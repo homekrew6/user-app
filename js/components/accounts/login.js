@@ -69,36 +69,36 @@ class Login extends Component {
 						</View>
 						<View style={{padding:20}}>
 							<Item regular style={{borderColor:'#29416f',borderWidth:1,borderRadius:2,height:45}}>
-								<Input placeholder='USERNAME OR EMAIL' style={{textAlign:'center',color:'#29416f',fontSize:14}}/>
+								<Input placeholder={I18n.t('username_or_email')} style={{textAlign:'center',color:'#29416f',fontSize:14}}/>
 							</Item>
 							<Item regular style={{borderColor:'#29416f',marginTop:10,borderWidth:1,borderRadius:2,height:45}}>
-								<Input placeholder='PASSWORD' secureTextEntry={true} style={{textAlign:'center',color:'#29416f',fontSize:14}} />
+								<Input placeholder={I18n.t('password')} secureTextEntry={true} style={{textAlign:'center',color:'#29416f',fontSize:14}} />
 							</Item>
 						</View>
 						<Button transparent style={{height:70,marginTop:2}} >
 							<Image source={buttonImage} style={{flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center',width:deviceWidth/1.3,height:55}} >
-								<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>LOGIN</Text>
+								<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>{I18n.t('login')}</Text>
 							</Image>
 
 						</Button>
 						<View style={{flexDirection:'row',justifyContent:'center',marginTop:-13}}>
-							<Text>- OR -</Text>
+							<Text>- {I18n.t('or')} -</Text>
 						</View>
 						<View style={{flexDirection:'row',justifyContent:'center',marginTop:5}}>
 							<Button block transparent style={{borderWidth:1,borderColor:'#29416f',width:deviceWidth/1.3}}>
-								<Text style={{color:'#29416f'}}>VIA FACEBOOK</Text>
+								<Text style={{color:'#29416f'}}>{I18n.t('via_facebook')}</Text>
 							</Button>
 						</View>
 						<View style={{flexDirection:'row',justifyContent:'center',marginTop:5}}>
 							<Button block transparent style={{borderWidth:1,borderColor:'#29416f',width:deviceWidth/1.3}}>
-								<Text style={{color:'#29416f'}}>VIA GMAIL</Text>
+								<Text style={{color:'#29416f'}}>{I18n.t('via_gmail')}</Text>
 							</Button>
 						</View>
 
 						<View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginTop:10, marginBottom: 20 }}>
-							<Text style={{color:'#252525'}}>Not a register member? </Text>
-							<TouchableOpacity onPress={()=>this.props.navigation.navigate("Login")}>
-								<Text style={{color:'#29416f'}}>SIGNUP</Text>
+							<Text style={{color:'#252525'}}>{I18n.t('not_a_register_member')} </Text>
+							<TouchableOpacity onPress={()=>this.props.navigation.navigate("Signup")}>
+								<Text style={{color:'#29416f'}}>{I18n.t('signup')}</Text>
 							</TouchableOpacity>
 						</View>
 

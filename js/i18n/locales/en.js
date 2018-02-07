@@ -1,6 +1,17 @@
 export default {
   greeting: 'Hi!',
   username: 'Username',
-  password: 'Password',
-  submit: 'Submit'
+  //password: 'Password',
+  submit: 'Submit',
+  username_or_email: 'USERNAME OR EMAIL',
+  password: 'PASSWORD',
+  login: 'LOGIN',
+  or: 'OR',
+  via_facebook: 'VIA FACEBOOK',
+  via_gmail: 'VIA GMAIL',
+  signup: 'SIGNUP',
+  not_a_register_member: 'Not a register member?',
+  name: 'NAME',
+  email: 'EMAIL',
+  phone_number: 'PHONE NUMBER',
 };

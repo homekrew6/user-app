@@ -1,6 +1,17 @@
 export default {
   greeting: '!تحية',
   username: 'اسم المستخدم',
+  //password: 'كلمه السر',
+  submit: 'خضع',
+  username_or_email: 'اسم المستخدم أو البريد الالكتروني',
   password: 'كلمه السر',
-  submit: 'خضع'
+  login: 'تسجيل الدخول',
+  or: 'أو',
+  via_facebook: 'فيا الفيسبوك',
+  via_gmail: 'فيا غميل',
+  signup: 'سجل',
+  not_a_register_member: 'ليس عضوا في السجل؟',
+  name: 'اسم',
+  email: 'البريد الإلكتروني',
+  phone_number: 'رقم الهاتف',
 };
