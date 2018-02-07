@@ -85,7 +85,7 @@ class Signup extends Component {
 							</View>
 
 
-							
+
 
 							{/* <Button transparent >
 								<Image source={buttonImage} style={{width:50,backgroundColor:"#fff"}} />

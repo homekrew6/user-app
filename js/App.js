@@ -11,6 +11,8 @@ import Intro  from "./components/intro";
 import Demo  from "./components/intro/demo";
 import Signup  from "./components/accounts/signup";
 import Login  from "./components/accounts/login";
+import ForgotPassword  from "./components/accounts/forgot_password";
+import ResetPassword  from "./components/accounts/reset_password";
 
 const AppNavigator = StackNavigator(
     {
@@ -18,10 +20,12 @@ const AppNavigator = StackNavigator(
         Intro: {screen: Intro},
         Demo: {screen: Demo},
         Signup: {screen: Signup},
-        Login: {screen: Login}
+        Login: {screen: Login},
+        ForgotPassword: {screen: ForgotPassword},
+        ResetPassword: {screen: ResetPassword}
     },
     {
-        initialRouteName: "Login",
+        initialRouteName: "ResetPassword",
         headerMode: "none",
     }
 );
