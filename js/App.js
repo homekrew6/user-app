@@ -9,7 +9,7 @@ import { StackNavigator } from "react-navigation";
 import Drawer from "./Drawer";
 import Intro  from "./components/intro";
 import Demo  from "./components/intro/demo";
-import Signup  from "./components/signup";
+import Signup  from "./components/accounts/signup";
 import Login  from "./components/accounts/login";
 
 const AppNavigator = StackNavigator(
@@ -21,7 +21,7 @@ const AppNavigator = StackNavigator(
         Login: {screen: Login}
     },
     {
-        initialRouteName: "Drawer",
+        initialRouteName: "Login",
         headerMode: "none",
     }
 );

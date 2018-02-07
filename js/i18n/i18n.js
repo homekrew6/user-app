@@ -4,9 +4,9 @@ import en from './locales/en';
 import ar from './locales/ar';
 
 I18n.fallbacks = true;
-
+//I18n.locale='ar';
 I18n.translations = {
-  en,  
+  en,
   ar
 };
 
