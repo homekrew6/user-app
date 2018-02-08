@@ -2,9 +2,29 @@ import authApi from './authApi'
 import * as TYPES from '../../../actions/actionTypes'
 import {AsyncStorage} from 'react-native'
 export function login(email,password){
-  alert(email);
+    return function(dispatch){
+      dispatch(authStateBusy())
+      return authApi.login(email,password).then(res=>{
+
+        AsyncStorage.setItem('userToken',JSON.stringify(res),(err,result)=>{
+          AsyncStorage.getItem('userToken',(err,result)=>{
+            console.log(result);
+          })
+        })
+        res.type = 'success';
+        //dispatch(authStateSuccess(res))
+        return res
+
+      }).catch(err=>{
+        err.type = 'error';
+        console.log(err)
+        dispatch(authStateFailed())
+        return err
+      })
+    }
+
   //console.log(email , password);
-  return function(dispatch){
+  /*return function(dispatch){
     dispatch(authStateBusy())
     return authApi.login(email,password).then(res=>{
       //console.log(res)
@@ -19,26 +39,52 @@ export function login(email,password){
       //   dispatch(authStateSuccess(res.data))
       // }
       console.log(res);
-      console.log(res.json());
+      dispatch(authStateSuccess(res))
+      return res
       //console.log(res.json());
-      if(res.status === 200){
-        res.json().then((result)=> {
-            console.log(result);
-            dispatch(authStateSuccess(result.id))
+      //console.log(res.json());
 
-        }).catch((err)=>{
-          console.log(err)
-        });
-        return res
-      }else{
-        dispatch(authStateFailed())
-        return res
-      }
 
     }).catch(err=>{
+      console.log(err)
       dispatch(authStateFailed())
       return err
     })
+  }*/
+}
+
+export function getUserDetail(id){
+    return function(dispatch){
+      dispatch(authStateBusy())
+      return authApi.getUserDetail(id).then(res=>{
+        res.type = 'success';
+        console.log(res);
+        dispatch(authStateSuccess(res))
+        return res
+
+      }).catch(err=>{
+        err.type = 'error';
+        console.log(err)
+        dispatch(authStateFailed())
+        return err
+      })
+    }
+  }
+
+export function signup(name,email,password,phone){
+  return function(dispatch){
+    dispatch(authStateBusy())
+    return authApi.signup(name,email,password,phone).then(res=>{
+      // if(res.status!=='success'){
+      //   dispatch(authStateFailed())
+      // }else{
+      //   AsyncStorage.setItem('userData',JSON.stringify(res.data),(err,result)=>{
+      //
+      //   })
+      //   dispatch(authStateSuccess(res.data))
+      // }
+      return res
+    }).catch(err=>err)
   }
 }
 

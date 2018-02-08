@@ -25,7 +25,7 @@ const AppNavigator = StackNavigator(
         ResetPassword: {screen: ResetPassword}
     },
     {
-        initialRouteName: "ResetPassword",
+        initialRouteName: "Login",
         headerMode: "none",
     }
 );
