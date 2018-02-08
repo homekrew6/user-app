@@ -78,7 +78,7 @@ class Login extends Component {
                        <Button transparent >
                             <Icon name='search'/>
                        </Button>
-  
+
                 </Header>
                 <Card>
                         <CardItem style={styles.pcard}>
@@ -162,7 +162,7 @@ class Login extends Component {
                     </CardItem>
                     <CardItem style={styles.menuCarditem}>
                         <View style={ styles.menuCardView} >
-                            <Image source={icon6} style={styles.menuCardIcon} />
+                            <Image source={icon7} style={styles.menuCardIcon} />
                             <Text style={styles.menuCardTxt}>Settings</Text>
                                 <View style={styles.arw_lft}>
                                     <Image source={back_arow} style={styles.arw_lft_img} />
