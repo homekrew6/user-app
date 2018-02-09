@@ -75,16 +75,43 @@ export function signup(name,email,password,phone){
   return function(dispatch){
     dispatch(authStateBusy())
     return authApi.signup(name,email,password,phone).then(res=>{
-      // if(res.status!=='success'){
-      //   dispatch(authStateFailed())
-      // }else{
-      //   AsyncStorage.setItem('userData',JSON.stringify(res.data),(err,result)=>{
-      //
-      //   })
-      //   dispatch(authStateSuccess(res.data))
-      // }
+      res.type = 'success';
+      console.log(res);
+      dispatch(authStateSuccess(res))
       return res
-    }).catch(err=>err)
+
+    }).catch(err=>{
+      err.type = 'error';
+      console.log(err)
+      dispatch(authStateFailed())
+      return err
+    })
+  }
+}
+
+export function checkAuth(cb){
+  return function(dispatch){
+    dispatch(authStateBusy())
+    AsyncStorage.getItem('userToken',(err,result)=>{
+      if(result){
+        const data = JSON.parse(result)
+        dispatch(authStateSuccess(data))
+        cb(true)
+      }else{
+        dispatch(authStateFailed())
+        cb(false)
+      }
+    })
+  }
+}
+
+export function logout(cb){
+  return function(dispatch){
+    dispatch(authStateBusy())
+    AsyncStorage.removeItem('userToken',(err,res)=>{
+      dispatch(authStateFailed())
+      cb(true)
+    })
   }
 }
 

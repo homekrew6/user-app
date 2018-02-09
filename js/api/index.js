@@ -17,6 +17,7 @@ const resolver = ()=>AsyncStorage.getItem('userData',(err,result)=>{
 class api {
   static post(endpoint,data){
     console.log(config.base_api+endpoint)
+    console.log(data);
     return new Promise((resolve,reject)=>{
       resolver().then(()=>{
         fetch(config.base_api+endpoint,{
