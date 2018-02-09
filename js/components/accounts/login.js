@@ -21,6 +21,9 @@ class Login extends Component {
 	        password: ''
 	      }
     }
+		pressForgotPassword(){
+			this.props.navigation.navigate("ForgotPassword");
+		}
 
 		pressLogin(){
 	    if(!this.state.email){
@@ -47,13 +50,7 @@ class Login extends Component {
 				}
 
 
-	      // if(res.status!=='success'){
-	      //
-	      //   this.setState({email:'',password:''});
-	      // }else{
-				// 	Alert.alert('Login success');
-	      //   //this.props.navigation.navigate("Home");
-	      // }
+
 	    }).catch(err=>{
 				console.log(err);
 	     Alert.alert('Login fail,please try again');
@@ -90,6 +87,13 @@ class Login extends Component {
 								</Image>
 							</TouchableOpacity>
 						</Button>
+						<View>
+							<TouchableOpacity onPress={() =>this.pressForgotPassword()}>
+								<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>
+									Forgot your password
+								</Text>
+							</TouchableOpacity>
+						</View>
 						<View style={{flexDirection:'row',justifyContent:'center',marginTop:-13}}>
 							<Text>- {I18n.t('or')} -</Text>
 						</View>
