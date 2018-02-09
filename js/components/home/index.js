@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Image, View, StatusBar } from "react-native";
-
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
+import {checkAuth} from '../accounts/elements/authActions'
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right } from "native-base";
 
 import styles from "./styles";
@@ -15,9 +17,13 @@ class Home extends Component {
 		super(params)
 	}
 	componentWillMount(){
-		setTimeout(() => {
-			this.props.navigation.navigate("Login")
-		}, 4000)
+		this.props.checkAuth(res=>{
+			if(res){
+				this.props.navigation.navigate("Menu")
+			}else{
+				this.props.navigation.navigate("Login")
+			}
+		})
 
 	}
 	render() {
@@ -47,4 +53,20 @@ class Home extends Component {
 	}
 }
 
-export default Home;
+Home.propTypes = {
+	auth : PropTypes.object.isRequired,
+	checkAuth : PropTypes.func.isRequired
+}
+
+const mapStateToProps = (state)=>{
+	return {
+		auth:state.auth
+	}
+}
+
+const mapDispatchToProps = (dispatch)=>{
+	return {
+		checkAuth:(cb)=>dispatch(checkAuth(cb))
+	}
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Home);

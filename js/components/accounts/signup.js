@@ -50,11 +50,17 @@ class Signup extends Component {
       const phone = this.state.phone;
 
       this.props.signup(name,email,password,phone).then(res=>{
-        if(res.status!=='success'){
-          Alert.alert(res.message);
+        if(res.type == 'success'){
+					Alert.alert('Successfully saved.');
+					this.props.navigation.navigate("Login");
+				}else{
+					Alert.alert('Data not saved,please try again');
+				}
+      }).catch(err=>{
+				console.log(err);
+	     Alert.alert('Data not saved,please try again');
 
-        }
-      })
+	    })
 
 	}
 

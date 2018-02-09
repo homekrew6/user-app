@@ -13,6 +13,17 @@ class authApi {
 		})
 	}
 
+	static signup(name,email,password,phone){
+		return new Promise((resolve,reject)=>{
+			api.post('Customers',{name:name,email:email,password:password,phone:phone}).then(responseJson=>{
+				resolve(responseJson)
+			}).catch(err=>{
+					console.log(err);
+					reject(err)
+			})
+		})
+	}
+
 	static getUserDetail(id){
 		return new Promise((resolve,reject)=>{
 			api.get('Customers/'+id).then(responseJson=>{
@@ -24,9 +35,7 @@ class authApi {
 		})
 	}
 
-	static signup(name,email,password,phone){
-    return api.post('Customers/login',{name:name,email:email,password:password,phone:phone}).then(responseJson=>responseJson).catch(err=>err)
-	}
+	
 
 
 

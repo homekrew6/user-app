@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {login,getUserDetail} from './elements/authActions'
 import { Image, View, StatusBar,Dimensions,Alert, TouchableOpacity } from "react-native";
-
+import FSpinner from 'react-native-loading-spinner-overlay';
 import { Container, Header, Button, Content, Form, Item,Icon,Frame, Input, Label,Text } from "native-base";
 
 import I18n from '../../i18n/i18n';
@@ -38,11 +38,12 @@ class Login extends Component {
 				if(res.type == 'success'){
 					this.props.getUserDetail(res.userId).then(userRes=>{
 						console.log(userRes)
+						this.props.navigation.navigate("Menu");
 					}).catch(err=>{
-						console.log(err)
+						Alert.alert('Login failed, please try again');
 			    })
 				}else{
-
+						Alert.alert('Login failed, please try again');
 				}
 
 
@@ -69,6 +70,7 @@ class Login extends Component {
 				/>
 				{/* <Image source={launchscreenBg}> */}
 				<Content>
+					<FSpinner visible={this.props.auth.busy} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
 					<Image source={launchscreenBg} style={styles.imageContainer}>
 						<View style={styles.logoContainer}>
 							<Image source={launchscreenLogo} style={styles.logo} />
