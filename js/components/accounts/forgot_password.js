@@ -59,8 +59,8 @@ class ForgotPassword extends Component {
 				<Content>
 					<Header style={{backgroundColor:'#fff'}}>
 						<Left style={{marginRight:-15}}>
-							<Button transparent>
-								<Icon style={{color:'#81cdc7'}} name='arrow-back' />
+							<Button transparent onPress={() => this.props.navigation.goBack()}>
+								<Icon style={{color:'#81cdc7'}} name='arrow-back'  />
 							</Button>
 						</Left>
 						<Body>
