@@ -29,7 +29,7 @@ const AppNavigator = StackNavigator(
         EditProfile: { screen: EditProfile }
     },
     {
-        initialRouteName: "EditProfile",
+        initialRouteName: "Drawer",
         headerMode: "none",
     }
 );
