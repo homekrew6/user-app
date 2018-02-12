@@ -84,13 +84,13 @@ class Signup extends Component {
 								<Input onChangeText={(text) => this.setState({name:text})} value={this.state.name} placeholder={I18n.t('name')} style={{textAlign:'center',color:'#29416f',fontSize:14}}/>
 							</Item>
 							<Item regular style={{borderColor:'#29416f',marginTop:10,borderWidth:1,borderRadius:2,height:45}}>
-								<Input onChangeText={(text) => this.setState({email:text})} value={this.state.email} placeholder={I18n.t('email')} keyboardType={'email-address'} style={{textAlign:'center',color:'#29416f',fontSize:14}} />
+								<Input onChangeText={(text) => this.setState({email:text})} value={this.state.email} placeholder={I18n.t('email')} keyboardType={'email-address'} style={{textAlign:'center',color:'#29416f',fontSize:14 }} />
 							</Item>
 							<Item regular style={{borderColor:'#29416f',marginTop:10,borderWidth:1,borderRadius:2,height:45}}>
-								<Input onChangeText={(text) => this.setState({password:text})} value={this.state.password} placeholder={I18n.t('password')} secureTextEntry={true} style={{textAlign:'center',color:'#29416f',fontSize:14}} />
+								<Input onChangeText={(text) => this.setState({password:text})} value={this.state.password} placeholder={I18n.t('password')} secureTextEntry={true} style={{textAlign:'center',color:'#29416f',fontSize:14 }} />
 							</Item>
 							<Item regular style={{borderColor:'#29416f',marginTop:10,borderWidth:1,borderRadius:2,height:45}}>
-								<Input onChangeText={(text) => this.setState({phone:text})} value={this.state.phone} placeholder={I18n.t('phone_number')} keyboardType={'numeric'} style={{textAlign:'center',color:'#29416f',fontSize:14,placeholderTextColor:'#29416f'}} />
+								<Input onChangeText={(text) => this.setState({phone:text})} value={this.state.phone} placeholder={I18n.t('phone_number')} keyboardType={'numeric'} style={{textAlign:'center',color:'#29416f',fontSize:14 }} />
 							</Item>
 							{/* <Button block style={{marginTop:10},styles.buttonStyle}>
 								<Text>Sign Up</Text>
@@ -104,24 +104,23 @@ class Signup extends Component {
 								</Image>
 							</View> */}
 
-							<Button transparent style={{height:70,marginTop:2}} >
 
-								<TouchableOpacity onPress={() =>this.pressSignup()}>
-									<Image source={buttonImage} style={{flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center',width:deviceWidth/1.3,height:55}} >
-										<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>{I18n.t('signup')}</Text>
-									</Image>
-								</TouchableOpacity>
-							</Button>
+							<TouchableOpacity onPress={() => this.pressSignup()} style={{ height: 70, marginTop: 15, flexDirection: 'row' }}>
+								<Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
+									<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>{I18n.t('signup')}</Text>
+								</Image>
+							</TouchableOpacity>
+
 							<View style={{flexDirection:'row',justifyContent:'center',marginTop:-13}}>
 								<Text>- {I18n.t('or')} -</Text>
 							</View>
-							<View style={{flexDirection:'row',justifyContent:'center',marginTop:5}}>
-								<Button block transparent style={{borderWidth:1,borderColor:'#29416f',width:deviceWidth/1.3}}>
+							<View style={{ flexDirection:'row', justifyContent:'center', marginTop:5, }}>
+								<Button block transparent style={{borderWidth:1,borderColor:'#29416f', flex:1}}>
 									<Text style={{color:'#29416f'}}>{I18n.t('via_facebook')}</Text>
 								</Button>
 							</View>
 							<View style={{flexDirection:'row',justifyContent:'center',marginTop:5}}>
-								<Button block transparent style={{borderWidth:1,borderColor:'#29416f',width:deviceWidth/1.3}}>
+								<Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1}}>
 									<Text style={{color:'#29416f'}}>{I18n.t('via_gmail')}</Text>
 								</Button>
 							</View>
