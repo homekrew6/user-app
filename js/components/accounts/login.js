@@ -80,13 +80,11 @@ class Login extends Component {
 								<Input onChangeText={(text) => this.setState({password:text})} value={this.state.password} placeholder={I18n.t('password')} secureTextEntry={true} style={{textAlign:'center',color:'#29416f',fontSize:14}} />
 							</Item>
 						</View>
-						<Button transparent style={{height:70,marginTop:2}} >
-							<TouchableOpacity onPress={() =>this.pressLogin()}>
-								<Image source={buttonImage} style={{flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center',width:deviceWidth/1.3,height:55}} >
-									<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>{I18n.t('login')}</Text>
-								</Image>
-							</TouchableOpacity>
-						</Button>
+						<TouchableOpacity transparent style={{ height: 70, marginTop: 2, flexDirection: 'row', paddingLeft: 15, paddingRight: 15 }} onPress={() => this.pressLogin()}>
+							<Image source={buttonImage} style={{ flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center',height:55 }} >
+								<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>{I18n.t('login')}</Text>
+							</Image>
+						</TouchableOpacity>
 						<View>
 							<TouchableOpacity onPress={() =>this.pressForgotPassword()}>
 								<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>
@@ -97,13 +95,13 @@ class Login extends Component {
 						<View style={{flexDirection:'row',justifyContent:'center',marginTop:-13}}>
 							<Text>- {I18n.t('or')} -</Text>
 						</View>
-						<View style={{flexDirection:'row',justifyContent:'center',marginTop:5}}>
-							<Button block transparent style={{borderWidth:1,borderColor:'#29416f',width:deviceWidth/1.3}}>
+						<View style={{flexDirection:'row',justifyContent:'center',marginTop:5, paddingLeft: 15, paddingRight: 15 }}>
+							<Button block transparent style={{borderWidth:1,borderColor:'#29416f', flex: 1 }}>
 								<Text style={{color:'#29416f'}}>{I18n.t('via_facebook')}</Text>
 							</Button>
 						</View>
-						<View style={{flexDirection:'row',justifyContent:'center',marginTop:5}}>
-							<Button block transparent style={{borderWidth:1,borderColor:'#29416f',width:deviceWidth/1.3}}>
+						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, paddingLeft: 15, paddingRight: 15 }}>
+							<Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1}}>
 								<Text style={{color:'#29416f'}}>{I18n.t('via_gmail')}</Text>
 							</Button>
 						</View>

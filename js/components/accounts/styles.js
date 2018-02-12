@@ -35,7 +35,7 @@ export default {
   },
   menuCarditem:{ 
     paddingTop: 0, 
-    marginTOP: 0, 
+    marginTop: 0, 
     paddingBottom: 0
   },
   menuCardView:{
@@ -61,8 +61,10 @@ export default {
   appHdr:{
     backgroundColor: '#80cec8'
   },
+  appHdr2: {
+    backgroundColor: '#cbf0ed',
+  },
   appHdrtitleWarp:{
-    textAlign: 'center', 
     alignItems: 'center', 
     justifyContent: 'center'
   },
@@ -103,17 +105,18 @@ flx_View:{
   flex: 1, 
   flexDirection: 'row' 
 },
-artNt:{ 
-  width: 20, 
-  textAlign: 'right' 
-},
+// artNt:{ 
+//   width: 20, 
+//   textAlign: 'right' 
+// },
 artNtTxt:{
-  color: '#ff0026'
+  color: '#ff0026',
+  width: 20
 },
-arw_lft:{ 
-  width: 20, 
-  textAlign: 'right' 
-},
+// arw_lft:{ 
+//   width: 20, 
+//   textAlign: 'right' 
+// },
 arw_lft_img: { 
   height: 20, 
   width: 10 
@@ -123,5 +126,53 @@ version:{
   fontSize: 10,
   paddingTop: 15,
   paddingBottom: 15
-}
+},
+  bg_white: {
+    backgroundColor: '#fff'
+  },
+  editprofileLst: {
+    flexDirection: 'row',
+    flex: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+    paddingLeft: 10,
+    paddingRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  editprofileWarp: {
+    flex: 1,
+    paddingBottom: 0,
+    marginBottom: 0,
+  },
+  editprofileInputwrap: {
+    flex: 1
+  },
+  editprofileInput: {
+    color: '#29416f',
+    fontSize: 14,
+    color: '#828282'
+  },
+  editPflHdr: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#cbf0ed'
+  },
+  editPflHdrWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 30,
+    marginTop: 0,
+    marginBottom: 0
+  },
+  editPflHdrThumbnail: {
+    height: 110,
+    width: 110,
+    borderRadius: 90
+  },
+  editPflHdrBtn: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    marginTop: 15
+  },
 };
