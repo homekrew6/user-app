@@ -29,7 +29,12 @@ class api {
             if(response.status === 200){
               resolve(response.json());
             }else{
-              reject({"err":"401 found"})
+              if(response.status === 204){
+                resolve();
+              }else{
+                reject({"err":"401 found"})
+              }
+
             }
 
         }).catch(error=>error)
@@ -49,7 +54,11 @@ class api {
         if(response.status === 200){
           resolve(response.json());
         }else{
-          reject({"err":"401 found"})
+          if(response.status === 204){
+            resolve();
+          }else{
+            reject({"err":"401 found"})
+          }
         }
       }).catch(error=>error)
     }).catch(error=>error)
