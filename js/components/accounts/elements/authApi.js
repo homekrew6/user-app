@@ -15,7 +15,7 @@ class authApi {
 
 	static signup(name,email,password,phone){
 		return new Promise((resolve,reject)=>{
-			api.post('Customers',{name:name,email:email,password:password,phone:phone}).then(responseJson=>{
+			api.post('Customers/signup',{name:name,email:email,password:password,phone:phone}).then(responseJson=>{
 				resolve(responseJson)
 			}).catch(err=>{
 					console.log(err);
@@ -35,7 +35,7 @@ class authApi {
 		})
 	}
 
-	
+
 
 
 

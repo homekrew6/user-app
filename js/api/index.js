@@ -5,7 +5,7 @@ let headers = {
   'Content-Type': 'application/json',
 }
 
-const resolver = ()=>AsyncStorage.getItem('userData',(err,result)=>{
+const resolver = ()=>AsyncStorage.getItem('userToken',(err,result)=>{
 
   if(result){
     result = JSON.parse(result);
