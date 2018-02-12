@@ -41,7 +41,6 @@ export default {
   menuCardView:{
     flex: 1, 
     flexDirection: 'row', 
-    alignItem: 1, 
     justifyContent: 'center', 
     alignItems: 'center', 
     borderBottomColor: '#ececec', 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { login } from './elements/authActions'
+import { logout } from './elements/authActions'
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title  } from "native-base";
@@ -21,157 +21,140 @@ const icon7 = require("../../../img/icon7.png");
 const back_arow = require("../../../img/arrow_back.png");
 const logo_hdr = require("../../../img/logo2.png");
 
-class Login extends Component {
+class Menu extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            email: '',
-            password: ''
-        }
+
     }
 
-    pressLogin() {
-        if (!this.state.email) {
-            Alert.alert('Please enter email');
-            return false;
-        }
-        if (!this.state.password) {
-            Alert.alert('Please enter password');
-            return false;
-        }
-        const email = this.state.email;
-        const password = this.state.password;
-        this.props.login(email, password).then(res => {
-            console.log(res);
-            if (res.status === 200) {
-                console.log(res.json())
-            } else {
-                Alert.alert('Login fail,please try again');
-            }
-
-            // if(res.status!=='success'){
-            //
-            //   this.setState({email:'',password:''});
-            // }else{
-            // 	Alert.alert('Login success');
-            //   //this.props.navigation.navigate("Home");
-            // }
-        }).catch(err => {
-            Alert.alert('Login fail,please try again');
-            //return err
-        })
+    logout(){
+      this.props.logout(res=>{
+  			if(res){
+  				this.props.navigation.navigate("Login")
+  			}else{
+  				this.props.navigation.navigate("Menu")
+  			}
+  		})
     }
-
 
     render() {
         return (
             <Container >
-                <StatusBar
-                    backgroundColor="#81cdc7"
-                />
-                <Content>
+              <StatusBar
+                backgroundColor="#81cdc7"
+              />
+              <Content>
                 <Header style={styles.appHdr}>
-                    <Button transparent/>
-                        <Body style={styles.appHdrtitleWarp}>
-                            <Image source={logo_hdr} style={{ height: 18, width: 100 }}/>
-                    </Body>
-                       <Button transparent >
-                            <Icon name='search'/>
-                       </Button>
+                  <Button transparent/>
+                  <Body style={styles.appHdrtitleWarp}>
+                    <Image source={logo_hdr} style={{ height: 18, width: 100 }}/>
+                  </Body>
+                  <Button transparent >
+                    <Icon name='search'/>
+                  </Button>
 
                 </Header>
                 <Card>
-                        <CardItem style={styles.pcard}>
-                        <View style={styles.flx_View}>
-                            <Image source={profileImage} style={styles.profileImage}/>
-                            <View>
-                                <Text style={styles.pname}>Tiffany Krew</Text>
-                                <Text style={styles.pemail}>tiffany@email.com</Text>
-                                <Text style={styles.pphone}>123456789</Text>
-                            </View>
-                        </View>
+                  <CardItem style={styles.pcard}>
+                    <View style={styles.flx_View}>
+                      <Image source={profileImage} style={styles.profileImage}/>
+                      <View>
+                        <Text style={styles.pname}>Tiffany Krew</Text>
+                        <Text style={styles.pemail}>tiffany@email.com</Text>
+                        <Text style={styles.pphone}>123456789</Text>
+                      </View>
+                    </View>
 
-                    </CardItem>
-                    <CardItem>
-                            <View style={styles.pBtmTxt }>
-                                <Text style={styles.pBtmTxt_Txt}>Credit: AED 0.00</Text>
-                            </View>
-                    </CardItem>
+                  </CardItem>
+                  <CardItem>
+                    <View style={styles.pBtmTxt }>
+                      <Text style={styles.pBtmTxt_Txt}>Credit: AED 0.00</Text>
+                    </View>
+                  </CardItem>
                 </Card>
 
                 <Card>
-                    <CardItem style={styles.menuCarditem}>
-                        <View style={styles.menuCardView}>
-                            <Image source={icon1} style={styles.menuCardIcon}/>
-                            <Text style={styles.menuCardTxt}>Google Plus</Text>
-                                <View style={styles.artNt}>
-                                        <Text style={styles.artNtTxt}>4</Text>
-                                </View>
-                                <View style={styles.arw_lft}>
-                                <Image source={back_arow} style={ styles.arw_lft_img} />
-                            </View>
-                        </View>
-                    </CardItem>
-                    <CardItem style={styles.menuCarditem}>
-                        <View style={styles.menuCardView}>
-                            <Image source={icon2} style={styles.menuCardIcon} />
-                            <Text style={styles.menuCardTxt}>My Jobs</Text>
-                                <View style={styles.artNt}>
-                                    <Text style={styles.artNtTxt}>2</Text>
-                            </View>
-                                <View style={styles.arw_lft}>
-                                    <Image source={back_arow} style={styles.arw_lft_img} />
-                            </View>
-                        </View>
-                    </CardItem>
-                    <CardItem style={styles.menuCarditem}>
-                        <View style={styles.menuCardView}>
-                            <Image source={icon3} style={styles.menuCardIcon} />
-                            <Text style={styles.menuCardTxt}>My Location</Text>
-                                <View style={styles.arw_lft}>
-                                    <Image source={back_arow} style={styles.arw_lft_img} />
-                            </View>
-                        </View>
-                    </CardItem>
-                    <CardItem style={styles.menuCarditem}>
-                        <View style={styles.menuCardView}>
-                            <Image source={icon4} style={styles.menuCardIcon} />
-                            <Text style={styles.menuCardTxt}>My Card</Text>
-                                <View style={styles.arw_lft}>
-                                    <Image source={back_arow} style={styles.arw_lft_img} />
-                            </View>
-                        </View>
-                    </CardItem>
-                    <CardItem style={styles.menuCarditem}>
-                        <View style={styles.menuCardView}>
-                            <Image source={icon5} style={styles.menuCardIcon} />
-                            <Text style={styles.menuCardTxt}>MY promo Code</Text>
-                                <View style={styles.arw_lft}>
-                                    <Image source={back_arow} style={styles.arw_lft_img} />
-                            </View>
-                        </View>
-                    </CardItem>
-                    <CardItem style={styles.menuCarditem}>
-                        <View style={styles.menuCardView}>
-                            <Image source={icon6} style={styles.menuCardIcon} />
-                            <Text style={styles.menuCardTxt}>Support</Text>
-                            <View style={{ width: 20 }}>
-                                    <Image source={back_arow} style={styles.arw_lft_img} />
-                            </View>
-                        </View>
-                    </CardItem>
-                    <CardItem style={styles.menuCarditem}>
-                        <View style={ styles.menuCardView} >
-                            <Image source={icon7} style={styles.menuCardIcon} />
-                            <Text style={styles.menuCardTxt}>Settings</Text>
-                                <View style={styles.arw_lft}>
-                                    <Image source={back_arow} style={styles.arw_lft_img} />
-                            </View>
-                        </View>
-                    </CardItem>
+                  <CardItem style={styles.menuCarditem}>
+                    <View style={styles.menuCardView}>
+                      <Image source={icon1} style={styles.menuCardIcon}/>
+                      <Text style={styles.menuCardTxt}>Google Plus</Text>
+                      <View style={styles.artNt}>
+                        <Text style={styles.artNtTxt}>4</Text>
+                      </View>
+                      <View style={styles.arw_lft}>
+                        <Image source={back_arow} style={ styles.arw_lft_img} />
+                      </View>
+                    </View>
+                  </CardItem>
+                  <CardItem style={styles.menuCarditem}>
+                    <View style={styles.menuCardView}>
+                      <Image source={icon2} style={styles.menuCardIcon} />
+                      <Text style={styles.menuCardTxt}>My Jobs</Text>
+                      <View style={styles.artNt}>
+                        <Text style={styles.artNtTxt}>2</Text>
+                      </View>
+                      <View style={styles.arw_lft}>
+                        <Image source={back_arow} style={styles.arw_lft_img} />
+                      </View>
+                    </View>
+                  </CardItem>
+                  <CardItem style={styles.menuCarditem}>
+                    <View style={styles.menuCardView}>
+                      <Image source={icon3} style={styles.menuCardIcon} />
+                      <Text style={styles.menuCardTxt}>My Location</Text>
+                      <View style={styles.arw_lft}>
+                        <Image source={back_arow} style={styles.arw_lft_img} />
+                      </View>
+                    </View>
+                  </CardItem>
+                  <CardItem style={styles.menuCarditem}>
+                    <View style={styles.menuCardView}>
+                      <Image source={icon4} style={styles.menuCardIcon} />
+                      <Text style={styles.menuCardTxt}>My Card</Text>
+                      <View style={styles.arw_lft}>
+                        <Image source={back_arow} style={styles.arw_lft_img} />
+                      </View>
+                    </View>
+                  </CardItem>
+                  <CardItem style={styles.menuCarditem}>
+                    <View style={styles.menuCardView}>
+                      <Image source={icon5} style={styles.menuCardIcon} />
+                      <Text style={styles.menuCardTxt}>MY promo Code</Text>
+                      <View style={styles.arw_lft}>
+                        <Image source={back_arow} style={styles.arw_lft_img} />
+                      </View>
+                    </View>
+                  </CardItem>
+                  <CardItem style={styles.menuCarditem}>
+                    <View style={styles.menuCardView}>
+                      <Image source={icon6} style={styles.menuCardIcon} />
+                      <Text style={styles.menuCardTxt}>Support</Text>
+                      <View style={{ width: 20 }}>
+                        <Image source={back_arow} style={styles.arw_lft_img} />
+                      </View>
+                    </View>
+                  </CardItem>
+                  <CardItem style={styles.menuCarditem}>
+                    <View style={ styles.menuCardView} >
+                      <Image source={icon7} style={styles.menuCardIcon} />
+                      <Text style={styles.menuCardTxt}>Settings</Text>
+                      <View style={styles.arw_lft}>
+                        <Image source={back_arow} style={styles.arw_lft_img} />
+                      </View>
+                    </View>
+                  </CardItem>
+                  <CardItem style={styles.menuCarditem} >
+                    <View style={ styles.menuCardView} >
+
+                      <Image source={icon7} style={styles.menuCardIcon} onPress={() =>this.logout()}/>
+                      <Text style={styles.menuCardTxt} onPress={() =>this.logout()}>Logout</Text>
+
+
+                    </View>
+                  </CardItem>
 
                 </Card>
-                    <View >
+                <View >
                         <Text style={styles.version}>Ver 2.5 Build 2425 - Aug 2017</Text>
                 </View>
                 </Content>
@@ -180,7 +163,7 @@ class Login extends Component {
     }
 }
 
-Login.propTypes = {
+Menu.propTypes = {
     auth: PropTypes.object.isRequired
 }
 const mapStateToProps = (state) => {
@@ -191,8 +174,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        login: (email, password) => dispatch(login(email, password))
+        logout:(cb)=>dispatch(logout(cb))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
