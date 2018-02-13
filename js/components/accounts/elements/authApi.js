@@ -24,9 +24,9 @@ class authApi {
 		})
 	}
 
-	static getUserDetail(id){
+	static getUserDetail(id,auth){
 		return new Promise((resolve,reject)=>{
-			api.get('Customers/'+id).then(responseJson=>{
+			api.get('Customers/'+id+'?access_token='+auth).then(responseJson=>{
 				resolve(responseJson)
 			}).catch(err=>{
 					console.log(err);

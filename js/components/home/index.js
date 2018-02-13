@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Image, View, StatusBar } from "react-native";
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {checkAuth} from '../accounts/elements/authActions'
+import {checkAuth, getUserDetail} from '../accounts/elements/authActions'
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right } from "native-base";
 
 import styles from "./styles";
@@ -18,8 +18,16 @@ class Home extends Component {
 	}
 	componentWillMount(){
 		this.props.checkAuth(res=>{
+			console.log(res);
 			if(res){
-				this.props.navigation.navigate("Menu")
+				this.props.getUserDetail(res.userId,res.id).then(userRes=>{
+					console.log(userRes)
+					this.props.navigation.navigate("Menu");
+				}).catch(err=>{
+					Alert.alert('Please login');
+					this.props.navigation.navigate("Login")
+				})
+				//this.props.navigation.navigate("Menu")
 			}else{
 				this.props.navigation.navigate("Login")
 			}
@@ -66,7 +74,8 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
 	return {
-		checkAuth:(cb)=>dispatch(checkAuth(cb))
+		checkAuth:(cb)=>dispatch(checkAuth(cb)),
+		getUserDetail:(id,auth)=>dispatch(getUserDetail(id,auth))
 	}
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Home);
