@@ -39,7 +39,7 @@ class Login extends Component {
 	    this.props.login(email,password).then(res=>{
 				console.log(res);
 				if(res.type == 'success'){
-					this.props.getUserDetail(res.userId).then(userRes=>{
+					this.props.getUserDetail(res.userId,res.id).then(userRes=>{
 						console.log(userRes)
 						this.props.navigation.navigate("Menu");
 					}).catch(err=>{
@@ -74,7 +74,7 @@ class Login extends Component {
 						</View>
 						<View style={{padding:20}}>
 							<Item regular style={{borderColor:'#29416f',borderWidth:1,borderRadius:2,height:45}}>
-								<Input onChangeText={(text) => this.setState({email:text})} value={this.state.email} placeholder={I18n.t('username_or_email')} style={{textAlign:'center',color:'#29416f',fontSize:14}}/>
+								<Input keyboardType={'email-address'} onChangeText={(text) => this.setState({email:text})} value={this.state.email} placeholder={I18n.t('username_or_email')} style={{textAlign:'center',color:'#29416f',fontSize:14}}/>
 							</Item>
 							<Item regular style={{borderColor:'#29416f',marginTop:10,borderWidth:1,borderRadius:2,height:45}}>
 								<Input onChangeText={(text) => this.setState({password:text})} value={this.state.password} placeholder={I18n.t('password')} secureTextEntry={true} style={{textAlign:'center',color:'#29416f',fontSize:14}} />
@@ -132,7 +132,7 @@ const mapStateToProps = (state)=>{
 const mapDispatchToProps = (dispatch)=>{
 	return {
 		login:(email,password)=>dispatch(login(email,password)),
-		getUserDetail:(id)=>dispatch(getUserDetail(id))
+		getUserDetail:(id,auth)=>dispatch(getUserDetail(id,auth))
 	}
 }
 

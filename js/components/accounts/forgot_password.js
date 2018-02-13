@@ -110,7 +110,7 @@ class ForgotPassword extends Component {
 							</Item>
 						</View>
 					</View>
-					<TouchableOpacity transparent style={{height:70,marginTop:2}} onPress={() => this.pressSend()} >
+					<TouchableOpacity transparent style={{flex:1,flexDirection:'row',height:70,marginTop:2}} onPress={() => this.pressSend()} >
 						<Image source={buttonImage} style={{flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center',width:deviceWidth/1.3,height:55}} >
 							<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>{I18n.t('send_otp')}</Text>
 						</Image>

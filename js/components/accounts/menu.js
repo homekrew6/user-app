@@ -24,6 +24,7 @@ const logo_hdr = require("../../../img/logo2.png");
 class Menu extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
 
     }
 
@@ -57,11 +58,20 @@ class Menu extends Component {
                 <Card>
                   <CardItem style={styles.pcard}>
                     <View style={styles.flx_View}>
-                      <Image source={profileImage} style={styles.profileImage}/>
+                      {
+                        this.props.auth.data.image ? (
+                          <Image source={profileImage} style={styles.profileImage}/>
+                        ):(
+                          <Image source={profileImage} style={styles.profileImage}/>
+                        )
+                      }
+
                       <View>
-                        <Text style={styles.pname}>Tiffany Krew</Text>
-                        <Text style={styles.pemail}>tiffany@email.com</Text>
-                        <Text style={styles.pphone}>123456789</Text>
+                        <TouchableOpacity onPress={()=>this.props.navigation.navigate("EditProfile")}>
+                          <Text style={styles.pname}>{this.props.auth.data.name}</Text>
+                          <Text style={styles.pemail}>{this.props.auth.data.email}</Text>
+                          <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
+                        </TouchableOpacity>
                       </View>
                     </View>
 
