@@ -29,7 +29,7 @@ class Home extends Component {
 				})
 				//this.props.navigation.navigate("Menu")
 			}else{
-				this.props.navigation.navigate("Login")
+				this.props.navigation.navigate("Intro")
 			}
 		})
 
