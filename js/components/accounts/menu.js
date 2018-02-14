@@ -18,6 +18,7 @@ const icon4 = require("../../../img/icon4.png");
 const icon5 = require("../../../img/icon5.png");
 const icon6 = require("../../../img/icon6.png");
 const icon7 = require("../../../img/icon7.png");
+const icon8 = require("../../../img/icon8.png");
 const back_arow = require("../../../img/arrow_back.png");
 const logo_hdr = require("../../../img/logo2.png");
 
@@ -45,18 +46,23 @@ class Menu extends Component {
                 backgroundColor="#81cdc7"
               />
               <Content>
-                <Header style={styles.appHdr}>
+
+
+                <Header style={{ backgroundColor: '#fff' }}>
                   <Button transparent/>
                   <Body style={styles.appHdrtitleWarp}>
-                    <Image source={logo_hdr} style={{ height: 18, width: 100 }}/>
+                    <Image source={logo_hdr} style={{ height: 18, width: 110 }}/>
                   </Body>
                   <Button transparent >
-                    <Icon name='search'/>
+                  <Icon name='search' style={{ color: '#81cdc7' }}/>
                   </Button>
 
                 </Header>
+
+
                 <Card>
                   <CardItem style={styles.pcard}>
+
                     <View style={styles.flx_View}>
                       {
                         this.props.auth.data.image ? (
@@ -73,17 +79,20 @@ class Menu extends Component {
                           <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
                         </TouchableOpacity>
                       </View>
-                    </View>
 
+                    </View>
                   </CardItem>
+
                   <CardItem>
                     <View style={styles.pBtmTxt }>
                       <Text style={styles.pBtmTxt_Txt}>Credit: AED 0.00</Text>
                     </View>
                   </CardItem>
+
                 </Card>
 
                 <Card>
+
                   <CardItem style={styles.menuCarditem}>
                     <View style={styles.menuCardView}>
                       <Image source={icon1} style={styles.menuCardIcon}/>
@@ -96,6 +105,7 @@ class Menu extends Component {
                       </View>
                     </View>
                   </CardItem>
+
                   <CardItem style={styles.menuCarditem}>
                     <View style={styles.menuCardView}>
                       <Image source={icon2} style={styles.menuCardIcon} />
@@ -108,6 +118,7 @@ class Menu extends Component {
                       </View>
                     </View>
                   </CardItem>
+
                   <CardItem style={styles.menuCarditem}>
                     <View style={styles.menuCardView}>
                       <Image source={icon3} style={styles.menuCardIcon} />
@@ -117,6 +128,7 @@ class Menu extends Component {
                       </View>
                     </View>
                   </CardItem>
+
                   <CardItem style={styles.menuCarditem}>
                     <View style={styles.menuCardView}>
                       <Image source={icon4} style={styles.menuCardIcon} />
@@ -126,6 +138,7 @@ class Menu extends Component {
                       </View>
                     </View>
                   </CardItem>
+
                   <CardItem style={styles.menuCarditem}>
                     <View style={styles.menuCardView}>
                       <Image source={icon5} style={styles.menuCardIcon} />
@@ -135,15 +148,17 @@ class Menu extends Component {
                       </View>
                     </View>
                   </CardItem>
+
                   <CardItem style={styles.menuCarditem}>
                     <View style={styles.menuCardView}>
                       <Image source={icon6} style={styles.menuCardIcon} />
                       <Text style={styles.menuCardTxt}>Support</Text>
-                      <View style={{ width: 20 }}>
+                    <View style={styles.arw_lftgit}>
                         <Image source={back_arow} style={styles.arw_lft_img} />
                       </View>
                     </View>
                   </CardItem>
+
                   <CardItem style={styles.menuCarditem}>
                     <View style={ styles.menuCardView} >
                       <Image source={icon7} style={styles.menuCardIcon} />
@@ -153,19 +168,21 @@ class Menu extends Component {
                       </View>
                     </View>
                   </CardItem>
+
                   <CardItem style={styles.menuCarditem} >
                     <View style={ styles.menuCardView} >
 
-                      <Image source={icon7} style={styles.menuCardIcon} onPress={() =>this.logout()}/>
+                      <Image source={icon8} style={styles.menuCardIcon} onPress={() =>this.logout()}/>
                       <Text style={styles.menuCardTxt} onPress={() =>this.logout()}>Logout</Text>
-
-
+                      <View style={styles.arw_lft}>
+                        <Image source={back_arow} style={styles.arw_lft_img} />
+                      </View>
                     </View>
                   </CardItem>
 
                 </Card>
                 <View >
-                        <Text style={styles.version}>Ver 2.5 Build 2425 - Aug 2017</Text>
+                    <Text style={styles.version}>Ver 2.5 Build 2425 - Aug 2017</Text>
                 </View>
                 </Content>
             </Container>

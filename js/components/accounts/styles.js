@@ -49,8 +49,8 @@ export default {
     paddingTop: 10 
   },
   menuCardIcon:{
-    height: 40, 
-    width: 40
+    height: 30, 
+    width: 30
   },
   menuCardTxt:{
     flex: 1, 

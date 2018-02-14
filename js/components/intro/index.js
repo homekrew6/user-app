@@ -40,11 +40,9 @@ class Intro extends Component {
 					onPositionChanged={position => this.setState({position})}
 				/>
 				<View style={{ padding: 10 }}>
-					<Button block info flat  style={{ marginTop: 40, backgroundColor: '#72cfc7', borderRadius: 10, shadowColor: 'transparent', shadowOffset: { width: 0, height: 0 }, shadowRadius: 0, shadowOpacity: 0, borderWidth: 0 }}>
-						<TouchableOpacity onPress={()=>this.props.navigation.navigate("Login")}>
-							<Text>Book Now</Text>
-						</TouchableOpacity>
-					</Button>
+					<TouchableOpacity block info flat style={{ marginTop: 40, backgroundColor: '#72cfc7', borderRadius: 10, shadowColor: 'transparent', shadowOffset: { width: 0, height: 0 }, shadowRadius: 0, shadowOpacity: 0, borderWidth: 0, padding: 15, alignItems: 'center', }} onPress={() => this.props.navigation.navigate("Login")}>
+						<Text style={{ color: '#fff' }}>Book Now</Text>
+					</TouchableOpacity>
 				</View>
 			</Container>
 		);
