@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {NavigationActions} from "react-navigation";
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {login,getUserDetail} from './elements/authActions'
@@ -13,6 +14,10 @@ const deviceWidth = Dimensions.get('window').width;
 const launchscreenBg = require("../../../img/bg-login.png");
 const launchscreenLogo = require("../../../img/logo.png");
 const buttonImage = require("../../../img/bg-button.png");
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Menu' })],
+});
 class Login extends Component {
 	constructor(props) {
         super(props);
@@ -41,7 +46,8 @@ class Login extends Component {
 				if(res.type == 'success'){
 					this.props.getUserDetail(res.userId,res.id).then(userRes=>{
 						console.log(userRes)
-						this.props.navigation.navigate("Menu");
+						//this.props.navigation.navigate("Menu");
+						this.props.navigation.dispatch(resetAction);
 					}).catch(err=>{
 						Alert.alert('Login failed, please try again');
 			    })
