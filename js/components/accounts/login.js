@@ -74,7 +74,7 @@ class Login extends Component {
 						</View>
 						<View style={{padding:20}}>
 							<Item regular style={{borderColor:'#29416f',borderWidth:1,borderRadius:2,height:45}}>
-								<Input keyboardType={'email-address'} onChangeText={(text) => this.setState({email:text})} value={this.state.email} placeholder={I18n.t('username_or_email')} style={{textAlign:'center',color:'#29416f',fontSize:14}}/>
+								<Input keyboardType={'email-address'} onChangeText={(text) => this.setState({email:text})} value={this.state.email} placeholder={I18n.t('email')} style={{textAlign:'center',color:'#29416f',fontSize:14}}/>
 							</Item>
 							<Item regular style={{borderColor:'#29416f',marginTop:10,borderWidth:1,borderRadius:2,height:45}}>
 								<Input onChangeText={(text) => this.setState({password:text})} value={this.state.password} placeholder={I18n.t('password')} secureTextEntry={true} style={{textAlign:'center',color:'#29416f',fontSize:14}} />
@@ -88,7 +88,7 @@ class Login extends Component {
 						<View>
 							<TouchableOpacity onPress={() =>this.pressForgotPassword()}>
 								<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>
-									Forgot your password
+									Forgot password
 								</Text>
 							</TouchableOpacity>
 						</View>
