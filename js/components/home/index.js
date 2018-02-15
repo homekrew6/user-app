@@ -15,28 +15,35 @@ const resetAction = NavigationActions.reset({
   index: 0,
   actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });
+const resetActionIntro = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'Intro' })],
+  });
 class Home extends Component {
 	// eslint-disable-line
 	constructor(params){
 		super(params)
 	}
 	componentWillMount(){
-		this.props.checkAuth(res=>{
-			console.log(res);
-			if(res){
-				this.props.getUserDetail(res.userId,res.id).then(userRes=>{
-					//console.log(userRes)
-					//this.props.navigation.navigate("Menu");
-					this.props.navigation.dispatch(resetAction);
-				}).catch(err=>{
-					Alert.alert('Please login');
-					this.props.navigation.navigate("Login")
-				})
-				//this.props.navigation.navigate("Menu")
-			}else{
-				this.props.navigation.navigate("Intro")
-			}
-		})
+		setTimeout(() => {
+			this.props.checkAuth(res=>{
+				console.log(res);
+				if(res){
+					this.props.getUserDetail(res.userId,res.id).then(userRes=>{
+						//console.log(userRes)
+						//this.props.navigation.navigate("Menu");
+						this.props.navigation.dispatch(resetAction);
+					}).catch(err=>{
+						Alert.alert('Please login');
+						this.props.navigation.navigate("Login")
+					})
+					//this.props.navigation.navigate("Menu")
+				}else{
+					//this.props.navigation.navigate("Intro")
+					this.props.navigation.dispatch(resetActionIntro);
+				}
+			})
+		}, 4000);		
 
 	}
 	render() {
