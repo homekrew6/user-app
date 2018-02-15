@@ -47,7 +47,7 @@ class Signup extends Component {
         return false;
 	  }
 		if (!this.state.chkbox_chk) {
-		 Alert.alert('Please check Tears and Conditions');
+		 Alert.alert('Please check Terms and Conditions');
 			return false;
 		}
       const name = this.state.name;
@@ -60,11 +60,11 @@ class Signup extends Component {
 					Alert.alert('Successfully saved.');
 					this.props.navigation.navigate("Login");
 				}else{
-					Alert.alert('Data not saved,please try again');
+					Alert.alert('Please check all fields and try again');
 				}
       }).catch(err=>{
 				console.log(err);
-	     Alert.alert('Data not saved,please try again');
+				Alert.alert('Please check all fields and try again');
 
 	    })
 
