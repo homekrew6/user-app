@@ -11,6 +11,7 @@ export default {
   via_gmail: 'فيا غميل',
   signup: 'سجل',
   not_a_register_member: 'ليس عضوا في السجل؟',
+  already_registered: 'هل سبق لك التسجيل؟',
   name: 'اسم',
   email: 'البريد الإلكتروني',
   phone_number: 'رقم الهاتف',
@@ -24,4 +25,9 @@ export default {
   four_digit_code: '4 رمز الكود',
   new_password: 'كلمة السر الجديدة',
   save_password: 'حفظ كلمة المرور',
+  i_agree_to_the_term_and_conditions: ' ',
+  terms_and_conditions: '',
+  terms_and_conditions: 'Terms and Conditions',
+  resetpassword: 'Reset Password',
+  forgot_password: 'Forgot password'
 };

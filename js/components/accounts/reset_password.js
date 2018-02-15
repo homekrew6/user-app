@@ -58,10 +58,10 @@ class ResetPassword extends Component {
 					backgroundColor="#81cdc7"
 				/>
 				<Content>
-					<FSpinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
+					<FSpinner visible={this.state.visible} textContent={"Loading..."} textStyle={{ color: '#FFF' }} androidStatusBarColor="#81cdc7" />
 					<Header style={{backgroundColor:'#fff'}}>
 						<Left style={{marginRight:-15}}>
-							<Button transparent>
+							<Button transparent onPress={() => this.props.navigation.goBack()}>
 								<Icon style={{color:'#81cdc7'}} name='arrow-back' />
 							</Button>
 						</Left>

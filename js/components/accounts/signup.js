@@ -4,9 +4,10 @@ import {connect} from 'react-redux'
 import {signup} from './elements/authActions'
 import { Image, View,ScrollView, StatusBar,Dimensions,Alert,TouchableOpacity } from "react-native";
 
-import { Container, Header, Button, Content, Form, Item,Icon,Frame, Input, Label,Text } from "native-base";
+import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CheckBox } from "native-base";
 import styles from "./styles";
 import I18n from '../../i18n/i18n';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const launchscreenBg = require("../../../img/bg-login.png");
@@ -20,7 +21,8 @@ class Signup extends Component {
 	        name:'',
 	        email: '',
 	        password: '',
-	        phone:''
+			phone:'',
+			chkbox_chk: false
 
       }
   }
@@ -40,10 +42,14 @@ class Signup extends Component {
         Alert.alert('Please enter password');
         return false;
       }
-			if(!this.state.phone){
+	  if(!this.state.phone){
         Alert.alert('Please enter phone');
         return false;
-      }
+	  }
+		if (!this.state.chkbox_chk) {
+		 Alert.alert('Please check Tears and Conditions');
+			return false;
+		}
       const name = this.state.name;
       const email = this.state.email;
       const password = this.state.password;
@@ -62,6 +68,17 @@ class Signup extends Component {
 
 	    })
 
+	}
+
+	chkbox_check() {		
+		if (this.state.chkbox_chk) {
+			this.setState({ chkbox_chk: false });
+			console.log(this.state.chkbox_chk);
+		}
+		else{
+			this.setState({ chkbox_chk: true });
+			console.log(this.state.chkbox_chk);		
+		}		
 	}
 
 	render() {
@@ -103,7 +120,17 @@ class Signup extends Component {
 								<Text>Sign Up</Text>
 								</Image>
 							</View> */}
-
+							<View style={{ flexDirection: 'row', flex: 1, paddingTop: 15, paddingBottom: 10 }} >
+								<View style={{ width: 35 }}>
+									<CheckBox checkboxBgColor={'#29416f'} checked={this.state.chkbox_chk} onPress={() => this.chkbox_check()} />
+								</View>
+								<View style={{ flex: 1, flexDirection: 'row' }}>
+									<Text style={{ fontSize: 14 }}>{I18n.t('i_agree_to_the_term_and_conditions')}</Text>
+									<TouchableOpacity>
+										<Text style={{ fontSize: 14, color: '#29416f' }}>{I18n.t('terms_and_conditions')}</Text>
+									</TouchableOpacity>
+								</View>
+							</View>
 
 							<TouchableOpacity onPress={() => this.pressSignup()} style={{ height: 70, marginTop: 15, flexDirection: 'row' }}>
 								<Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
@@ -116,17 +143,19 @@ class Signup extends Component {
 							</View>
 							<View style={{ flexDirection:'row', justifyContent:'center', marginTop:5, }}>
 								<Button block transparent style={{borderWidth:1,borderColor:'#29416f', flex:1}}>
+									<Icon name="facebook" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
 									<Text style={{color:'#29416f'}}>{I18n.t('via_facebook')}</Text>
 								</Button>
 							</View>
 							<View style={{flexDirection:'row',justifyContent:'center',marginTop:5}}>
 								<Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1}}>
+									<Icon name="gmail" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
 									<Text style={{color:'#29416f'}}>{I18n.t('via_gmail')}</Text>
 								</Button>
 							</View>
 
 							<View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginTop:10}}>
-								<Text style={{color:'#252525'}}>{I18n.t('not_a_register_member')} </Text>
+								<Text style={{ color: '#252525' }} >{I18n.t('already_registered')} </Text>
 								<TouchableOpacity onPress={()=>this.props.navigation.navigate("Login")}>
 									<Text style={{color:'#29416f'}}>{I18n.t('login')}</Text>
 								</TouchableOpacity>

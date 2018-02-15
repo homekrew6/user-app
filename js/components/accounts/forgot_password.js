@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {login} from './elements/authActions'
-import { Image, View, StatusBar,Dimensions,Alert, TouchableOpacity } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { Container, Header, Button, Content, Form,Left,Right,Body,Title, Item,Icon,Frame, Input, Label,Text } from "native-base";
 import api from '../../api'
@@ -48,13 +48,13 @@ class ForgotPassword extends Component {
 
 	render() {
 		return (
-			<Container style={{backgroundColor:'#fff'}}>
+			<Container>
 				<StatusBar
 					backgroundColor="#81cdc7"
 				/>
 				<Content>
 					<FSpinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
-					<Header style={{backgroundColor:'#fff'}}>
+					<Header style={{ backgroundColor: '#fff' }} androidStatusBarColor="#81cdc7" >
 						<Left style={{marginRight:-15}}>
 							<Button transparent onPress={() => this.props.navigation.goBack()}>
 								<Icon style={{color:'#81cdc7'}} name='arrow-back'  />
@@ -112,7 +112,7 @@ class ForgotPassword extends Component {
 					</View>
 					<TouchableOpacity transparent style={{flex:1,flexDirection:'row',height:70,marginTop:2}} onPress={() => this.pressSend()} >
 						<Image source={buttonImage} style={{flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center',width:deviceWidth/1.3,height:55}} >
-							<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>{I18n.t('send_otp')}</Text>
+							<Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('resetpassword')}</Text>
 						</Image>
 					</TouchableOpacity>
 
