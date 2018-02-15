@@ -10,7 +10,8 @@ export default {
   via_facebook: 'VIA FACEBOOK',
   via_gmail: 'VIA GMAIL',
   signup: 'SIGNUP',
-  not_a_register_member: 'Not a register member?',
+  not_a_register_member: 'Not a registered member?',
+  already_registered: 'Already registered ?',
   name: 'NAME',
   email: 'EMAIL',
   phone_number: 'PHONE NUMBER',
@@ -24,4 +25,8 @@ export default {
   four_digit_code: '4 DIGIT CODE',
   new_password: 'NEW PASSWORD',
   save_password: 'SAVE PASSWORD',
+  i_agree_to_the_term_and_conditions: 'I agree to the ' ,
+  terms_and_conditions: 'Terms and Conditions',
+  resetpassword: 'Reset Password',
+  forgot_password: 'Forgot password'
 };

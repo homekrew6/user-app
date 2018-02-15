@@ -5,10 +5,11 @@ import {connect} from 'react-redux'
 import {login,getUserDetail} from './elements/authActions'
 import { Image, View, StatusBar,Dimensions,Alert, TouchableOpacity } from "react-native";
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content, Form, Item,Icon,Frame, Input, Label,Text } from "native-base";
+import { Container, Header, Button, Content, Form, Item,Frame, Input, Label,Text } from "native-base";
 
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const launchscreenBg = require("../../../img/bg-login.png");
@@ -21,10 +22,10 @@ const resetAction = NavigationActions.reset({
 class Login extends Component {
 	constructor(props) {
         super(props);
-				this.state = {
+			this.state = {
 	        email: '',
-	        password: ''
-	      }
+			password: ''
+		}
     }
 		pressForgotPassword(){
 			this.props.navigation.navigate("ForgotPassword");
@@ -63,7 +64,7 @@ class Login extends Component {
 	      //return err
 	    })
 		}
-
+		
 
 	render() {
 		return (
@@ -72,9 +73,9 @@ class Login extends Component {
 					backgroundColor="#81cdc7"
 				/>
 				{/* <Image source={launchscreenBg}> */}
+				<Image source={launchscreenBg} style={styles.imageContainer}>
 				<Content>
 					<FSpinner visible={this.props.auth.busy} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
-					<Image source={launchscreenBg} style={styles.imageContainer}>
 						<View style={styles.logoContainer}>
 							<Image source={launchscreenLogo} style={styles.logo} />
 						</View>
@@ -94,7 +95,7 @@ class Login extends Component {
 						<View>
 							<TouchableOpacity onPress={() =>this.pressForgotPassword()}>
 								<Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>
-									Forgot password
+									{I18n.t('forgot_password')}
 								</Text>
 							</TouchableOpacity>
 						</View>
@@ -103,11 +104,13 @@ class Login extends Component {
 						</View>
 						<View style={{flexDirection:'row',justifyContent:'center',marginTop:5, paddingLeft: 15, paddingRight: 15 }}>
 							<Button block transparent style={{borderWidth:1,borderColor:'#29416f', flex: 1 }}>
+								<Icon name="facebook" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
 								<Text style={{color:'#29416f'}}>{I18n.t('via_facebook')}</Text>
 							</Button>
 						</View>
 						<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, paddingLeft: 15, paddingRight: 15 }}>
 							<Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1}}>
+								<Icon name="gmail" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }}></Icon>
 								<Text style={{color:'#29416f'}}>{I18n.t('via_gmail')}</Text>
 							</Button>
 						</View>
@@ -118,9 +121,8 @@ class Login extends Component {
 								<Text style={{color:'#29416f'}}>{I18n.t('signup')}</Text>
 							</TouchableOpacity>
 						</View>
-
-					</Image>
-				</Content>
+					</Content>
+				</Image>
 			</Container>
 		);
 	}
