@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {NavigationActions} from "react-navigation";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { logout } from './elements/authActions'
@@ -21,7 +22,10 @@ const icon7 = require("../../../img/icon7.png");
 const icon8 = require("../../../img/icon8.png");
 const back_arow = require("../../../img/arrow_back.png");
 const logo_hdr = require("../../../img/logo2.png");
-
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Login' })],
+});
 class Menu extends Component {
     constructor(props) {
         super(props);
@@ -32,7 +36,8 @@ class Menu extends Component {
     logout(){
       this.props.logout(res=>{
   			if(res){
-  				this.props.navigation.navigate("Login")
+  				//this.props.navigation.navigate("Login")
+          this.props.navigation.dispatch(resetAction);
   			}else{
   				this.props.navigation.navigate("Menu")
   			}
