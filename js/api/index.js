@@ -9,7 +9,7 @@ const resolver = ()=>AsyncStorage.getItem('userToken',(err,result)=>{
 
   if(result){
     result = JSON.parse(result);
-    headers.Authorization = 'Bearer '+result.id
+    //headers.Authorization = 'Bearer '+result.id
   }
 })
 //headers.Authorization = 'Bearer tdsiUzrbkMWy3HcVoB4UPaTxgDdxTpXeJduwkWKpiOX6XtZKYPBvJAsTXv9M';
@@ -19,13 +19,16 @@ class api {
     console.log(config.base_api+endpoint)
     console.log(data);
     return new Promise((resolve,reject)=>{
+      //alert('promise');
       resolver().then(()=>{
+        //alert('resolver');
         fetch(config.base_api+endpoint,{
           method:'POST',
           headers:headers,
           body:JSON.stringify(data)
         }).then(response => {
           console.log(response);
+          //alert(response.status)
             if(response.status === 200){
               resolve(response.json());
             }else{

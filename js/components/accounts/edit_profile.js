@@ -18,7 +18,7 @@ const carveImage = require("../../../img/bg-1.png");
 class EditProfile extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
+        console.log(props);        
         this.state = {
 	        email: props.auth.data.email,
 	        name: props.auth.data.name,

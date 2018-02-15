@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {NavigationActions} from "react-navigation";
 import { Image, View, StatusBar } from "react-native";
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
@@ -10,7 +11,10 @@ import styles from "./styles";
 //const launchscreenBg = require("../../../img/launchscreen-bg.png");
 const launchscreenBg = require("../../../img/splash.png");
 const launchscreenLogo = require("../../../img/logo-kitchen-sink.png");
-
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Menu' })],
+});
 class Home extends Component {
 	// eslint-disable-line
 	constructor(params){
@@ -21,8 +25,9 @@ class Home extends Component {
 			console.log(res);
 			if(res){
 				this.props.getUserDetail(res.userId,res.id).then(userRes=>{
-					console.log(userRes)
-					this.props.navigation.navigate("Menu");
+					//console.log(userRes)
+					//this.props.navigation.navigate("Menu");
+					this.props.navigation.dispatch(resetAction);
 				}).catch(err=>{
 					Alert.alert('Please login');
 					this.props.navigation.navigate("Login")
