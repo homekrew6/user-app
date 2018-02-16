@@ -8,6 +8,7 @@ import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Te
 import styles from "./styles";
 import I18n from '../../i18n/i18n';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import PopoverTooltip from 'react-native-popover-tooltip';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const launchscreenBg = require("../../../img/bg-login.png");
@@ -41,7 +42,12 @@ class Signup extends Component {
       if(!this.state.password){
         Alert.alert('Please enter password');
         return false;
-      }
+	  }
+	  const password_pattern = /(?=.*[A-Z]).{6,}/; 
+	if(!password_pattern.test(this.state.password)) {
+		Alert.alert('Password must have one capital letter and min six characters');
+		return false;
+	}
 	  if(!this.state.phone){
         Alert.alert('Please enter phone');
         return false;
@@ -50,6 +56,9 @@ class Signup extends Component {
 		 Alert.alert('Please check Terms and Conditions');
 			return false;
 		}
+		
+		
+		alert(re.test(this.state.password))
       const name = this.state.name;
       const email = this.state.email;
       const password = this.state.password;
@@ -105,6 +114,21 @@ class Signup extends Component {
 							</Item>
 							<Item regular style={{borderColor:'#29416f',marginTop:10,borderWidth:1,borderRadius:2,height:45}}>
 								<Input onChangeText={(text) => this.setState({password:text})} value={this.state.password} placeholder={I18n.t('password')} secureTextEntry={true} style={{textAlign:'center',color:'#29416f',fontSize:14 }} />
+								<PopoverTooltip
+								ref='tooltip1'
+								buttonComponent={
+									<Icon name="information-outline" style={{ fontSize: 26, paddingRight: 10, color: '#29416f', paddingLeft: 10, paddingTop: 10, paddingBottom: 10 }}></Icon>
+								}
+								items={[
+									{
+									label: 'Min length six, one Caps',
+									onPress: () => {}
+									}            
+								]}
+								// animationType='timing'
+								// using the default timing animation
+								/>
+								
 							</Item>
 							<Item regular style={{borderColor:'#29416f',marginTop:10,borderWidth:1,borderRadius:2,height:45}}>
 								<Input onChangeText={(text) => this.setState({phone:text})} value={this.state.phone} placeholder={I18n.t('phone_number')} keyboardType={'numeric'} style={{textAlign:'center',color:'#29416f',fontSize:14 }} />
@@ -122,7 +146,7 @@ class Signup extends Component {
 							</View> */}
 							<View style={{ flexDirection: 'row', flex: 1, paddingTop: 15, paddingBottom: 10 }} >
 								<View style={{ width: 35 }}>
-									<CheckBox checkboxBgColor={'#29416f'} checked={this.state.chkbox_chk} onPress={() => this.chkbox_check()} />
+									<CheckBox color='#29416f' checked={this.state.chkbox_chk} onPress={() => this.chkbox_check()} />
 								</View>
 								<View style={{ flex: 1, flexDirection: 'row' }}>
 									<Text style={{ fontSize: 14 }}>{I18n.t('i_agree_to_the_term_and_conditions')}</Text>
@@ -131,6 +155,7 @@ class Signup extends Component {
 									</TouchableOpacity>
 								</View>
 							</View>
+							
 
 							<TouchableOpacity onPress={() => this.pressSignup()} style={{ height: 70, marginTop: 15, flexDirection: 'row' }}>
 								<Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
