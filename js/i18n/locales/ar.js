@@ -29,5 +29,9 @@ export default {
   terms_and_conditions: '',
   terms_and_conditions: 'Terms and Conditions',
   resetpassword: 'Reset Password',
-  forgot_password: 'Forgot password'
+  forgot_password: 'Forgot password',
+  i_agree_to_the_term_and_conditions: '',
+  terms_and_conditions: '',
+  resetpassword: '',
+  forgot_password: ''
 };

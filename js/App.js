@@ -15,6 +15,7 @@ import ForgotPassword  from "./components/accounts/forgot_password";
 import ResetPassword from "./components/accounts/reset_password";
 import Menu  from "./components/accounts/menu";
 import EditProfile from "./components/accounts/edit_profile";
+import Category from "./components/service/category";
 
 const AppNavigator = StackNavigator(
     {
@@ -26,10 +27,11 @@ const AppNavigator = StackNavigator(
         ForgotPassword: {screen: ForgotPassword},
         ResetPassword: {screen: ResetPassword},
         Menu: { screen: Menu },
-        EditProfile: { screen: EditProfile }
+        EditProfile: { screen: EditProfile },
+        Category: { screen: Category }
     },
     {
-        initialRouteName: "Drawer",
+        initialRouteName: "Category",
         headerMode: "none",
     }
 );
