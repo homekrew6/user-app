@@ -66,6 +66,9 @@ class Home extends Component {
 						{/* <H3 style={styles.text}>NativeBase components</H3> */}
 						<View style={{ marginTop: 8 }} />
 					</View>
+					<View style={styles.btmView}>
+						<Text style={styles.btmText}>Copyright © 2018 homekrew. All Rights Reserved.</Text>
+					</View>
 
 				</Image>
 			</Container>
