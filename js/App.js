@@ -31,7 +31,7 @@ const AppNavigator = StackNavigator(
         Category: { screen: Category }
     },
     {
-        initialRouteName: "Category",
+        initialRouteName: "Drawer",
         headerMode: "none",
     }
 );
