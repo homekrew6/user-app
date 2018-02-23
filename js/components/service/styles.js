@@ -12,6 +12,14 @@ export default {
     appHdr2: {
         backgroundColor: '#cbf0ed',
     },
+    appHdr2Bdy:{
+        textAlign: 'center',
+        alignItems: 'center'
+    },
+    appHdr2Txt:{
+        color: '#1e3768',
+        fontSize: 15
+    },
     catIten:{
         width: 110, 
         marginBottom: 40,
@@ -76,5 +84,152 @@ export default {
         flexDirection: 'row', 
         justifyContent: 'center', 
         width: deviceWidth 
+    },
+
+
+
+    confirmationItem: { 
+        paddingTop: 15, 
+        paddingBottom: 15, 
+        paddingLeft: 15, 
+        paddingRight: 15, 
+        borderColor: '#f9f9f9' 
+    },
+    confirmationItem2:{
+        paddingTop: 15,
+        paddingBottom: 15,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderColor: '#f9f9f9', 
+        flexDirection: 'row'
+    },
+    bedroomCount:{ 
+        flex: 1, 
+        textAlign: 'center' 
+    },
+    confirmationIconView:{ 
+        borderRadius: 50, 
+        borderWidth: 1, 
+        borderColor: '#81cdc7', 
+        marginRight: 8, 
+        height: 35, 
+        width: 35, 
+        alignItems: 'center', 
+        justifyContent: 'center' 
+    },
+    confirmationViewIcon:{ 
+        fontSize: 20, 
+        color: '#81cdc7' 
+    },
+    confirmationViewIcon2:{
+        fontSize: 26,
+        color: '#81cdc7',
+        marginRight: 10, 
+        marginLeft: 10
+    },
+    confirmationMainTxt:{ 
+        flex: 1, 
+        fontSize: 14 
+    },
+    confirmationDateTime:{ 
+        color: '#a9a9a9', 
+        fontSize: 13 
+    },
+    confirmationArwNxt:{ 
+        paddingLeft: 5 
+    },
+    confirmationArwNxtIcn:{
+        fontSize: 30
+    },
+    confirmationhd: { 
+        alignItems: 'center', 
+        paddingTop: 15, 
+        paddingBottom: 15 
+    },
+    confirmationhdtxt:{ 
+        color: '#1e3768', 
+        fontSize: 18 
+    },
+    confirmationServicewarp:{ 
+        flex: 1, 
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 30 
+    },
+    confirmationServiceItem:{ 
+        flex: 1, 
+        alignItems: 'center' 
+    },
+    confirmationServiceItemIcon:{ 
+        borderRadius: 70, 
+        height: 45, 
+        width: 45, 
+        backgroundColor: '#81cdc7', 
+        flexDirection: 'row',
+        alignItems: 'center', 
+        justifyContent: 'center' 
+    },
+    confirmationServiceItemIcon2: {
+        borderRadius: 70,
+        height: 45,
+        width: 45,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: '#81cdc7',
+        borderWidth: 1
+    },
+    confirmationServiceItemIconIcn:{ 
+        color: "#fff", 
+        fontSize: 30 
+    },
+    confirmationServiceItemIconIcn2: {
+        color: "#81cdc7",
+        fontSize: 30
+    },
+    confirmationServiceTxt:{
+        color: '#1e3768', 
+        marginTop: 5, 
+        marginBottom: 10
+    },
+    confirmationServicePlusWarp:{ 
+        borderRadius: 50, 
+        borderWidth: 1, 
+        borderColor: '#e0e0e0', 
+        height: 25, 
+        width: 25, 
+        alignItems: 'center', 
+        justifyContent: 'center' 
+    },
+    confirmationServicePlusIcon:{ 
+        color: '#81cdc7', 
+        fontSize: 18 
+    },
+    confirmationServiceDvdr:{ 
+        height: 100, 
+        backgroundColor: '#e6e6e6', 
+        width: 1,
+         
+    },
+    confirmationServicefooterItem:{
+        flex: 1, 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        backgroundColor: '#81cdc7', 
+        color: '#fff', 
+        alignItems: 'center'
+    },
+    confirmationServicefooterItem2:{
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        backgroundColor: '#1e3768',
+        color: '#fff',
+        alignItems: 'center'
+    },
+    confirmationServicefooterItmTxt:{
+        color: '#fff',
+        fontSize: 14
+
     }
 };

@@ -15,7 +15,10 @@ import ForgotPassword  from "./components/accounts/forgot_password";
 import ResetPassword from "./components/accounts/reset_password";
 import Menu  from "./components/accounts/menu";
 import EditProfile from "./components/accounts/edit_profile";
-import Category from "./components/service/category";
+import Category from "./components/service/category"; 
+import Confirmation from "./components/service/confirmation";
+import ServiceDetails from "./components/service/serviceDetails";
+import Expect from "./components/service/expect";
 
 const AppNavigator = StackNavigator(
     {
@@ -28,10 +31,13 @@ const AppNavigator = StackNavigator(
         ResetPassword: {screen: ResetPassword},
         Menu: { screen: Menu },
         EditProfile: { screen: EditProfile },
-        Category: { screen: Category }
+        Category: { screen: Category }, 
+        Confirmation: { screen: Confirmation },
+        ServiceDetails: { screen: ServiceDetails },
+        Expect: { screen: Expect }
     },
     {
-        initialRouteName: "Category",
+        initialRouteName: "Drawer",
         headerMode: "none",
     }
 );
