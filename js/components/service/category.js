@@ -125,14 +125,7 @@ class Categories extends Component {
                             <Text style={styles.catIten_txt}>Washing</Text>
                         </View>
                     </View>
-
-                    {/* <GridView style={styles.gridView}>
-                        <View style={styles.itemContainer}>
-                            <Text style={styles.itemName}>1</Text>
-                            <Text style={styles.itemCode}>2</Text>
-                        </View>
-                    </GridView> */}
-
+                    
                 </Content>
             </Container>
         );
