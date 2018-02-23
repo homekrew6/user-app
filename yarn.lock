@@ -1879,7 +1879,7 @@ inquirer@^3.0.6:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
-invariant@^2.0.0, invariant@^2.2.0, invariant@^2.2.1, invariant@^2.2.2:
+invariant@^2.0.0, invariant@^2.2.0, invariant@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.2.tgz#9e1f56ac0acdb6bf303306f338be3b204ae60360"
   dependencies:
@@ -3223,6 +3223,14 @@ react-native-i18n@^2.0.11:
   dependencies:
     i18n-js "^3.0.3"
 
+react-native-image-crop-picker@^0.16.1:
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.16.1.tgz#37efb419276c691ac0f99d497ef787b53e652fc2"
+
+react-native-image-picker@^0.26.7:
+  version "0.26.7"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-0.26.7.tgz#ad2ee957f7f6cc01396893ea03d84cb2adb2e376"
+
 react-native-image-slider@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/react-native-image-slider/-/react-native-image-slider-1.1.5.tgz#1fa8537d1e0477c41d6c3a05f3fe02ffcdddd150"
@@ -3239,19 +3247,18 @@ react-native-loading-spinner-overlay@^0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-0.5.2.tgz#b7bcd277476d596615fd7feee601789f9bdc7acc"
 
-react-native-oauth@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-oauth/-/react-native-oauth-2.2.0.tgz#8aa7fad344b22cd29f24a4c3385244684dbcbe9e"
-  dependencies:
-    invariant "^2.2.1"
-    valib "^2.0.0"
-
 react-native-popover-tooltip@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/react-native-popover-tooltip/-/react-native-popover-tooltip-1.1.4.tgz#f6f2121e6725e9da2c014a33b946162c197a4eb4"
   dependencies:
     invariant "^2.2.2"
     prop-types "^15.6.0"
+
+react-native-slider@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-slider/-/react-native-slider-0.11.0.tgz#b68a0bc43c8422b24cd57947cc5ac2bcdb58fadc"
+  dependencies:
+    prop-types "^15.5.6"
 
 react-native-tab-view@^0.0.65:
   version "0.0.65"
@@ -4095,10 +4102,6 @@ utils-merge@1.0.0:
 uuid@3.0.1, uuid@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
-
-valib@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/valib/-/valib-2.0.0.tgz#e0d455b10e17ae605c0f33971adac73564ee18a7"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.1"

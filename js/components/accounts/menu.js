@@ -71,7 +71,7 @@ class Menu extends Component {
                     <View style={styles.flx_View}>
                       {
                         this.props.auth.data.image ? (
-                          <Image source={profileImage} style={styles.profileImage}/>
+                          <Image source={{uri: this.props.auth.data.image}} style={styles.profileImage}/>
                         ):(
                           <Image source={profileImage} style={styles.profileImage}/>
                         )

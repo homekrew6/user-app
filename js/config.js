@@ -5,7 +5,7 @@ const config = {
   krew_vertical_id : 1,
   s3 : {
   keyPrefix: "",
-  bucket: "files.homekrew.com",
+  bucket:"homekrewbooking",
   region: "eu-central-1",
   accessKey: "AKIAJUKBBDPNW5ED2M2A",
   secretKey: "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",

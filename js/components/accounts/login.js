@@ -46,25 +46,34 @@ class Login extends Component {
 	      return false;
 	    }
 	    const email = this.state.email;
-	    const password = this.state.password;
-	    this.props.login(email, password).then((res) => {
-      console.log(res);
-      if (res.type == 'success') {
-        this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-          console.log(userRes);
-          // this.props.navigation.navigate("Menu");
-          this.props.navigation.dispatch(resetAction);
-        }).catch((err) => {
-          Alert.alert('Login failed, please try again');
-			    });
-      }else {
-        Alert.alert('Login failed, please try again');
-      }
-	    }).catch((err) => {
-      console.log(err);
-	     Alert.alert('Login fail,please try again');
-	      // return err
-	    });
+      const password = this.state.password;
+      api.post('Customers/approveChecking', { email: this.state.email }).then(resEdit => {
+				if (resEdit.response.is_active){
+          this.props.login(email, password).then((res) => {
+            console.log(res);
+            if (res.type == 'success') {
+              this.props.getUserDetail(res.userId, res.id).then((userRes) => {
+                console.log(userRes);
+                // this.props.navigation.navigate("Menu");
+                this.props.navigation.dispatch(resetAction);
+              }).catch((err) => {
+                Alert.alert('Login failed, please try again');
+                });
+            }else {
+              Alert.alert('Login failed, please try again');
+            }
+            }).catch((err) => {
+            console.log(err);
+             Alert.alert('Login fail,please try again');
+              // return err
+            });
+        }else{
+          Alert.alert('You account not active, contact with admin.');
+        }
+      }).catch((err)=>{
+        Alert.alert('Login fail,please try again');
+      })
+	    
   }
 
   clcikFacebook() {
@@ -97,7 +106,7 @@ class Login extends Component {
 							  // return err
               });
             } else {
-              api.post('Customers/signup', { name: profileDetails.name, email: profileDetails.email, password: profileDetails.id, social_type: 'facebook', social_id: profileDetails.id }).then((responseJson) => {
+              api.post('Customers/signup', { name: profileDetails.name, email: profileDetails.email, password: profileDetails.id, social_type: 'facebook', social_id: profileDetails.id,is_active:1 }).then((responseJson) => {
                 this.props.login(profileDetails.email, profileDetails.id).then((resLogin) => {
                   console.log(resLogin);
                   if (resLogin.type == 'success') {
