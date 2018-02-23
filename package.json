@@ -25,6 +25,8 @@
     "native-base": "2.3.1",
     "react": "16.0.0-alpha.13",
     "react-native": "0.46.4",
+    "react-native-facebook-login": "^1.6.0",
+    "react-native-google-signin": "^0.10.0",
     "react-native-i18n": "^2.0.11",
     "react-native-image-slider": "^1.1.5",
     "react-native-loading-spinner-overlay": "^0.5.2",

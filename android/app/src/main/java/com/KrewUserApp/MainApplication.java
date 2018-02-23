@@ -3,6 +3,8 @@ package com.KrewUserApp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import com.magus.fblogin.FacebookLoginPackage;
 //import com.reactnative.ivpusic.imagepicker.PickerPackage;
 //import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
@@ -27,6 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNGoogleSigninPackage(),
+            new FacebookLoginPackage(),
             //new PickerPackage(),
             //new FBSDKPackage(),
             new RNI18nPackage(),
