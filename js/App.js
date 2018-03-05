@@ -37,7 +37,7 @@ const AppNavigator = StackNavigator(
         Expect: { screen: Expect }
     },
     {
-        initialRouteName: "Drawer",
+        initialRouteName: "Category",
         headerMode: "none",
     }
 );

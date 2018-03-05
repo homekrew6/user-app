@@ -231,5 +231,13 @@ export default {
         color: '#fff',
         fontSize: 14
 
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+      },
+      innerContainer: {
+        alignItems: 'center',
+      },
 };
