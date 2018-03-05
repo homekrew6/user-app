@@ -125,8 +125,7 @@ class Categories extends Component {
               <Image source={{uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
                 <View style={{ width: 120 }}>
                   <Picker
-                    mode="dropdown"
-                    mode="dropdown"
+                    mode="dropdown"                    
                     selectedValue={this.state.selected1}
                     onValueChange={this.onValueChange.bind(this)}
                     supportedOrientations="Portrait"
