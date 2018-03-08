@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, Modal } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api';
-
+import { setServiceDetails} from './elements/serviceActions';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker } from 'native-base';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-
+import Modal from "react-native-modal";
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require('../../../img/logo2.png');
@@ -35,6 +35,7 @@ class Categories extends Component {
       serviceList: [],
       selectedZoneDetails: '',
       visible: true,
+      IsModalVisible:false
     };
   }
 
@@ -55,13 +56,23 @@ class Categories extends Component {
           //console.log(err);
           this.setState({visible:false})
         });
-        
+
       }
     }).catch((err) => {
       this.setState({visible:false})
     });
   }
-
+  openModal(data) {
+    console.log('data on open Modal', data);
+     //Alert.alert('Click is working');
+     this.props.setServiceDetails(data);
+     this.setState({ IsModalVisible: true })
+  }
+  closeModal() {
+     //Alert.alert('Click is working');
+     this.setState({ IsModalVisible: false });
+     this.props.navigation.navigate('ServiceDetails');
+  }
   onValueChange(value) {
     //console.log(value);
     this.setState({
@@ -93,7 +104,9 @@ class Categories extends Component {
       this.state.serviceList.map((data,key)=>(
         <View key={ data.id } style={styles.catIten}>
           <View style={styles.catIten_img_view}>
-            <Image source={{uri: data.service.banner_image }} style={styles.catIten_img} />
+            <TouchableOpacity onPress={() => this.openModal(data.service)}>
+              <Image source={{uri: data.service.banner_image }} style={styles.catIten_img} />
+            </TouchableOpacity>
           </View>
           <Text style={styles.catIten_txt}>{data.service.name}</Text>
         </View>
@@ -105,7 +118,7 @@ class Categories extends Component {
           backgroundColor="#cbf0ed"
         />
         <Content style={styles.bgWhite} >
-        <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
+          <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
           <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
             <Button transparent >
               <SimpleLineIcons name="grid" style={styles.hd_lft_icon} />
@@ -125,7 +138,7 @@ class Categories extends Component {
               <Image source={{uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
                 <View style={{ width: 120 }}>
                   <Picker
-                    mode="dropdown"                    
+                    mode="dropdown"
                     selectedValue={this.state.selected1}
                     onValueChange={this.onValueChange.bind(this)}
                     supportedOrientations="Portrait"
@@ -146,40 +159,51 @@ class Categories extends Component {
           <View style={styles.catIten_hdr}>
             <Text style={styles.catIten_hdr_txt}>Browse by categories</Text>
           </View>
+          <Modal isVisible={this.state.IsModalVisible}  animationIn="slideInLeft"
+          animationOut="slideOutRight">
 
+            <TouchableOpacity onPress={() => this.closeModal()}>
+              <Text>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.closeModal()}>
+              <Text>Office</Text>
+            </TouchableOpacity>
+
+
+          </Modal>
           <View style={styles.catIten_txt_warp}>
-          {serviceListing}
+            {serviceListing}
             {/* <View style={styles.catIten}>
               <View style={styles.catIten_img_view}>
                 <Image source={img11} style={styles.catIten_img} />
               </View>
               <Text style={styles.catIten_txt}>Cleaning</Text>
-            </View>
-            <View style={styles.catIten}>
+              </View>
+              <View style={styles.catIten}>
               <View style={styles.catIten_img_view}>
                 <Image source={img12} style={styles.catIten_img} />
               </View>
               <Text style={styles.catIten_txt}>Handyman</Text>
-            </View>
-            <View style={styles.catIten}>
+              </View>
+              <View style={styles.catIten}>
               <View style={styles.catIten_img_view}>
                 <Image source={img13} style={styles.catIten_img} />
               </View>
               <Text style={styles.catIten_txt}>Plumbing</Text>
-            </View>
-            <View style={styles.catIten}>
+              </View>
+              <View style={styles.catIten}>
               <View style={styles.catIten_img_view}>
                 <Image source={img14} style={styles.catIten_img} />
               </View>
               <Text style={styles.catIten_txt}>Electrical</Text>
-            </View>
-            <View style={styles.catIten}>
+              </View>
+              <View style={styles.catIten}>
               <View style={styles.catIten_img_view} >
                 <Image source={img15} style={styles.catIten_img} />
               </View>
               <Text style={styles.catIten_txt}>Air Conditioning</Text>
-            </View>
-            <View style={styles.catIten}>
+              </View>
+              <View style={styles.catIten}>
               <View style={styles.catIten_img_view}>
                 <Image source={img16} style={styles.catIten_img} />
               </View>
@@ -193,4 +217,17 @@ class Categories extends Component {
   }
 }
 
-export default Categories;
+// export default Categories;
+Categories.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+const mapStateToProps = state => ({
+  auth: state.auth,
+  service:state.service
+});
+
+const mapDispatchToProps = dispatch => ({
+  setServiceDetails: (data) => dispatch(setServiceDetails(data))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);

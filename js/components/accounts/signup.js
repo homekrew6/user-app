@@ -67,7 +67,7 @@ class Signup extends Component {
     }
 
 
-    alert(re.test(this.state.password));
+
     const name = this.state.name;
     const email = this.state.email;
     const password = this.state.password;
@@ -91,7 +91,7 @@ class Signup extends Component {
 	}).catch((err) => {
 		Alert.alert('please try again.');
 	  });
-    
+
   }
 
   clcikFacebook() {

@@ -6,10 +6,10 @@ import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from 'rea
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-crop-picker';
-import config from '../../config'
+import config from '../../config';
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title } from 'native-base';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
 
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -18,7 +18,10 @@ const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const profileImage = require('../../../img/atul.png');
 const carveImage = require('../../../img/bg-1.png');
-
+var BUTTONS = [
+  { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
+  { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+];
 class EditProfile extends Component {
   constructor(props) {
     super(props);
@@ -37,8 +40,10 @@ class EditProfile extends Component {
 	      };
   }
 
+
+
   attachFile() {
-    //this.setState({ uploadButton: false });
+    // this.setState({ uploadButton: false });
 
     ImagePicker.openPicker({
       width: 400,
@@ -64,76 +69,80 @@ class EditProfile extends Component {
         console.log(response);
         if (response.status !== 201) {
           this.setState({ uploadButton: true });
-          
+
           this.setState({ visible: false });
           throw new Error('Failed to upload image to S3');
         }
 
-        
+
         if (response.status == 201) {
           this.setState({ uploadButton: true });
           this.setState({ uploaded: true });
 
           // this.props.setProfilePic(response.body.postResponse.location);
-          this.setState({ image: response.body.postResponse.location })
+          this.setState({ image: response.body.postResponse.location });
           this.setState({ visible: false });
         }
       }).catch((err) => {
-          console.log(err);
-          this.setState({ visible: false });
+        console.log(err);
+        this.setState({ visible: false });
       });
     }).catch((err) => {
       this.setState({ visible: false });
       // console.log(err);
-      //this.setState({ uploadButton: true });
+      // this.setState({ uploadButton: true });
     });
   }
 
   captureFile() {
-    this.setState({ cameraButton: false });
+      this.setState({ cameraButton: false });
 
-    ImagePicker.openCamera({
-      width: 400,
-      height: 300,
-      cropping: true,
-    }).then((response) => {
-      console.log(response);
-      let uri;
-      if (!response.path) {
-        uri = response.uri;
-      } else{
-        uri = response.path;
-      }
-      const file = {
-        uri,
-        name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
-        type: response.mime || 'image/png',
-      };
-      console.log(file);
-      
-      const options = config.s3;
-      console.log(options);
-      RNS3.put(file, config.s3).then((response) => {
-        console.log(response);
-        if (response.status !== 201) {
-          this.setState({ cameraButton: true });
-          throw new Error('Failed to upload image to S3');
-        }
+      ImagePicker.openCamera({
+          width: 400,
+          height: 300,
+          cropping: true
+      }).then((response) => {
+          this.setState({ visible: true });
+          let uri;
 
-        
-        if (response.status == 201) {
-          this.setState({ cameraButton: true });
-          this.setState({ cameraUploaded: true });
-          //this.props.setProfilePic(response.body.postResponse.location);
-          // this.setState({uploadButton:false})
-        }
+          if (!response.path) {
+              uri = response.uri;
+          } else {
+              uri = response.path;
+          }
+          const file = {
+              uri,
+              name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
+              type: response.mime || 'image/png',
+          };
+          console.log(file);
+
+          const options = config.s3;
+          console.log(options);
+          RNS3.put(file, config.s3).then((response) => {
+              console.log(response);
+              if (response.status !== 201) {
+                  this.setState({ cameraButton: true });
+                  this.setState({ visible: true });
+                  throw new Error('Failed to upload image to S3');
+              }
+
+
+              if (response.status == 201) {
+                  this.setState({ cameraButton: true });
+                  this.setState({ cameraUploaded: true });
+                  this.setState({ image: response.body.postResponse.location })
+                  this.setState({ visible: false });
+              }
+          }).catch((err) => {
+              this.setState({ visible: false });
+              console.log(err);
+          });
       }).catch((err) => {
+          this.setState({ visible: false });
           console.log(err);
+          this.setState({ cameraButton: true });
       });
-    }).catch((err) => {
-      console.log(err);
-      this.setState({ cameraButton: true });
-    });
   }
 
   pressSave() {
@@ -181,6 +190,15 @@ class EditProfile extends Component {
   		});
   }
 
+  fileUploadType(buttonIndex) {
+    if (buttonIndex == 0) {
+      this.captureFile();
+    }
+    if (buttonIndex == 1) {
+      this.attachFile();
+    }
+  }
+
   render() {
     return (
       <Container >
@@ -203,13 +221,29 @@ class EditProfile extends Component {
             <View style={styles.editPflHdrWrap}>
               {
                 this.props.auth.data.image ? (
-                  <Thumbnail source={{uri: this.props.auth.data.image}} style={styles.editPflHdrThumbnail} />
+                  <Thumbnail source={{ uri: this.state.image }} style={styles.editPflHdrThumbnail} />
                 ) : (
                   <Thumbnail source={profileImage} style={styles.editPflHdrThumbnail} />
                 )
               }
 
-              <Button primary noShadow small style={styles.editPflHdrBtn} onPress={() => this.attachFile()}><Text> Change Photo </Text></Button>
+              <Button
+                primary noShadow small
+                style={styles.editPflHdrBtn}
+                onPress={() =>
+                  ActionSheet.show(
+                    {
+                      options: BUTTONS,
+                    },
+                    (buttonIndex) => {
+                      this.setState({ clicked: BUTTONS[buttonIndex] });
+                      // this.setState({ filecat: buttonIndex });
+                      console.log(buttonIndex);
+                      // this.setState({ filecat: buttonIndex});
+                      this.fileUploadType(buttonIndex);
+                    },
+                  )}
+              ><Text> Change Photo </Text></Button>
             </View>
           </View>
 
