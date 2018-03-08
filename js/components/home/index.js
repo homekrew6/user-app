@@ -43,7 +43,7 @@ class Home extends Component {
 					this.props.navigation.dispatch(resetActionIntro);
 				}
 			})
-		}, 4000);		
+		}, 4000);
 
 	}
 	render() {

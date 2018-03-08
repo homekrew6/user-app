@@ -41,114 +41,114 @@ class serviceDetails extends Component {
     render() {
         return (
             <Container >
-                <StatusBar
-                    backgroundColor="#cbf0ed"
-                />
-                <Content style={styles.bgWhite} >
+              <StatusBar
+                backgroundColor="#cbf0ed"
+              />
+              <Content style={styles.bgWhite} >
 
-                    <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                        <Button transparent onPress={() => this.props.navigation.goBack()} >
-                            <SimpleLineIcons name="grid" style={styles.hd_lft_icon}  />
-                        </Button>
-                        <Body style={styles.appHdr2Bdy}>
-                            <Title style={styles.appHdr2Txt}>Service Details</Title>
-                        </Body>
-                        <Button transparent onPress={() => this.props.navigation.navigate("Expect")} >
-                            <Ionicons name='ios-information-circle' style={styles.hd_rt_icon} />
-                        </Button>
-                    </Header>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <View style={{ flex: 1, flexDirection: 'row', position: 'relative' }}>
-                            <Image source={carveImage} style={styles.carveImage} />
-                        </View>
+                <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
+                  <Button transparent onPress={() => this.props.navigation.goBack()} >
+                    <SimpleLineIcons name="grid" style={styles.hd_lft_icon}  />
+                  </Button>
+                  <Body style={styles.appHdr2Bdy}>
+                    <Title style={styles.appHdr2Txt}>Service Details</Title>
+                  </Body>
+                  <Button transparent onPress={() => this.props.navigation.navigate("Expect")} >
+                    <Ionicons name='ios-information-circle' style={styles.hd_rt_icon} />
+                  </Button>
+                </Header>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <View style={{ flex: 1, flexDirection: 'row', position: 'relative' }}>
+                    <Image source={carveImage} style={styles.carveImage} />
+                  </View>
+                </View>
+
+                <View style={{ flex: 1, flexDirection: 'row', marginTop: -40 }}>
+                  <Image source={img17} style={{ width: deviceWidth, height: 50 }}></Image>
+                </View>
+
+                <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center', marginBottom: 15, marginRight: 15 }}>
+                  <View>
+                    <View style={{ flex: 1, flexDirection: 'row', marginTop: -40, justifyContent: 'flex-end', marginRight: 20 }}>
+                      <Image source={img18} style={{ width: 50, height: 50 }}></Image>
                     </View>
+                    <Text style={{ color: '#1e3768' }}>Cleaning</Text>
+                  </View>
+                </View>
 
-                    <View style={{ flex: 1, flexDirection: 'row', marginTop: -40 }}>
-                        <Image source={img17} style={{ width: deviceWidth, height: 50 }}></Image>
+
+
+                <View style={styles.confirmationServicewarp}>
+                  <View style={styles.confirmationServiceItem}>
+                    <View style={styles.confirmationServiceItemIcon2}>
+                      <Ionicons name="ios-man-outline" style={styles.confirmationServiceItemIconIcn2} />
                     </View>
-
-                    <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center', marginBottom: 15, marginRight: 15 }}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row', marginTop: -40, justifyContent: 'flex-end', marginRight: 20 }}>
-                                <Image source={img18} style={{ width: 50, height: 50 }}></Image>
-                            </View>
-                            <Text style={{ color: '#1e3768' }}>Cleaning</Text>
-                        </View>
+                    <Text style={styles.confirmationServiceTxt}>Cleaners</Text>
+                    <IncrimentDecriment />
+                  </View>
+                  <View style={styles.confirmationServiceDvdr}></View>
+                  <View style={styles.confirmationServiceItem}>
+                    <View style={styles.confirmationServiceItemIcon2}>
+                      <MaterialCommunityIcons name="timer-sand-empty" style={styles.confirmationServiceItemIconIcn2} />
                     </View>
-                    
+                    <Text style={styles.confirmationServiceTxt}>Hours</Text>
+                    <IncrimentDecriment />
+                  </View>
+                </View>
 
-
-                    <View style={styles.confirmationServicewarp}>
-                        <View style={styles.confirmationServiceItem}>
-                            <View style={styles.confirmationServiceItemIcon2}>
-                                <Ionicons name="ios-man-outline" style={styles.confirmationServiceItemIconIcn2} />
-                            </View>
-                            <Text style={styles.confirmationServiceTxt}>Cleaners</Text>
-                            <IncrimentDecriment />
-                        </View>
-                        <View style={styles.confirmationServiceDvdr}></View>
-                        <View style={styles.confirmationServiceItem}>
-                            <View style={styles.confirmationServiceItemIcon2}>
-                                <MaterialCommunityIcons name="timer-sand-empty" style={styles.confirmationServiceItemIconIcn2} />
-                            </View>
-                            <Text style={styles.confirmationServiceTxt}>Hours</Text>
-                            <IncrimentDecriment />
-                        </View>
+                <View>
+                  <Item style={styles.confirmationItem}>
+                    <View style={styles.confirmationIconView}>
+                      <Image source={logo22} style={{ height: 20, width: 20 }} />
                     </View>
+                    <Text style={styles.confirmationMainTxt}>Question A</Text>
+                    <Switch value={this.state.isOpen} onValueChange={() => this.switchChange()} />
+                  </Item>
 
-                    <View>
-                        <Item style={styles.confirmationItem}>
-                            <View style={styles.confirmationIconView}>
-                                <Image source={logo22} style={{ height: 20, width: 20 }} />
-                            </View>
-                            <Text style={styles.confirmationMainTxt}>Question A</Text>
-                            <Switch value={this.state.isOpen} onValueChange={() => this.switchChange()} />
-                        </Item>
+                  <View style={styles.confirmationItem2}>
+                    <Entypo name='home' style={styles.confirmationViewIcon2} />
+                    <View style={styles.confirmationMainTxt}>
+                      <Slider
+                        minimumTrackTintColor='#81cdc7'
+                        maximumTrackTintColor="#e1e1e1"
+                        thumbTintColor='#81cdc7'
+                        value={this.state.value}
+                        onValueChange={(value) => this.setState({ value })} />
+                      <Text style={ styles.bedroomCount }>2 Bedroom</Text>
+                    </View>
+                    <Entypo name='home' style={styles.confirmationViewIcon2} />
+                  </View>
+                  <View style={styles.confirmationItem}>
 
-                        <View style={styles.confirmationItem2}>
-                            <Entypo name='home' style={styles.confirmationViewIcon2} />
-                            <View style={styles.confirmationMainTxt}>
-                                <Slider
-                                    minimumTrackTintColor='#81cdc7'
-                                    maximumTrackTintColor="#e1e1e1"
-                                    thumbTintColor='#81cdc7'
-                                    value={this.state.value}
-                                    onValueChange={(value) => this.setState({ value })} />
-                                <Text style={ styles.bedroomCount }>2 Bedroom</Text>
-                            </View>
-                            <Entypo name='home' style={styles.confirmationViewIcon2} />
-                        </View>
-                        <View style={styles.confirmationItem}>
-                            
-                        </View>
+                  </View>
 
-                        <Item style={styles.confirmationItem}>
-                            <View style={styles.confirmationIconView}>
-                                <Text name='scissors' style={styles.confirmationViewIcon} > ? </Text>
-                            </View>
-                            <Text style={styles.confirmationMainTxt}>Question A</Text>
-                            <IncrimentDecriment />
-                        </Item>
+                  <Item style={styles.confirmationItem}>
+                    <View style={styles.confirmationIconView}>
+                      <Text name='scissors' style={styles.confirmationViewIcon} > ? </Text>
+                    </View>
+                    <Text style={styles.confirmationMainTxt}>Question A</Text>
+                    <IncrimentDecriment />
+                  </Item>
 
-                        <Item style={styles.confirmationItem}>
-                            <View style={styles.confirmationIconView}>
-                                <Text name='scissors' style={styles.confirmationViewIcon} > ? </Text>
-                            </View>
-                            <Text style={styles.confirmationMainTxt}>Question B</Text>
-                            <View style={styles.confirmationArwNxt}>
-                                <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
-                            </View>
-                        </Item>
-                        <Item style={styles.confirmationItem}>
-                            <View style={styles.confirmationIconView}>
-                                <Icon name='file-photo-o' style={styles.confirmationViewIcon} />
-                            </View>
-                            <Text style={styles.confirmationMainTxt}>Insert Photo</Text>
-                            <View style={{ alignItems: 'center' }}>
-                                <EvilIcons name="camera" style={{ color: '#81cdc7', fontSize: 30 }} />
-                                <Text style={{ fontSize: 10 }}>Take Photo</Text>
-                            </View>
-                        </Item>
+                  <Item style={styles.confirmationItem}>
+                    <View style={styles.confirmationIconView}>
+                      <Text name='scissors' style={styles.confirmationViewIcon} > ? </Text>
+                    </View>
+                    <Text style={styles.confirmationMainTxt}>Question B</Text>
+                    <View style={styles.confirmationArwNxt}>
+                      <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
+                    </View>
+                  </Item>
+                  <Item style={styles.confirmationItem}>
+                    <View style={styles.confirmationIconView}>
+                      <Icon name='file-photo-o' style={styles.confirmationViewIcon} />
+                    </View>
+                    <Text style={styles.confirmationMainTxt}>Insert Photo</Text>
+                    <View style={{ alignItems: 'center' }}>
+                      <EvilIcons name="camera" style={{ color: '#81cdc7' }} />
+                      <Text style={{ fontSize: 10 }}>Take Photo</Text>
+                    </View>
+                  </Item>
                     </View>
 
                     <Footer>
@@ -157,7 +157,7 @@ class serviceDetails extends Component {
                             <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED 295.00</Text></TouchableOpacity>
                         </FooterTab>
                     </Footer>
-                    
+
                 </Content>
             </Container>
         );

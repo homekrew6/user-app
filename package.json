@@ -33,6 +33,7 @@
     "react-native-image-picker": "^0.26.7",
     "react-native-image-slider": "^1.1.5",
     "react-native-loading-spinner-overlay": "^0.5.2",
+    "react-native-modal": "^5.2.0",
     "react-native-popover-tooltip": "^1.1.4",
     "react-native-slider": "^0.11.0",
     "react-navigation": "1.0.0-beta.11",
