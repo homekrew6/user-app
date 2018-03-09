@@ -19,6 +19,7 @@ import Category from "./components/service/category";
 import Confirmation from "./components/service/confirmation";
 import ServiceDetails from "./components/service/serviceDetails";
 import Expect from "./components/service/expect";
+// import Test from "./components/accounts/test";
 
 const AppNavigator = StackNavigator(
     {
@@ -34,7 +35,7 @@ const AppNavigator = StackNavigator(
         Category: { screen: Category },
         Confirmation: { screen: Confirmation },
         ServiceDetails: { screen: ServiceDetails },
-        Expect: { screen: Expect }
+        Expect: { screen: Expect },
     },
     {
         initialRouteName: "Drawer",

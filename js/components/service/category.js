@@ -157,17 +157,27 @@ class Categories extends Component {
           </View>
 
           <View style={styles.catIten_hdr}>
-            <Text style={styles.catIten_hdr_txt}>Browse by categories</Text>
+            <Text style={styles.catIten_hdr_txt}>{I18n.t('browse_by_categories')}</Text>
           </View>
-          <Modal isVisible={this.state.IsModalVisible}  animationIn="slideInLeft"
-          animationOut="slideOutRight">
+          <Modal isVisible={this.state.IsModalVisible}  
+          animationIn="slideInLeft"
+          animationOut="slideOutRight"
+          hideModalContentWhileAnimating = {true}
+          >
+            <View style={{ alignItems: 'center', marginBottom: 15 }}>
+              <Text style={{ color: '#fff', fontSize: 20 }}>Cleaning</Text>
+            </View>
 
-            <TouchableOpacity onPress={() => this.closeModal()}>
-              <Text>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.closeModal()}>
-              <Text>Office</Text>
-            </TouchableOpacity>
+            <View style={{backgroundColor: '#fff', borderRadius: 10, }}>
+              <TouchableOpacity onPress={() => this.closeModal()} style={{ padding:10, borderBottomWidth:1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center'}}>
+                <Ionicons name='md-home' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }}/>
+                <Text>{I18n.t('home')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
+                <Ico name='business' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
+                <Text>{I18n.t('office')}</Text>
+              </TouchableOpacity>
+            </View>
 
 
           </Modal>
