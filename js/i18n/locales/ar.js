@@ -33,5 +33,9 @@ export default {
   i_agree_to_the_term_and_conditions: '',
   terms_and_conditions: '',
   resetpassword: '',
-  forgot_password: ''
+  forgot_password: '',
+  book_now:'احجز الآن',
+  home:'الصفحة الرئيسية',
+  office:'مكتب. مقر. مركز',
+  browse_by_categories:'تصفح حسب الفئات'
 };
