@@ -35,7 +35,7 @@ export default {
     },
     title: {
         fontSize: 22,
-        color: 'red',
+        color: '#1e3768',
         backgroundColor: 'transparent',
         textAlign: 'center',
         marginBottom: 16,
