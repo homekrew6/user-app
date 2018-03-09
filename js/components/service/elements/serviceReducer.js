@@ -2,6 +2,7 @@ import * as TYPES from '../../../actions/actionTypes';
 import initialState from '../../../reducers/initialState';
 
 export default function serviceReducer(state = initialState.service, action) {
+  console.log('service data', action);
   switch (action.type) {
     case TYPES.SERVICE_STATE_BUSY: {
       return {
