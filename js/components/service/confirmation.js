@@ -21,7 +21,16 @@ const carve = require("../../../img/icon17.png");
 class Confirmation extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            dateTime: props.service.data.serviceTime,
+            serviceName: props.service.data.name,
+        }
+         
+    }
+
+    componentWillMount(){
+        this.setState({
+        })
     }
 
     render() {
@@ -47,8 +56,8 @@ class Confirmation extends Component {
                             <View style={{ borderRadius: 60, height: 60, width: 60, backgroundColor: '#81cdc7', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <Ionicons name="ios-home-outline" style={{ color: "#fff", fontSize: 34 }} />
                             </View>
-                            <Text style={{ color: '#1e3768', fontSize: 18, padding: 5, fontSize:16 }}>Home Cleaning</Text>
-                            <View style={{ color: "#747474", flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                            <Text style={{ color: '#1e3768', fontSize: 18, padding: 5, fontSize: 16 }}>{this.state.serviceName}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                                 <EvilIcons name="clock" style={{ fontSize: 14, color: "#747474" }}/> 
                                 <Text style={{ color: "#747474", fontSize: 14 }}>4 hours</Text>
                             </View>
@@ -61,12 +70,12 @@ class Confirmation extends Component {
                     </View>
                     <View>
 
-                        <Item style={styles.confirmationItem}>
+                        <Item style={styles.confirmationItem} onPress={() => this.props.navigation.navigate('DateAndTime')}>
                             <View style={styles.confirmationIconView}>
                                 <Ico name='alarm' style={styles.confirmationViewIcon}></Ico>
                             </View>
                             <Text style={styles.confirmationMainTxt}>Date & Time</Text>
-                            <Text style={styles.confirmationDateTime}>Mon, 07 Jun 2017, 2:00pm</Text>
+                            <Text style={styles.confirmationDateTime}>{this.state.dateTime}</Text>
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
                             </View>
@@ -153,4 +162,16 @@ class Confirmation extends Component {
     }
 }
 
-export default Confirmation;
+Confirmation.propTypes = {
+    service: PropTypes.object.isRequired
+}
+const mapStateToProps = (state) => {
+    return {
+        service: state.service,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Confirmation);
