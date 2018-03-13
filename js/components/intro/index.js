@@ -3,7 +3,6 @@ import { Image, View, StatusBar, Dimensions, StyleSheet } from "react-native";
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right, Grid } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import Swiper from 'react-native-swiper';
-import AppIntroSlider from './AppIntroSlider';
 import styles from './styles';
 import api from '../../api';
 import I18n from '../../i18n/i18n';

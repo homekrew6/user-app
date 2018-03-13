@@ -10,12 +10,19 @@ export function setServiceDetails(data) {
       dispatch(serviceStateSuccess(data));
   };
 }
-export function getQuestionListByServiceId(id) {
+
+export function setDateAndTime(data) {
+  return function (dispatch) {
+    console.log('setDateAndTime',data);
+    dispatch(serviceStateSuccess(data));    
+  };
+}
+export function getQuestionListByServiceId(data) {
   return function (dispatch) {
     dispatch(serviceStateBusy());
-    return serviceApi.getQuestionListByServiceId(id).then((res) => {
+    return serviceApi.getQuestionListByServiceId(data.id).then((res) => {
       res.type = 'success';
-       dispatch(serviceStateSuccess(res))
+       dispatch(serviceStateSuccess(data))
       return res;
     }).catch((err) => {
       err.type = 'error';
