@@ -19,8 +19,11 @@ export default {
     color: '#1e3768',
     fontSize: 15,
   },
+  tac: {
+    alignItems: 'center'
+  },
   catIten: {
-    width: 110,
+    width: 100,
     marginBottom: 40,
     alignItems: 'center',
   },
@@ -234,4 +237,34 @@ export default {
   innerContainer: {
     alignItems: 'center',
   },
+  imagesSliderWarp: {
+    padding: 15
+  },
+  imagesSliderFlatList: {
+    height: 60
+  },
+  imagesSliderImage: {
+    height: 60,
+    width: 60,
+    marginLeft: 2,
+    marginRight: 2,
+    borderRadius: 10
+  },
+
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  }
 };
