@@ -47,7 +47,7 @@ class serviceDetails extends Component {
     });
   }
   componentWillMount() {
-    this.props.getQuestionListByServiceId(this.props.service.data.id).then((res) => {
+    this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
       if (res.type == "success") {
         this.setState({ questionList: res });
       }
