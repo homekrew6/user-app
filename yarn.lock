@@ -3204,16 +3204,19 @@ react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-app-intro-v2@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/react-native-app-intro-v2/-/react-native-app-intro-v2-2.1.2.tgz#5b2be1776d703841f2f2e1e77641a91f5dc3b927"
-
 react-native-aws3@0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/react-native-aws3/-/react-native-aws3-0.0.8.tgz#9a18789ae0cedfb40d29b1f69799a8af4f9927e8"
   dependencies:
     buffer "^4.5.1"
     crypto-js "^3.1.6"
+
+react-native-calendars@^1.17.3:
+  version "1.17.3"
+  resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.17.3.tgz#27737086082602c1ba29c3450333ddbb4f28c77d"
+  dependencies:
+    prop-types "^15.5.10"
+    xdate "^0.8.0"
 
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
@@ -4298,6 +4301,10 @@ xcode@^0.9.1:
     pegjs "^0.10.0"
     simple-plist "^0.2.1"
     uuid "3.0.1"
+
+xdate@^0.8.0:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/xdate/-/xdate-0.8.2.tgz#d7b033c00485d02695baf0044f4eacda3fc961a3"
 
 xml-name-validator@^2.0.1:
   version "2.0.1"
