@@ -1,42 +1,54 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, } from "react-native";
-import Ico from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import { View, Text, TouchableOpacity } from "react-native";
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker } from "native-base";
-import I18n from '../../i18n/i18n';
 import styles from './styles';
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 
 class incrimentDecriment extends Component {
-    constructor(props) {
-        super(props);
+    state = { massage: "" }
+    componentDidMount(){
+        this.setState({ massage: this.props.massage });
     }
+
+    increment() {
+        console.log("from child")
+        this.props.onIncrement(this.props.massage);
+    }
+    decrement() {
+        this.props.onDecrement(this.props.massage);
+    }
+
+    handleIncrement = () => {
+        console.log("incrementValue", this.state.massage);
+        const massage = Number(this.state.massage) + 1;
+        this.setState({ massage: massage });
+    }
+    handleDecrement = () => {
+        console.log("decrementValue", this.state.massage);
+        const massage = Number(this.state.massage) - 1;
+        this.setState({ massage: massage });
+    }
+
+
 
     render() {
         return (
             <View style={{ flexDirection: 'row' }}>
 
-                <View style={styles.confirmationServicePlusWarp}>
+                <TouchableOpacity style={styles.confirmationServicePlusWarp} onPress={this.handleDecrement.bind(this)}>
                     <MaterialCommunityIcons name='minus' style={styles.confirmationServicePlusIcon} />
-                </View>
+                </TouchableOpacity>
 
                 <View style={{ marginLeft: 5, marginRight: 5, borderWidth: 1, borderRadius: 10, width: 50, borderColor: '#e0e0e0', alignItems: 'center' }}>
-                    <Text>12</Text>
+                    <Text>{this.state.massage}</Text>
                 </View>
 
-                <View style={styles.confirmationServicePlusWarp}>
+                <TouchableOpacity style={styles.confirmationServicePlusWarp} onPress={this.handleIncrement.bind(this)}>
                     <Entypo name='plus' style={styles.confirmationServicePlusIcon} />
-                </View>
+                </TouchableOpacity>
             </View>
         );
     }

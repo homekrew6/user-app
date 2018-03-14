@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -24,6 +24,11 @@ const carveImage = require('../../../img/bg-6.png');
 const logo22 = require('../../../img/logo22.png');
 const img17 = require('../../../img/icon17.png');
 const img18 = require('../../../img/img22.png');
+const img19 = require('../../../img/swiper-2.png');
+const img20 = require('../../../img/swiper-2.png');
+const img21 = require('../../../img/swiper-2.png');
+const img22 = require('../../../img/swiper-2.png');
+
 
 class serviceDetails extends Component {
   constructor(props) {
@@ -34,7 +39,38 @@ class serviceDetails extends Component {
       questionList: [],
       serviceName: props.service.data.name,
       banner_image: props.service.data.banner_image,
-      cover_image: props.service.data.cover_image
+      cover_image: props.service.data.cover_image,
+      numberValue:1,
+      sliderData: [
+        {
+          'src': img19,
+          'key': 1
+        },
+        {
+          'src': img20,
+          'key': 2
+        },
+        {
+          'src': img21,
+          'key': 3
+        },
+        {
+          'src': img22,
+          'key': 4
+        },
+        {
+          'src': img19,
+          'key': 5
+        },
+        {
+          'src': img20,
+          'key': 6
+        },
+        {
+          'src': img21,
+          'key': 7
+        }
+      ]
     };
     super(props);
     console.log("propsDetails in service details", props);
@@ -49,6 +85,7 @@ class serviceDetails extends Component {
   componentWillMount() {
     this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
       if (res.type == "success") {
+        console.log("success", res);
         this.setState({ questionList: res });
       }
     }).catch((err) => {
@@ -56,9 +93,19 @@ class serviceDetails extends Component {
       console.log(err);
     });
   }
+
+  handleIncrement = (value) => {
+    console.log("incrementValue",value);
+    value=value+1;
+    this.setState({ numberValue: value });
+  }
+  handleDecrement = (value) => {
+    console.log("decrementValue", value);
+    if(value!=0)
+    value = value -1;
+    this.setState({ numberValue: value });
+  }
   render() {
-    console.log('service name', this.props.service);
-    console.log('auth name', this.props.auth);
     let questionList = (
       this.state.questionList.map((data, key) => (
         data.type == "1" ? <View key={data.id} >
@@ -67,7 +114,7 @@ class serviceDetails extends Component {
               <Text name="scissors" style={styles.confirmationViewIcon} > ? </Text>
             </View>
             <Text style={styles.confirmationMainTxt}>{data.name}</Text>
-            <IncrimentDecriment />
+            <IncrimentDecriment massage={data.IncrementId} onIncrement={this.handleIncrement} onDecrement={this.handleDecrement}/>
           </Item>
         </View> : data.type == "2" ? <View key={data.id}>
           <Item style={styles.confirmationItem}>
@@ -90,7 +137,19 @@ class serviceDetails extends Component {
             <Text style={styles.bedroomCount}>{data.name}</Text>
           </View>
           <Entypo name="home" style={styles.confirmationViewIcon2} />
-        </View> : <Text>No type found.</Text>
+            </View> : data.type == "5" ? <View key={data.id}>
+          <View style={styles.imagesSliderWarp}>
+            <FlatList
+              data={this.state.sliderData}
+              renderItem={({ item }) =>
+                <Image key={item.key} source={item.src} style={styles.imagesSliderImage}></Image>
+              }
+              horizontal={true}
+              style={styles.imagesSliderFlatList}
+            />
+          </View>
+              </View> : <Text key={data.id}>No type found.</Text>
+        
         // <View key={ data.id } style={styles.catIten}>
         //   <View style={styles.catIten_img_view}>
         //     <TouchableOpacity onPress={() => this.openModal(data.service)}>
