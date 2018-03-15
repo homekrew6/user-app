@@ -16,7 +16,7 @@ import FSpinner from 'react-native-loading-spinner-overlay';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker, Switch, Footer, FooterTab } from 'native-base';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-
+import { setServiceDetails } from './elements/serviceActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require('../../../img/logo2.png');
@@ -40,7 +40,7 @@ class serviceDetails extends Component {
       serviceName: props.service.data.name,
       banner_image: props.service.data.banner_image,
       cover_image: props.service.data.cover_image,
-      numberValue:1,
+      numberValue: 1,
       sliderData: [
         {
           'src': img19,
@@ -87,6 +87,33 @@ class serviceDetails extends Component {
       if (res.type == "success") {
         console.log("success", res);
         this.setState({ questionList: res });
+        var price = 0.0;
+        for (var i = 0; i < this.state.questionList.length; i++) {
+          if (this.state.questionList[i].type == 1 || this.state.questionList[i].type == 2 || this.state.questionList[i].type == 3 || this.state.questionList[i].type == 4) {
+            if (this.state.questionList[i].answers && this.state.questionList[i].answers.length > 0) {
+              if (this.state.questionList[i].type == 1) {
+                if (this.state.questionList[i].answers[0].option_price_impact == "Addition") {
+                  price = price + (this.state.questionList[i].IncrementId + Number(this.state.questionList[i].answers[0].price_impact));
+                }
+                else {
+                  price = price + (this.state.questionList[i].IncrementId * Number(this.state.questionList[i].answers[0].price_impact));
+                }
+              }
+              else if (this.state.questionList[i].type == 2) {
+                if (this.state.questionList[i].answers[0].option_price_impact == "Addition") {
+                  price = price + Number(this.state.questionList[i].answers[0].price_impact);
+                }
+                else {
+                  price = price * Number(this.state.questionList[i].answers[0].price_impact);
+                }
+              }
+            }
+          }
+        }
+        var data=this.props.service.data;
+        data.questionList=this.state.questionList;
+        data.price=price;
+        this.props.setServiceDetails(data);
       }
     }).catch((err) => {
       console.log("error in catch");
@@ -94,18 +121,9 @@ class serviceDetails extends Component {
     });
   }
 
-  handleIncrement = (value) => {
-    console.log("incrementValue",value);
-    value=value+1;
-    this.setState({ numberValue: value });
-  }
-  handleDecrement = (value) => {
-    console.log("decrementValue", value);
-    if(value!=0)
-    value = value -1;
-    this.setState({ numberValue: value });
-  }
+ 
   render() {
+
     let questionList = (
       this.state.questionList.map((data, key) => (
         data.type == "1" ? <View key={data.id} >
@@ -114,7 +132,7 @@ class serviceDetails extends Component {
               <Text name="scissors" style={styles.confirmationViewIcon} > ? </Text>
             </View>
             <Text style={styles.confirmationMainTxt}>{data.name}</Text>
-            <IncrimentDecriment massage={data.IncrementId} onIncrement={this.handleIncrement} onDecrement={this.handleDecrement}/>
+            <IncrimentDecriment massage={data} onIncrement={this.handleIncrement} onDecrement={this.handleDecrement} />
           </Item>
         </View> : data.type == "2" ? <View key={data.id}>
           <Item style={styles.confirmationItem}>
@@ -137,7 +155,7 @@ class serviceDetails extends Component {
             <Text style={styles.bedroomCount}>{data.name}</Text>
           </View>
           <Entypo name="home" style={styles.confirmationViewIcon2} />
-            </View> : data.type == "5" ? <View key={data.id}>
+        </View> : data.type == "5" ? <View key={data.id}>
           <View style={styles.imagesSliderWarp}>
             <FlatList
               data={this.state.sliderData}
@@ -148,8 +166,8 @@ class serviceDetails extends Component {
               style={styles.imagesSliderFlatList}
             />
           </View>
-              </View> : <Text key={data.id}>No type found.</Text>
-        
+        </View> : <Text key={data.id}>No type found.</Text>
+
         // <View key={ data.id } style={styles.catIten}>
         //   <View style={styles.catIten_img_view}>
         //     <TouchableOpacity onPress={() => this.openModal(data.service)}>
@@ -288,7 +306,7 @@ class serviceDetails extends Component {
           <Footer>
             <FooterTab>
               <TouchableOpacity style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED 295.00</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
             </FooterTab>
           </Footer>
 
@@ -307,7 +325,8 @@ const mapStateToProps = state => ({
   service: state.service,
 });
 const mapDispatchToProps = dispatch => ({
-  getQuestionListByServiceId: (data) => dispatch(getQuestionListByServiceId(data))
+  getQuestionListByServiceId: (data) => dispatch(getQuestionListByServiceId(data)),
+  setServiceDetails: (data) => dispatch(setServiceDetails(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(serviceDetails);
