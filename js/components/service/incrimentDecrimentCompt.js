@@ -6,11 +6,13 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './styles';
 
-
+import { setServiceDetails } from './elements/serviceActions';
 class incrimentDecriment extends Component {
-    state = { massage: "" }
-    componentDidMount(){
-        this.setState({ massage: this.props.massage });
+    state = { massage: "", totalData: "" }
+    componentDidMount() {
+        console.log(this.props);
+        this.setState({ massage: this.props.massage.IncrementId });
+        this.setState({ totalData: this.props.massage });
     }
 
     increment() {
@@ -22,14 +24,39 @@ class incrimentDecriment extends Component {
     }
 
     handleIncrement = () => {
-        console.log("incrementValue", this.state.massage);
+        var price = this.props.service.data.price;
         const massage = Number(this.state.massage) + 1;
         this.setState({ massage: massage });
+        if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
+            if (this.state.totalData.answers[0].option_price_impact == "Addition") {
+                price = price - (this.state.totalData.IncrementId + Number(this.state.totalData.answers[0].price_impact));
+                price = price + (Number(massage) + Number(this.state.totalData.answers[0].price_impact));
+            }
+            else {
+                price = price + (Number(massage) * Number(this.state.totalData.answers[0].price_impact));
+            }
+            var data = this.props.service.data;
+            data.price = price;
+            this.props.setServiceDetails(data);
+        }
+
     }
     handleDecrement = () => {
-        console.log("decrementValue", this.state.massage);
+        var price = this.props.service.data.price;
         const massage = Number(this.state.massage) - 1;
         this.setState({ massage: massage });
+        if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
+            if (this.state.totalData.answers[0].option_price_impact == "Addition") {
+                price = price - (this.state.totalData.IncrementId + Number(this.state.totalData.answers[0].price_impact));
+                price = price + (Number(massage) + Number(this.state.totalData.answers[0].price_impact));
+            }
+            else {
+                price = price + (Number(massage) * Number(this.state.totalData.answers[0].price_impact));
+            }
+            var data = this.props.service.data;
+            data.price = price;
+            this.props.setServiceDetails(data);
+        }
     }
 
 
@@ -54,4 +81,17 @@ class incrimentDecriment extends Component {
     }
 }
 
-export default incrimentDecriment;
+// export default incrimentDecriment;
+
+incrimentDecriment.propTypes = {
+    auth: PropTypes.object.isRequired,
+};
+const mapStateToProps = state => ({
+    auth: state.auth,
+    service: state.service,
+});
+const mapDispatchToProps = dispatch => ({
+    setServiceDetails: (data) => dispatch(setServiceDetails(data))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(incrimentDecriment);
