@@ -15,8 +15,11 @@ import { getQuestionListByServiceId } from './elements/serviceActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker, Switch, Footer, FooterTab } from 'native-base';
 import I18n from '../../i18n/i18n';
+import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';
 import { setServiceDetails } from './elements/serviceActions';
+import { RNS3 } from 'react-native-aws3';
+import config from '../../config';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require('../../../img/logo2.png');
@@ -41,34 +44,42 @@ class serviceDetails extends Component {
       banner_image: props.service.data.banner_image,
       cover_image: props.service.data.cover_image,
       numberValue: 1,
+      activeRadioArray: [false, false, false],
+      IsSpinnerVisible: false,
+      // sliderData: [
+      //   {
+      //     'src': img19,
+      //     'key': 1
+      //   },
+      //   {
+      //     'src': img20,
+      //     'key': 2
+      //   },
+      //   {
+      //     'src': img21,
+      //     'key': 3
+      //   },
+      //   {
+      //     'src': img22,
+      //     'key': 4
+      //   },
+      //   {
+      //     'src': img19,
+      //     'key': 5
+      //   },
+      //   {
+      //     'src': img20,
+      //     'key': 6
+      //   },
+      //   {
+      //     'src': img21,
+      //     'key': 7
+      //   }
+      // ]
       sliderData: [
         {
-          'src': img19,
+          'src': 'https://homekrewbooking.s3.amazonaws.com/66665615_.png',
           'key': 1
-        },
-        {
-          'src': img20,
-          'key': 2
-        },
-        {
-          'src': img21,
-          'key': 3
-        },
-        {
-          'src': img22,
-          'key': 4
-        },
-        {
-          'src': img19,
-          'key': 5
-        },
-        {
-          'src': img20,
-          'key': 6
-        },
-        {
-          'src': img21,
-          'key': 7
         }
       ]
     };
@@ -77,10 +88,145 @@ class serviceDetails extends Component {
 
 
   }
-  switchChange() {
-    this.setState({
-      isOpen: !this.state.isOpen,
+  uploadPhoto() {
+    this.setState({ IsSpinnerVisible: true });
+    ImagePicker.openCamera({
+      width: 400,
+      height: 300,
+      cropping: true
+    }).then((response) => {
+      let uri;
+
+      if (!response.path) {
+        uri = response.uri;
+      } else {
+        uri = response.path;
+      }
+      const file = {
+        uri,
+        name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
+        type: response.mime || 'image/png',
+      };
+      console.log(file);
+
+      const options = config.s3;
+      console.log(options);
+      RNS3.put(file, config.s3).then((response) => {
+        console.log(response);
+        if (response.status !== 201) {
+          this.setState({ IsSpinnerVisible: false });
+          throw new Error('Failed to upload image to S3');
+        }
+
+
+        if (response.status == 201) {
+          let slider = [];
+          this.state.sliderData.map(sdata => {
+            slider.push(sdata);
+          });
+          let lengthOfSlider = slider.length;
+          lengthOfSlider = lengthOfSlider - 1;
+          let latestKey = slider[lengthOfSlider].key;
+          latestKey = latestKey + 1;
+          let newData = {
+            'src': response.body.postResponse.location,
+            'key': latestKey
+          };
+          slider.push(newData);
+          this.setState({ IsSpinnerVisible: false });
+          this.setState({ sliderData: slider });
+        }
+      }).catch((err) => {
+        this.setState({ IsSpinnerVisible: false });
+        console.log(err);
+      });
+    }).catch((err) => {
+      this.setState({ IsSpinnerVisible: false });
+      console.log(err);
     });
+  }
+  changeActiveRadio(data) {
+    debugger;
+    data.selected = !data.selected;
+    var price = this.props.service.data.price;
+    if (data.selected == false) {
+      if (data.option_price_impact == "Addition") {
+        price = price - Number(data.price_impact);
+      }
+      else {
+        price = price / Number(data.price_impact);
+      }
+    }
+    else {
+      if (data.option_price_impact == "Addition") {
+        price = price + Number(data.price_impact);
+      }
+      else {
+        price = price * Number(data.price_impact);
+      }
+    }
+
+    var data = this.props.service.data;
+    data.price = price;
+    this.props.setServiceDetails(data);
+  }
+  activeRadio(index) {
+    let newradio = [false, false, false];
+    newradio[index] = true;
+    this.setState({
+      activeRadioArray: newradio
+    });
+
+  }
+  switchChange(data) {
+    // this.setState({
+    //   isOpen: !this.state.isOpen,
+    // });
+    debugger;
+    var price = this.props.service.data.price;
+    data.Status = !data.Status;
+    console.log(data.Status);
+    let index;
+    for (var i = 0; i < this.state.questionList.length; i++) {
+      if (this.state.questionList[i].id == data.id) {
+        index = i;
+        break;
+      }
+    }
+    if (index || index == 0) {
+      if (data.Status == false) {
+        var data1 = this.state.questionList[index];
+        if (data1.answers && data1.answers.length > 0) {
+          if (data1.answers[0].option_price_impact == "Addition") {
+            price = price - Number(data1.answers[0].price_impact);
+          }
+          else {
+            price = price / Number(data1.answers[0].price_impact);
+          }
+          var data = this.props.service.data;
+          data.price = price;
+          this.props.setServiceDetails(data);
+        }
+      }
+      else {
+        var data1 = this.state.questionList[index];
+        if (data1.answers && data1.answers.length > 0) {
+          if (data1.answers[0].option_price_impact == "Addition") {
+            price = price + Number(data1.answers[0].price_impact);
+          }
+          else {
+            price = price * Number(data1.answers[0].price_impact);
+          }
+          var data = this.props.service.data;
+          data.price = price;
+          this.props.setServiceDetails(data);
+        }
+      }
+
+
+
+
+    }
   }
   componentWillMount() {
     this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
@@ -110,9 +256,9 @@ class serviceDetails extends Component {
             }
           }
         }
-        var data=this.props.service.data;
-        data.questionList=this.state.questionList;
-        data.price=price;
+        var data = this.props.service.data;
+        data.questionList = this.state.questionList;
+        data.price = price;
         this.props.setServiceDetails(data);
       }
     }).catch((err) => {
@@ -121,7 +267,61 @@ class serviceDetails extends Component {
     });
   }
 
- 
+  renderFlatListImage() {
+
+  }
+
+  sliderChanged(value, data) {
+    debugger;
+    var price = this.props.service.data.price;
+    if (data.answers) {
+      if (data.answers[0].option_price_impact == "Addition") {
+        if(this.props.service.data.value)
+        {
+         if(value<this.props.service.data.value)
+         {
+          price = price - (value + Number(data.answers[0].price_impact));
+         }
+         else
+         {
+          price = price + (value + Number(data.answers[0].price_impact));
+         }
+        }
+        else
+        {
+          price = price + (value + Number(data.answers[0].price_impact));
+        }
+       
+      }
+      else {
+        if(this.props.service.data.value)
+        {
+         if(value<this.props.service.data.value)
+         {
+          price = price + (value + Number(data.answers[0].price_impact));
+         }
+         else
+         {
+          price = price + (value + Number(data.answers[0].price_impact));
+         }
+        }
+        else
+        {
+          price = price + (value * Number(data.answers[0].price_impact));
+        }
+       
+      }
+
+      price = parseFloat(Math.round(price * 100) / 100).toFixed(2);
+      price=Number(price);
+      var data = this.props.service.data;
+      data.price = price;
+      data.value=value;
+      this.props.setServiceDetails(data);
+    }
+
+  }
+
   render() {
 
     let questionList = (
@@ -129,7 +329,13 @@ class serviceDetails extends Component {
         data.type == "1" ? <View key={data.id} >
           <Item style={styles.confirmationItem}  >
             <View style={styles.confirmationIconView}>
-              <Text name="scissors" style={styles.confirmationViewIcon} > ? </Text>
+              <Text name="scissors" style={styles.confirmationViewIcon} > {
+                data.image ? (
+                  <Image source={{ uri: data.image }} style={{ width: 20, height: 20 }} />
+                ) : (
+                    <Image source={logo22} style={{ height: 20, width: 20 }} />
+                  )
+              } </Text>
             </View>
             <Text style={styles.confirmationMainTxt}>{data.name}</Text>
             <IncrimentDecriment massage={data} onIncrement={this.handleIncrement} onDecrement={this.handleDecrement} />
@@ -137,10 +343,16 @@ class serviceDetails extends Component {
         </View> : data.type == "2" ? <View key={data.id}>
           <Item style={styles.confirmationItem}>
             <View style={styles.confirmationIconView}>
-              <Image source={logo22} style={{ height: 20, width: 20 }} />
+              {
+                data.image ? (
+                  <Image source={{ uri: data.image }} style={{ width: 20, height: 20 }} />
+                ) : (
+                    <Image source={logo22} style={{ height: 20, width: 20 }} />
+                  )
+              }
             </View>
             <Text style={styles.confirmationMainTxt}>{data.name}</Text>
-            <Switch value={this.state.isOpen} onValueChange={() => this.switchChange()} />
+            <Switch value={data.Status} onValueChange={() => this.switchChange(data)} />
           </Item>
         </View> : data.type == "4" ? <View style={styles.confirmationItem2} key={data.id}>
           <Entypo name="home" style={styles.confirmationViewIcon2} />
@@ -149,24 +361,89 @@ class serviceDetails extends Component {
               minimumTrackTintColor="#81cdc7"
               maximumTrackTintColor="#e1e1e1"
               thumbTintColor="#81cdc7"
-              value={this.state.value}
-              onValueChange={value => this.setState({ value })}
+              value={data.start_range}
+              onValueChange={value => this.sliderChanged(value, data)}
             />
             <Text style={styles.bedroomCount}>{data.name}</Text>
           </View>
           <Entypo name="home" style={styles.confirmationViewIcon2} />
         </View> : data.type == "5" ? <View key={data.id}>
+          <View style={{ flexDirection: 'row', padding: 15 }}>
+            <Text style={{ flex: 1 }}>
+              Insert Photo
+                </Text>
+            <TouchableOpacity onPress={() => this.uploadPhoto()}>
+              <Icon name="camera" style={{ fontSize: 16 }}></Icon>
+            </TouchableOpacity>
+          </View>
           <View style={styles.imagesSliderWarp}>
             <FlatList
               data={this.state.sliderData}
               renderItem={({ item }) =>
-                <Image key={item.key} source={item.src} style={styles.imagesSliderImage}></Image>
+                <View>
+                  <Image key={item.key} source={{ uri: item.src }} style={styles.imagesSliderImage}></Image>
+                </View>
               }
               horizontal={true}
               style={styles.imagesSliderFlatList}
             />
           </View>
-        </View> : <Text key={data.id}>No type found.</Text>
+        </View> : <View key={data.id}>
+                  <Item style={styles.confirmationItem}>
+                    <View style={styles.confirmationIconView}>
+                      <Text >
+                        {
+                          data.image ? (
+                            <Image source={{ uri: data.image }} style={{ width: 20, height: 20 }} />
+                          ) : (
+                              <Image source={logo22} style={{ height: 20, width: 20 }} />
+                            )
+                        }
+                      </Text>
+                    </View>
+                    <Text style={styles.confirmationMainTxt}>{data.name}</Text>
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginRight: 15 }}>
+                      <View style={{ borderRadius: 10, borderWidth: 1, borderColor: "#ccc", flexDirection: 'row', overflow: 'hidden', }}>
+
+                        {
+                          data.answers.map((data1, key1) => {
+                            return (<View key={data1.id}>
+                              <TouchableOpacity style={[{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom: 4, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }, [
+                                data1.selected ?
+                                  { backgroundColor: '#ccc' } : {}
+                              ]]} onPress={() => this.changeActiveRadio(data1)}><Text style={[[
+                                data1.selected ?
+                                  { color: '#fff' } : {}
+                              ]]}>{data1.title}</Text></TouchableOpacity>
+                            </View>)
+
+                          })
+                        }
+                        {/* <TouchableOpacity style={[{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom:4, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }, [
+                    this.state.activeRadioArray[0] ?
+                      { backgroundColor: '#ccc' } : {}
+                  ]]} onPress={() => this.activeRadio(0)}><Text style={[ [
+                    this.state.activeRadioArray[0] ?
+                      { color: '#fff' } : { }
+                  ]]}>One</Text></TouchableOpacity>
+                  <TouchableOpacity style={[{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom: 4, borderLeftColor: '#ccc', borderLeftWidth: 1, borderRightColor: '#ccc', borderRightWidth: 1 }, [
+                    this.state.activeRadioArray[1] ?
+                      { backgroundColor: '#ccc' } : {}
+                  ]]} onPress={() => this.activeRadio(1)}><Text style={[[
+                    this.state.activeRadioArray[1] ?
+                      { color: '#fff' } : {}
+                  ]]}>Two</Text></TouchableOpacity>
+                  <TouchableOpacity style={[{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom: 4, borderBottomRightRadius: 10, borderTopRightRadius: 10 }, [
+                    this.state.activeRadioArray[2] ?
+                      { backgroundColor: '#ccc' } : {}
+                  ]]} onPress={() => this.activeRadio(2)}><Text style={[[
+                    this.state.activeRadioArray[2] ?
+                      { color: '#fff' } : {}
+                  ]]}>Three</Text></TouchableOpacity> */}
+                      </View>
+                    </View>
+                  </Item>
+                </View>
 
         // <View key={ data.id } style={styles.catIten}>
         //   <View style={styles.catIten_img_view}>
@@ -258,7 +535,14 @@ class serviceDetails extends Component {
           </View> */}
 
           <View>
-            {questionList}
+            {/* {questionList} */}
+            {
+              this.state.questionList.length > 0 ? (
+                questionList
+              ) : (
+                  <View style={{flex:1, alignItems: 'center'}}><Text>No questions found.</Text></View>
+                )
+            }
             {/* <Item style={styles.confirmationItem}>
               <View style={styles.confirmationIconView}>
                 <Image source={logo22} style={{ height: 20, width: 20 }} />
@@ -311,16 +595,20 @@ class serviceDetails extends Component {
               </View>
             </Item> */}
           </View>
-        </Content>
-
-          <Footer>
-            <FooterTab>
-            <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.props.navigation.navigate('Confirmation')}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
-            </FooterTab>
-          </Footer>
-
-        
+        </Content>  
+          {
+            this.state.questionList.length > 0 ? (
+              <Footer>
+                <FooterTab>
+                  <TouchableOpacity style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
+                  <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
+                </FooterTab>
+              </Footer>
+            ) : (
+                <View></View>
+              )
+          }
+              
       </Container>
     );
   }
