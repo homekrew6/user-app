@@ -27,7 +27,6 @@ class Expect extends Component {
     }
 
     render() {
-        console.log(this.state.serviceDetails.features[0].desc, "service details in expect");
         let featureList = (
             this.state.serviceDetails.features.map((data, key) => (
                 <View style={{ padding: 10, flexDirection: 'row', borderBottomWidth: 1, borderColor: '#e1e1e1', paddingTop: 15, paddingBottom: 15 }} key={key}>
