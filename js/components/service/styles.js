@@ -94,6 +94,9 @@ export default {
     paddingLeft: 15,
     paddingRight: 15,
     borderColor: '#f9f9f9',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   confirmationItem2: {
     paddingTop: 15,

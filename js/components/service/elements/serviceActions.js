@@ -11,6 +11,8 @@ export function setServiceDetails(data) {
   };
 }
 
+
+
 export function setDateAndTime(data) {
   return function (dispatch) {
     console.log('setDateAndTime',data);

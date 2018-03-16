@@ -8,10 +8,12 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'; 
 import Entypo from 'react-native-vector-icons/Entypo';
+import FSpinner from 'react-native-loading-spinner-overlay';
 
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
+import api from '../../api/index'
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -22,35 +24,76 @@ class Confirmation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dateTime: props.service.data.serviceTime,
-            serviceName: props.service.data.name,
+            dateTime: props.service.data.serviceTime,        
+            serviceName: props.service.data.serviceLocation?props.service.data.serviceLocation:'Home',
+            // homeValuearray: props.service.data.serviceLocation,            
+            loader: false,
+            continueButtonDesable: false,
+            //homeValuearray: props.service.data.homeArray,
+            // homeValue: 'Home'
         }
          
     }
 
-    componentWillMount(){
+    confirmationContinue(){
         this.setState({
+            loader: true,
         })
+        if (!(this.state.dateTime == undefined)){
+            api.post('jobs',
+                {
+                    "serviceId": this.props.service.data.id,
+                    "postedDate": this.state.dateTime,
+                    "location": "Home",
+                    "payment": "Credit Card",
+                    "faourite_sp": "James Harden",
+                    "promo_code": "AED 50 off",
+                    "status": "STARTED",
+                    "userId": "3",
+                    "workerId": "1"
+                }
+            ).then(responseJson => {
+                // console.log(responseJson);
+                Alert.alert("Job Post is Successfully")
+                this.setState({
+                    loader: false,
+                    continueButtonDesable: true
+                })
+            }).catch(err => {
+                console.log(err);
+                Alert.alert("Job Post not save");
+                this.setState({
+                    loader: false,
+                })
+            })
+        }
+        else{
+            this.setState({
+                loader: false,
+            })
+            Alert.alert("Please Enter a Date And Time")
+        }
+        
     }
 
     render() {
         return (
             <Container >
-                <StatusBar
-                    backgroundColor="#cbf0ed"
-                />
+                <FSpinner visible={this.state.loader} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
+                    <StatusBar
+                        backgroundColor="#cbf0ed"
+                    />
+                <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
+                    <Button transparent >
+                        <Ionicons name="ios-arrow-back-outline" style={styles.hd_lft_icon} />
+                    </Button>
+                    <Body style={{ alignItems: 'center' }}>
+                        <Title style={ styles.appHdr2Txt }>Confirmation</Title>
+                    </Body>
+                    <Button transparent/>
+                </Header>
+
                 <Content style={styles.bgWhite} >
-
-                    <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                        <Button transparent >
-                            <Ionicons name="ios-arrow-back-outline" style={styles.hd_lft_icon} />
-                        </Button>
-                        <Body style={{ alignItems: 'center' }}>
-                            <Title style={ styles.appHdr2Txt }>Confirmation</Title>
-                        </Body>
-                        <Button transparent/>
-                    </Header>
-
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#cbf0ed', paddingBottom: 30, paddingTop: 14 }}>
                         <View style={{ alignItems: "center" }}>
                             <View style={{ borderRadius: 60, height: 60, width: 60, backgroundColor: '#81cdc7', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -61,7 +104,7 @@ class Confirmation extends Component {
                                 <EvilIcons name="clock" style={{ fontSize: 14, color: "#747474" }}/> 
                                 <Text style={{ color: "#747474", fontSize: 14 }}>4 hours</Text>
                             </View>
-                            <Text style={{ color: '#1e3768', fontSize: 16 }}>AED 360</Text>
+                            <Text style={{ color: '#1e3768', fontSize: 16 }}>AED {this.props.service.data.price}</Text>
                         </View>
                     </View>
 
@@ -70,7 +113,7 @@ class Confirmation extends Component {
                     </View>
                     <View>
 
-                        <Item style={styles.confirmationItem} onPress={() => this.props.navigation.navigate('DateAndTime')}>
+                        <TouchableOpacity style={[styles.confirmationItem]} onPress={() => this.props.navigation.navigate('DateAndTime')}>
                             <View style={styles.confirmationIconView}>
                                 <Ico name='alarm' style={styles.confirmationViewIcon}></Ico>
                             </View>
@@ -79,18 +122,18 @@ class Confirmation extends Component {
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
                             </View>
-                        </Item>
+                        </TouchableOpacity>
 
-                        <Item style={styles.confirmationItem}>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate('LocationList')}>
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='location' style={styles.confirmationViewIcon} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>Location</Text>
-                            <Text style={styles.confirmationDateTime}>Home</Text>
+                            <Text style={styles.confirmationDateTime}>{this.state.serviceName}</Text>
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
                             </View>
-                        </Item>
+                        </TouchableOpacity>
 
                         <Item style={styles.confirmationItem}>
                             <View style={styles.confirmationIconView}>
@@ -150,24 +193,27 @@ class Confirmation extends Component {
                             </View>
                         </View>
                     </View>
+                </Content>
                     <Footer>
                         <FooterTab>
-                            <TouchableOpacity style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
-                            <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED 295.00</Text></TouchableOpacity>
+                        <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.confirmationContinue()} disabled={this.state.continueButtonDesable}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
+                        <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
                         </FooterTab>
                     </Footer>
-                </Content>
+                
             </Container>
         );
     }
 }
 
 Confirmation.propTypes = {
-    service: PropTypes.object.isRequired
+    service: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
 }
 const mapStateToProps = (state) => {
     return {
         service: state.service,
+        auth: state.auth
     }
 }
 
