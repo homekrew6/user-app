@@ -600,7 +600,7 @@ class serviceDetails extends Component {
             this.state.questionList.length > 0 ? (
               <Footer>
                 <FooterTab>
-                  <TouchableOpacity style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt} onPress={() => this.props.navigation.navigate('Confirmation')}>CONTINUE</Text></TouchableOpacity>
                   <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
                 </FooterTab>
               </Footer>
