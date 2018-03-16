@@ -183,19 +183,28 @@ class serviceDetails extends Component {
         <StatusBar
           backgroundColor="#cbf0ed"
         />
-        <Content style={styles.bgWhite} >
-          <FSpinner visible={this.props.service.busy} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
-          <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-            <Button transparent onPress={() => this.props.navigation.goBack()} >
-              <SimpleLineIcons name="grid" style={styles.hd_lft_icon} />
-            </Button>
-            <Body style={styles.appHdr2Bdy}>
-              <Title style={styles.appHdr2Txt}>Service Details</Title>
-            </Body>
-            <Button transparent onPress={() => this.props.navigation.navigate('Expect')} >
-              <Ionicons name="ios-information-circle" style={styles.hd_rt_icon} />
-            </Button>
-          </Header>
+        <FSpinner visible={this.props.service.busy} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
+        <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
+          <Button transparent onPress={() => this.props.navigation.goBack()} >
+            <SimpleLineIcons name="grid" style={styles.hd_lft_icon} />
+          </Button>
+          <Body style={styles.appHdr2Bdy}>
+            <Title style={styles.appHdr2Txt}>Service Details</Title>
+          </Body>
+          {/* <Button transparent onPress={() => this.props.navigation.navigate('Expect')} >
+            <Ionicons name="ios-information-circle" style={styles.hd_rt_icon} />
+          </Button> */}
+          {
+            this.props.service.data.features ? (
+              <Button transparent onPress={() => this.props.navigation.navigate('Expect')} >
+                <Ionicons name="ios-information-circle" style={styles.hd_rt_icon} />
+              </Button>
+            ) : (
+                <View ></View>
+              )
+          }
+        </Header>
+        <Content style={{ flex: 1, backgroundColor: '#fff' }}>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ flex: 1, flexDirection: 'row', position: 'relative' }}>
               {/* <Image source={carveImage} style={styles.carveImage} /> */}
@@ -302,15 +311,16 @@ class serviceDetails extends Component {
               </View>
             </Item> */}
           </View>
+        </Content>
 
           <Footer>
             <FooterTab>
-              <TouchableOpacity style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.props.navigation.navigate('Confirmation')}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
               <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
             </FooterTab>
           </Footer>
 
-        </Content>
+        
       </Container>
     );
   }
