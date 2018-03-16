@@ -25,7 +25,6 @@
     "native-base": "2.3.1",
     "react": "16.0.0-alpha.13",
     "react-native": "0.46.4",
-    "react-native-app-intro-v2": "^2.1.2",
     "react-native-aws3": "0.0.8",
     "react-native-calendars": "^1.17.4",
     "react-native-facebook-login": "^1.6.0",

@@ -8,7 +8,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api';
-import { setServiceDetails} from './elements/serviceActions';
+import { setServiceDetails } from './elements/serviceActions';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker } from 'native-base';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -35,7 +35,7 @@ class Categories extends Component {
       serviceList: [],
       selectedZoneDetails: '',
       visible: true,
-      IsModalVisible:false
+      IsModalVisible: false
     };
   }
 
@@ -43,53 +43,53 @@ class Categories extends Component {
     api.get('Zones/getParentZone').then((res) => {
       //console.log(res);
       if (res.zone.length > 0) {
-        this.setState({ zoneList:res.zone, selectedZoneDetails:res.zone[0], selected1:res.zone[0].id})
+        this.setState({ zoneList: res.zone, selectedZoneDetails: res.zone[0], selected1: res.zone[0].id })
 
         api.post('serviceZones/getZoneRelatedService', { id: res.zone[0].id }).then((resService) => {
           //console.log(res);
           if (resService.response.length > 0) {
             this.setState({ serviceList: resService.response })
             //console.log(this.state.serviceList)
-            this.setState({visible:false})
+            this.setState({ visible: false })
           }
         }).catch((err) => {
           //console.log(err);
-          this.setState({visible:false})
+          this.setState({ visible: false })
         });
 
       }
     }).catch((err) => {
-      this.setState({visible:false})
+      this.setState({ visible: false })
     });
   }
   openModal(data) {
     console.log('data on open Modal', data);
-     //Alert.alert('Click is working');
-     this.props.setServiceDetails(data);
-     this.setState({ IsModalVisible: true })
+    //Alert.alert('Click is working');
+    this.props.setServiceDetails(data);
+    this.setState({ IsModalVisible: true })
   }
   closeModal() {
-     //Alert.alert('Click is working');
-     this.setState({ IsModalVisible: false });
-     this.props.navigation.navigate('ServiceDetails');
+    //Alert.alert('Click is working');
+    this.setState({ IsModalVisible: false });
+    this.props.navigation.navigate('ServiceDetails');
   }
   onValueChange(value) {
     //console.log(value);
     this.setState({
       selected1: value,
     });
-    this.setState({visible:true})
+    this.setState({ visible: true })
     api.post('serviceZones/getZoneRelatedService', { id: value }).then((res) => {
       //console.log(res);
       if (res.response.length > 0) {
-        this.setState({ selectedZoneDetails:res.response[0].zone, serviceList: res.response })
+        this.setState({ selectedZoneDetails: res.response[0].zone, serviceList: res.response })
         //console.log(this.state.selectedZoneDetails)
         //console.log(this.state.serviceList)
-        this.setState({visible:false})
+        this.setState({ visible: false })
       }
     }).catch((err) => {
       //console.log(err);
-      this.setState({visible:false})
+      this.setState({ visible: false })
     });
     //console.log(this.state.coverImgWith);
   }
@@ -144,7 +144,7 @@ class Categories extends Component {
           </Header>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Image source={{uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
+              <Image source={{ uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
                 <View style={{ width: 120 }}>
                   <Picker
                     mode="dropdown"
@@ -168,18 +168,18 @@ class Categories extends Component {
           <View style={styles.catIten_hdr}>
             <Text style={styles.catIten_hdr_txt}>{I18n.t('browse_by_categories')}</Text>
           </View>
-          <Modal isVisible={this.state.IsModalVisible}  
-          animationIn="slideInLeft"
-          animationOut="slideOutRight"
-          hideModalContentWhileAnimating = {true}
+          <Modal isVisible={this.state.IsModalVisible}
+            animationIn="slideInLeft"
+            animationOut="slideOutRight"
+            hideModalContentWhileAnimating={true}
           >
             <View style={{ alignItems: 'center', marginBottom: 15 }}>
               <Text style={{ color: '#fff', fontSize: 20 }}>Cleaning</Text>
             </View>
 
-            <View style={{backgroundColor: '#fff', borderRadius: 10, }}>
-              <TouchableOpacity onPress={() => this.closeModal()} style={{ padding:10, borderBottomWidth:1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center'}}>
-                <Ionicons name='md-home' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }}/>
+            <View style={{ backgroundColor: '#fff', borderRadius: 10, }}>
+              <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
+                <Ionicons name='md-home' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
                 <Text>{I18n.t('home')}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
@@ -242,7 +242,7 @@ Categories.propTypes = {
 };
 const mapStateToProps = state => ({
   auth: state.auth,
-  service:state.service
+  service: state.service
 });
 
 const mapDispatchToProps = dispatch => ({

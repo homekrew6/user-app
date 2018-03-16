@@ -1862,6 +1862,13 @@ html-encoding-sniffer@^1.0.1:
   dependencies:
     whatwg-encoding "^1.0.1"
 
+<<<<<<< HEAD
+=======
+htmlencode@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/htmlencode/-/htmlencode-0.0.4.tgz#f7e2d6afbe18a87a78e63ba3308e753766740e3f"
+
+>>>>>>> master
 htmlparser2-without-node-native@^3.9.2:
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/htmlparser2-without-node-native/-/htmlparser2-without-node-native-3.9.2.tgz#b3ed050d877d0ff3465969e339877b7f9f6631f6"
@@ -3255,10 +3262,6 @@ react-native-animatable@^1.2.4:
   resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.2.4.tgz#b5fb7657e8f6edadbc26697057a327fb920b3039"
   dependencies:
     prop-types "^15.5.10"
-
-react-native-app-intro-v2@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/react-native-app-intro-v2/-/react-native-app-intro-v2-2.1.2.tgz#5b2be1776d703841f2f2e1e77641a91f5dc3b927"
 
 react-native-aws3@0.0.8:
   version "0.0.8"
