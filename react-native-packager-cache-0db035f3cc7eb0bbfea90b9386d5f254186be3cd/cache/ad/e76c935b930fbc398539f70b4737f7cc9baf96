@@ -412,17 +412,32 @@ var Categories = _wrapComponent('Categories')(function (_Component) {
               }
             },
             _react3.default.createElement(
+              _reactNative.TouchableOpacity,
+              { style: { position: 'absolute', top: 0, right: 0, height: 20, width: 20 }, onPress: function onPress() {
+                  return _this4.closeModal();
+                }, __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 176
+                }
+              },
+              _react3.default.createElement(_Ionicons2.default, { name: 'md-close-circle', style: { fontSize: 20, color: 'white' }, __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 177
+                }
+              })
+            ),
+            _react3.default.createElement(
               _reactNative.View,
               { style: { alignItems: 'center', marginBottom: 15 }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 176
+                  lineNumber: 179
                 }
               },
               _react3.default.createElement(
                 _nativeBase.Text,
                 { style: { color: '#fff', fontSize: 20 }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 177
+                    lineNumber: 180
                   }
                 },
                 'Cleaning'
@@ -432,7 +447,7 @@ var Categories = _wrapComponent('Categories')(function (_Component) {
               _reactNative.View,
               { style: { backgroundColor: '#fff', borderRadius: 10 }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 180
+                  lineNumber: 183
                 }
               },
               _react3.default.createElement(
@@ -441,12 +456,12 @@ var Categories = _wrapComponent('Categories')(function (_Component) {
                     return _this4.closeModal();
                   }, style: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center' }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 181
+                    lineNumber: 184
                   }
                 },
                 _react3.default.createElement(_Ionicons2.default, { name: 'md-home', style: { fontSize: 20, marginRight: 10, color: '#1e3768' }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 182
+                    lineNumber: 185
                   }
                 }),
                 _react3.default.createElement(
@@ -454,7 +469,7 @@ var Categories = _wrapComponent('Categories')(function (_Component) {
                   {
                     __source: {
                       fileName: _jsxFileName,
-                      lineNumber: 183
+                      lineNumber: 186
                     }
                   },
                   _i18n2.default.t('home')
@@ -466,12 +481,12 @@ var Categories = _wrapComponent('Categories')(function (_Component) {
                     return _this4.closeModal();
                   }, style: { padding: 10, flexDirection: 'row', alignItems: 'center' }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 185
+                    lineNumber: 188
                   }
                 },
                 _react3.default.createElement(_MaterialIcons2.default, { name: 'business', style: { fontSize: 20, marginRight: 10, color: '#1e3768' }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 186
+                    lineNumber: 189
                   }
                 }),
                 _react3.default.createElement(
@@ -479,7 +494,7 @@ var Categories = _wrapComponent('Categories')(function (_Component) {
                   {
                     __source: {
                       fileName: _jsxFileName,
-                      lineNumber: 187
+                      lineNumber: 190
                     }
                   },
                   _i18n2.default.t('office')
@@ -491,7 +506,7 @@ var Categories = _wrapComponent('Categories')(function (_Component) {
             _reactNative.View,
             { style: _styles2.default.catIten_txt_warp, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 193
+                lineNumber: 196
               }
             },
             serviceListing

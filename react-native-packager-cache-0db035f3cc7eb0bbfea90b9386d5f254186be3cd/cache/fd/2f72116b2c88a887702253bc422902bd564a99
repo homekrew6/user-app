@@ -73,6 +73,10 @@ var _locationList = require("./components/service/locationList");
 
 var _locationList2 = _interopRequireDefault(_locationList);
 
+var _serviceProviderListing = require("./components/service/serviceProviderListing");
+
+var _serviceProviderListing2 = _interopRequireDefault(_serviceProviderListing);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var AppNavigator = (0, _reactNavigation.StackNavigator)({
@@ -90,7 +94,8 @@ var AppNavigator = (0, _reactNavigation.StackNavigator)({
     ServiceDetails: { screen: _serviceDetails2.default },
     Expect: { screen: _expect2.default },
     DateAndTime: { screen: _dateAndTime2.default },
-    LocationList: { screen: _locationList2.default }
+    LocationList: { screen: _locationList2.default },
+    ServiceProviderListing: { screen: _serviceProviderListing2.default }
 }, {
     initialRouteName: "Drawer",
     headerMode: "none"
@@ -102,13 +107,13 @@ exports.default = function () {
         {
             __source: {
                 fileName: _jsxFileName,
-                lineNumber: 51
+                lineNumber: 53
             }
         },
         _react2.default.createElement(AppNavigator, {
             __source: {
                 fileName: _jsxFileName,
-                lineNumber: 52
+                lineNumber: 54
             }
         })
     );
