@@ -24,8 +24,8 @@ class incrimentDecriment extends Component {
     }
 
     handleIncrement = () => {
-        debugger;
         var price = this.props.service.data.price;
+        price=Number(price);
         const massage = Number(this.state.massage) + 1;
         this.setState({ massage: massage });
         if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
@@ -37,29 +37,47 @@ class incrimentDecriment extends Component {
                 price = price + (Number(massage) * Number(this.state.totalData.answers[0].price_impact));
             }
             var data = this.props.service.data;
+            price = this.addZeroes(price);
             data.price = price;
             this.props.setServiceDetails(data);
         }
 
     }
     handleDecrement = () => {
+        price=Number(price);
         var price = this.props.service.data.price;
-        const massage = Number(this.state.massage) - 1;
-        this.setState({ massage: massage });
-        if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
-            if (this.state.totalData.answers[0].option_price_impact == "Addition") {
-                price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));
-                // price = price + (Number(massage) + Number(this.state.totalData.answers[0].price_impact));
-            }
-            else {
-                price = price + (Number(massage) * Number(this.state.totalData.answers[0].price_impact));
-            }
-            var data = this.props.service.data;
-            data.price = price;
-            this.props.setServiceDetails(data);
-        }
-    }
+        if (Number(this.state.massage) == 0) {
 
+        }
+        else {
+            const massage = Number(this.state.massage) - 1;
+            this.setState({ massage: massage });
+            if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
+                if (this.state.totalData.answers[0].option_price_impact == "Addition") {
+                    price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));
+                    // price = price + (Number(massage) + Number(this.state.totalData.answers[0].price_impact));
+                }
+                else {
+                    price = price - (Number(this.state.massage) * Number(this.state.totalData.answers[0].price_impact));
+                }
+                this.setState({ massage: massage });
+                var data = this.props.service.data;
+                price = this.addZeroes(price);
+                data.price = price;
+                this.props.setServiceDetails(data);
+            }
+        }
+
+    }
+    addZeroes(num) {
+        // var value = Number(num);
+        // var res = num.split(".");
+        // if(res.length == 1 || (res[1].length < 3)) {
+        //     value = value.toFixed(2);
+        // }
+        let value = num.toFixed(2);
+        return value
+    }
 
 
     render() {

@@ -1,0 +1,96 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/user-app/node_modules/react-navigation/src/navigators/TabNavigator.js';
+
+var _react = require('react');
+
+var _react2 = babelHelpers.interopRequireDefault(_react);
+
+var _reactNative = require('react-native');
+
+var _createNavigator = require('./createNavigator');
+
+var _createNavigator2 = babelHelpers.interopRequireDefault(_createNavigator);
+
+var _createNavigationContainer = require('../createNavigationContainer');
+
+var _createNavigationContainer2 = babelHelpers.interopRequireDefault(_createNavigationContainer);
+
+var _TabRouter = require('../routers/TabRouter');
+
+var _TabRouter2 = babelHelpers.interopRequireDefault(_TabRouter);
+
+var _TabView = require('../views/TabView/TabView');
+
+var _TabView2 = babelHelpers.interopRequireDefault(_TabView);
+
+var _TabBarTop = require('../views/TabView/TabBarTop');
+
+var _TabBarTop2 = babelHelpers.interopRequireDefault(_TabBarTop);
+
+var _TabBarBottom = require('../views/TabView/TabBarBottom');
+
+var _TabBarBottom2 = babelHelpers.interopRequireDefault(_TabBarBottom);
+
+var _NavigatorTypes = require('./NavigatorTypes');
+
+var _NavigatorTypes2 = babelHelpers.interopRequireDefault(_NavigatorTypes);
+
+var TabNavigator = function TabNavigator(routeConfigs) {
+  var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  var mergedConfig = babelHelpers.extends({}, TabNavigator.Presets.Default, config);
+  var tabBarComponent = mergedConfig.tabBarComponent,
+      tabBarPosition = mergedConfig.tabBarPosition,
+      tabBarOptions = mergedConfig.tabBarOptions,
+      swipeEnabled = mergedConfig.swipeEnabled,
+      animationEnabled = mergedConfig.animationEnabled,
+      lazy = mergedConfig.lazy,
+      tabsConfig = babelHelpers.objectWithoutProperties(mergedConfig, ['tabBarComponent', 'tabBarPosition', 'tabBarOptions', 'swipeEnabled', 'animationEnabled', 'lazy']);
+
+
+  var router = (0, _TabRouter2.default)(routeConfigs, tabsConfig);
+
+  var navigator = (0, _createNavigator2.default)(router, routeConfigs, config, _NavigatorTypes2.default.STACK)(function (props) {
+    return _react2.default.createElement(_TabView2.default, babelHelpers.extends({}, props, {
+      tabBarComponent: tabBarComponent,
+      tabBarPosition: tabBarPosition,
+      tabBarOptions: tabBarOptions,
+      swipeEnabled: swipeEnabled,
+      animationEnabled: animationEnabled,
+      lazy: lazy,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 51
+      }
+    }));
+  });
+
+  return (0, _createNavigationContainer2.default)(navigator, tabsConfig.containerOptions);
+};
+
+var Presets = {
+  iOSBottomTabs: {
+    tabBarComponent: _TabBarBottom2.default,
+    tabBarPosition: 'bottom',
+    swipeEnabled: false,
+    animationEnabled: false,
+    lazy: false
+  },
+  AndroidTopTabs: {
+    tabBarComponent: _TabBarTop2.default,
+    tabBarPosition: 'top',
+    swipeEnabled: true,
+    animationEnabled: true,
+    lazy: false
+  }
+};
+
+TabNavigator.Presets = {
+  iOSBottomTabs: Presets.iOSBottomTabs,
+  AndroidTopTabs: Presets.AndroidTopTabs,
+  Default: _reactNative.Platform.OS === 'ios' ? Presets.iOSBottomTabs : Presets.AndroidTopTabs
+};
+
+exports.default = TabNavigator;

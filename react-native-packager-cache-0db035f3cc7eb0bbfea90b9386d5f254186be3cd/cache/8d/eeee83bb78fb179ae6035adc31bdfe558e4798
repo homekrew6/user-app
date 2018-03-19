@@ -1,0 +1,67 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.setServiceDetails = setServiceDetails;
+exports.setDateAndTime = setDateAndTime;
+exports.getQuestionListByServiceId = getQuestionListByServiceId;
+exports.serviceStateBusy = serviceStateBusy;
+exports.serviceStateFailed = serviceStateFailed;
+exports.serviceStateSuccess = serviceStateSuccess;
+
+var _serviceApi = require('./serviceApi');
+
+var _serviceApi2 = babelHelpers.interopRequireDefault(_serviceApi);
+
+var _actionTypes = require('../../../actions/actionTypes');
+
+var TYPES = babelHelpers.interopRequireWildcard(_actionTypes);
+
+var _reactNative = require('react-native');
+
+function setServiceDetails(data) {
+  return function (dispatch) {
+    console.log('setServiceDetails', data);
+    dispatch(serviceStateSuccess(data));
+  };
+}
+
+function setDateAndTime(data) {
+  return function (dispatch) {
+    console.log('setDateAndTime', data);
+    dispatch(serviceStateSuccess(data));
+  };
+}
+function getQuestionListByServiceId(data) {
+  return function (dispatch) {
+    dispatch(serviceStateBusy());
+    return _serviceApi2.default.getQuestionListByServiceId(data.id).then(function (res) {
+      res.type = 'success';
+      dispatch(serviceStateSuccess(data));
+      return res;
+    }).catch(function (err) {
+      err.type = 'error';
+      console.log(err);
+      dispatch(serviceStateFailed());
+      return err;
+    });
+  };
+}
+
+function serviceStateBusy() {
+  return {
+    type: TYPES.SERVICE_STATE_BUSY
+  };
+}
+
+function serviceStateFailed() {
+  return {
+    type: TYPES.SERVICE_STATE_FAILED
+  };
+}
+
+function serviceStateSuccess(data) {
+  return {
+    type: TYPES.SERVICE_STATE_SUCCESS,
+    data: data
+  };
+}

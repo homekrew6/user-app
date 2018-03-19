@@ -1,0 +1,48 @@
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = serviceReducer;
+
+var _actionTypes = require('../../../actions/actionTypes');
+
+var TYPES = _interopRequireWildcard(_actionTypes);
+
+var _initialState = require('../../../reducers/initialState');
+
+var _initialState2 = _interopRequireDefault(_initialState);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function serviceReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _initialState2.default.service;
+  var action = arguments[1];
+
+  console.log('service data', action);
+  switch (action.type) {
+    case TYPES.SERVICE_STATE_BUSY:
+      {
+        return {
+          busy: true,
+          data: ''
+        };
+      }
+    case TYPES.SERVICE_STATE_FAILED:
+      {
+        return {
+          busy: false,
+          data: ''
+        };
+      }
+    case TYPES.SERVICE_STATE_SUCCESS:
+      {
+        return {
+          busy: false,
+          data: action.data
+        };
+      }
+    default:
+      return state;
+  }
+}

@@ -146,9 +146,51 @@ class serviceDetails extends Component {
     });
   }
   changeActiveRadio(data) {
-    debugger;
     data.selected = !data.selected;
+    let dataselected = data;
+    let item;
+    this.state.questionList.map((ques) => {
+      if (ques.id == data.questionId) {
+        item = ques;
+      }
+    });
+    if (item) {
+      if (item.answers) {
+        noofselected = 0;
+        item.answers.map((item1) => {
+          if (item1.selected == true) {
+            noofselected++;
+          }
+        });
+        if (noofselected > 1) {
+          item.answers.map((item1) => {
+            if (item1.id == dataselected.id) {
+
+            }
+            else {
+              if (item1.selected == true) {
+                item1.selected = false;
+                var price = this.props.service.data.price;
+                price=Number(price);
+                if (dataselected.option_price_impact == "Addition") {
+                  price = price - Number(dataselected.price_impact);
+                }
+                else {
+                  price = price / Number(dataselected.price_impact);
+                }
+                var data = this.props.service.data;
+                price = this.addZeroes(price);
+                data.price = price;
+                this.props.setServiceDetails(data);
+              }
+
+            }
+          })
+        }
+      }
+    }
     var price = this.props.service.data.price;
+    price=Number(price);
     if (data.selected == false) {
       if (data.option_price_impact == "Addition") {
         price = price - Number(data.price_impact);
@@ -167,6 +209,7 @@ class serviceDetails extends Component {
     }
 
     var data = this.props.service.data;
+    price = this.addZeroes(price);
     data.price = price;
     this.props.setServiceDetails(data);
   }
@@ -182,8 +225,8 @@ class serviceDetails extends Component {
     // this.setState({
     //   isOpen: !this.state.isOpen,
     // });
-    debugger;
     var price = this.props.service.data.price;
+    price=Number(price);
     data.Status = !data.Status;
     console.log(data.Status);
     let index;
@@ -204,6 +247,7 @@ class serviceDetails extends Component {
             price = price / Number(data1.answers[0].price_impact);
           }
           var data = this.props.service.data;
+          price = this.addZeroes(price);
           data.price = price;
           this.props.setServiceDetails(data);
         }
@@ -218,6 +262,7 @@ class serviceDetails extends Component {
             price = price * Number(data1.answers[0].price_impact);
           }
           var data = this.props.service.data;
+          price = this.addZeroes(price);
           data.price = price;
           this.props.setServiceDetails(data);
         }
@@ -258,6 +303,7 @@ class serviceDetails extends Component {
         }
         var data = this.props.service.data;
         data.questionList = this.state.questionList;
+        price = this.addZeroes(price);
         data.price = price;
         this.props.setServiceDetails(data);
       }
@@ -271,54 +317,64 @@ class serviceDetails extends Component {
 
   }
 
+
+  addZeroes(num) {
+    // var value = Number(num);
+    // var res = num.split(".");
+    // if (res.length == 1 || (res[1].length < 3)) {
+    //   value = value.toFixed(2);
+    // }
+    let value=num.toFixed(2);
+    return value
+  }
+
   sliderChanged(value, data) {
     debugger;
-    var price = this.props.service.data.price;
-    if (data.answers) {
-      if (data.answers[0].option_price_impact == "Addition") {
-        if(this.props.service.data.value)
-        {
-         if(value<this.props.service.data.value)
-         {
-          price = price - (value + Number(data.answers[0].price_impact));
-         }
-         else
-         {
-          price = price + (value + Number(data.answers[0].price_impact));
-         }
-        }
-        else
-        {
-          price = price + (value + Number(data.answers[0].price_impact));
-        }
-       
-      }
-      else {
-        if(this.props.service.data.value)
-        {
-         if(value<this.props.service.data.value)
-         {
-          price = price + (value + Number(data.answers[0].price_impact));
-         }
-         else
-         {
-          price = price + (value + Number(data.answers[0].price_impact));
-         }
-        }
-        else
-        {
-          price = price + (value * Number(data.answers[0].price_impact));
-        }
-       
-      }
-
-      price = parseFloat(Math.round(price * 100) / 100).toFixed(2);
+    if (value != 0) {
+      value = parseFloat(Math.round(value * 100) / 100).toFixed(2);
+      value = Number(value);
+      var price = this.props.service.data.price;
       price=Number(price);
-      var data = this.props.service.data;
-      data.price = price;
-      data.value=value;
-      this.props.setServiceDetails(data);
+      if (data.answers) {
+        if (data.answers[0].option_price_impact == "Addition") {
+          if (this.props.service.data.value) {
+            if (value < this.props.service.data.value) {
+              price = price - (value + Number(data.answers[0].price_impact));
+            }
+            else {
+              price = price + (value + Number(data.answers[0].price_impact));
+            }
+          }
+          else {
+            price = price + (value + Number(data.answers[0].price_impact));
+          }
+
+        }
+        else {
+          if (this.props.service.data.value) {
+            if (value < this.props.service.data.value) {
+              price = price + (value + Number(data.answers[0].price_impact));
+            }
+            else {
+              price = price + (value + Number(data.answers[0].price_impact));
+            }
+          }
+          else {
+            price = price + (value * Number(data.answers[0].price_impact));
+          }
+
+        }
+
+        price = parseFloat(Math.round(price * 100) / 100).toFixed(2);
+        price = Number(price);
+        var data = this.props.service.data;
+        price = this.addZeroes(price);
+        data.price = price;
+        data.value = value;
+        this.props.setServiceDetails(data);
+      }
     }
+
 
   }
 
@@ -460,7 +516,7 @@ class serviceDetails extends Component {
         <StatusBar
           backgroundColor="#cbf0ed"
         />
-        <FSpinner visible={this.props.service.busy} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
+        <FSpinner visible={this.props.service.busy || this.state.IsSpinnerVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
         <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
           <Button transparent onPress={() => this.props.navigation.goBack()} >
             <SimpleLineIcons name="grid" style={styles.hd_lft_icon} />
@@ -540,7 +596,7 @@ class serviceDetails extends Component {
               this.state.questionList.length > 0 ? (
                 questionList
               ) : (
-                  <View style={{flex:1, alignItems: 'center'}}><Text>No questions found.</Text></View>
+                  <View style={{ flex: 1, alignItems: 'center' }}><Text>No questions found.</Text></View>
                 )
             }
             {/* <Item style={styles.confirmationItem}>
@@ -595,20 +651,20 @@ class serviceDetails extends Component {
               </View>
             </Item> */}
           </View>
-        </Content>  
-          {
-            this.state.questionList.length > 0 ? (
-              <Footer>
-                <FooterTab>
+        </Content>
+        {
+          this.state.questionList.length > 0 ? (
+            <Footer>
+              <FooterTab>
                 <TouchableOpacity style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt} onPress={() => this.props.navigation.navigate('Confirmation')}>CONTINUE</Text></TouchableOpacity>
-                  <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
-                </FooterTab>
-              </Footer>
-            ) : (
-                <View></View>
-              )
-          }
-              
+                <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
+              </FooterTab>
+            </Footer>
+          ) : (
+              <View></View>
+            )
+        }
+
       </Container>
     );
   }

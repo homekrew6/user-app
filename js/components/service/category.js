@@ -98,15 +98,15 @@ class Categories extends Component {
     let serviceListing;
     if (this.state.serviceList.length > 0) {
 
-      serviceListing= (
-        this.state.serviceList.map((data,key)=>{
-          if(!data.service) return;
+      serviceListing = (
+        this.state.serviceList.map((data, key) => {
+          if (!data.service) return;
           return (
-            <View key={ data.id } style={styles.catIten}>
+            <View key={data.id} style={styles.catIten}>
               <View style={styles.catIten_img_view}>
                 <TouchableOpacity onPress={() => this.openModal(data.service)}>
-          
-                  <Image source={{uri: data.service.banner_image || null }} style={styles.catIten_img} />
+
+                  <Image source={{ uri: data.service.banner_image || null }} style={styles.catIten_img} />
                 </TouchableOpacity>
               </View>
               <Text style={styles.catIten_txt}>{data.service.name || null}</Text>
@@ -115,12 +115,12 @@ class Categories extends Component {
         })
       )
     }
-    let zoneItems = this.state.zoneList.map( (s) => {
-        //return <Picker.Item key={s.id} label={s.name}  value={s.id}/>
-        return <Item key={s.id} label={s.name} value={s.id} />
+    let zoneItems = this.state.zoneList.map((s) => {
+      //return <Picker.Item key={s.id} label={s.name}  value={s.id}/>
+      return <Item key={s.id} label={s.name} value={s.id} />
     });
 
-    
+
     return (
       <Container >
         <StatusBar
@@ -173,6 +173,9 @@ class Categories extends Component {
             animationOut="slideOutRight"
             hideModalContentWhileAnimating={true}
           >
+            <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, height: 20, width: 20 }} onPress={() => this.closeModal()}>
+              <Ionicons name='md-close-circle' style={{ fontSize: 20, color: 'white' }} />
+            </TouchableOpacity>
             <View style={{ alignItems: 'center', marginBottom: 15 }}>
               <Text style={{ color: '#fff', fontSize: 20 }}>Cleaning</Text>
             </View>

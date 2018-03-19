@@ -35,8 +35,9 @@ class DateAndTime extends Component {
         date = today.getFullYear() + "-" + dy + "-" + dm;
         this.state = {
             daYSelected: [date],
-            weekday :[ 'Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
-            months :['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            minDate: [today],
+            weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
             colectionData: [
                 { key: '1', time: '00:00AM', isActive: false },
                 { key: '2', time: '01:00AM', isActive: false },
@@ -56,7 +57,12 @@ class DateAndTime extends Component {
                 { key: '16', time: '03:00PM', isActive: false },
                 { key: '17', time: '04:00PM', isActive: false },
                 { key: '18', time: '05:00PM', isActive: false },
-                { key: '19', time: '06:00PM', isActive: false }
+                { key: '19', time: '06:00PM', isActive: false },
+                { key: '20', time: '07:00PM', isActive: false },
+                { key: '21', time: '08:00PM', isActive: false },
+                { key: '22', time: '09:00PM', isActive: false },
+                { key: '23', time: '10:00PM', isActive: false },
+                { key: '24', time: '11:00PM', isActive: false }
             ],
             satDate: '',
             setTime: '',
@@ -66,7 +72,7 @@ class DateAndTime extends Component {
     }
 
     onDaySelect(day) {
-        let d = new Date(day.dateString );
+        let d = new Date(day.dateString);
         let weekday = new Array(7);
         weekday[0] = "Sun";
         weekday[1] = "Mon";
@@ -79,12 +85,12 @@ class DateAndTime extends Component {
         let n = weekday[d.getDay()];
         console.log(n);
         //console.log(day);
-        this.setState({ 
+        this.setState({
             daYSelected: day.dateString,
-            satDate:  day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
+            satDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
             setWeek: n
-         })
-        
+        })
+
     }
     pressOnCircle(index) {
         let newColectionData = this.state.colectionData;
@@ -103,18 +109,18 @@ class DateAndTime extends Component {
             colectionData: newColectionData,
         })
     }
-    setDateAndTime(){
+    setDateAndTime() {
         console.log(this.props.service);
-        if (this.state.satDate == ''){
+        if (this.state.satDate == '') {
             Alert.alert('Please set a Date');
-        } else if (this.state.setTime == ''){
+        } else if (this.state.setTime == '') {
             Alert.alert('Please set a Time');
         } else {
-            let data=this.state.serviceDetails;
+            let data = this.state.serviceDetails;
             data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
             this.props.setDateAndTime(data);
             this.props.navigation.navigate('Confirmation');
-        }    
+        }
     }
 
     render() {
@@ -124,8 +130,8 @@ class DateAndTime extends Component {
                     backgroundColor="#81cdc7" />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
-                    <Button transparent >
-                        <Text>Cancle</Text>
+                    <Button transparent onPress={() => this.props.navigation.navigate('Confirmation')}>
+                        <Text>Cancel</Text>
                     </Button>
                     <Body style={styles.tac}>
                         <Text style={styles.hdClr}>My Timings</Text>
@@ -168,6 +174,7 @@ class DateAndTime extends Component {
                                         textDayHeaderFontSize: 16,
 
                                     }}
+                                    minDate={this.state.minDate}
                                 />
                             </CardItem>
 

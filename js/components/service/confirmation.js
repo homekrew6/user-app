@@ -4,17 +4,20 @@ import { connect } from 'react-redux';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'; 
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons'; 
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FSpinner from 'react-native-loading-spinner-overlay';
-
+import { NavigationActions } from 'react-navigation';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index'
-
+const resetAction = NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Menu' })],
+  });
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
@@ -24,22 +27,22 @@ class Confirmation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dateTime: props.service.data.serviceTime,        
-            serviceName: props.service.data.serviceLocation?props.service.data.serviceLocation:'Home',
+            dateTime: props.service.data.serviceTime,
+            serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : 'Home',
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,
             continueButtonDesable: false,
             //homeValuearray: props.service.data.homeArray,
             // homeValue: 'Home'
         }
-         
+
     }
 
-    confirmationContinue(){
+    confirmationContinue() {
         this.setState({
             loader: true,
         })
-        if (!(this.state.dateTime == undefined)){
+        if (!(this.state.dateTime == undefined)) {
             api.post('jobs',
                 {
                     "serviceId": this.props.service.data.id,
@@ -54,11 +57,12 @@ class Confirmation extends Component {
                 }
             ).then(responseJson => {
                 // console.log(responseJson);
-                Alert.alert("Job Post is Successfully")
+                Alert.alert("Job Posted Successfully");
                 this.setState({
                     loader: false,
                     continueButtonDesable: true
-                })
+                });
+                this.props.navigation.dispatch(resetAction);
             }).catch(err => {
                 console.log(err);
                 Alert.alert("Job Post not save");
@@ -67,30 +71,30 @@ class Confirmation extends Component {
                 })
             })
         }
-        else{
+        else {
             this.setState({
                 loader: false,
             })
             Alert.alert("Please Enter a Date And Time")
         }
-        
+
     }
 
     render() {
         return (
             <Container >
                 <FSpinner visible={this.state.loader} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
-                    <StatusBar
-                        backgroundColor="#cbf0ed"
-                    />
+                <StatusBar
+                    backgroundColor="#cbf0ed"
+                />
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent >
+                    <Button transparent onPress={() => this.props.navigation.goBack()}>
                         <Ionicons name="ios-arrow-back-outline" style={styles.hd_lft_icon} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={ styles.appHdr2Txt }>Confirmation</Title>
+                        <Title style={styles.appHdr2Txt}>Confirmation</Title>
                     </Body>
-                    <Button transparent/>
+                    <Button transparent />
                 </Header>
 
                 <Content style={styles.bgWhite} >
@@ -101,7 +105,7 @@ class Confirmation extends Component {
                             </View>
                             <Text style={{ color: '#1e3768', fontSize: 18, padding: 5, fontSize: 16 }}>{this.state.serviceName}</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-                                <EvilIcons name="clock" style={{ fontSize: 14, color: "#747474" }}/> 
+                                <EvilIcons name="clock" style={{ fontSize: 14, color: "#747474" }} />
                                 <Text style={{ color: "#747474", fontSize: 14 }}>4 hours</Text>
                             </View>
                             <Text style={{ color: '#1e3768', fontSize: 16 }}>AED {this.props.service.data.price}</Text>
@@ -194,13 +198,13 @@ class Confirmation extends Component {
                         </View>
                     </View>
                 </Content>
-                    <Footer>
-                        <FooterTab>
+                <Footer>
+                    <FooterTab>
                         <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.confirmationContinue()} disabled={this.state.continueButtonDesable}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
                         <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
-                        </FooterTab>
-                    </Footer>
-                
+                    </FooterTab>
+                </Footer>
+
             </Container>
         );
     }

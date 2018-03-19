@@ -1,0 +1,429 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react2 = require('react');
+
+var _react3 = _interopRequireDefault(_react2);
+
+var _index = require('./../../../node_modules/react-transform-hmr/lib/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/user-app/js/components/service/dateAndTime.js';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = require('react-redux');
+
+var _serviceActions = require('./elements/serviceActions');
+
+var _reactNative = require('react-native');
+
+var _nativeBase = require('native-base');
+
+var _styles = require('./styles');
+
+var _styles2 = _interopRequireDefault(_styles);
+
+var _reactNativeCalendars = require('react-native-calendars');
+
+var _FontAwesome = require('react-native-vector-icons/FontAwesome');
+
+var _FontAwesome2 = _interopRequireDefault(_FontAwesome);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _components = {
+    DateAndTime: {
+        displayName: 'DateAndTime'
+    }
+};
+
+var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: '/home/nits-58/Desktop/project/anup/loopback/user-app/js/components/service/dateAndTime.js',
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+});
+
+function _wrapComponent(id) {
+    return function (Component) {
+        return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+}
+
+var deviceHeight = _reactNative.Dimensions.get('window').height;
+var deviceWidth = _reactNative.Dimensions.get('window').width;
+var img1 = require('../../../img/splash-bg2.png');
+var launchscreenBg = require("../../../img/bg-login.png");
+
+var DateAndTime = _wrapComponent('DateAndTime')(function (_Component) {
+    _inherits(DateAndTime, _Component);
+
+    function DateAndTime(props) {
+        _classCallCheck(this, DateAndTime);
+
+        var _this = _possibleConstructorReturn(this, (DateAndTime.__proto__ || Object.getPrototypeOf(DateAndTime)).call(this, props));
+
+        var today = new Date();
+        var dy = parseInt(today.getMonth() + 1);
+        var dm = today.getDate();
+        if (dy < 10) {
+            dy = '0' + dy;
+        }
+        if (dm < 10) {
+            dm = '0' + dm;
+        }
+
+        date = today.getFullYear() + "-" + dy + "-" + dm;
+        _this.state = {
+            daYSelected: [date],
+            minDate: [today],
+            weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
+            months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            colectionData: [{ key: '1', time: '00:00AM', isActive: false }, { key: '2', time: '01:00AM', isActive: false }, { key: '3', time: '02:00AM', isActive: false }, { key: '4', time: '03:00AM', isActive: false }, { key: '5', time: '04:00AM', isActive: false }, { key: '6', time: '05:00AM', isActive: false }, { key: '7', time: '06:00AM', isActive: false }, { key: '8', time: '07:00AM', isActive: false }, { key: '9', time: '08:00AM', isActive: false }, { key: '10', time: '09:00AM', isActive: false }, { key: '11', time: '10:00AM', isActive: false }, { key: '12', time: '11:00AM', isActive: false }, { key: '13', time: '12:00AM', isActive: false }, { key: '14', time: '01:00PM', isActive: false }, { key: '15', time: '02:00PM', isActive: false }, { key: '16', time: '03:00PM', isActive: false }, { key: '17', time: '04:00PM', isActive: false }, { key: '18', time: '05:00PM', isActive: false }, { key: '19', time: '06:00PM', isActive: false }, { key: '20', time: '07:00PM', isActive: false }, { key: '21', time: '08:00PM', isActive: false }, { key: '22', time: '09:00PM', isActive: false }, { key: '23', time: '10:00PM', isActive: false }, { key: '24', time: '11:00PM', isActive: false }],
+            satDate: '',
+            setTime: '',
+            setWeek: '',
+            serviceDetails: _this.props.service.data
+        };
+        return _this;
+    }
+
+    _createClass(DateAndTime, [{
+        key: 'onDaySelect',
+        value: function onDaySelect(day) {
+            var d = new Date(day.dateString);
+            var weekday = new Array(7);
+            weekday[0] = "Sun";
+            weekday[1] = "Mon";
+            weekday[2] = "Tue";
+            weekday[3] = "Wed";
+            weekday[4] = "Thu";
+            weekday[5] = "Fri";
+            weekday[6] = "Sat";
+
+            var n = weekday[d.getDay()];
+            console.log(n);
+
+            this.setState({
+                daYSelected: day.dateString,
+                satDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
+                setWeek: n
+            });
+        }
+    }, {
+        key: 'pressOnCircle',
+        value: function pressOnCircle(index) {
+            var newColectionData = this.state.colectionData;
+
+            for (var i = 0; i < newColectionData.length; i++) {
+                newColectionData[i].isActive = false;
+                if (newColectionData[i].key == index) {
+                    newColectionData[i].isActive = true;
+                    this.setState({
+                        setTime: newColectionData[i].time
+                    });
+                }
+            }
+            this.setState({
+                colectionData: newColectionData
+            });
+        }
+    }, {
+        key: 'setDateAndTime',
+        value: function setDateAndTime() {
+            console.log(this.props.service);
+            if (this.state.satDate == '') {
+                _reactNative.Alert.alert('Please set a Date');
+            } else if (this.state.setTime == '') {
+                _reactNative.Alert.alert('Please set a Time');
+            } else {
+                var data = this.state.serviceDetails;
+                data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
+                this.props.setDateAndTime(data);
+                this.props.navigation.navigate('Confirmation');
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return _react3.default.createElement(
+                _nativeBase.Container,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 128
+                    }
+                },
+                _react3.default.createElement(_reactNative.StatusBar, {
+                    backgroundColor: '#81cdc7', __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 129
+                    }
+                }),
+                _react3.default.createElement(
+                    _nativeBase.Header,
+                    { style: _styles2.default.appHdr2, androidStatusBarColor: '#cbf0ed', __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 132
+                        }
+                    },
+                    _react3.default.createElement(
+                        _nativeBase.Button,
+                        { transparent: true, onPress: function onPress() {
+                                return _this2.props.navigation.navigate('Confirmation');
+                            }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 133
+                            }
+                        },
+                        _react3.default.createElement(
+                            _nativeBase.Text,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 134
+                                }
+                            },
+                            'Cancel'
+                        )
+                    ),
+                    _react3.default.createElement(
+                        _nativeBase.Body,
+                        { style: _styles2.default.tac, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 136
+                            }
+                        },
+                        _react3.default.createElement(
+                            _nativeBase.Text,
+                            { style: _styles2.default.hdClr, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 137
+                                }
+                            },
+                            'My Timings'
+                        )
+                    ),
+                    _react3.default.createElement(
+                        _nativeBase.Button,
+                        { transparent: true, onPress: function onPress() {
+                                return _this2.setDateAndTime();
+                            }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 139
+                            }
+                        },
+                        _react3.default.createElement(
+                            _nativeBase.Text,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 140
+                                }
+                            },
+                            'Done'
+                        )
+                    )
+                ),
+                _react3.default.createElement(
+                    _nativeBase.Content,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 144
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.View,
+                        { style: { paddingLeft: 15, paddingRight: 15 }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 145
+                            }
+                        },
+                        _react3.default.createElement(
+                            _nativeBase.Card,
+                            { style: { backgroundColor: 'transparent', marginBottom: 20 }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 146
+                                }
+                            },
+                            _react3.default.createElement(
+                                _nativeBase.CardItem,
+                                { style: { marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 147
+                                    }
+                                },
+                                _react3.default.createElement(_FontAwesome2.default, { name: 'calendar', style: { color: '#81cdc7', fontSize: 20, marginRight: 5 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 148
+                                    }
+                                }),
+                                _react3.default.createElement(
+                                    _nativeBase.Text,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 149
+                                        }
+                                    },
+                                    'Date'
+                                )
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.CardItem,
+                                {
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 151
+                                    }
+                                },
+                                _react3.default.createElement(_reactNativeCalendars.Calendar, {
+                                    onDayPress: function onDayPress(day) {
+                                        return _this2.onDaySelect(day);
+                                    },
+                                    monthFormat: 'MMM yyyy',
+                                    hideArrows: false,
+                                    hideExtraDays: true,
+                                    disableMonthChange: false,
+                                    markedDates: _defineProperty({}, this.state.daYSelected, { selected: true, selectedColor: '#81cdc7' }),
+                                    theme: {
+                                        backgroundColor: '#ffffff',
+                                        calendarBackground: '#ffffff',
+                                        textSectionTitleColor: '#2d4150',
+                                        selectedDayBackgroundColor: '#2d4150',
+                                        selectedDayTextColor: '#ffffff',
+                                        todayTextColor: '#81cdc7',
+                                        dayTextColor: '#2d4150',
+                                        weekTextColor: '#000',
+                                        textDisabledColor: '#ccc',
+                                        arrowColor: '#81cdc7',
+                                        textDayFontSize: 14,
+                                        textMonthFontSize: 16,
+                                        textDayHeaderFontSize: 16
+
+                                    },
+                                    minDate: this.state.minDate,
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 152
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.CardItem,
+                                { style: { marginTop: 2, marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 181
+                                    }
+                                },
+                                _react3.default.createElement(_FontAwesome2.default, { name: 'clock-o', style: { color: '#81cdc7', fontSize: 20, marginRight: 5 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 182
+                                    }
+                                }),
+                                _react3.default.createElement(
+                                    _nativeBase.Text,
+                                    {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 183
+                                        }
+                                    },
+                                    ' Time'
+                                )
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.CardItem,
+                                {
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 185
+                                    }
+                                },
+                                _react3.default.createElement(
+                                    _reactNative.View,
+                                    { style: { flex: 1, flexDirection: 'row' }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 186
+                                        }
+                                    },
+                                    _react3.default.createElement(_reactNative.FlatList, {
+                                        data: this.state.colectionData,
+                                        renderItem: function renderItem(_ref2) {
+                                            var item = _ref2.item;
+                                            return _react3.default.createElement(
+                                                _reactNative.TouchableOpacity,
+                                                { onPress: function onPress() {
+                                                        return _this2.pressOnCircle(item.key);
+                                                    }, id: item.key, __source: {
+                                                        fileName: _jsxFileName,
+                                                        lineNumber: 192
+                                                    }
+                                                },
+                                                _react3.default.createElement(
+                                                    _nativeBase.Text,
+                                                    { style: { paddingTop: 5, paddingBottom: 5, paddingRight: 8, paddingLeft: 8, borderRadius: 4, borderWidth: 1, borderColor: '#ccc', backgroundColor: item.isActive ? '#81cdc7' : '#ffffff', color: item.isActive ? '#ffffff' : '#81cdc7', marginRight: 5 }, __source: {
+                                                            fileName: _jsxFileName,
+                                                            lineNumber: 193
+                                                        }
+                                                    },
+                                                    item.time
+                                                )
+                                            );
+                                        },
+                                        style: { paddingTop: 10, paddingBottom: 10 },
+                                        horizontal: true,
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 187
+                                        }
+                                    })
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return DateAndTime;
+}(_react2.Component));
+
+DateAndTime.propTypes = {
+    service: _propTypes2.default.object.isRequired
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        service: state.service
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        setDateAndTime: function setDateAndTime(data) {
+            return dispatch((0, _serviceActions.setDateAndTime)(data));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(DateAndTime);

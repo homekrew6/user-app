@@ -1,0 +1,783 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react2 = require('react');
+
+var _react3 = _interopRequireDefault(_react2);
+
+var _index = require('./../../../node_modules/react-transform-hmr/lib/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/user-app/js/components/service/confirmation.js';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = require('react-redux');
+
+var _reactNative = require('react-native');
+
+var _MaterialIcons = require('react-native-vector-icons/MaterialIcons');
+
+var _MaterialIcons2 = _interopRequireDefault(_MaterialIcons);
+
+var _FontAwesome = require('react-native-vector-icons/FontAwesome');
+
+var _FontAwesome2 = _interopRequireDefault(_FontAwesome);
+
+var _SimpleLineIcons = require('react-native-vector-icons/SimpleLineIcons');
+
+var _SimpleLineIcons2 = _interopRequireDefault(_SimpleLineIcons);
+
+var _Ionicons = require('react-native-vector-icons/Ionicons');
+
+var _Ionicons2 = _interopRequireDefault(_Ionicons);
+
+var _EvilIcons = require('react-native-vector-icons/EvilIcons');
+
+var _EvilIcons2 = _interopRequireDefault(_EvilIcons);
+
+var _Entypo = require('react-native-vector-icons/Entypo');
+
+var _Entypo2 = _interopRequireDefault(_Entypo);
+
+var _reactNativeLoadingSpinnerOverlay = require('react-native-loading-spinner-overlay');
+
+var _reactNativeLoadingSpinnerOverlay2 = _interopRequireDefault(_reactNativeLoadingSpinnerOverlay);
+
+var _nativeBase = require('native-base');
+
+var _i18n = require('../../i18n/i18n');
+
+var _i18n2 = _interopRequireDefault(_i18n);
+
+var _styles = require('./styles');
+
+var _styles2 = _interopRequireDefault(_styles);
+
+var _index3 = require('../../api/index');
+
+var _index4 = _interopRequireDefault(_index3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _components = {
+    Confirmation: {
+        displayName: 'Confirmation'
+    }
+};
+
+var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: '/home/nits-58/Desktop/project/anup/loopback/user-app/js/components/service/confirmation.js',
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+});
+
+function _wrapComponent(id) {
+    return function (Component) {
+        return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+}
+
+var deviceHeight = _reactNative.Dimensions.get('window').height;
+var deviceWidth = _reactNative.Dimensions.get('window').width;
+var logo_hdr = require("../../../img/logo2.png");
+var carve = require("../../../img/icon17.png");
+
+var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
+    _inherits(Confirmation, _Component);
+
+    function Confirmation(props) {
+        _classCallCheck(this, Confirmation);
+
+        var _this = _possibleConstructorReturn(this, (Confirmation.__proto__ || Object.getPrototypeOf(Confirmation)).call(this, props));
+
+        _this.state = {
+            dateTime: props.service.data.serviceTime,
+            serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : 'Home',
+
+            loader: false,
+            continueButtonDesable: false
+        };
+
+        return _this;
+    }
+
+    _createClass(Confirmation, [{
+        key: 'confirmationContinue',
+        value: function confirmationContinue() {
+            var _this2 = this;
+
+            this.setState({
+                loader: true
+            });
+            if (!(this.state.dateTime == undefined)) {
+                _index4.default.post('jobs', {
+                    "serviceId": this.props.service.data.id,
+                    "postedDate": this.state.dateTime,
+                    "location": "Home",
+                    "payment": "Credit Card",
+                    "faourite_sp": "James Harden",
+                    "promo_code": "AED 50 off",
+                    "status": "STARTED",
+                    "userId": "3",
+                    "workerId": "1"
+                }).then(function (responseJson) {
+                    _reactNative.Alert.alert("Job Post is Successfully");
+                    _this2.setState({
+                        loader: false,
+                        continueButtonDesable: true
+                    });
+                }).catch(function (err) {
+                    console.log(err);
+                    _reactNative.Alert.alert("Job Post not save");
+                    _this2.setState({
+                        loader: false
+                    });
+                });
+            } else {
+                this.setState({
+                    loader: false
+                });
+                _reactNative.Alert.alert("Please Enter a Date And Time");
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            return _react3.default.createElement(
+                _nativeBase.Container,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 81
+                    }
+                },
+                _react3.default.createElement(_reactNativeLoadingSpinnerOverlay2.default, { visible: this.state.loader, textContent: 'Loading...', textStyle: { color: '#FFF' }, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 82
+                    }
+                }),
+                _react3.default.createElement(_reactNative.StatusBar, {
+                    backgroundColor: '#cbf0ed',
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 83
+                    }
+                }),
+                _react3.default.createElement(
+                    _nativeBase.Header,
+                    { style: _styles2.default.appHdr2, androidStatusBarColor: '#cbf0ed', noShadow: true, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 86
+                        }
+                    },
+                    _react3.default.createElement(
+                        _nativeBase.Button,
+                        { transparent: true, onPress: function onPress() {
+                                return _this3.props.navigation.navigate('ServiceDetails');
+                            }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 87
+                            }
+                        },
+                        _react3.default.createElement(_Ionicons2.default, { name: 'ios-arrow-back-outline', style: _styles2.default.hd_lft_icon, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 88
+                            }
+                        })
+                    ),
+                    _react3.default.createElement(
+                        _nativeBase.Body,
+                        { style: { alignItems: 'center' }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 90
+                            }
+                        },
+                        _react3.default.createElement(
+                            _nativeBase.Title,
+                            { style: _styles2.default.appHdr2Txt, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 91
+                                }
+                            },
+                            'Confirmation'
+                        )
+                    ),
+                    _react3.default.createElement(_nativeBase.Button, { transparent: true, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 93
+                        }
+                    })
+                ),
+                _react3.default.createElement(
+                    _nativeBase.Content,
+                    { style: _styles2.default.bgWhite, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 96
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.View,
+                        { style: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#cbf0ed', paddingBottom: 30, paddingTop: 14 }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 97
+                            }
+                        },
+                        _react3.default.createElement(
+                            _reactNative.View,
+                            { style: { alignItems: "center" }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 98
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: { borderRadius: 60, height: 60, width: 60, backgroundColor: '#81cdc7', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 99
+                                    }
+                                },
+                                _react3.default.createElement(_Ionicons2.default, { name: 'ios-home-outline', style: { color: "#fff", fontSize: 34 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 100
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: { color: '#1e3768', fontSize: 18, padding: 5, fontSize: 16 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 102
+                                    }
+                                },
+                                this.state.serviceName
+                            ),
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 103
+                                    }
+                                },
+                                _react3.default.createElement(_EvilIcons2.default, { name: 'clock', style: { fontSize: 14, color: "#747474" }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 104
+                                    }
+                                }),
+                                _react3.default.createElement(
+                                    _nativeBase.Text,
+                                    { style: { color: "#747474", fontSize: 14 }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 105
+                                        }
+                                    },
+                                    '4 hours'
+                                )
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: { color: '#1e3768', fontSize: 16 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 107
+                                    }
+                                },
+                                'AED ',
+                                this.props.service.data.price
+                            )
+                        )
+                    ),
+                    _react3.default.createElement(
+                        _reactNative.View,
+                        { style: { flex: 1, flexDirection: 'row', marginTop: -50 }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 111
+                            }
+                        },
+                        _react3.default.createElement(_reactNative.Image, { source: carve, style: { flex: 1, height: 50 }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 112
+                            }
+                        })
+                    ),
+                    _react3.default.createElement(
+                        _reactNative.View,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 114
+                            }
+                        },
+                        _react3.default.createElement(
+                            _reactNative.TouchableOpacity,
+                            { style: [_styles2.default.confirmationItem], onPress: function onPress() {
+                                    return _this3.props.navigation.navigate('DateAndTime');
+                                }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 116
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationIconView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 117
+                                    }
+                                },
+                                _react3.default.createElement(_MaterialIcons2.default, { name: 'alarm', style: _styles2.default.confirmationViewIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 118
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationMainTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 120
+                                    }
+                                },
+                                'Date & Time'
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationDateTime, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 121
+                                    }
+                                },
+                                this.state.dateTime
+                            ),
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationArwNxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 122
+                                    }
+                                },
+                                _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 123
+                                    }
+                                })
+                            )
+                        ),
+                        _react3.default.createElement(
+                            _reactNative.TouchableOpacity,
+                            { style: _styles2.default.confirmationItem, onPress: function onPress() {
+                                    return _this3.props.navigation.navigate('LocationList');
+                                }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 127
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationIconView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 128
+                                    }
+                                },
+                                _react3.default.createElement(_EvilIcons2.default, { name: 'location', style: _styles2.default.confirmationViewIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 129
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationMainTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 131
+                                    }
+                                },
+                                'Location'
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationDateTime, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 132
+                                    }
+                                },
+                                this.state.serviceName
+                            ),
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationArwNxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 133
+                                    }
+                                },
+                                _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 134
+                                    }
+                                })
+                            )
+                        ),
+                        _react3.default.createElement(
+                            _nativeBase.Item,
+                            { style: _styles2.default.confirmationItem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 138
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationIconView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 139
+                                    }
+                                },
+                                _react3.default.createElement(_EvilIcons2.default, { name: 'credit-card', style: _styles2.default.confirmationViewIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 140
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationMainTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 142
+                                    }
+                                },
+                                'Payment'
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationDateTime, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 143
+                                    }
+                                },
+                                'Credit Card / Debit Card'
+                            ),
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationArwNxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 144
+                                    }
+                                },
+                                _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 145
+                                    }
+                                })
+                            )
+                        ),
+                        _react3.default.createElement(
+                            _nativeBase.Item,
+                            { style: _styles2.default.confirmationItem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 149
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationIconView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 150
+                                    }
+                                },
+                                _react3.default.createElement(_EvilIcons2.default, { name: 'heart', style: _styles2.default.confirmationViewIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 151
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationMainTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 153
+                                    }
+                                },
+                                'Favorite SP'
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationDateTime, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 154
+                                    }
+                                },
+                                'James Harden'
+                            ),
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationArwNxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 155
+                                    }
+                                },
+                                _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 156
+                                    }
+                                })
+                            )
+                        ),
+                        _react3.default.createElement(
+                            _nativeBase.Item,
+                            { style: _styles2.default.confirmationItem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 160
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationIconView, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 161
+                                    }
+                                },
+                                _react3.default.createElement(_Entypo2.default, { name: 'scissors', style: _styles2.default.confirmationViewIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 162
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationMainTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 164
+                                    }
+                                },
+                                'Promo Code'
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationDateTime, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 165
+                                    }
+                                },
+                                'AED 50 off'
+                            ),
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationArwNxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 166
+                                    }
+                                },
+                                _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 167
+                                    }
+                                })
+                            )
+                        )
+                    ),
+                    _react3.default.createElement(
+                        _reactNative.View,
+                        { style: _styles2.default.confirmationhd, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 172
+                            }
+                        },
+                        _react3.default.createElement(
+                            _nativeBase.Text,
+                            { style: _styles2.default.confirmationhdtxt, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 173
+                                }
+                            },
+                            'Add Service'
+                        )
+                    ),
+                    _react3.default.createElement(
+                        _reactNative.View,
+                        { style: _styles2.default.confirmationServicewarp, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 175
+                            }
+                        },
+                        _react3.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.confirmationServiceItem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 176
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationServiceItemIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 177
+                                    }
+                                },
+                                _react3.default.createElement(_Ionicons2.default, { name: 'ios-home-outline', style: _styles2.default.confirmationServiceItemIconIcn, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 178
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationServiceTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 180
+                                    }
+                                },
+                                'Home'
+                            ),
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationServicePlusWarp, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 181
+                                    }
+                                },
+                                _react3.default.createElement(_Entypo2.default, { name: 'plus', style: _styles2.default.confirmationServicePlusIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 182
+                                    }
+                                })
+                            )
+                        ),
+                        _react3.default.createElement(_reactNative.View, { style: _styles2.default.confirmationServiceDvdr, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 185
+                            }
+                        }),
+                        _react3.default.createElement(
+                            _reactNative.View,
+                            { style: _styles2.default.confirmationServiceItem, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 186
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationServiceItemIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 187
+                                    }
+                                },
+                                _react3.default.createElement(_Ionicons2.default, { name: 'ios-home-outline', style: _styles2.default.confirmationServiceItemIconIcn, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 188
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationServiceTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 190
+                                    }
+                                },
+                                'Home'
+                            ),
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                { style: _styles2.default.confirmationServicePlusWarp, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 191
+                                    }
+                                },
+                                _react3.default.createElement(_Entypo2.default, { name: 'plus', style: _styles2.default.confirmationServicePlusIcon, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 192
+                                    }
+                                })
+                            )
+                        )
+                    )
+                ),
+                _react3.default.createElement(
+                    _nativeBase.Footer,
+                    {
+                        __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 197
+                        }
+                    },
+                    _react3.default.createElement(
+                        _nativeBase.FooterTab,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 198
+                            }
+                        },
+                        _react3.default.createElement(
+                            _reactNative.TouchableOpacity,
+                            { style: _styles2.default.confirmationServicefooterItem, onPress: function onPress() {
+                                    return _this3.confirmationContinue();
+                                }, disabled: this.state.continueButtonDesable, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 199
+                                }
+                            },
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationServicefooterItmTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 199
+                                    }
+                                },
+                                'CONTINUE'
+                            )
+                        ),
+                        _react3.default.createElement(
+                            _reactNative.TouchableOpacity,
+                            { style: _styles2.default.confirmationServicefooterItem2, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 200
+                                }
+                            },
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.confirmationServicefooterItmTxt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 200
+                                    }
+                                },
+                                'AED ',
+                                this.props.service.data.price
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Confirmation;
+}(_react2.Component));
+
+Confirmation.propTypes = {
+    service: _propTypes2.default.object.isRequired,
+    auth: _propTypes2.default.object.isRequired
+};
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        service: state.service,
+        auth: state.auth
+    };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {};
+};
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Confirmation);

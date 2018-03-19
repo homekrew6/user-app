@@ -1,0 +1,22 @@
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _redux = require('redux');
+
+var _authReducer = require('../components/accounts/elements/authReducer');
+
+var _authReducer2 = _interopRequireDefault(_authReducer);
+
+var _serviceReducer = require('../components/service/elements/serviceReducer');
+
+var _serviceReducer2 = _interopRequireDefault(_serviceReducer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var rootReducer = (0, _redux.combineReducers)({
+	auth: _authReducer2.default,
+	service: _serviceReducer2.default
+});
+
+exports.default = rootReducer;
