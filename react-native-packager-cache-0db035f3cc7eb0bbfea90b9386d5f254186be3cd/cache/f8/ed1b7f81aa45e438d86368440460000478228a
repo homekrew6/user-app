@@ -50,6 +50,8 @@ var _reactNativeLoadingSpinnerOverlay = require('react-native-loading-spinner-ov
 
 var _reactNativeLoadingSpinnerOverlay2 = _interopRequireDefault(_reactNativeLoadingSpinnerOverlay);
 
+var _reactNavigation = require('react-navigation');
+
 var _nativeBase = require('native-base');
 
 var _i18n = require('../../i18n/i18n');
@@ -91,6 +93,10 @@ function _wrapComponent(id) {
     };
 }
 
+var resetAction = _reactNavigation.NavigationActions.reset({
+    index: 0,
+    actions: [_reactNavigation.NavigationActions.navigate({ routeName: 'Menu' })]
+});
 var deviceHeight = _reactNative.Dimensions.get('window').height;
 var deviceWidth = _reactNative.Dimensions.get('window').width;
 var logo_hdr = require("../../../img/logo2.png");
@@ -129,17 +135,18 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                     "postedDate": this.state.dateTime,
                     "location": "Home",
                     "payment": "Credit Card",
-                    "faourite_sp": "James Harden",
+                    "faourite_sp": this.props.service.data.favouriteSp,
                     "promo_code": "AED 50 off",
                     "status": "STARTED",
                     "userId": "3",
                     "workerId": "1"
                 }).then(function (responseJson) {
-                    _reactNative.Alert.alert("Job Post is Successfully");
+                    _reactNative.Alert.alert("Job Posted Successfully");
                     _this2.setState({
                         loader: false,
                         continueButtonDesable: true
                     });
+                    _this2.props.navigation.dispatch(resetAction);
                 }).catch(function (err) {
                     console.log(err);
                     _reactNative.Alert.alert("Job Post not save");
@@ -155,6 +162,15 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
             }
         }
     }, {
+        key: 'goToSpListing',
+        value: function goToSpListing() {
+            if (this.state.dateTime) {
+                this.props.navigation.navigate('ServiceProviderListing');
+            } else {
+                _reactNative.Alert.alert('Please select date and time to see the service providers available.');
+            }
+        }
+    }, {
         key: 'render',
         value: function render() {
             var _this3 = this;
@@ -164,40 +180,40 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                 {
                     __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 81
+                        lineNumber: 95
                     }
                 },
                 _react3.default.createElement(_reactNativeLoadingSpinnerOverlay2.default, { visible: this.state.loader, textContent: 'Loading...', textStyle: { color: '#FFF' }, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 82
+                        lineNumber: 96
                     }
                 }),
                 _react3.default.createElement(_reactNative.StatusBar, {
                     backgroundColor: '#cbf0ed',
                     __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 83
+                        lineNumber: 97
                     }
                 }),
                 _react3.default.createElement(
                     _nativeBase.Header,
                     { style: _styles2.default.appHdr2, androidStatusBarColor: '#cbf0ed', noShadow: true, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 86
+                            lineNumber: 100
                         }
                     },
                     _react3.default.createElement(
                         _nativeBase.Button,
                         { transparent: true, onPress: function onPress() {
-                                return _this3.props.navigation.navigate('ServiceDetails');
+                                return _this3.props.navigation.goBack();
                             }, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 87
+                                lineNumber: 101
                             }
                         },
                         _react3.default.createElement(_Ionicons2.default, { name: 'ios-arrow-back-outline', style: _styles2.default.hd_lft_icon, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 88
+                                lineNumber: 102
                             }
                         })
                     ),
@@ -205,14 +221,14 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                         _nativeBase.Body,
                         { style: { alignItems: 'center' }, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 90
+                                lineNumber: 104
                             }
                         },
                         _react3.default.createElement(
                             _nativeBase.Title,
                             { style: _styles2.default.appHdr2Txt, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 91
+                                    lineNumber: 105
                                 }
                             },
                             'Confirmation'
@@ -220,7 +236,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                     ),
                     _react3.default.createElement(_nativeBase.Button, { transparent: true, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 93
+                            lineNumber: 107
                         }
                     })
                 ),
@@ -228,33 +244,33 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                     _nativeBase.Content,
                     { style: _styles2.default.bgWhite, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 96
+                            lineNumber: 110
                         }
                     },
                     _react3.default.createElement(
                         _reactNative.View,
                         { style: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#cbf0ed', paddingBottom: 30, paddingTop: 14 }, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 97
+                                lineNumber: 111
                             }
                         },
                         _react3.default.createElement(
                             _reactNative.View,
                             { style: { alignItems: "center" }, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 98
+                                    lineNumber: 112
                                 }
                             },
                             _react3.default.createElement(
                                 _reactNative.View,
                                 { style: { borderRadius: 60, height: 60, width: 60, backgroundColor: '#81cdc7', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 99
+                                        lineNumber: 113
                                     }
                                 },
                                 _react3.default.createElement(_Ionicons2.default, { name: 'ios-home-outline', style: { color: "#fff", fontSize: 34 }, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 100
+                                        lineNumber: 114
                                     }
                                 })
                             ),
@@ -262,7 +278,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: { color: '#1e3768', fontSize: 18, padding: 5, fontSize: 16 }, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 102
+                                        lineNumber: 116
                                     }
                                 },
                                 this.state.serviceName
@@ -271,19 +287,19 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _reactNative.View,
                                 { style: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 }, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 103
+                                        lineNumber: 117
                                     }
                                 },
                                 _react3.default.createElement(_EvilIcons2.default, { name: 'clock', style: { fontSize: 14, color: "#747474" }, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 104
+                                        lineNumber: 118
                                     }
                                 }),
                                 _react3.default.createElement(
                                     _nativeBase.Text,
                                     { style: { color: "#747474", fontSize: 14 }, __source: {
                                             fileName: _jsxFileName,
-                                            lineNumber: 105
+                                            lineNumber: 119
                                         }
                                     },
                                     '4 hours'
@@ -293,7 +309,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: { color: '#1e3768', fontSize: 16 }, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 107
+                                        lineNumber: 121
                                     }
                                 },
                                 'AED ',
@@ -305,12 +321,12 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                         _reactNative.View,
                         { style: { flex: 1, flexDirection: 'row', marginTop: -50 }, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 111
+                                lineNumber: 125
                             }
                         },
                         _react3.default.createElement(_reactNative.Image, { source: carve, style: { flex: 1, height: 50 }, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 112
+                                lineNumber: 126
                             }
                         })
                     ),
@@ -319,7 +335,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                         {
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 114
+                                lineNumber: 128
                             }
                         },
                         _react3.default.createElement(
@@ -328,19 +344,19 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                     return _this3.props.navigation.navigate('DateAndTime');
                                 }, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 116
+                                    lineNumber: 130
                                 }
                             },
                             _react3.default.createElement(
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationIconView, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 117
+                                        lineNumber: 131
                                     }
                                 },
                                 _react3.default.createElement(_MaterialIcons2.default, { name: 'alarm', style: _styles2.default.confirmationViewIcon, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 118
+                                        lineNumber: 132
                                     }
                                 })
                             ),
@@ -348,7 +364,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationMainTxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 120
+                                        lineNumber: 134
                                     }
                                 },
                                 'Date & Time'
@@ -357,7 +373,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationDateTime, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 121
+                                        lineNumber: 135
                                     }
                                 },
                                 this.state.dateTime
@@ -366,12 +382,12 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationArwNxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 122
+                                        lineNumber: 136
                                     }
                                 },
                                 _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 123
+                                        lineNumber: 137
                                     }
                                 })
                             )
@@ -382,19 +398,19 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                     return _this3.props.navigation.navigate('LocationList');
                                 }, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 127
+                                    lineNumber: 141
                                 }
                             },
                             _react3.default.createElement(
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationIconView, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 128
+                                        lineNumber: 142
                                     }
                                 },
                                 _react3.default.createElement(_EvilIcons2.default, { name: 'location', style: _styles2.default.confirmationViewIcon, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 129
+                                        lineNumber: 143
                                     }
                                 })
                             ),
@@ -402,7 +418,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationMainTxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 131
+                                        lineNumber: 145
                                     }
                                 },
                                 'Location'
@@ -411,7 +427,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationDateTime, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 132
+                                        lineNumber: 146
                                     }
                                 },
                                 this.state.serviceName
@@ -420,12 +436,12 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationArwNxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 133
+                                        lineNumber: 147
                                     }
                                 },
                                 _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 134
+                                        lineNumber: 148
                                     }
                                 })
                             )
@@ -434,19 +450,19 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                             _nativeBase.Item,
                             { style: _styles2.default.confirmationItem, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 138
+                                    lineNumber: 152
                                 }
                             },
                             _react3.default.createElement(
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationIconView, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 139
+                                        lineNumber: 153
                                     }
                                 },
                                 _react3.default.createElement(_EvilIcons2.default, { name: 'credit-card', style: _styles2.default.confirmationViewIcon, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 140
+                                        lineNumber: 154
                                     }
                                 })
                             ),
@@ -454,7 +470,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationMainTxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 142
+                                        lineNumber: 156
                                     }
                                 },
                                 'Payment'
@@ -463,7 +479,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationDateTime, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 143
+                                        lineNumber: 157
                                     }
                                 },
                                 'Credit Card / Debit Card'
@@ -472,33 +488,35 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationArwNxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 144
+                                        lineNumber: 158
                                     }
                                 },
                                 _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 145
+                                        lineNumber: 159
                                     }
                                 })
                             )
                         ),
                         _react3.default.createElement(
-                            _nativeBase.Item,
-                            { style: _styles2.default.confirmationItem, __source: {
+                            _reactNative.TouchableOpacity,
+                            { style: _styles2.default.confirmationItem, onPress: function onPress() {
+                                    return _this3.goToSpListing();
+                                }, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 149
+                                    lineNumber: 163
                                 }
                             },
                             _react3.default.createElement(
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationIconView, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 150
+                                        lineNumber: 164
                                     }
                                 },
                                 _react3.default.createElement(_EvilIcons2.default, { name: 'heart', style: _styles2.default.confirmationViewIcon, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 151
+                                        lineNumber: 165
                                     }
                                 })
                             ),
@@ -506,7 +524,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationMainTxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 153
+                                        lineNumber: 167
                                     }
                                 },
                                 'Favorite SP'
@@ -515,21 +533,21 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationDateTime, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 154
+                                        lineNumber: 168
                                     }
                                 },
-                                'James Harden'
+                                this.props.service.data.favouriteSp
                             ),
                             _react3.default.createElement(
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationArwNxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 155
+                                        lineNumber: 169
                                     }
                                 },
                                 _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 156
+                                        lineNumber: 170
                                     }
                                 })
                             )
@@ -538,19 +556,19 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                             _nativeBase.Item,
                             { style: _styles2.default.confirmationItem, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 160
+                                    lineNumber: 174
                                 }
                             },
                             _react3.default.createElement(
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationIconView, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 161
+                                        lineNumber: 175
                                     }
                                 },
                                 _react3.default.createElement(_Entypo2.default, { name: 'scissors', style: _styles2.default.confirmationViewIcon, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 162
+                                        lineNumber: 176
                                     }
                                 })
                             ),
@@ -558,7 +576,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationMainTxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 164
+                                        lineNumber: 178
                                     }
                                 },
                                 'Promo Code'
@@ -567,7 +585,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationDateTime, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 165
+                                        lineNumber: 179
                                     }
                                 },
                                 'AED 50 off'
@@ -576,12 +594,12 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationArwNxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 166
+                                        lineNumber: 180
                                     }
                                 },
                                 _react3.default.createElement(_MaterialIcons2.default, { name: 'navigate-next', style: _styles2.default.confirmationArwNxtIcn, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 167
+                                        lineNumber: 181
                                     }
                                 })
                             )
@@ -591,14 +609,14 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                         _reactNative.View,
                         { style: _styles2.default.confirmationhd, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 172
+                                lineNumber: 186
                             }
                         },
                         _react3.default.createElement(
                             _nativeBase.Text,
                             { style: _styles2.default.confirmationhdtxt, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 173
+                                    lineNumber: 187
                                 }
                             },
                             'Add Service'
@@ -608,26 +626,26 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                         _reactNative.View,
                         { style: _styles2.default.confirmationServicewarp, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 175
+                                lineNumber: 189
                             }
                         },
                         _react3.default.createElement(
                             _reactNative.View,
                             { style: _styles2.default.confirmationServiceItem, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 176
+                                    lineNumber: 190
                                 }
                             },
                             _react3.default.createElement(
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationServiceItemIcon, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 177
+                                        lineNumber: 191
                                     }
                                 },
                                 _react3.default.createElement(_Ionicons2.default, { name: 'ios-home-outline', style: _styles2.default.confirmationServiceItemIconIcn, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 178
+                                        lineNumber: 192
                                     }
                                 })
                             ),
@@ -635,7 +653,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationServiceTxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 180
+                                        lineNumber: 194
                                     }
                                 },
                                 'Home'
@@ -644,38 +662,38 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationServicePlusWarp, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 181
+                                        lineNumber: 195
                                     }
                                 },
                                 _react3.default.createElement(_Entypo2.default, { name: 'plus', style: _styles2.default.confirmationServicePlusIcon, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 182
+                                        lineNumber: 196
                                     }
                                 })
                             )
                         ),
                         _react3.default.createElement(_reactNative.View, { style: _styles2.default.confirmationServiceDvdr, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 185
+                                lineNumber: 199
                             }
                         }),
                         _react3.default.createElement(
                             _reactNative.View,
                             { style: _styles2.default.confirmationServiceItem, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 186
+                                    lineNumber: 200
                                 }
                             },
                             _react3.default.createElement(
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationServiceItemIcon, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 187
+                                        lineNumber: 201
                                     }
                                 },
                                 _react3.default.createElement(_Ionicons2.default, { name: 'ios-home-outline', style: _styles2.default.confirmationServiceItemIconIcn, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 188
+                                        lineNumber: 202
                                     }
                                 })
                             ),
@@ -683,7 +701,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationServiceTxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 190
+                                        lineNumber: 204
                                     }
                                 },
                                 'Home'
@@ -692,12 +710,12 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                 _reactNative.View,
                                 { style: _styles2.default.confirmationServicePlusWarp, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 191
+                                        lineNumber: 205
                                     }
                                 },
                                 _react3.default.createElement(_Entypo2.default, { name: 'plus', style: _styles2.default.confirmationServicePlusIcon, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 192
+                                        lineNumber: 206
                                     }
                                 })
                             )
@@ -709,7 +727,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                     {
                         __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 197
+                            lineNumber: 211
                         }
                     },
                     _react3.default.createElement(
@@ -717,7 +735,7 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                         {
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 198
+                                lineNumber: 212
                             }
                         },
                         _react3.default.createElement(
@@ -726,14 +744,14 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                                     return _this3.confirmationContinue();
                                 }, disabled: this.state.continueButtonDesable, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 199
+                                    lineNumber: 213
                                 }
                             },
                             _react3.default.createElement(
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationServicefooterItmTxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 199
+                                        lineNumber: 213
                                     }
                                 },
                                 'CONTINUE'
@@ -743,14 +761,14 @@ var Confirmation = _wrapComponent('Confirmation')(function (_Component) {
                             _reactNative.TouchableOpacity,
                             { style: _styles2.default.confirmationServicefooterItem2, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 200
+                                    lineNumber: 214
                                 }
                             },
                             _react3.default.createElement(
                                 _nativeBase.Text,
                                 { style: _styles2.default.confirmationServicefooterItmTxt, __source: {
                                         fileName: _jsxFileName,
-                                        lineNumber: 200
+                                        lineNumber: 214
                                     }
                                 },
                                 'AED ',
