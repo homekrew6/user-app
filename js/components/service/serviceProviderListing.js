@@ -41,7 +41,6 @@ class ServiceProviderListing extends Component {
             api.post('worker-available-timings/getUserFavSVListing', data).then((data) => {
                 if (data.response.type == 'success') {
                     this.setState({ isVisible: false });
-                    debugger;
                     this.setState({ spList: data.response.list });
                 }
                 else {

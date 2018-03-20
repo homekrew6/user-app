@@ -1,9 +1,0 @@
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _HTMLView = require('./HTMLView');
-
-var _HTMLView2 = babelHelpers.interopRequireDefault(_HTMLView);
-
-exports.default = _HTMLView2.default;
