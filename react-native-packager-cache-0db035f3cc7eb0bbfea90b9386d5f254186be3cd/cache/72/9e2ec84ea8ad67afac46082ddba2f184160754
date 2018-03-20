@@ -1,0 +1,448 @@
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react2 = require('react');
+
+var _react3 = _interopRequireDefault(_react2);
+
+var _index = require('./../../../node_modules/react-transform-hmr/lib/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _jsxFileName = '/home/nits-58/Desktop/project/anup/loopback/user-app/js/components/service/serviceProviderListing.js';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = require('react-redux');
+
+var _reactNative = require('react-native');
+
+var _MaterialIcons = require('react-native-vector-icons/MaterialIcons');
+
+var _MaterialIcons2 = _interopRequireDefault(_MaterialIcons);
+
+var _Ionicons = require('react-native-vector-icons/Ionicons');
+
+var _Ionicons2 = _interopRequireDefault(_Ionicons);
+
+var _SimpleLineIcons = require('react-native-vector-icons/SimpleLineIcons');
+
+var _SimpleLineIcons2 = _interopRequireDefault(_SimpleLineIcons);
+
+var _nativeBase = require('native-base');
+
+var _i18n = require('../../i18n/i18n');
+
+var _i18n2 = _interopRequireDefault(_i18n);
+
+var _styles = require('./styles');
+
+var _styles2 = _interopRequireDefault(_styles);
+
+var _serviceActions = require('./elements/serviceActions');
+
+var _reactNativeLoadingSpinnerOverlay = require('react-native-loading-spinner-overlay');
+
+var _reactNativeLoadingSpinnerOverlay2 = _interopRequireDefault(_reactNativeLoadingSpinnerOverlay);
+
+var _index3 = require('../../api/index');
+
+var _index4 = _interopRequireDefault(_index3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _components = {
+    ServiceProviderListing: {
+        displayName: 'ServiceProviderListing'
+    }
+};
+
+var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: '/home/nits-58/Desktop/project/anup/loopback/user-app/js/components/service/serviceProviderListing.js',
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+});
+
+function _wrapComponent(id) {
+    return function (Component) {
+        return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+}
+
+var deviceHeight = _reactNative.Dimensions.get('window').height;
+var deviceWidth = _reactNative.Dimensions.get('window').width;
+var carve = require("../../../img/atul_bk.png");
+var img18 = require('../../../img/no-image-available.png');
+
+var ServiceProviderListing = _wrapComponent('ServiceProviderListing')(function (_Component) {
+    _inherits(ServiceProviderListing, _Component);
+
+    function ServiceProviderListing(props) {
+        _classCallCheck(this, ServiceProviderListing);
+
+        var _this = _possibleConstructorReturn(this, (ServiceProviderListing.__proto__ || Object.getPrototypeOf(ServiceProviderListing)).call(this, props));
+
+        _this.state = {
+            serviceDetails: _this.props.service.data,
+            selectedTime: '',
+            isVisible: false,
+            spList: []
+
+        };
+        return _this;
+    }
+
+    _createClass(ServiceProviderListing, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            var _this2 = this;
+
+            if (this.props.service.data.serviceTime.includes('AM')) {
+                var time = this.props.service.data.serviceTime.split('AM')[0].split(' ')[2];
+                time = time.replace('0', '');
+                time = time.replace(':00', '');
+                time = time + " am";
+                var day = this.props.service.data.serviceTime.split(' ')[0].toLowerCase();
+                this.setState({ selectedTime: time });
+                var data = { "serviceId": 8, 'time': time, 'day': day };
+                this.setState({ isVisible: true });
+                _index4.default.post('worker-available-timings/getUserFavSVListing', data).then(function (data) {
+                    if (data.response.type == 'success') {
+                        _this2.setState({ isVisible: false });
+                        debugger;
+                        _this2.setState({ spList: data.response.list });
+                    } else {
+                        _this2.setState({ isVisible: false });
+                        _reactNative.Alert.alert(data.response.message);
+                    }
+                }).catch(function (err) {
+                    _this2.setState({ isVisible: false });
+                    _reactNative.Alert.alert(data.response.message);
+                });
+            } else {
+                var _time = this.props.service.data.serviceTime.split('PM')[0].split(' ')[2];
+                _time = _time.replace('0', '');
+                _time = _time.replace(':00', '');
+                _time = _time + " pm";
+                this.setState({ selectedTime: _time });
+                var _day = this.props.service.data.serviceTime.split(' ')[0].toLowerCase();
+                var _data = { "serviceId": 8, 'time': _time, 'day': _day };
+                _index4.default.post('worker-available-timings/getUserFavSVListing', _data).then(function (data) {
+                    if (data.response.type == 'success') {
+                        _this2.setState({ isVisible: false });
+                        _this2.setState({ spList: data.response.list });
+                    } else {
+                        _this2.setState({ isVisible: false });
+                        _reactNative.Alert.alert(data.response.message);
+                    }
+                }).catch(function (err) {
+                    _this2.setState({ isVisible: false });
+                    _reactNative.Alert.alert(_data.response.message);
+                });
+            }
+        }
+    }, {
+        key: 'selectServiceProvider',
+        value: function selectServiceProvider(data) {
+            var spListing = [];
+            this.state.spList.map(function (item) {
+                spListing.push(item);
+            });
+            spListing.map(function (item1) {
+                if (item1.id == data.id) {
+                    item1.IsSelected = !item1.IsSelected;
+                } else {
+                    item1.IsSelected = false;
+                }
+            });
+            this.setState({ spList: spListing });
+        }
+    }, {
+        key: 'spDone',
+        value: function spDone() {
+            var loc = void 0;
+            this.state.spList.map(function (loc1) {
+                if (loc1.IsSelected == true) {
+                    loc = loc1.name;
+                }
+            });
+            if (loc) {
+                var data = this.state.serviceDetails;
+
+                data.favouriteSp = loc;
+                this.props.setServiceDetails(data);
+                this.props.navigation.navigate('Confirmation');
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            var serviceListing = void 0;
+            if (this.state.spList.length > 0) {
+
+                serviceListing = this.state.spList.map(function (data, key) {
+                    if (!data.name) return;
+                    return _react3.default.createElement(
+                        _reactNative.View,
+                        { key: data.id, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 124
+                            }
+                        },
+                        data.IsAvailable ? _react3.default.createElement(
+                            _reactNative.View,
+                            { style: { height: 120, width: 120, backgroundColor: 'blue' }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 129
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.TouchableOpacity,
+                                { onPress: function onPress() {
+                                        return _this3.selectServiceProvider(data);
+                                    }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 130
+                                    }
+                                },
+                                data.image ? _react3.default.createElement(
+                                    _reactNative.Image,
+                                    { source: { uri: data.image }, style: { height: 100, width: 100, borderRadius: 50, position: 'relative' }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 135
+                                        }
+                                    },
+                                    data.IsSelected ? _react3.default.createElement(
+                                        _reactNative.View,
+                                        { style: { backgroundColor: 'black', opacity: 0.5, top: 0, left: 0, position: 'absolute', height: 100, width: 100, alignItems: 'center', justifyContent: 'center' }, __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 138
+                                            }
+                                        },
+                                        _react3.default.createElement(_Ionicons2.default, { name: 'ios-information-circle', style: { color: 'white' }, __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 139
+                                            }
+                                        })
+                                    ) : _react3.default.createElement(_reactNative.View, {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 141
+                                        }
+                                    })
+                                ) : _react3.default.createElement(
+                                    _reactNative.Image,
+                                    { source: img18, style: { height: 100, width: 100, borderRadius: 50, position: 'relative' }, __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 146
+                                        }
+                                    },
+                                    data.IsSelected ? _react3.default.createElement(
+                                        _reactNative.View,
+                                        { style: { backgroundColor: 'black', opacity: 0.5, top: 0, left: 0, position: 'absolute', height: 100, width: 100, alignItems: 'center', justifyContent: 'center' }, __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 149
+                                            }
+                                        },
+                                        _react3.default.createElement(_Ionicons2.default, { name: 'ios-information-circle', style: { color: 'white' }, __source: {
+                                                fileName: _jsxFileName,
+                                                lineNumber: 150
+                                            }
+                                        })
+                                    ) : _react3.default.createElement(_reactNative.View, {
+                                        __source: {
+                                            fileName: _jsxFileName,
+                                            lineNumber: 152
+                                        }
+                                    })
+                                )
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.catIten_txt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 158
+                                    }
+                                },
+                                data.name || null
+                            )
+                        ) : _react3.default.createElement(
+                            _reactNative.View,
+                            { style: { height: 120, width: 120, backgroundColor: 'lightgray' }, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 161
+                                }
+                            },
+                            _react3.default.createElement(
+                                _reactNative.View,
+                                {
+                                    __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 162
+                                    }
+                                },
+                                data.image ? _react3.default.createElement(_reactNative.Image, { source: { uri: data.image }, style: { height: 100, width: 100, borderRadius: 50 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 165
+                                    }
+                                }) : _react3.default.createElement(_reactNative.Image, { source: img18, style: { height: 100, width: 100, borderRadius: 50 }, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 167
+                                    }
+                                })
+                            ),
+                            _react3.default.createElement(
+                                _nativeBase.Text,
+                                { style: _styles2.default.catIten_txt, __source: {
+                                        fileName: _jsxFileName,
+                                        lineNumber: 171
+                                    }
+                                },
+                                data.name || null
+                            )
+                        )
+                    );
+                });
+            }
+            return _react3.default.createElement(
+                _nativeBase.Container,
+                {
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 183
+                    }
+                },
+                _react3.default.createElement(_reactNativeLoadingSpinnerOverlay2.default, { visible: this.state.isVisible, textContent: 'Loading...', textStyle: { color: '#FFF' }, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 184
+                    }
+                }),
+                _react3.default.createElement(_reactNative.StatusBar, {
+                    backgroundColor: '#cbf0ed',
+                    __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 185
+                    }
+                }),
+                _react3.default.createElement(
+                    _nativeBase.Header,
+                    { style: _styles2.default.appHdr2, androidStatusBarColor: '#cbf0ed', noShadow: true, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 189
+                        }
+                    },
+                    _react3.default.createElement(
+                        _nativeBase.Button,
+                        { transparent: true, onPress: function onPress() {
+                                return _this3.props.navigation.goBack();
+                            }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 190
+                            }
+                        },
+                        _react3.default.createElement(
+                            _nativeBase.Text,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 191
+                                }
+                            },
+                            'Cancel'
+                        )
+                    ),
+                    _react3.default.createElement(
+                        _nativeBase.Body,
+                        { style: { alignItems: 'center' }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 193
+                            }
+                        },
+                        _react3.default.createElement(
+                            _nativeBase.Title,
+                            { style: _styles2.default.appHdr2Txt, __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 194
+                                }
+                            },
+                            'Adc Favourite'
+                        )
+                    ),
+                    _react3.default.createElement(
+                        _nativeBase.Button,
+                        { transparent: true, onPress: function onPress() {
+                                return _this3.spDone();
+                            }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 196
+                            }
+                        },
+                        _react3.default.createElement(
+                            _nativeBase.Text,
+                            {
+                                __source: {
+                                    fileName: _jsxFileName,
+                                    lineNumber: 196
+                                }
+                            },
+                            'Done'
+                        )
+                    )
+                ),
+                _react3.default.createElement(
+                    _nativeBase.Content,
+                    { style: _styles2.default.bgWhite, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 199
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.View,
+                        { style: { flexDirection: 'row', flexWrap: 'wrap' }, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 201
+                            }
+                        },
+                        serviceListing
+                    )
+                )
+            );
+        }
+    }]);
+
+    return ServiceProviderListing;
+}(_react2.Component));
+
+ServiceProviderListing.propTypes = {
+    auth: _propTypes2.default.object.isRequired,
+    service: _propTypes2.default.object.isRequired
+};
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        auth: state.auth,
+        service: state.service
+    };
+};
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        setServiceDetails: function setServiceDetails(data) {
+            return dispatch((0, _serviceActions.setServiceDetails)(data));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ServiceProviderListing);

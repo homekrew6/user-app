@@ -79,6 +79,7 @@ var incrimentDecriment = _wrapComponent('incrimentDecriment')(function (_Compone
 
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = incrimentDecriment.__proto__ || Object.getPrototypeOf(incrimentDecriment)).call.apply(_ref, [this].concat(args))), _this), _this.state = { massage: "", totalData: "" }, _this.handleIncrement = function () {
             var price = _this.props.service.data.price;
+            price = Number(price);
             var massage = Number(_this.state.massage) + 1;
             _this.setState({ massage: massage });
             if (_this.state.totalData.answers && _this.state.totalData.answers.length > 0) {
@@ -88,10 +89,12 @@ var incrimentDecriment = _wrapComponent('incrimentDecriment')(function (_Compone
                     price = price + Number(massage) * Number(_this.state.totalData.answers[0].price_impact);
                 }
                 var data = _this.props.service.data;
+                price = _this.addZeroes(price);
                 data.price = price;
                 _this.props.setServiceDetails(data);
             }
         }, _this.handleDecrement = function () {
+            price = Number(price);
             var price = _this.props.service.data.price;
             if (Number(_this.state.massage) == 0) {} else {
                 var massage = Number(_this.state.massage) - 1;
@@ -100,9 +103,11 @@ var incrimentDecriment = _wrapComponent('incrimentDecriment')(function (_Compone
                     if (_this.state.totalData.answers[0].option_price_impact == "Addition") {
                         price = price - (_this.state.massage + Number(_this.state.totalData.answers[0].price_impact));
                     } else {
-                        price = price + Number(massage) * Number(_this.state.totalData.answers[0].price_impact);
+                        price = price - Number(_this.state.massage) * Number(_this.state.totalData.answers[0].price_impact);
                     }
+                    _this.setState({ massage: massage });
                     var data = _this.props.service.data;
+                    price = _this.addZeroes(price);
                     data.price = price;
                     _this.props.setServiceDetails(data);
                 }
@@ -129,25 +134,31 @@ var incrimentDecriment = _wrapComponent('incrimentDecriment')(function (_Compone
             this.props.onDecrement(this.props.massage);
         }
     }, {
+        key: 'addZeroes',
+        value: function addZeroes(num) {
+            var value = num.toFixed(2);
+            return value;
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react3.default.createElement(
                 _reactNative.View,
                 { style: { flexDirection: 'row' }, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 74
+                        lineNumber: 85
                     }
                 },
                 _react3.default.createElement(
                     _reactNative.TouchableOpacity,
                     { style: _styles2.default.confirmationServicePlusWarp, onPress: this.handleDecrement.bind(this), __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 76
+                            lineNumber: 87
                         }
                     },
                     _react3.default.createElement(_MaterialCommunityIcons2.default, { name: 'minus', style: _styles2.default.confirmationServicePlusIcon, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 77
+                            lineNumber: 88
                         }
                     })
                 ),
@@ -155,7 +166,7 @@ var incrimentDecriment = _wrapComponent('incrimentDecriment')(function (_Compone
                     _reactNative.View,
                     { style: { marginLeft: 5, marginRight: 5, borderWidth: 1, borderRadius: 10, width: 50, borderColor: '#e0e0e0', alignItems: 'center' }, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 80
+                            lineNumber: 91
                         }
                     },
                     _react3.default.createElement(
@@ -163,7 +174,7 @@ var incrimentDecriment = _wrapComponent('incrimentDecriment')(function (_Compone
                         {
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 81
+                                lineNumber: 92
                             }
                         },
                         this.state.massage
@@ -173,12 +184,12 @@ var incrimentDecriment = _wrapComponent('incrimentDecriment')(function (_Compone
                     _reactNative.TouchableOpacity,
                     { style: _styles2.default.confirmationServicePlusWarp, onPress: this.handleIncrement.bind(this), __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 84
+                            lineNumber: 95
                         }
                     },
                     _react3.default.createElement(_Entypo2.default, { name: 'plus', style: _styles2.default.confirmationServicePlusIcon, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 85
+                            lineNumber: 96
                         }
                     })
                 )

@@ -218,30 +218,48 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
   }, {
     key: 'changeActiveRadio',
     value: function changeActiveRadio(data) {
-      debugger;
+      var _this3 = this;
+
       data.selected = !data.selected;
-      if (data.selected == true) {
-        var removeData = void 0;
-        this.state.questionList.map(function (ques) {
-          if (ques.id == data.id) {
-            removeData = data;
-            data.selected = false;
+      var dataselected = data;
+      var item = void 0;
+      this.state.questionList.map(function (ques) {
+        if (ques.id == data.questionId) {
+          item = ques;
+        }
+      });
+      if (item) {
+        if (item.answers) {
+          noofselected = 0;
+          item.answers.map(function (item1) {
+            if (item1.selected == true) {
+              noofselected++;
+            }
+          });
+          if (noofselected > 1) {
+            item.answers.map(function (item1) {
+              if (item1.id == dataselected.id) {} else {
+                if (item1.selected == true) {
+                  item1.selected = false;
+                  var price = _this3.props.service.data.price;
+                  price = Number(price);
+                  if (dataselected.option_price_impact == "Addition") {
+                    price = price - Number(dataselected.price_impact);
+                  } else {
+                    price = price / Number(dataselected.price_impact);
+                  }
+                  var data = _this3.props.service.data;
+                  price = _this3.addZeroes(price);
+                  data.price = price;
+                  _this3.props.setServiceDetails(data);
+                }
+              }
+            });
           }
-        });
-        if (removeData) {
-          var price = this.props.service.data.price;
-          if (data.option_price_impact == "Addition") {
-            price = price - Number(data.price_impact);
-          } else {
-            price = price / Number(data.price_impact);
-          }
-          var data = this.props.service.data;
-          data.price = price;
-          this.props.setServiceDetails(data);
         }
       }
-
       var price = this.props.service.data.price;
+      price = Number(price);
       if (data.selected == false) {
         if (data.option_price_impact == "Addition") {
           price = price - Number(data.price_impact);
@@ -257,6 +275,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
       }
 
       var data = this.props.service.data;
+      price = this.addZeroes(price);
       data.price = price;
       this.props.setServiceDetails(data);
     }
@@ -273,6 +292,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
     key: 'switchChange',
     value: function switchChange(data) {
       var price = this.props.service.data.price;
+      price = Number(price);
       data.Status = !data.Status;
       console.log(data.Status);
       var index = void 0;
@@ -292,6 +312,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               price = price / Number(data1.answers[0].price_impact);
             }
             var data = this.props.service.data;
+            price = this.addZeroes(price);
             data.price = price;
             this.props.setServiceDetails(data);
           }
@@ -304,6 +325,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               price = price * Number(data1.answers[0].price_impact);
             }
             var data = this.props.service.data;
+            price = this.addZeroes(price);
             data.price = price;
             this.props.setServiceDetails(data);
           }
@@ -313,36 +335,37 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
   }, {
     key: 'componentWillMount',
     value: function componentWillMount() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.props.getQuestionListByServiceId(this.props.service.data).then(function (res) {
         if (res.type == "success") {
           console.log("success", res);
-          _this3.setState({ questionList: res });
+          _this4.setState({ questionList: res });
           var price = 0.0;
-          for (var i = 0; i < _this3.state.questionList.length; i++) {
-            if (_this3.state.questionList[i].type == 1 || _this3.state.questionList[i].type == 2 || _this3.state.questionList[i].type == 3 || _this3.state.questionList[i].type == 4) {
-              if (_this3.state.questionList[i].answers && _this3.state.questionList[i].answers.length > 0) {
-                if (_this3.state.questionList[i].type == 1) {
-                  if (_this3.state.questionList[i].answers[0].option_price_impact == "Addition") {
-                    price = price + (_this3.state.questionList[i].IncrementId + Number(_this3.state.questionList[i].answers[0].price_impact));
+          for (var i = 0; i < _this4.state.questionList.length; i++) {
+            if (_this4.state.questionList[i].type == 1 || _this4.state.questionList[i].type == 2 || _this4.state.questionList[i].type == 3 || _this4.state.questionList[i].type == 4) {
+              if (_this4.state.questionList[i].answers && _this4.state.questionList[i].answers.length > 0) {
+                if (_this4.state.questionList[i].type == 1) {
+                  if (_this4.state.questionList[i].answers[0].option_price_impact == "Addition") {
+                    price = price + (_this4.state.questionList[i].IncrementId + Number(_this4.state.questionList[i].answers[0].price_impact));
                   } else {
-                    price = price + _this3.state.questionList[i].IncrementId * Number(_this3.state.questionList[i].answers[0].price_impact);
+                    price = price + _this4.state.questionList[i].IncrementId * Number(_this4.state.questionList[i].answers[0].price_impact);
                   }
-                } else if (_this3.state.questionList[i].type == 2) {
-                  if (_this3.state.questionList[i].answers[0].option_price_impact == "Addition") {
-                    price = price + Number(_this3.state.questionList[i].answers[0].price_impact);
+                } else if (_this4.state.questionList[i].type == 2) {
+                  if (_this4.state.questionList[i].answers[0].option_price_impact == "Addition") {
+                    price = price + Number(_this4.state.questionList[i].answers[0].price_impact);
                   } else {
-                    price = price * Number(_this3.state.questionList[i].answers[0].price_impact);
+                    price = price * Number(_this4.state.questionList[i].answers[0].price_impact);
                   }
                 }
               }
             }
           }
-          var data = _this3.props.service.data;
-          data.questionList = _this3.state.questionList;
+          var data = _this4.props.service.data;
+          data.questionList = _this4.state.questionList;
+          price = _this4.addZeroes(price);
           data.price = price;
-          _this3.props.setServiceDetails(data);
+          _this4.props.setServiceDetails(data);
         }
       }).catch(function (err) {
         console.log("error in catch");
@@ -353,83 +376,95 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
     key: 'renderFlatListImage',
     value: function renderFlatListImage() {}
   }, {
+    key: 'addZeroes',
+    value: function addZeroes(num) {
+      var value = num.toFixed(2);
+      return value;
+    }
+  }, {
     key: 'sliderChanged',
     value: function sliderChanged(value, data) {
       debugger;
-      var price = this.props.service.data.price;
-      if (data.answers) {
-        if (data.answers[0].option_price_impact == "Addition") {
-          if (this.props.service.data.value) {
-            if (value < this.props.service.data.value) {
-              price = price - (value + Number(data.answers[0].price_impact));
-            } else {
-              price = price + (value + Number(data.answers[0].price_impact));
-            }
-          } else {
-            price = price + (value + Number(data.answers[0].price_impact));
-          }
-        } else {
-          if (this.props.service.data.value) {
-            if (value < this.props.service.data.value) {
-              price = price + (value + Number(data.answers[0].price_impact));
-            } else {
-              price = price + (value + Number(data.answers[0].price_impact));
-            }
-          } else {
-            price = price + value * Number(data.answers[0].price_impact);
-          }
-        }
-
-        price = parseFloat(Math.round(price * 100) / 100).toFixed(2);
+      if (value != 0) {
+        value = parseFloat(Math.round(value * 100) / 100).toFixed(2);
+        value = Number(value);
+        var price = this.props.service.data.price;
         price = Number(price);
-        var data = this.props.service.data;
-        data.price = price;
-        data.value = value;
-        this.props.setServiceDetails(data);
+        if (data.answers) {
+          if (data.answers[0].option_price_impact == "Addition") {
+            if (this.props.service.data.value) {
+              if (value < this.props.service.data.value) {
+                price = price - (value + Number(data.answers[0].price_impact));
+              } else {
+                price = price + (value + Number(data.answers[0].price_impact));
+              }
+            } else {
+              price = price + (value + Number(data.answers[0].price_impact));
+            }
+          } else {
+            if (this.props.service.data.value) {
+              if (value < this.props.service.data.value) {
+                price = price + (value + Number(data.answers[0].price_impact));
+              } else {
+                price = price + (value + Number(data.answers[0].price_impact));
+              }
+            } else {
+              price = price + value * Number(data.answers[0].price_impact);
+            }
+          }
+
+          price = parseFloat(Math.round(price * 100) / 100).toFixed(2);
+          price = Number(price);
+          var data = this.props.service.data;
+          price = this.addZeroes(price);
+          data.price = price;
+          data.value = value;
+          this.props.setServiceDetails(data);
+        }
       }
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
+      var _this5 = this;
 
       var questionList = this.state.questionList.map(function (data, key) {
         return data.type == "1" ? _react3.default.createElement(
           _reactNative.View,
           { key: data.id, __source: {
               fileName: _jsxFileName,
-              lineNumber: 342
+              lineNumber: 385
             }
           },
           _react3.default.createElement(
             _nativeBase.Item,
             { style: _styles2.default.confirmationItem, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 343
+                lineNumber: 386
               }
             },
             _react3.default.createElement(
               _reactNative.View,
               { style: _styles2.default.confirmationIconView, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 344
+                  lineNumber: 387
                 }
               },
               _react3.default.createElement(
                 _nativeBase.Text,
                 { name: 'scissors', style: _styles2.default.confirmationViewIcon, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 345
+                    lineNumber: 388
                   }
                 },
                 ' ',
                 data.image ? _react3.default.createElement(_reactNative.Image, { source: { uri: data.image }, style: { width: 20, height: 20 }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 347
+                    lineNumber: 390
                   }
                 }) : _react3.default.createElement(_reactNative.Image, { source: logo22, style: { height: 20, width: 20 }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 349
+                    lineNumber: 392
                   }
                 }),
                 ' '
@@ -439,14 +474,14 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               _nativeBase.Text,
               { style: _styles2.default.confirmationMainTxt, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 353
+                  lineNumber: 396
                 }
               },
               data.name
             ),
-            _react3.default.createElement(_incrimentDecrimentCompt2.default, { massage: data, onIncrement: _this4.handleIncrement, onDecrement: _this4.handleDecrement, __source: {
+            _react3.default.createElement(_incrimentDecrimentCompt2.default, { massage: data, onIncrement: _this5.handleIncrement, onDecrement: _this5.handleDecrement, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 354
+                lineNumber: 397
               }
             })
           )
@@ -454,30 +489,30 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
           _reactNative.View,
           { key: data.id, __source: {
               fileName: _jsxFileName,
-              lineNumber: 356
+              lineNumber: 399
             }
           },
           _react3.default.createElement(
             _nativeBase.Item,
             { style: _styles2.default.confirmationItem, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 357
+                lineNumber: 400
               }
             },
             _react3.default.createElement(
               _reactNative.View,
               { style: _styles2.default.confirmationIconView, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 358
+                  lineNumber: 401
                 }
               },
               data.image ? _react3.default.createElement(_reactNative.Image, { source: { uri: data.image }, style: { width: 20, height: 20 }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 361
+                  lineNumber: 404
                 }
               }) : _react3.default.createElement(_reactNative.Image, { source: logo22, style: { height: 20, width: 20 }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 363
+                  lineNumber: 406
                 }
               })
             ),
@@ -485,16 +520,16 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               _nativeBase.Text,
               { style: _styles2.default.confirmationMainTxt, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 367
+                  lineNumber: 410
                 }
               },
               data.name
             ),
             _react3.default.createElement(_nativeBase.Switch, { value: data.Status, onValueChange: function onValueChange() {
-                return _this4.switchChange(data);
+                return _this5.switchChange(data);
               }, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 368
+                lineNumber: 411
               }
             })
           )
@@ -502,19 +537,19 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
           _reactNative.View,
           { style: _styles2.default.confirmationItem2, key: data.id, __source: {
               fileName: _jsxFileName,
-              lineNumber: 370
+              lineNumber: 413
             }
           },
           _react3.default.createElement(_Entypo2.default, { name: 'home', style: _styles2.default.confirmationViewIcon2, __source: {
               fileName: _jsxFileName,
-              lineNumber: 371
+              lineNumber: 414
             }
           }),
           _react3.default.createElement(
             _reactNative.View,
             { style: _styles2.default.confirmationMainTxt, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 372
+                lineNumber: 415
               }
             },
             _react3.default.createElement(_reactNativeSlider2.default, {
@@ -523,18 +558,18 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               thumbTintColor: '#81cdc7',
               value: data.start_range,
               onValueChange: function onValueChange(value) {
-                return _this4.sliderChanged(value, data);
+                return _this5.sliderChanged(value, data);
               },
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 373
+                lineNumber: 416
               }
             }),
             _react3.default.createElement(
               _nativeBase.Text,
               { style: _styles2.default.bedroomCount, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 380
+                  lineNumber: 423
                 }
               },
               data.name
@@ -542,28 +577,28 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
           ),
           _react3.default.createElement(_Entypo2.default, { name: 'home', style: _styles2.default.confirmationViewIcon2, __source: {
               fileName: _jsxFileName,
-              lineNumber: 382
+              lineNumber: 425
             }
           })
         ) : data.type == "5" ? _react3.default.createElement(
           _reactNative.View,
           { key: data.id, __source: {
               fileName: _jsxFileName,
-              lineNumber: 383
+              lineNumber: 426
             }
           },
           _react3.default.createElement(
             _reactNative.View,
             { style: { flexDirection: 'row', padding: 15 }, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 384
+                lineNumber: 427
               }
             },
             _react3.default.createElement(
               _nativeBase.Text,
               { style: { flex: 1 }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 385
+                  lineNumber: 428
                 }
               },
               'Insert Photo'
@@ -571,15 +606,15 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
             _react3.default.createElement(
               _reactNative.TouchableOpacity,
               { onPress: function onPress() {
-                  return _this4.uploadPhoto();
+                  return _this5.uploadPhoto();
                 }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 388
+                  lineNumber: 431
                 }
               },
               _react3.default.createElement(_FontAwesome2.default, { name: 'camera', style: { fontSize: 16 }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 389
+                  lineNumber: 432
                 }
               })
             )
@@ -588,11 +623,11 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
             _reactNative.View,
             { style: _styles2.default.imagesSliderWarp, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 392
+                lineNumber: 435
               }
             },
             _react3.default.createElement(_reactNative.FlatList, {
-              data: _this4.state.sliderData,
+              data: _this5.state.sliderData,
               renderItem: function renderItem(_ref) {
                 var item = _ref.item;
                 return _react3.default.createElement(
@@ -600,12 +635,12 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
                   {
                     __source: {
                       fileName: _jsxFileName,
-                      lineNumber: 396
+                      lineNumber: 439
                     }
                   },
                   _react3.default.createElement(_reactNative.Image, { key: item.key, source: { uri: item.src }, style: _styles2.default.imagesSliderImage, __source: {
                       fileName: _jsxFileName,
-                      lineNumber: 397
+                      lineNumber: 440
                     }
                   })
                 );
@@ -614,7 +649,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               style: _styles2.default.imagesSliderFlatList,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 393
+                lineNumber: 436
               }
             })
           )
@@ -622,21 +657,21 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
           _reactNative.View,
           { key: data.id, __source: {
               fileName: _jsxFileName,
-              lineNumber: 404
+              lineNumber: 447
             }
           },
           _react3.default.createElement(
             _nativeBase.Item,
             { style: _styles2.default.confirmationItem, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 405
+                lineNumber: 448
               }
             },
             _react3.default.createElement(
               _reactNative.View,
               { style: _styles2.default.confirmationIconView, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 406
+                  lineNumber: 449
                 }
               },
               _react3.default.createElement(
@@ -644,16 +679,16 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
                 {
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 407
+                    lineNumber: 450
                   }
                 },
                 data.image ? _react3.default.createElement(_reactNative.Image, { source: { uri: data.image }, style: { width: 20, height: 20 }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 410
+                    lineNumber: 453
                   }
                 }) : _react3.default.createElement(_reactNative.Image, { source: logo22, style: { height: 20, width: 20 }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 412
+                    lineNumber: 455
                   }
                 })
               )
@@ -662,7 +697,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               _nativeBase.Text,
               { style: _styles2.default.confirmationMainTxt, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 417
+                  lineNumber: 460
                 }
               },
               data.name
@@ -671,14 +706,14 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               _reactNative.View,
               { style: { flex: 1, alignItems: 'center', justifyContent: 'center', marginRight: 15 }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 418
+                  lineNumber: 461
                 }
               },
               _react3.default.createElement(
                 _reactNative.View,
                 { style: { borderRadius: 10, borderWidth: 1, borderColor: "#ccc", flexDirection: 'row', overflow: 'hidden' }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 419
+                    lineNumber: 462
                   }
                 },
                 data.answers.map(function (data1, key1) {
@@ -686,23 +721,23 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
                     _reactNative.View,
                     { key: data1.id, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 423
+                        lineNumber: 466
                       }
                     },
                     _react3.default.createElement(
                       _reactNative.TouchableOpacity,
                       { style: [{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom: 4, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }, [data1.selected ? { backgroundColor: '#ccc' } : {}]], onPress: function onPress() {
-                          return _this4.changeActiveRadio(data1);
+                          return _this5.changeActiveRadio(data1);
                         }, __source: {
                           fileName: _jsxFileName,
-                          lineNumber: 424
+                          lineNumber: 467
                         }
                       },
                       _react3.default.createElement(
                         _nativeBase.Text,
                         { style: [[data1.selected ? { color: '#fff' } : {}]], __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 427
+                            lineNumber: 470
                           }
                         },
                         data1.title
@@ -720,40 +755,40 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
         {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 472
+            lineNumber: 515
           }
         },
         _react3.default.createElement(_reactNative.StatusBar, {
           backgroundColor: '#cbf0ed',
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 473
+            lineNumber: 516
           }
         }),
-        _react3.default.createElement(_reactNativeLoadingSpinnerOverlay2.default, { visible: this.props.service.busy, textContent: 'Loading...', textStyle: { color: '#FFF' }, __source: {
+        _react3.default.createElement(_reactNativeLoadingSpinnerOverlay2.default, { visible: this.props.service.busy || this.state.IsSpinnerVisible, textContent: 'Loading...', textStyle: { color: '#FFF' }, __source: {
             fileName: _jsxFileName,
-            lineNumber: 476
+            lineNumber: 519
           }
         }),
         _react3.default.createElement(
           _nativeBase.Header,
           { style: _styles2.default.appHdr2, androidStatusBarColor: '#cbf0ed', noShadow: true, __source: {
               fileName: _jsxFileName,
-              lineNumber: 477
+              lineNumber: 520
             }
           },
           _react3.default.createElement(
             _nativeBase.Button,
             { transparent: true, onPress: function onPress() {
-                return _this4.props.navigation.goBack();
+                return _this5.props.navigation.goBack();
               }, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 478
+                lineNumber: 521
               }
             },
             _react3.default.createElement(_SimpleLineIcons2.default, { name: 'grid', style: _styles2.default.hd_lft_icon, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 479
+                lineNumber: 522
               }
             })
           ),
@@ -761,14 +796,14 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
             _nativeBase.Body,
             { style: _styles2.default.appHdr2Bdy, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 481
+                lineNumber: 524
               }
             },
             _react3.default.createElement(
               _nativeBase.Title,
               { style: _styles2.default.appHdr2Txt, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 482
+                  lineNumber: 525
                 }
               },
               'Service Details'
@@ -777,21 +812,21 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
           this.props.service.data.features ? _react3.default.createElement(
             _nativeBase.Button,
             { transparent: true, onPress: function onPress() {
-                return _this4.props.navigation.navigate('Expect');
+                return _this5.props.navigation.navigate('Expect');
               }, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 489
+                lineNumber: 532
               }
             },
             _react3.default.createElement(_Ionicons2.default, { name: 'ios-information-circle', style: _styles2.default.hd_rt_icon, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 490
+                lineNumber: 533
               }
             })
           ) : _react3.default.createElement(_reactNative.View, {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 493
+              lineNumber: 536
             }
           })
         ),
@@ -799,30 +834,30 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
           _nativeBase.Content,
           { style: { flex: 1, backgroundColor: '#fff' }, __source: {
               fileName: _jsxFileName,
-              lineNumber: 497
+              lineNumber: 540
             }
           },
           _react3.default.createElement(
             _reactNative.View,
             { style: { flex: 1, flexDirection: 'row' }, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 498
+                lineNumber: 541
               }
             },
             _react3.default.createElement(
               _reactNative.View,
               { style: { flex: 1, flexDirection: 'row', position: 'relative' }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 499
+                  lineNumber: 542
                 }
               },
               this.state.cover_image ? _react3.default.createElement(_reactNative.Image, { source: { uri: this.state.cover_image }, style: _styles2.default.carveImage, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 504
+                  lineNumber: 547
                 }
               }) : _react3.default.createElement(_reactNative.Image, { source: carveImage, style: _styles2.default.carveImage, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 506
+                  lineNumber: 549
                 }
               })
             )
@@ -831,12 +866,12 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
             _reactNative.View,
             { style: { flex: 1, flexDirection: 'row', marginTop: -40 }, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 511
+                lineNumber: 554
               }
             },
             _react3.default.createElement(_reactNative.Image, { source: img17, style: { width: deviceWidth, height: 50 }, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 512
+                lineNumber: 555
               }
             })
           ),
@@ -844,7 +879,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
             _reactNative.View,
             { style: { flex: 1, alignItems: 'flex-end', justifyContent: 'center', marginBottom: 15, marginRight: 15 }, __source: {
                 fileName: _jsxFileName,
-                lineNumber: 515
+                lineNumber: 558
               }
             },
             _react3.default.createElement(
@@ -852,23 +887,23 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               {
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 516
+                  lineNumber: 559
                 }
               },
               _react3.default.createElement(
                 _reactNative.View,
                 { style: { flex: 1, flexDirection: 'row', marginTop: -40, justifyContent: 'flex-end', marginRight: 20 }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 517
+                    lineNumber: 560
                   }
                 },
                 this.state.banner_image ? _react3.default.createElement(_reactNative.Image, { source: { uri: this.state.banner_image }, style: { width: 50, height: 50 }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 521
+                    lineNumber: 564
                   }
                 }) : _react3.default.createElement(_reactNative.Image, { source: img18, style: { width: 50, height: 50 }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 523
+                    lineNumber: 566
                   }
                 })
               ),
@@ -876,7 +911,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
                 _nativeBase.Text,
                 { style: { color: '#1e3768' }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 527
+                    lineNumber: 570
                   }
                 },
                 this.state.serviceName
@@ -888,14 +923,14 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
             {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 550
+                lineNumber: 593
               }
             },
             this.state.questionList.length > 0 ? questionList : _react3.default.createElement(
               _reactNative.View,
               { style: { flex: 1, alignItems: 'center' }, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 556
+                  lineNumber: 599
                 }
               },
               _react3.default.createElement(
@@ -903,7 +938,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
                 {
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 556
+                    lineNumber: 599
                   }
                 },
                 'No questions found.'
@@ -916,7 +951,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 614
+              lineNumber: 657
             }
           },
           _react3.default.createElement(
@@ -924,23 +959,23 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
             {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 615
+                lineNumber: 658
               }
             },
             _react3.default.createElement(
               _reactNative.TouchableOpacity,
               { style: _styles2.default.confirmationServicefooterItem, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 616
+                  lineNumber: 659
                 }
               },
               _react3.default.createElement(
                 _nativeBase.Text,
                 { style: _styles2.default.confirmationServicefooterItmTxt, onPress: function onPress() {
-                    return _this4.props.navigation.navigate('Confirmation');
+                    return _this5.props.navigation.navigate('Confirmation');
                   }, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 616
+                    lineNumber: 659
                   }
                 },
                 'CONTINUE'
@@ -950,14 +985,14 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
               _reactNative.TouchableOpacity,
               { style: _styles2.default.confirmationServicefooterItem2, __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 617
+                  lineNumber: 660
                 }
               },
               _react3.default.createElement(
                 _nativeBase.Text,
                 { style: _styles2.default.confirmationServicefooterItmTxt, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 617
+                    lineNumber: 660
                   }
                 },
                 'AED ',
@@ -968,7 +1003,7 @@ var serviceDetails = _wrapComponent('serviceDetails')(function (_Component) {
         ) : _react3.default.createElement(_reactNative.View, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 621
+            lineNumber: 664
           }
         })
       );
