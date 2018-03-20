@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ImageBackground } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -41,7 +41,6 @@ class ServiceProviderListing extends Component {
             api.post('worker-available-timings/getUserFavSVListing', data).then((data) => {
                 if (data.response.type == 'success') {
                     this.setState({ isVisible: false });
-                    debugger;
                     this.setState({ spList: data.response.list });
                 }
                 else {
@@ -126,7 +125,7 @@ class ServiceProviderListing extends Component {
                             {
                                 data.IsAvailable ? (
 
-                                    <View style={{ height: 120, width: 120, backgroundColor: 'blue' }}>
+                                    <View style={{ height: 110, width: 110, backgroundColor: 'blue' }}>
                                         <TouchableOpacity onPress={() => this.selectServiceProvider(data)}>
 
                                             {/* <Image source={{ uri: data.image || null }} style={styles.catIten_img} /> */}
@@ -158,17 +157,17 @@ class ServiceProviderListing extends Component {
                                         <Text style={styles.catIten_txt}>{data.name || null}</Text>
                                     </View>
                                 ) : (
-                                        <View style={{ height: 120, width: 120, backgroundColor: 'lightgray' }}>
-                                            <View>
+                                        <View style={{width: 100, paddingTop: 10, paddingBottom: 10 }}>
+                                            <View style={{ justifyContent: 'space-around', alignContent: 'center', flex:1, flexDirection: 'row'  }}>
                                                 {
                                                     data.image ? (
-                                                        <Image source={{ uri: data.image }} style={{ height: 100, width: 100, borderRadius: 50 }} />
+                                                        <Image source={{ uri: data.image }} style={{ height: 80, width: 80, borderRadius: 50, borderColor: '#ccc', borderWidth: 2 }} />
                                                     ) : (
-                                                            <Image source={img18} style={{ height: 100, width: 100, borderRadius: 50 }} />
+                                                            <Image source={img18} style={{ height: 80, width: 80, borderRadius: 50, borderColor: '#ccc', borderWidth: 2 }} />
                                                         )
                                                 }
                                             </View>
-                                            <Text style={styles.catIten_txt}>{data.name || null}</Text>
+                                            <Text style={[styles.catIten_txt, { textAlign: 'center' }]}>{data.name || null}</Text>
                                         </View>
                                     )
                             }
