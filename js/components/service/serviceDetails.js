@@ -313,10 +313,6 @@ class serviceDetails extends Component {
     });
   }
 
-  renderFlatListImage() {
-
-  }
-
 
   addZeroes(num) {
     // var value = Number(num);

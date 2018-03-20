@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ImageBackground } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -132,7 +132,7 @@ class ServiceProviderListing extends Component {
                                             {/* <Image source={{ uri: data.image || null }} style={styles.catIten_img} /> */}
                                             {
                                                 data.image ? (
-                                                    <Image source={{ uri: data.image }} style={{ height: 100, width: 100, borderRadius: 50, position: 'relative' }} >
+                                                    <ImageBackground source={{ uri: data.image }} style={{ height: 100, width: 100, borderRadius: 50, position: 'relative' }} >
                                                         {
                                                             data.IsSelected ? (
                                                                 <View style={{ backgroundColor: 'black', opacity: 0.5, top: 0, left: 0, position: 'absolute', height: 100, width: 100, alignItems: 'center', justifyContent: 'center' }}>
@@ -141,9 +141,9 @@ class ServiceProviderListing extends Component {
                                                             ) : (<View></View>)
                                                         }
 
-                                                    </Image>
+                                                    </ImageBackground>
                                                 ) : (
-                                                        <Image source={img18} style={{ height: 100, width: 100, borderRadius: 50, position: 'relative' }} >
+                                                        <ImageBackground source={img18} style={{ height: 100, width: 100, borderRadius: 50, position: 'relative' }} >
                                                             {
                                                                 data.IsSelected ? (
                                                                     <View style={{ backgroundColor: 'black', opacity: 0.5, top: 0, left: 0, position: 'absolute', height: 100, width: 100, alignItems: 'center', justifyContent: 'center' }}>
@@ -151,7 +151,7 @@ class ServiceProviderListing extends Component {
                                                                     </View>
                                                                 ) : (<View></View>)
                                                             }
-                                                        </Image>
+                                                        </ImageBackground>
                                                     )
                                             }
                                         </TouchableOpacity>
