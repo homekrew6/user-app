@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {login} from './elements/authActions'
-import { Image, View, StatusBar,Dimensions,Alert, TouchableOpacity } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground } from "react-native";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { Container, Header, Button, Content, Form,Left,Right,Body,Title, Item,Icon,Frame, Input, Label,Text } from "native-base";
 import api from '../../api'
@@ -118,10 +118,10 @@ class ResetPassword extends Component {
 							</Item>
 						</View>
 					</View>
-					<TouchableOpacity transparent style={{flex:1,flexDirection:'row',height:70,marginTop:2}} onPress={() => this.pressSend()} >
-						<Image source={buttonImage} style={{flex:1,flexDirection:'row',justifyContent:'center',alignItems:'center',width:deviceWidth/1.3,height:55}} >
+					<TouchableOpacity transparent style={{ flex:1, flexDirection:'row', height:70, marginTop:2, backgroundColor: 'red', paddingLeft: 15, paddingRight: 15 }} onPress={() => this.pressSend()} >
+						<ImageBackground source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%',height:55}} >
 							<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>{I18n.t('save_password')}</Text>
-						</Image>
+						</ImageBackground>
 					</TouchableOpacity>
 
 				</Content>
