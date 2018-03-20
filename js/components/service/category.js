@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem ,ImageBackground} from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -144,7 +144,7 @@ class Categories extends Component {
           </Header>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Image source={{ uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
+              <ImageBackground source={{ uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
                 <View style={{ width: 120 }}>
                   <Picker
                     mode="dropdown"
@@ -157,7 +157,7 @@ class Categories extends Component {
                     {zoneItems}
                   </Picker>
                 </View>
-              </Image>
+              </ImageBackground>
             </View>
           </View>
 
