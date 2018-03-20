@@ -5,7 +5,8 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.imagepicker.ImagePickerPackage;
-import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+//import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.magus.fblogin.FacebookLoginPackage;
 //import com.reactnative.ivpusic.imagepicker.PickerPackage;
 //import com.facebook.reactnative.androidsdk.FBSDKPackage;
@@ -33,12 +34,13 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new PickerPackage(),
             new ImagePickerPackage(),
-            new RNGoogleSigninPackage(),
+            //new RNGoogleSigninPackage(),
             new FacebookLoginPackage(),
             //new PickerPackage(),
             //new FBSDKPackage(),
             new RNI18nPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new MapsPackage()
       );
     }
   };

@@ -21,6 +21,8 @@ import ServiceDetails from "./components/service/serviceDetails";
 import Expect from "./components/service/expect";
 import DateAndTime from "./components/service/dateAndTime";
 import LocationList from "./components/service/locationList";
+import MyMap from "./components/location/MyMap";
+import MyLocation from "./components/location/MyLocation";
 // import Test from "./components/accounts/test";
 
 const AppNavigator = StackNavigator(
@@ -40,6 +42,8 @@ const AppNavigator = StackNavigator(
         Expect: { screen: Expect },
         DateAndTime: { screen: DateAndTime },
         LocationList: { screen: LocationList },
+        MyLocation: { screen: MyLocation },
+        MyMap: { screen: MyMap },
     },
     {
         initialRouteName: "Drawer",
