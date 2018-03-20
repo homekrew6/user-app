@@ -13,7 +13,7 @@ import I18n from '../../i18n/i18n';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const img1 = require('../../../img/splash-bg2.png');
-const launchscreenBg = require("../../../img/bg-login.png");
+const launchscreenBg = require("../../../img/splash.png");
 const logo = require("../../../img/logo22.png");
 const imageht = (deviceHeight - 88);
 
@@ -142,7 +142,12 @@ class Intro extends Component {
 		if (this.state.sliderArray.length == 0) {
 
 			return (
-				<Container><Text>Loading...</Text></Container>
+				<Container>
+					<Container>
+						<Image source={launchscreenBg} style={styles.slide}>
+						</Image>
+					</Container>
+				</Container>
 			)
 		}
 		else {

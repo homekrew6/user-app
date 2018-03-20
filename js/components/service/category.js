@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ImageBackground  } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -144,7 +144,7 @@ class Categories extends Component {
           </Header>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Image source={{ uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
+              <ImageBackground  source={{ uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
                 <View style={{ width: 120 }}>
                   <Picker
                     mode="dropdown"
@@ -152,12 +152,10 @@ class Categories extends Component {
                     onValueChange={this.onValueChange.bind(this)}
                     supportedOrientations="Portrait"
                   >
-                    {/* <Item label="Dubai" value="key0" />
-                    <Item label="London" value="key1" /> */}
                     {zoneItems}
                   </Picker>
                 </View>
-              </Image>
+              </ImageBackground >
             </View>
           </View>
 
@@ -195,42 +193,6 @@ class Categories extends Component {
           </Modal>
           <View style={styles.catIten_txt_warp}>
             {serviceListing}
-            {/* <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img11} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Cleaning</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img12} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Handyman</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img13} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Plumbing</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img14} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Electrical</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view} >
-                <Image source={img15} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Air Conditioning</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img16} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Washing</Text>
-            </View> */}
           </View>
 
         </Content>

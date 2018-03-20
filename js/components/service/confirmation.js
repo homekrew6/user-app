@@ -17,7 +17,7 @@ import api from '../../api/index'
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'Menu' })],
-  });
+});
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
@@ -51,7 +51,7 @@ class Confirmation extends Component {
                     "postedDate": this.state.dateTime,
                     "location": "Home",
                     "payment": "Credit Card",
-                    "faourite_sp": "James Harden",
+                    "faourite_sp": this.props.service.data.favouriteSp,
                     "promo_code": "AED 50 off",
                     "status": "STARTED",
                     "userId": "3",
@@ -80,6 +80,16 @@ class Confirmation extends Component {
             Alert.alert("Please Enter a Date And Time")
         }
 
+    }
+
+
+    goToSpListing() {
+        if (this.state.dateTime) {
+            this.props.navigation.navigate('ServiceProviderListing');
+        }
+        else {
+            Alert.alert('Please select date and time to see the service providers available.');
+        }
     }
 
     render() {
@@ -155,16 +165,16 @@ class Confirmation extends Component {
                             </View>
                         </Item>
 
-                        <Item style={styles.confirmationItem}>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.goToSpListing()}>
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='heart' style={styles.confirmationViewIcon} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>Favorite SP</Text>
-                            <Text style={styles.confirmationDateTime}>James Harden</Text>
+                            <Text style={styles.confirmationDateTime}>{this.props.service.data.favouriteSp}</Text>
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
                             </View>
-                        </Item>
+                        </TouchableOpacity>
 
                         <Item style={styles.confirmationItem}>
                             <View style={styles.confirmationIconView}>
