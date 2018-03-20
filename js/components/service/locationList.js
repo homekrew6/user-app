@@ -8,6 +8,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
+import api from '../../api';
 import { setServiceDetails } from './elements/serviceActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -33,6 +34,18 @@ class LocationList extends Component {
             serviceDetails: this.props.service.data,
 
         }
+    }
+
+    componentDidMount(){
+        const customerId = this.props.auth.data.id;
+        const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`
+        api.get(getLocationUrl).then(res => {
+            console.log('user-locations', res);
+            this.setState({ homeArray: res });
+            this.setState({ locationData: res });
+        }).catch((err) => {
+            console.log(err);
+        });
     }
     selectActive(data) {
         let index;

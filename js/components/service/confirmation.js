@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -37,6 +37,8 @@ class Confirmation extends Component {
         }
 
     }
+
+   
 
     confirmationContinue() {
         this.setState({
@@ -91,6 +93,9 @@ class Confirmation extends Component {
     }
 
     render() {
+        BackHandler.addEventListener('hardwareBackPress', function() {
+            this.props.navigation.navigate('ServiceDetails');
+        });
         return (
             <Container >
                 <FSpinner visible={this.state.loader} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />

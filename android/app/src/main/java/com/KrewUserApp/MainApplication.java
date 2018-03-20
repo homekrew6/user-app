@@ -32,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new MapsPackage(),
             new PickerPackage(),
             new ImagePickerPackage(),
             //new RNGoogleSigninPackage(),
@@ -39,8 +40,8 @@ public class MainApplication extends Application implements ReactApplication {
             //new PickerPackage(),
             //new FBSDKPackage(),
             new RNI18nPackage(),
-            new VectorIconsPackage(),
-            new MapsPackage()
+            new VectorIconsPackage()
+            
       );
     }
   };
