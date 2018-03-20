@@ -29,6 +29,8 @@
     "react-native-aws3": "0.0.8",
     "react-native-calendars": "^1.17.4",
     "react-native-facebook-login": "^1.6.1",
+    "react-native-google-places": "^2.4.2",
+    "react-native-google-places-autocomplete": "^1.3.6",
     "react-native-google-signin": "^0.10.0",
     "react-native-htmlview": "^0.12.1",
     "react-native-i18n": "^2.0.11",
