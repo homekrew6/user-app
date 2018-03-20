@@ -3,7 +3,7 @@ import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login, getUserDetail } from './elements/authActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground } from 'react-native';
 import { FBLogin, FBLoginManager } from 'react-native-facebook-login';
 // import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 import api from '../../api';
@@ -151,11 +151,11 @@ class Login extends Component {
           backgroundColor="#81cdc7"
         />
         {/* <Image source={launchscreenBg}> */}
-        <Image source={launchscreenBg} style={styles.imageContainer}>
+        <ImageBackground source={launchscreenBg} style={styles.imageContainer}>
           <Content>
             <FSpinner visible={this.props.auth.busy} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
             <View style={styles.logoContainer}>
-    <Image source={launchscreenLogo} style={styles.logo} />
+            <Image source={launchscreenLogo} style={styles.logo} />
   </View>
             <View style={{ padding: 20 }}>
     <Item regular style={{ borderColor: '#29416f', borderWidth: 1, borderRadius: 2, height: 45 }}>
@@ -166,9 +166,9 @@ class Login extends Component {
               </Item>
   </View>
             <TouchableOpacity transparent style={{ height: 70, marginTop: 2, flexDirection: 'row', paddingLeft: 15, paddingRight: 15 }} onPress={() => this.pressLogin()}>
-    <Image source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
+    <ImageBackground source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
                 <Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('login')}</Text>
-              </Image>
+              </ImageBackground>
   </TouchableOpacity>
     <View>
               <TouchableOpacity onPress={() => this.pressForgotPassword()}>
@@ -200,7 +200,7 @@ class Login extends Component {
               </TouchableOpacity>
             </View>
   </Content>
-  </Image>
+  </ImageBackground>
       </Container>
     );
   }

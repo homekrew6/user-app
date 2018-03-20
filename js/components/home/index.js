@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {NavigationActions} from "react-navigation";
-import { Image, View, StatusBar } from "react-native";
+import { Image, View, StatusBar, ImageBackground } from "react-native";
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {checkAuth, getUserDetail} from '../accounts/elements/authActions'
@@ -50,7 +50,7 @@ class Home extends Component {
 		return (
 			<Container>
 				<StatusBar barStyle="light-content" />
-				<Image source={launchscreenBg} style={styles.imageContainer}>
+				<ImageBackground source={launchscreenBg} style={styles.imageContainer}>
 					<View style={styles.logoContainer}>
 						{/* <Image source={launchscreenLogo} style={styles.logo} /> */}
 					</View>
@@ -70,7 +70,7 @@ class Home extends Component {
 						<Text style={styles.btmText}>Copyright © 2018 homekrew. All Rights Reserved.</Text>
 					</View>
 
-				</Image>
+				</ImageBackground>
 			</Container>
 		);
 	}

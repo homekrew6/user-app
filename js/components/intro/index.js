@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, Dimensions, StyleSheet } from "react-native";
+import { Image, View, StatusBar, Dimensions, StyleSheet, ImageBackground } from "react-native";
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right, Grid } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import Swiper from 'react-native-swiper';
@@ -148,14 +148,14 @@ class Intro extends Component {
 		else {
 			return (
 				<Container >
-					<Swiper 
-					style={styles.wrapper} 
-					loop={true} 
+					<Swiper
+					style={styles.wrapper}
+					loop={true}
 					autoplay={true}
 					autoplayTimeout={5}
 					dotColor={'#81cdc7'}
 					activeDotColor={'#1e3768'}
-					
+
 					>
 
 						{/* <Image style={styles.slide} source={img1}>
@@ -176,11 +176,11 @@ class Intro extends Component {
 						{
 							this.state.sliderArray.map((item, key) => {
 								return (
-									<Image key={key} source={{ uri: item.image_url }} style={styles.slide}>
+									<ImageBackground key={key} source={{ uri: item.image_url }} style={styles.slide}>
 										<Image source={logo} style={styles.imageLogo} />
 										<Text style={styles.title}>{item.name}</Text>
 										<Text style={styles.text}>{item.description}</Text>
-									</Image>
+									</ImageBackground>
 								)
 							})
 						}
