@@ -152,8 +152,6 @@ class Categories extends Component {
                     onValueChange={this.onValueChange.bind(this)}
                     supportedOrientations="Portrait"
                   >
-                    {/* <Item label="Dubai" value="key0" />
-                    <Item label="London" value="key1" /> */}
                     {zoneItems}
                   </Picker>
                 </View>
@@ -195,42 +193,6 @@ class Categories extends Component {
           </Modal>
           <View style={styles.catIten_txt_warp}>
             {serviceListing}
-            {/* <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img11} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Cleaning</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img12} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Handyman</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img13} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Plumbing</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img14} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Electrical</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view} >
-                <Image source={img15} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Air Conditioning</Text>
-              </View>
-              <View style={styles.catIten}>
-              <View style={styles.catIten_img_view}>
-                <Image source={img16} style={styles.catIten_img} />
-              </View>
-              <Text style={styles.catIten_txt}>Washing</Text>
-            </View> */}
           </View>
 
         </Content>

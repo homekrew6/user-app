@@ -176,13 +176,6 @@ class EditProfile extends Component {
           this.setState({ visible: false });
     				Alert.alert('Data not saved, please try again.');
     			});
-  				// this.props.getUserDetail(res.userId,res.id).then(userRes=>{
-  				// 	console.log(userRes)
-  				// 	this.props.navigation.navigate("Menu");
-  				// }).catch(err=>{
-  				// 	Alert.alert('Please login');
-  				// 	this.props.navigation.navigate("Login")
-  				// })
   			} else {
         this.setState({ visible: false });
   				this.props.navigation.navigate('Login');
