@@ -23,12 +23,22 @@ class LocationList extends Component {
                 {
                     "text": "Home",
                     "id": 1,
-                    "status": true
+                    "status": true,
+                    "latitude": '',
+                    "longitude": '',
+                    "buildingName": '',
+                    "villa": '',
+                    "landmark": ''
                 },
                 {
                     "text": "Mother Home",
                     "id": 2,
-                    "status": false
+                    "status": false,
+                    "latitude": '',
+                    "longitude": '',
+                    "buildingName": '',
+                    "villa": '',
+                    "landmark": ''
                 }
             ],
             homeValue: 'Home',
@@ -42,8 +52,54 @@ class LocationList extends Component {
         const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`
         api.get(getLocationUrl).then(res => {
             console.log('user-locations', res);
-            this.setState({ homeArray: res });
-            this.setState({ locationData: res });
+            let finalArray=[];
+            res.map((item)=>{
+                let data;
+                if(this.props.service.data.serviceLocation)
+                {
+                    if(this.props.service.data.serviceLocation===item.name)
+                    {
+                        data={
+                            "text": item.name,
+                            "id": item.id,
+                            "status": true,
+                            "latitude": item.latitude,
+                            "longitude": item.longitude,
+                            "buildingName": item.buildingName,
+                            "villa": item.villa,
+                            "landmark": item.landmark
+                        }
+                    }
+                    else
+                    {
+                        data={
+                            "text": item.name,
+                            "id": item.id,
+                            "status": false,
+                            "latitude": item.latitude,
+                            "longitude": item.longitude,
+                            "buildingName": item.buildingName,
+                            "villa": item.villa,
+                            "landmark": item.landmark
+                        }
+                    }
+                }
+                else{
+                    data={
+                        "text": item.name,
+                        "id": item.id,
+                        "status": false,
+                        "latitude": item.latitude,
+                        "longitude": item.longitude,
+                        "buildingName": item.buildingName,
+                        "villa": item.villa,
+                        "landmark": item.landmark
+                    }
+                }
+                 
+                finalArray.push(data);
+            })
+            this.setState({ homeArray: finalArray });
         }).catch((err) => {
             console.log(err);
         });
@@ -110,7 +166,17 @@ class LocationList extends Component {
                     <View style={{ flex: 1 }}>
                         <Text>{data.text}</Text>
                     </View>
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('MyMap', {
+                        screenType: 'edit',
+                        id: data.id,
+                        customerId: this.props.auth.data.id,
+                        latitude: data.latitude,
+                        longitude: data.longitude,
+                        name: data.text,
+                        buildingName: data.buildingName,
+                        villaNo: data.villa,
+                        landmark: data.landmark
+                        })} >
                         <Text>Edit</Text>
                     </TouchableOpacity>
                 </TouchableOpacity>
@@ -124,7 +190,7 @@ class LocationList extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()} >
+                    <Button transparent onPress={() => this.props.navigation.navigate('MyMap', {screenType: 'add', customerId: this.props.auth.data.id})} >
                         <Text>Add</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>

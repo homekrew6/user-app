@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { View, Text, StatusBar, TouchableOpacity, ScrollView, Dimensions, TextInput } from 'react-native';
+import { View, Text, StatusBar, TouchableOpacity, ScrollView, Dimensions, TextInput, Alert } from 'react-native';
 import { Container, Header, Button, Content, Body, Item, Frame, Input, Label } from 'native-base';
 import  MapView, { Marker } from 'react-native-maps';
+import FSpinner from 'react-native-loading-spinner-overlay';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import api from '../../api';
 
@@ -17,15 +18,41 @@ class MyMap extends Component {
         name: '',
         buildingName: '',
         villaNo: '',
-        landmark: ''
+        landmark: '',
+        formatted_address: '',
+        IsSpinnerVisible: false,
+        locationChange: false,
 
     }
     componentDidMount(){
-        console.log('navigate mount', this.props.navigation);
+        if(this.props.navigation.state.params.screenType === 'edit'){
+
+            console.log('navigate mount', this.props.navigation);
+            const latitude = Number(this.props.navigation.state.params.latitude);
+            const longitude = Number(this.props.navigation.state.params.longitude);
+            this.setState({
+                region: {
+                    latitude: latitude,
+                    longitude: longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  },
+                  name: this.props.navigation.state.params.name,
+                  buildingName: this.props.navigation.state.params.buildingName? this.props.navigation.state.params.buildingName:'',
+                villaNo: this.props.navigation.state.params.villaNo? this.props.navigation.state.params.villaNo:'',
+                landmark: this.props.navigation.state.params.landmark? this.props.navigation.state.params.landmark: '',
+            });
+        }
     }
+
     onRegionChange = (region) => {
         console.log('region', region);
         this.setState({ region: region });
+    }
+    onLocationChange =(region) => {
+        if(this.state.locationChange){
+            this.setState({ region: region });
+        }
     }
     ChangeNameText(text){
         this.setState({ name: text });
@@ -41,13 +68,15 @@ class MyMap extends Component {
     }
 
     onMapDoneClick(){
-
+        this.setState({ IsSpinnerVisible: true });
         if(this.props.navigation.state.params.screenType === 'add'){
             const customerId = this.props.navigation.state.params.customerId;
+            const id = this.props.navigation.state.params.id;
             const name = this.state.name;
             const buildingName = this.state.buildingName;
             const villaNo = this.state.villaNo;
-            const landmark = this.state.landmark;
+            const landmark = this.state.landmark? this.state.landmark
+            : this.state.formatted_address;
             const latitude = this.state.region.latitude;
             const longitude = this.state.region.longitude;
 
@@ -61,12 +90,45 @@ class MyMap extends Component {
                 longitude: longitude,
                 customerId: customerId
              }).then(res => {
+                 this.setState({ IsSpinnerVisible: false });
+                 this.props.navigation.navigate('LocationList');
                 console.log('user-locations-post', res);
             }).catch((err) => {
                 console.log(err);
+                this.setState({ IsSpinnerVisible: false });
+                Alert.alert("Please try again later");
             });
-            
         }
+        if(this.props.navigation.state.params.screenType === 'edit'){
+            const customerId = this.props.navigation.state.params.customerId;
+            const id = this.props.navigation.state.params.id;
+            const name = this.state.name;
+            const buildingName = this.state.buildingName;
+            const villaNo = this.state.villaNo;
+            const landmark = this.state.formatted_address? this.state.formatted_address
+            : this.state.landmark;
+            const latitude = this.state.region.latitude;
+            const longitude = this.state.region.longitude;
+            const locationEditUrl = `user-locations/${id}`;
+            api.put(locationEditUrl, {
+                name: name, 
+                buildingName: buildingName, 
+                villa: villaNo, 
+                landmark: landmark,
+                latitude: latitude,
+                longitude: longitude,
+                customerId: customerId
+             }).then(res => {
+                 this.setState({ IsSpinnerVisible: false });
+                 this.props.navigation.navigate('LocationList');
+                console.log('user-locations-post', res);
+            }).catch((err) => {
+                console.log(err);
+                this.setState({ IsSpinnerVisible: false });
+                Alert.alert("Please try again later");
+            });
+        }
+        
     }
 
     render(){
@@ -85,7 +147,11 @@ class MyMap extends Component {
                            </TouchableOpacity>
                        </Button>
                        <Body style={styleSelf.tac}>
-                           <Text style={styleSelf.hdClr}>Edit Location</Text>
+                            {
+                               this.props.navigation.state.params.screenType === 'add' ?
+                               <Text style={styleSelf.hdClr}>Add Location</Text> :
+                               <Text style={styleSelf.hdClr}>Edit Location</Text>
+                           }
                        </Body>
                        <Button transparent >
                            <TouchableOpacity onPress={() => this.onMapDoneClick()}>
@@ -95,6 +161,7 @@ class MyMap extends Component {
                    </Header>
                    
                    <View>
+                   <FSpinner visible={this.state.IsSpinnerVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                    <GooglePlacesAutocomplete
                         placeholder='Search'
                         minLength={2} // minimum length of text to search
@@ -107,21 +174,21 @@ class MyMap extends Component {
                             console.log('on list click of map', data, details);
                             console.log(typeof(details.geometry.location.lat));
                             console.log('lat', details.geometry.location.lat);
-                            this.setState({ BusinessName: details.name });
+                            this.setState({ 
+                                BusinessName: details.name, 
+                                formatted_address: details.formatted_address,
+                                locationChange: true,
+                            });
                             const region = {
                                     latitude: details.geometry.location.lat,
                                     longitude: details.geometry.location.lng,
                                     latitudeDelta: 0.0922,
                                     longitudeDelta: 0.0421,
                                   }
-                              
                             this.onRegionChange(region);
                             //this.setState({ region: region });
-                            
                         }}
-                        
                         getDefaultValue={() => ''}
-                        
                         query={{
                             key: 'AIzaSyCya136InrAdTM3EkhM9hryzbCcfTUu7UU',
                             language: 'en', // language of the results
@@ -151,17 +218,31 @@ class MyMap extends Component {
 
                         filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
                         debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-                        renderRightButton={() => <Text>Cancel</Text>}
+                        renderRightButton={() => 
+                        <TouchableOpacity onPress={() => 
+                            this.setState({
+                                buildingName: '',
+                                name: '',
+                                villaNo: '',
+                                landmark: '',
+                                formatted_address: ''
+                            })
+                        }>
+                            <Text>Cancel</Text>
+                        </TouchableOpacity>
+                        }
                     />
                    </View>
                    <View style={{ height: 200 }}>
                        <MapView
                            style={{ width: width, height: 200 }}
+                           zoomEnabled
                            zoomControlEnabled
                            maxZoomLevel={20}
-                           minZoomLevel={16}
+                           minZoomLevel={14}
                            region={this.state.region}
-                           onRegionChange={this.onRegionChange}
+                           onRegionChangeComplete={this.onRegionChange}
+                           onRegionChange={this.onLocationChange}
                        >
                             <Marker
                                 coordinate={{latitude: this.state.region.latitude, longitude: this.state.region.longitude}}
@@ -178,6 +259,7 @@ class MyMap extends Component {
                            <TextInput 
                                 placeholder="Home"
                                 onChangeText={(text) => this.ChangeNameText(text)}
+                                value={this.state.name}
                             />
                        </View>
                        <View>
@@ -185,20 +267,23 @@ class MyMap extends Component {
                            <TextInput 
                                 placeholder="Enter Building Name"
                                 onChangeText={(text) => this.ChangeBuildingText(text)}
+                                value={this.state.buildingName}
                             />
                        </View>
                        <View>
                            <Text style={styleSelf.inputTitleStyle}>APARTMENT / VILLA NO.</Text>
                            <TextInput 
                                 placeholder="Enter Apartment/ vill No."
-                                onChangeText={(text) => this.ChangeVillaNoText(text)} 
+                                onChangeText={(text) => this.ChangeVillaNoText(text)}
+                                value={this.state.villaNo}
                            />
                        </View>
                        <View>
                            <Text style={styleSelf.inputTitleStyle}>ADDRESS (NEAREST LANDMARK)</Text>
                            <TextInput 
                                 placeholder="Enter landmark" 
-                                onChangeText={(text) => this.ChangeLandmarkText(text)} 
+                                onChangeText={(text) => this.ChangeLandmarkText(text)}
+                                value={this.state.formatted_address? this.state.formatted_address : this.state.landmark}
                            />
                        </View>
                    </View>
