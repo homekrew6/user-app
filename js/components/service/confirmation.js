@@ -94,9 +94,7 @@ class Confirmation extends Component {
     }
 
     render() {
-        BackHandler.addEventListener('hardwareBackPress', function() {
-            this.props.navigation.navigate('ServiceDetails');
-        });
+
         return (
             <Container >
                 <FSpinner visible={this.state.loader} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
