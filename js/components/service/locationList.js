@@ -10,6 +10,7 @@ import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api';
 import { setServiceDetails } from './elements/serviceActions';
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
@@ -46,7 +47,7 @@ class LocationList extends Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const customerId = this.props.auth.data.id;
         const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`
         api.get(getLocationUrl).then(res => {
@@ -128,6 +129,14 @@ class LocationList extends Component {
         }
 
     }
+
+    navigate() {
+        const data = this.props.auth.data;
+        data.activeScreen = 'Confirmation';
+        data.previousScreen = "ServiceDetails";
+        this.props.navigateAndSaveCurrentScreen(data);
+        this.props.navigation.navigate('Confirmation');
+    }
     locationDone() {
         let loc;
         this.state.homeArray.map((loc1) => {
@@ -140,7 +149,7 @@ class LocationList extends Component {
             // data.serviceLocation = this.state.homeArray;
             data.serviceLocation = loc;
             this.props.setServiceDetails(data);
-            this.props.navigation.navigate('Confirmation');
+            this.navigate();
         }
 
     }
@@ -210,7 +219,8 @@ const mapStateToProps = state => ({
     service: state.service,
 });
 const mapDispatchToProps = dispatch => ({
-    setServiceDetails: (data) => dispatch(setServiceDetails(data))
+    setServiceDetails: (data) => dispatch(setServiceDetails(data)),
+    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocationList);

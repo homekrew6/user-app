@@ -9,6 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api';
 import { setServiceDetails } from './elements/serviceActions';
+import { navigateAndSaveCurrentScreen} from '../accounts/elements/authActions';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker } from 'native-base';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -48,29 +49,34 @@ class Categories extends Component {
         api.post('serviceZones/getZoneRelatedService', { id: res.zone[0].id }).then((resService) => {
           //console.log(res);
           if (resService.response.length > 0) {
-            this.setState({ serviceList: resService.response })
+            this.setState({ serviceList: resService.response });
             //console.log(this.state.serviceList)
-            this.setState({ visible: false })
+            this.setState({ visible: false });
           }
         }).catch((err) => {
           //console.log(err);
-          this.setState({ visible: false })
+          this.setState({ visible: false });
         });
 
       }
     }).catch((err) => {
-      this.setState({ visible: false })
+      this.setState({ visible: false });
     });
   }
   openModal(data) {
     console.log('data on open Modal', data);
     //Alert.alert('Click is working');
     this.props.setServiceDetails(data);
-    this.setState({ IsModalVisible: true })
+    this.setState({ IsModalVisible: true });
   }
   closeModal() {
     //Alert.alert('Click is working');
     this.setState({ IsModalVisible: false });
+    const data=this.props.auth.data;
+    data.activeScreen ="ServiceDetails";
+    data.previousScreen="Category";
+    this.props.navigateAndSaveCurrentScreen(data);
+    console.log(this.props.auth.data);
     this.props.navigation.navigate('ServiceDetails');
   }
   onValueChange(value) {
@@ -211,7 +217,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setServiceDetails: (data) => dispatch(setServiceDetails(data))
+  setServiceDetails: (data) => dispatch(setServiceDetails(data)),
+  navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);

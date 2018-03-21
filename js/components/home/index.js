@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {NavigationActions} from "react-navigation";
-import { Image, View, StatusBar, ImageBackground } from "react-native";
+import { Image, View, StatusBar, ImageBackground, Alert} from "react-native";
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {checkAuth, getUserDetail} from '../accounts/elements/authActions'

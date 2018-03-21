@@ -9,7 +9,7 @@ import styles from './styles';
 import { Calendar } from 'react-native-calendars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 
 
 
@@ -34,13 +34,10 @@ class DateAndTime extends Component {
 
         date = today.getFullYear() + "-" + dy + "-" + dm;
         this.state = {
-            daYSelected: props.service.data.daYSelectedDate ? props.service.data.daYSelectedDate : '',
+            daYSelected: [date],
             minDate: [today],
             weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-            daYSelectedString: [{
-                date : "", time : "", fullFormat: '',
-        }],
             colectionData: [
                 { key: '1', time: '00:00AM', isActive: false },
                 { key: '2', time: '01:00AM', isActive: false },
@@ -67,7 +64,7 @@ class DateAndTime extends Component {
                 { key: '23', time: '10:00PM', isActive: false },
                 { key: '24', time: '11:00PM', isActive: false }
             ],
-            satDate: this.props.service.data.daYSelected,
+            satDate: '',
             setTime: '',
             setWeek: '',
             serviceDetails: this.props.service.data,
@@ -86,14 +83,14 @@ class DateAndTime extends Component {
         weekday[6] = "Sat";
 
         let n = weekday[d.getDay()];
-        console.log(n);
+        console.log(n)
+;
         //console.log(day);
         this.setState({
             daYSelected: day.dateString,
             satDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
             setWeek: n
         })
-        this.props.service.data.daYSelectedDate = day.dateString;
 
     }
     pressOnCircle(index) {
@@ -106,7 +103,6 @@ class DateAndTime extends Component {
                 this.setState({
                     setTime: newColectionData[i].time,
                 })
-                this.props.service.data.setTimeId = newColectionData[i].key
             }
 
         }
@@ -114,46 +110,24 @@ class DateAndTime extends Component {
             colectionData: newColectionData,
         })
     }
-    setDateAndTime() {
-
-        if (this.state.setWeek && this.state.satDate && this.state.setTime)
-        {
-            console.log(this.props.service.data.daYSelected + 'done');
-            if (this.state.satDate == '') {
-                Alert.alert('Please set a Date');
-            } else if (this.state.setTime == '') {
-                Alert.alert('Please set a Time');
-            } else {
-                let data = this.state.serviceDetails;
-                //data.satDate = this.state.satDate;
-                //data.serviceTimeDetails = { date: 'aaa', timeKey: 'bbbbb', fullFormat: 'cccc'}
-
-                data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
-                this.props.setDateAndTime(data);
-                console.log(this.state.setWeek + ' , ' + this.state.satDate + ' , ' + this.state.setTime);
-                this.props.navigation.navigate('Confirmation');
-            } 
-        }
-        else
-        {
-            this.props.navigation.navigate('Confirmation');
-        }
-        
+    navigate() {
+        const data = this.props.auth.data;
+        data.activeScreen = 'Confirmation';
+        data.previousScreen = "ServiceDetails";
+        this.props.navigateAndSaveCurrentScreen(data);
+        this.props.navigation.navigate('Confirmation');
     }
-
-    componentWillMount(){
-        let newColectionData = this.state.colectionData;
-        if (this.props.service.data.setTimeId){
-            for (var i = 0; i < (newColectionData.length); i++) {
-                newColectionData[i].isActive = false;
-                if (newColectionData[i].key == this.props.service.data.setTimeId) {
-                    newColectionData[i].isActive = true;
-                    this.setState({
-                        setTime: newColectionData[i].time,
-                    })
-                }
-
-            }
+    setDateAndTime() {
+        console.log(this.props.service);
+        if (this.state.satDate == '') {
+            Alert.alert('Please set a Date');
+        } else if (this.state.setTime == '') {
+            Alert.alert('Please set a Time');
+        } else {
+            let data = this.state.serviceDetails;
+            data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
+            this.props.setDateAndTime(data);
+            this.navigate();
         }
     }
 
@@ -245,18 +219,21 @@ class DateAndTime extends Component {
 }
 
 DateAndTime.propTypes = {
-    service: PropTypes.object.isRequired
+    service: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => {
     return {
         service: state.service,
+        auth: state.auth
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setDateAndTime: (data) => dispatch(setDateAndTime(data))
+        setDateAndTime: (data) => dispatch(setDateAndTime(data)),
+        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
     }
 }
 

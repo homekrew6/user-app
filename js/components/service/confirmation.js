@@ -13,7 +13,8 @@ import { NavigationActions } from 'react-navigation';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-import api from '../../api/index'
+import api from '../../api/index';
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 const resetAction = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'Menu' })],
@@ -81,12 +82,18 @@ class Confirmation extends Component {
         }
 
     }
-
+    navigate(screen) {
+        const data = this.props.auth.data;
+        data.activeScreen = screen;
+        data.previousScreen = "Confirmation";
+        this.props.navigateAndSaveCurrentScreen(data);
+        this.props.navigation.navigate(screen);
+    }
 
     goToSpListing() {
         
         if (this.state.dateTime) {
-            this.props.navigation.navigate('ServiceProviderListing');
+            this.navigate('ServiceProviderListing');
         }
         else {
             Alert.alert('Please select date and time to see the service providers available.');
@@ -94,7 +101,6 @@ class Confirmation extends Component {
     }
 
     render() {
-
         return (
             <Container >
                 <FSpinner visible={this.state.loader} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
@@ -131,7 +137,7 @@ class Confirmation extends Component {
                     </View>
                     <View>
 
-                        <TouchableOpacity style={[styles.confirmationItem]} onPress={() => this.props.navigation.navigate('DateAndTime')}>
+                        <TouchableOpacity style={[styles.confirmationItem]} onPress={() => this.navigate('DateAndTime')}>
                             <View style={styles.confirmationIconView}>
                                 <Ico name='alarm' style={styles.confirmationViewIcon}></Ico>
                             </View>
@@ -142,7 +148,7 @@ class Confirmation extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate('LocationList')}>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.navigate('LocationList')}>
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='location' style={styles.confirmationViewIcon} />
                             </View>
@@ -235,7 +241,7 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {}
-}
+const mapDispatchToProps = dispatch => ({
+    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
+});
 export default connect(mapStateToProps, mapDispatchToProps)(Confirmation);

@@ -18,6 +18,7 @@ import I18n from '../../i18n/i18n';
 import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';
 import { setServiceDetails } from './elements/serviceActions';
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import { RNS3 } from 'react-native-aws3';
 import config from '../../config';
 const deviceHeight = Dimensions.get('window').height;
@@ -374,6 +375,17 @@ class serviceDetails extends Component {
 
   }
 
+
+  goToConfirmation()
+  {
+    const data = this.props.auth.data;
+    data.activeScreen = "Confirmation";
+    data.previousScreen ="ServiceDetails";
+    this.props.navigateAndSaveCurrentScreen(data);
+    console.log(this.props.auth.data);
+    this.props.navigation.navigate('Confirmation');
+  }
+
   render() {
 
     let questionList = (
@@ -652,7 +664,7 @@ class serviceDetails extends Component {
           this.state.questionList.length > 0 ? (
             <Footer>
               <FooterTab>
-                <TouchableOpacity style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt} onPress={() => this.props.navigation.navigate('Confirmation')}>CONTINUE</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => this.goToConfirmation()} style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt} >CONTINUE</Text></TouchableOpacity>
                 <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
               </FooterTab>
             </Footer>
@@ -676,7 +688,8 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
   getQuestionListByServiceId: (data) => dispatch(getQuestionListByServiceId(data)),
-  setServiceDetails: (data) => dispatch(setServiceDetails(data))
+  setServiceDetails: (data) => dispatch(setServiceDetails(data)),
+  navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(serviceDetails);

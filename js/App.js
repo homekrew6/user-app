@@ -2,18 +2,18 @@
 
 import React from "react";
 
-import { Platform } from "react-native";
+import { Platform, BackHandler, Alert } from "react-native";
 import { Root } from "native-base";
-import { StackNavigator } from "react-navigation";
+import { StackNavigator, NavigationActions } from "react-navigation";
 
 import Drawer from "./Drawer";
-import Intro  from "./components/intro";
-import Demo  from "./components/intro/demo";
-import Signup  from "./components/accounts/signup";
-import Login  from "./components/accounts/login";
-import ForgotPassword  from "./components/accounts/forgot_password";
+import Intro from "./components/intro";
+import Demo from "./components/intro/demo";
+import Signup from "./components/accounts/signup";
+import Login from "./components/accounts/login";
+import ForgotPassword from "./components/accounts/forgot_password";
 import ResetPassword from "./components/accounts/reset_password";
-import Menu  from "./components/accounts/menu";
+import Menu from "./components/accounts/menu";
 import EditProfile from "./components/accounts/edit_profile";
 import Category from "./components/service/category";
 import Confirmation from "./components/service/confirmation";
@@ -30,12 +30,12 @@ import ThankYou from "./components/promoCode/thankYou";
 const AppNavigator = StackNavigator(
     {
         Drawer: { screen: Drawer },
-        Intro: {screen: Intro},
-        Demo: {screen: Demo},
-        Signup: {screen: Signup},
-        Login: {screen: Login},
-        ForgotPassword: {screen: ForgotPassword},
-        ResetPassword: {screen: ResetPassword},
+        Intro: { screen: Intro },
+        Demo: { screen: Demo },
+        Signup: { screen: Signup },
+        Login: { screen: Login },
+        ForgotPassword: { screen: ForgotPassword },
+        ResetPassword: { screen: ResetPassword },
         Menu: { screen: Menu },
         EditProfile: { screen: EditProfile },
         Category: { screen: Category },
@@ -46,7 +46,7 @@ const AppNavigator = StackNavigator(
         LocationList: { screen: LocationList },
         MyLocation: { screen: MyLocation },
         MyMap: { screen: MyMap },
-        ServiceProviderListing:{screen:ServiceProviderListing},
+        ServiceProviderListing: { screen: ServiceProviderListing },
         MyPromoCode: { screen: MyPromoCode },
         ThankYou: { screen: ThankYou },
     },
@@ -55,6 +55,41 @@ const AppNavigator = StackNavigator(
         headerMode: "none",
     }
 );
+// const defaultStackGetStateForAction =
+//     AppNavigator.router.getStateForAction;
+// AppNavigator.router.getStateForAction = (action, state) => {
+//     if (state && action) {
+//         if (state.index === 0 && action.type === NavigationActions.BACK) {
+//             Alert.alert(
+//                 'Confirm',
+//                 'Are you sure to exit the app?',
+//                 [
+//                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+//                     { text: 'OK', onPress: () => BackHandler.exitApp() },
+//                 ],
+//                 { cancelable: false }
+//             )
+
+
+//             // BackHandler.exitApp();
+//             //return null;
+//         }
+
+//         else {
+//             if (state.routes && state.routes.length && state.routes.length > 1) {
+//                 let index = state.routes.length - 1;
+//                 if (state.routes[index].routeName == 'Confirmation') {
+//                     debugger;
+//                     console.log(AppNavigator);
+//                 }
+//             }
+//         }
+//     }
+
+
+//     return defaultStackGetStateForAction(action, state);
+// };
+
 
 
 export default () =>
