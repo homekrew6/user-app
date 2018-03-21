@@ -84,6 +84,7 @@ class Confirmation extends Component {
 
 
     goToSpListing() {
+        
         if (this.state.dateTime) {
             this.props.navigation.navigate('ServiceProviderListing');
         }
