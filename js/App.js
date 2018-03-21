@@ -56,6 +56,7 @@ const AppNavigator = StackNavigator(
     }
 );
 
+
 export default () =>
     <Root>
         <AppNavigator />

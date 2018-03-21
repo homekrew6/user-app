@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { logout } from './elements/authActions'
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler } from "react-native";
+import FCM, {NotificationActionType} from "react-native-fcm";
 
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title  } from "native-base";
 
@@ -45,24 +46,68 @@ class Menu extends Component {
     }
 
     render() {
-      let self=this;
-      BackHandler.addEventListener('hardwareBackPress', function() {
-        console.log('menu props', self);
-        //debugger;
-        if(self.props.navigation.state.routeName === 'Menu'){
-          Alert.alert(
-            'Confirm',
-            'Are you sure to exit the app?',
-            [
-              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-              {text: 'OK', onPress: () =>  BackHandler.exitApp()},
-            ],
-            { cancelable: false }
-          )
-        }
+      //let self=this;
+      // BackHandler.addEventListener('hardwareBackPress', function() {
+      //   console.log('menu props', self);
+      //   //debugger;
+      //   if(self.props.navigation.state.routeName === 'Menu'){
+      //     Alert.alert(
+      //       'Confirm',
+      //       'Are you sure to exit the app?',
+      //       [
+      //         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+      //         {text: 'OK', onPress: () =>  BackHandler.exitApp()},
+      //       ],
+      //       { cancelable: false }
+      //     )
+      //   }
         
-        return true;
-      });
+      //   return true;
+      // });
+
+      
+      // FCM.presentLocalNotification({
+      //   id: new Date().valueOf().toString(),                // (optional for instant notification)
+      //   title: "Test Notification with action",             // as FCM payload
+      //   body: "Force touch to reply",                       // as FCM payload (required)
+      //   sound: "bell.mp3",                                  // "default" or filename
+      //   priority: "high",                                   // as FCM payload
+      //   click_action: "com.myapp.MyCategory",               // as FCM payload - this is used as category identifier on iOS.
+      //   badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+      //   number: 10,                                         // Android only
+      //   ticker: "My Notification Ticker",                   // Android only
+      //   auto_cancel: true,                                  // Android only (default true)
+      //   large_icon: "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg",                           // Android only
+      //   icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+      //   big_text: "Show when notification is expanded",     // Android only
+      //   sub_text: "This is a subText",                      // Android only
+      //   color: "red",                                       // Android only
+      //   vibrate: 300,                                       // Android only default: 300, no vibration if you pass 0
+      //   wake_screen: true,                                  // Android only, wake up screen when notification arrives
+      //   group: "group",                                     // Android only
+      //   picture: "https://google.png",                      // Android only bigPicture style
+      //   ongoing: true,                                      // Android only
+      //   my_custom_data:'my_custom_field_value',             // extra data you want to throw
+      //   lights: true,                                       // Android only, LED blinking (default false)
+      //   show_in_foreground: true                           // notification when app is in foreground (local & remote)
+      // });
+
+
+      // FCM.presentLocalNotification({
+      //   title: 'Test Notification with action',
+      //   body: 'Force touch to reply',
+      //   priority: "high",
+      //   show_in_foreground: true,
+      //   click_action: "com.myidentifi.fcm.text", // for ios
+      //   android_actions: JSON.stringify([{
+      //     id: "view",
+      //     title: 'view'
+      //   },{
+      //     id: "dismiss",
+      //     title: 'dismiss'
+      //   }]) // for android, take syntax similar to ios's. only buttons are supported
+      // });
+
         return (
             <Container >
               <StatusBar

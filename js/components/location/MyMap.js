@@ -21,6 +21,7 @@ class MyMap extends Component {
         landmark: '',
         formatted_address: '',
         IsSpinnerVisible: false,
+        locationChange: false,
 
     }
     componentDidMount(){
@@ -48,6 +49,11 @@ class MyMap extends Component {
         console.log('region', region);
         this.setState({ region: region });
     }
+    onLocationChange =(region) => {
+        if(this.state.locationChange){
+            this.setState({ region: region });
+        }
+    }
     ChangeNameText(text){
         this.setState({ name: text });
     }
@@ -58,7 +64,6 @@ class MyMap extends Component {
         this.setState({ villaNo: text });
     }
     ChangeLandmarkText(text){
-
         this.setState({ landmark: text });
     }
 
@@ -169,21 +174,21 @@ class MyMap extends Component {
                             console.log('on list click of map', data, details);
                             console.log(typeof(details.geometry.location.lat));
                             console.log('lat', details.geometry.location.lat);
-                            this.setState({ BusinessName: details.name, formatted_address: details.formatted_address });
+                            this.setState({ 
+                                BusinessName: details.name, 
+                                formatted_address: details.formatted_address,
+                                locationChange: true,
+                            });
                             const region = {
                                     latitude: details.geometry.location.lat,
                                     longitude: details.geometry.location.lng,
                                     latitudeDelta: 0.0922,
                                     longitudeDelta: 0.0421,
                                   }
-                              
                             this.onRegionChange(region);
                             //this.setState({ region: region });
-                            
                         }}
-                        
                         getDefaultValue={() => ''}
-                        
                         query={{
                             key: 'AIzaSyCya136InrAdTM3EkhM9hryzbCcfTUu7UU',
                             language: 'en', // language of the results
@@ -231,12 +236,13 @@ class MyMap extends Component {
                    <View style={{ height: 200 }}>
                        <MapView
                            style={{ width: width, height: 200 }}
+                           zoomEnabled
                            zoomControlEnabled
                            maxZoomLevel={20}
-                           minZoomLevel={10}
+                           minZoomLevel={14}
                            region={this.state.region}
-                           //onRegionChangeComplete={this.onRegionChange}
-                           onRegionChange={this.onRegionChange}
+                           onRegionChangeComplete={this.onRegionChange}
+                           onRegionChange={this.onLocationChange}
                        >
                             <Marker
                                 coordinate={{latitude: this.state.region.latitude, longitude: this.state.region.longitude}}
