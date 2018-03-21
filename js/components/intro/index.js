@@ -157,7 +157,7 @@ class Intro extends Component {
 					style={styles.wrapper}
 					loop={true}
 					autoplay={true}
-					autoplayTimeout={5}
+					autoplayTimeout={10}
 					dotColor={'#81cdc7'}
 					activeDotColor={'#1e3768'}
 

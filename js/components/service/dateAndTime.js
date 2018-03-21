@@ -9,7 +9,7 @@ import styles from './styles';
 import { Calendar } from 'react-native-calendars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 
 
 
@@ -109,6 +109,13 @@ class DateAndTime extends Component {
             colectionData: newColectionData,
         })
     }
+    navigate() {
+        const data = this.props.auth.data;
+        data.activeScreen = 'Confirmation';
+        data.previousScreen = "ServiceDetails";
+        this.props.navigateAndSaveCurrentScreen(data);
+        this.props.navigation.navigate('Confirmation');
+    }
     setDateAndTime() {
         console.log(this.props.service);
         if (this.state.satDate == '') {
@@ -119,7 +126,7 @@ class DateAndTime extends Component {
             let data = this.state.serviceDetails;
             data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
             this.props.setDateAndTime(data);
-            this.props.navigation.navigate('Confirmation');
+            this.navigate();
         }
     }
 
@@ -211,18 +218,21 @@ class DateAndTime extends Component {
 }
 
 DateAndTime.propTypes = {
-    service: PropTypes.object.isRequired
+    service: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => {
     return {
         service: state.service,
+        auth: state.auth
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setDateAndTime: (data) => dispatch(setDateAndTime(data))
+        setDateAndTime: (data) => dispatch(setDateAndTime(data)),
+        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
     }
 }
 
