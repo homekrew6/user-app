@@ -36,7 +36,8 @@ class Categories extends Component {
       serviceList: [],
       selectedZoneDetails: '',
       visible: true,
-      IsModalVisible: false
+      IsModalVisible: false,
+      selectedServiceName: ''
     };
   }
 
@@ -46,10 +47,18 @@ class Categories extends Component {
       if (res.zone.length > 0) {
         this.setState({ zoneList: res.zone, selectedZoneDetails: res.zone[0], selected1: res.zone[0].id })
 
-        api.post('serviceZones/getZoneRelatedService', { id: res.zone[0].id }).then((resService) => {
-          //console.log(res);
+        api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
+          console.log('khalid', resService);
           if (resService.response.length > 0) {
-            this.setState({ serviceList: resService.response });
+
+
+            let zoneServiceIdCheck = [];
+            resService.response.map((data, key)=>{
+              if(data.service && (data.service.is_active === true || data.service.is_active === null)){
+                zoneServiceIdCheck.push(data)
+              }
+            })
+            this.setState({ serviceList: zoneServiceIdCheck });
             //console.log(this.state.serviceList)
             this.setState({ visible: false });
           }
@@ -67,7 +76,7 @@ class Categories extends Component {
     console.log('data on open Modal', data);
     //Alert.alert('Click is working');
     this.props.setServiceDetails(data);
-    this.setState({ IsModalVisible: true });
+    this.setState({ IsModalVisible: true, selectedServiceName: data.name });
   }
   closeModal() {
     //Alert.alert('Click is working');
@@ -76,7 +85,6 @@ class Categories extends Component {
     data.activeScreen ="ServiceDetails";
     data.previousScreen="Category";
     this.props.navigateAndSaveCurrentScreen(data);
-    console.log(this.props.auth.data);
     this.props.navigation.navigate('ServiceDetails');
   }
   onValueChange(value) {
@@ -106,6 +114,7 @@ class Categories extends Component {
 
       serviceListing = (
         this.state.serviceList.map((data, key) => {
+          console.log('category list', data)
           if (!data.service) return;
           return (
             <View key={data.id} style={styles.catIten}>
@@ -177,25 +186,34 @@ class Categories extends Component {
             animationOut="slideOutRight"
             hideModalContentWhileAnimating={true}
           >
-            <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, height: 20, width: 20 }} onPress={() => this.closeModal()}>
+          <TouchableOpacity 
+            activeOpacity={1} 
+            onPressOut={() => this.setState({IsModalVisible : false})}
+            style={{  flex: 1, alignItems: 'center', justifyContent: 'center' , flexDirection: 'row'}}
+          >
+            {/* <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, height: 20, width: 20 }} onPress={() => this.setState({ IsModalVisible: false })}>
               <Ionicons name='md-close-circle' style={{ fontSize: 20, color: 'white' }} />
-            </TouchableOpacity>
-            <View style={{ alignItems: 'center', marginBottom: 15 }}>
-              <Text style={{ color: '#fff', fontSize: 20 }}>Cleaning</Text>
+            </TouchableOpacity> */}
+
+            <View style={{ flex: 1 }}>
+              <View style={{ alignItems: 'center', marginBottom: 15 }}>
+                <Text style={{ color: '#fff', fontSize: 20 }}>{this.state.selectedServiceName}</Text>
+              </View>
+              <View style={{   }} >
+                <View style={{ backgroundColor: '#fff', borderRadius: 10, }}>
+                  <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
+                    <Ionicons name='md-home' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
+                    <Text>{I18n.t('home')}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
+                    <Ico name='business' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
+                    <Text>{I18n.t('office')}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-
-            <View style={{ backgroundColor: '#fff', borderRadius: 10, }}>
-              <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name='md-home' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
-                <Text>{I18n.t('home')}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
-                <Ico name='business' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
-                <Text>{I18n.t('office')}</Text>
-              </TouchableOpacity>
-            </View>
-
-
+            
+          </TouchableOpacity>
           </Modal>
           <View style={styles.catIten_txt_warp}>
             {serviceListing}
