@@ -26,6 +26,7 @@ import MyLocation from "./components/location/MyLocation";
 import ServiceProviderListing from './components/service/serviceProviderListing';
 import MyPromoCode from "./components/promoCode/myPromoCode";
 import ThankYou from "./components/promoCode/thankYou";
+import JobListing from "./components/jobs/jobListing";
 
 const AppNavigator = StackNavigator(
     {
@@ -49,9 +50,10 @@ const AppNavigator = StackNavigator(
         ServiceProviderListing: { screen: ServiceProviderListing },
         MyPromoCode: { screen: MyPromoCode },
         ThankYou: { screen: ThankYou },
+        JobListing: { screen: JobListing },
     },
     {
-        initialRouteName: "Drawer",
+        initialRouteName: "JobListing",
         headerMode: "none",
     }
 );
