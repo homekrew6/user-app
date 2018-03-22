@@ -71,6 +71,10 @@ class DateAndTime extends Component {
         };
     }
 
+    componentDidMount(){
+        console.log('this service timing', this);
+    }
+
     onDaySelect(day) {
         let d = new Date(day.dateString);
         let weekday = new Array(7);
@@ -83,8 +87,7 @@ class DateAndTime extends Component {
         weekday[6] = "Sat";
 
         let n = weekday[d.getDay()];
-        console.log(n)
-;
+        console.log(n);
         //console.log(day);
         this.setState({
             daYSelected: day.dateString,

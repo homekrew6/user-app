@@ -269,11 +269,10 @@ class serviceDetails extends Component {
         }
       }
 
-
-
-
     }
   }
+
+ 
   componentWillMount() {
     this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
       if (res.type == "success") {

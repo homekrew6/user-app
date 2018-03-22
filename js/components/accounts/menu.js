@@ -79,6 +79,7 @@ class Menu extends Component {
         // else {
         //   this.props.navigation.navigate('Menu');
         // }
+
         switch (this.props.auth.data.activeScreen) {
           case "EditProfile":
             saveData.activeScreen = "Menu";
@@ -87,9 +88,9 @@ class Menu extends Component {
             break;
 
           case "Category":
-            saveData.activeScreen = "Menu";
-            saveData.previousScreen = "";
-            this.props.navigateAndSaveCurrentScreen(saveData);
+            // saveData.activeScreen = "Menu";
+            // saveData.previousScreen = "";
+            // this.props.navigateAndSaveCurrentScreen(saveData);
             break;
           case "MyLocation":
             saveData.activeScreen = "Menu";
@@ -97,14 +98,14 @@ class Menu extends Component {
             this.props.navigateAndSaveCurrentScreen(saveData);
             break;
           case "ServiceDetails":
-            saveData.activeScreen = "Category";
-            saveData.previousScreen = "Menu";
-            this.props.navigateAndSaveCurrentScreen(saveData);
+            //saveData.activeScreen = "Category";
+            //saveData.previousScreen = "Menu";
+            //this.props.navigateAndSaveCurrentScreen(saveData);
             break;
           case "Confirmation":
-            // saveData.activeScreen = "ServiceDetails";
-            // saveData.previousScreen = "Category";
-            // this.props.navigateAndSaveCurrentScreen(saveData);
+             saveData.activeScreen = "Confirmation";
+             saveData.previousScreen = "Category";
+             this.props.navigateAndSaveCurrentScreen(saveData);
             break;
           case "DateAndTime":
             saveData.activeScreen = "Confirmation";
@@ -119,15 +120,38 @@ class Menu extends Component {
           default:
             break;
         }
-        if (this.props.auth.data.activeScreen == 'Confirmation') {
+        if (this.props.auth.data.activeScreen == 'Confirmation' ) {
           saveData.activeScreen = "ServiceDetails";
           saveData.previousScreen = "Category";
           this.props.navigateAndSaveCurrentScreen(saveData);
-          this.props.navigation.navigate('ServiceDetails');
+          console.log('stack menu', this.props);
+          this.props.navigation.dispatch({
+            routeName: 'ServiceDetails'
+          });
+          Alert.alert(
+            'Confirm',
+            'Your data will be lost',
+            [
+              { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+              { text: 'OK', onPress: () => this.props.navigation.navigate('ServiceDetails') },
+            ],
+            { cancelable: false }
+          )
+          //this.props.navigation.navigate('ServiceDetails');
+          //console.log()
           //this.props.navigation.dispatch(NavigationActions.back({ routeName:'ServiceDetails'}));
           return true;
-        }
-        else {
+        }else if(this.props.auth.data.activeScreen === 'ServiceDetails'){
+          saveData.activeScreen = "Category";
+          saveData.previousScreen = "Menu";
+          this.props.navigateAndSaveCurrentScreen(saveData);
+          this.props.navigation.navigate('Category')
+        }else if(this.props.auth.data.activeScreen === 'Category'){
+          saveData.activeScreen = "Menu";
+          saveData.previousScreen = "";
+          this.props.navigateAndSaveCurrentScreen(saveData);
+          this.props.navigation.navigate('Menu')
+        }else {
           this.props.navigation.goBack(null);
           return true;
         }
