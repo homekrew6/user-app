@@ -13,7 +13,7 @@ import IncrimentDecriment from './incrimentDecrimentCompt';
 import Slider from 'react-native-slider';
 import { getQuestionListByServiceId } from './elements/serviceActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker, Switch, Footer, FooterTab } from 'native-base';
+import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker, Switch, Footer, FooterTab,ActionSheet } from 'native-base';
 import I18n from '../../i18n/i18n';
 import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';
@@ -33,7 +33,10 @@ const img20 = require('../../../img/swiper-2.png');
 const img21 = require('../../../img/swiper-2.png');
 const img22 = require('../../../img/swiper-2.png');
 
-
+var BUTTONS = [
+  { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
+  { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+];
 class serviceDetails extends Component {
   constructor(props) {
     super(props);
@@ -89,8 +92,9 @@ class serviceDetails extends Component {
 
 
   }
-  uploadPhoto() {
-    this.setState({ IsSpinnerVisible: true });
+  captureFile()
+  {
+this.setState({ IsSpinnerVisible: true });
     ImagePicker.openCamera({
       width: 400,
       height: 300,
@@ -146,7 +150,90 @@ class serviceDetails extends Component {
       console.log(err);
     });
   }
+
+  attachFile() {
+    // this.setState({ uploadButton: false });
+
+    ImagePicker.openPicker({
+      width: 400,
+      height: 300,
+      cropping: true,
+    }).then((response) => {
+      this.setState({ visible: true });
+      let uri;
+      if (!response.path) {
+        uri = response.uri;
+      } else {
+        uri = response.path;
+      }
+      const file = {
+        uri,
+        name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
+        type: response.mime || 'image/png',
+      };
+
+      const options = config.s3;
+
+      RNS3.put(file, config.s3).then((response) => {
+        console.log(response);
+        if (response.status !== 201) {
+          this.setState({ IsSpinnerVisible: false });
+          throw new Error('Failed to upload image to S3');
+        }
+
+
+        if (response.status == 201) {
+          let slider = [];
+          this.state.sliderData.map(sdata => {
+            slider.push(sdata);
+          });
+          let lengthOfSlider = slider.length;
+          lengthOfSlider = lengthOfSlider - 1;
+          let latestKey = slider[lengthOfSlider].key;
+          latestKey = latestKey + 1;
+          let newData = {
+            'src': response.body.postResponse.location,
+            'key': latestKey
+          };
+          slider.push(newData);
+          this.setState({ IsSpinnerVisible: false });
+          this.setState({ sliderData: slider });
+        }
+      }).catch((err) => {
+        console.log(err);
+        this.setState({ IsSpinnerVisible: false });
+      });
+    }).catch((err) => {
+      this.setState({ IsSpinnerVisible: false });
+      // console.log(err);
+      // this.setState({ uploadButton: true });
+    });
+  }
+  fileUploadType(buttonIndex) {
+    if (buttonIndex == 0) {
+      this.captureFile();
+    }
+    if (buttonIndex == 1) {
+      this.attachFile();
+    }
+  }
+  uploadPhoto() {
+    ActionSheet.show(
+      {
+        options: BUTTONS,
+      },
+      (buttonIndex) => {
+        this.setState({ clicked: BUTTONS[buttonIndex] });
+        // this.setState({ filecat: buttonIndex });
+        console.log(buttonIndex);
+        // this.setState({ filecat: buttonIndex});
+        this.fileUploadType(buttonIndex);
+      },
+    )
+    
+  }
   changeActiveRadio(data) {
+    debugger;
     data.selected = !data.selected;
     let dataselected = data;
     let item;
