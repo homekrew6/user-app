@@ -39,6 +39,9 @@ class Confirmation extends Component {
 
     }
 
+    componentDidMount(){
+        console.log('this confirm', this);
+    }
    
 
     confirmationContinue() {
