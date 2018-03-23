@@ -753,6 +753,7 @@ class serviceDetails extends Component {
     else{
       this.props.navigation.dispatch(resetAction);
     }
+  }
     
 
 

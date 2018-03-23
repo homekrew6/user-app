@@ -50,36 +50,54 @@ class Confirmation extends Component {
             loader: true,
         })
         if (!(this.state.dateTime == undefined)) {
-            api.post('jobs',
+            AsyncStorage.getItem("zoneId").then((zoneValue)=>{
+                if(zoneValue)
                 {
-                    "serviceId": this.props.service.data.id,
-                    "postedDate": this.props.service.data.saveDateDB,
-                    "location": this.props.service.data.serviceLocationid,
-                    "payment": "Credit Card",
-                    "faourite_sp": this.props.service.data.favouriteSp,
-                    "promo_code": "AED 50 off",
-                    "status": "STARTED",
-                    "userId": this.props.auth.data.id,
-                    "workerId": "0"
+                    debugger;
+                    api.post('jobs',
+                        {
+                            // "serviceId": this.props.service.data.id,
+                            // "postedDate": this.props.service.data.saveDateDB,
+                            // "location": this.props.service.data.serviceLocationid,
+                            // "payment": "Credit Card",
+                            // "faourite_sp": this.props.service.data.favouriteSp,
+                            // "promo_code": "AED 50 off",
+                            // "status": "STARTED",
+                            // "userId": this.props.auth.data.id,
+                            // "workerId": "0"
+                            "price": this.props.service.data.price,
+                            "postedDate": this.state.dateTime,
+                            "payment": "Credit Card",
+                            "faourite_sp": this.props.service.data.favouriteSp,
+                            "promo_code": "AED 50 off",
+                            "status": "STARTED",
+                            "customerId": this.props.auth.data.id,
+                            "currencyId": 0,
+                            "workerId": 0,
+                            "zoneId": zoneValue,
+                            "serviceId": this.props.service.data.id
+                        }
+                    ).then(responseJson => {
+                        // console.log(responseJson);
+                        AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
+                        AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
+                        AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
+                        Alert.alert("Job Posted Successfully");
+                        this.setState({
+                            loader: false,
+                            continueButtonDesable: true
+                        });
+                        this.props.navigation.dispatch(reseteAction);
+                    }).catch(err => {
+                        console.log(err);
+                        Alert.alert("Job Post not save");
+                        this.setState({
+                            loader: false,
+                        })
+                    })
                 }
-            ).then(responseJson => {
-                // console.log(responseJson);
-                AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
-                AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
-                AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
-                Alert.alert("Job Posted Successfully");
-                this.setState({
-                    loader: false,
-                    continueButtonDesable: true
-                });
-                this.props.navigation.dispatch(resetAction);
-            }).catch(err => {
-                console.log(err);
-                Alert.alert("Job Post not save");
-                this.setState({
-                    loader: false,
-                })
             })
+           
         }
         else {
             this.setState({

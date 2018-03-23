@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ImageBackground  } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ImageBackground, AsyncStorage  } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -39,17 +39,19 @@ class Categories extends Component {
       IsModalVisible: false,
       selectedServiceName: '',
       serviceId: '',
-      locationArray: ''
+      locationArray: []
     };
   }
 
   componentWillMount() {
-    console.log("login check"+ this.props.auth.data);
+    
     api.get('Zones/getParentZone').then((res) => {
       //console.log(res);
       if (res.zone.length > 0) {
         this.setState({ zoneList: res.zone, selectedZoneDetails: res.zone[0], selected1: res.zone[0].id })
+        AsyncStorage.setItem("zoneId", res.zone[0].id.toString()).then((res) => {
 
+        });
         api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
           console.log('khalid', resService);
           if (resService.response.length > 0) {
@@ -76,16 +78,20 @@ class Categories extends Component {
     });
     if(this.props.auth.data)
     {
-      debugger;
+     
       let customerId = this.props.auth.data.id;
       const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`;
       api.get(getLocationUrl).then(res => {
-        console.log('user-locations' +  res);
+        //let newArray = res;
+        console.log('this is test');
         this.setState({ locationArray: res });
+        console.log(this.state.locationArray);
+        
       }).catch((err) => {
+        console.log("this is an error");        
         console.log(err);
       });
-
+      console.log(this.state.locationArray);
     }
   }
   openModal(data) {
@@ -114,13 +120,16 @@ class Categories extends Component {
     });
   }
   onValueChange(value) {
+    AsyncStorage.setItem("zoneId", value.toString()).then((res)=>{
+
+    });
     //console.log(value);
     this.setState({
       selected1: value,
     });
     this.setState({ visible: true })
-    api.post('serviceZones/getZoneRelatedService', { id: value }).then((res) => {
-      //console.log(res);
+    api.post('serviceZones/getZoneRelatedService', { zone: value }).then((res) => {
+      console.log(res.response);
       if (res.response.length > 0) {
         this.setState({ selectedZoneDetails: res.response[0].zone, serviceList: res.response })
         //console.log(this.state.selectedZoneDetails)
@@ -139,7 +148,24 @@ class Categories extends Component {
     this.props.navigation.navigate('ServiceDetails');
   }
   render() {
+
     let serviceListing;
+    let serviceType;
+
+    serviceType = (
+      this.state.locationArray.map((data, key) => {
+        //if (!data.service) return;
+        return (
+          <View style={{ backgroundColor: '#fff', borderRadius: 10, }} key={data.id}>
+            <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
+              <Ico name='business' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
+              <Text>{data.name}</Text>
+            </TouchableOpacity>
+          </View>
+        )
+      })
+    )
+
     if (this.state.serviceList.length > 0) {
 
       serviceListing = (
@@ -239,16 +265,17 @@ class Categories extends Component {
                 <Text style={{ color: '#fff', fontSize: 20 }}>{this.state.selectedServiceName}</Text>
               </View>
               <View style={{   }} >
-                <View style={{ backgroundColor: '#fff', borderRadius: 10, }}>
-                  <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
+                  {/* <View style={{ backgroundColor: '#fff', borderRadius: 10, }}>
+                   <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
                     <Ionicons name='md-home' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
                     <Text>{I18n.t('home')}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
                     <Ico name='business' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
                     <Text>{I18n.t('office')}</Text>
-                  </TouchableOpacity>
-                </View>
+                  </TouchableOpacity> 
+                </View> */}
+                  {serviceType}
               </View>
             </View>
             
