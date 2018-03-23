@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler } from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -29,6 +29,7 @@ class Confirmation extends Component {
         super(props);
         this.state = {
             dateTime: props.service.data.serviceTime,
+            saveDateDB: props.service.data.saveDateDB,
             serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : 'Home',
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,
@@ -52,19 +53,20 @@ class Confirmation extends Component {
             api.post('jobs',
                 {
                     "serviceId": this.props.service.data.id,
-                    "postedDate": this.state.dateTime,
-                    "location": "Home",
+                    "postedDate": this.props.service.data.saveDateDB,
+                    "location": this.props.service.data.serviceLocationid,
                     "payment": "Credit Card",
                     "faourite_sp": this.props.service.data.favouriteSp,
                     "promo_code": "AED 50 off",
                     "status": "STARTED",
-                    "userId": "3",
-                    "workerId": "1"
+                    "userId": this.props.auth.data.id,
+                    "workerId": "0"
                 }
             ).then(responseJson => {
                 // console.log(responseJson);
                 AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
                 AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
+                AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
                 Alert.alert("Job Posted Successfully");
                 this.setState({
                     loader: false,

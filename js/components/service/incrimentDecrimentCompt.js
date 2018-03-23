@@ -63,6 +63,9 @@ class incrimentDecriment extends Component {
             var data = this.props.service.data;
             price = this.addZeroes(price);
             data.price = price;
+            AsyncStorage.setItem("servicePrice", price).then((success)=>{
+            
+            })
             this.props.setServiceDetails(data);
         }
 
@@ -109,6 +112,9 @@ class incrimentDecriment extends Component {
                 var data = this.props.service.data;
                 price = this.addZeroes(price);
                 data.price = price;
+                AsyncStorage.setItem("servicePrice", price).then((success)=>{
+            
+                })
                 this.props.setServiceDetails(data);
             }
         }

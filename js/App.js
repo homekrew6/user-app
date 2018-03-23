@@ -53,7 +53,7 @@ const AppNavigator = StackNavigator(
         JobListing: { screen: JobListing },
     },
     {
-        initialRouteName: "JobListing",
+        initialRouteName: "Drawer",
         headerMode: "none",
     }
 );

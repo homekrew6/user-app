@@ -88,8 +88,6 @@ class DateAndTime extends Component {
         weekday[6] = "Sat";
 
         let n = weekday[d.getDay()];
-        console.log(n);
-        //console.log(day);
         this.setState({
             daYSelected: day.dateString,
             satDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
@@ -122,7 +120,9 @@ class DateAndTime extends Component {
         this.props.navigation.navigate('Confirmation');
     }
     setDateAndTime() {
-        console.log(this.props.service);
+        const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00';
+        console.log('saveDateDB', saveDateDB);
+
         if (this.state.satDate == '') {
             Alert.alert('Please set a Date');
         } else if (this.state.setTime == '') {
@@ -130,6 +130,7 @@ class DateAndTime extends Component {
         } else {
             let data = this.state.serviceDetails;
             data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
+            data.saveDateDB = saveDateDB;
             this.props.setDateAndTime(data);
             this.navigate();
         }
