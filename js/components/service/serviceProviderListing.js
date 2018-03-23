@@ -187,12 +187,12 @@ class ServiceProviderListing extends Component {
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
                     <Button transparent onPress={() => this.props.navigation.goBack()} >
-                        <Text>Cancel</Text>
+                        <Text>{I18n.t('cancel')}</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>Adc Favourite</Title>
                     </Body>
-                    <Button transparent onPress={() => this.spDone()}><Text>Done</Text></Button>
+                    <Button transparent onPress={() => this.spDone()}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >

@@ -37,5 +37,8 @@ export default {
   book_now:'احجز الآن',
   home:'الصفحة الرئيسية',
   office:'مكتب. مقر. مركز',
-  browse_by_categories:'تصفح حسب الفئات'
+  browse_by_categories:'تصفح حسب الفئات',
+  cancel: 'إلغاء',
+  done: 'فعله',
+  edit: 'تصحيح',
 };

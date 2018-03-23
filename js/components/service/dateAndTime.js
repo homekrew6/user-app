@@ -8,6 +8,7 @@ import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Te
 import styles from './styles';
 import { Calendar } from 'react-native-calendars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import I18n from '../../i18n/i18n';
 
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 
@@ -142,13 +143,13 @@ class DateAndTime extends Component {
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
                     <Button transparent onPress={() => this.props.navigation.navigate('Confirmation')}>
-                        <Text>Cancel</Text>
+                        <Text>{I18n.t('cancel')}</Text>
                     </Button>
                     <Body style={styles.tac}>
                         <Text style={styles.hdClr}>My Timings</Text>
                     </Body>
                     <Button transparent onPress={() => this.setDateAndTime()}>
-                        <Text>Done</Text>
+                        <Text>{I18n.t('done')}</Text>
                     </Button>
                 </Header>
 

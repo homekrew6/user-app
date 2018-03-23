@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar, TouchableOpacity, ScrollView, Dimensions, TextInput, Alert } from 'react-native';
-import { Container, Header, Button, Content, Body, Item, Frame, Input, Label } from 'native-base';
+import { Container, Header, Button, Content, Body, Item, Frame, Input, Label, Form } from 'native-base';
 import  MapView, { Marker } from 'react-native-maps';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import I18n from '../../i18n/i18n';
 import api from '../../api';
+
+const win = Dimensions.get('window').width;
 
 class MyMap extends Component {
     state = {
@@ -138,31 +141,33 @@ class MyMap extends Component {
                <StatusBar
                    backgroundColor="#cbf0ed"
                />
-               <ScrollView>
+                <Header style={styleSelf.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
+                    <Button transparent >
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                            <Text style={styleSelf.backBt} >{I18n.t('cancel')}</Text>
+                        </TouchableOpacity>
+                    </Button>
+                    <Body style={styleSelf.tac}>
+                        {
+                            this.props.navigation.state.params.screenType === 'add' ?
+                                <Text style={styleSelf.hdClr}>Add Location</Text> :
+                                <Text style={styleSelf.hdClr}>Edit Location</Text>
+                        }
+                    </Body>
+                    <Button transparent >
+                        <TouchableOpacity onPress={() => this.onMapDoneClick()}>
+                            <Text style={styleSelf.backBt} >{I18n.t('done')}</Text>
+                        </TouchableOpacity>
+                    </Button>
+                </Header>
+
                <Content>
-                   <Header style={styleSelf.appHdr2} androidStatusBarColor= "#cbf0ed">
-                       <Button transparent >
-                           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                               <Text style={styleSelf.backBt} >Cancel</Text>
-                           </TouchableOpacity>
-                       </Button>
-                       <Body style={styleSelf.tac}>
-                            {
-                               this.props.navigation.state.params.screenType === 'add' ?
-                               <Text style={styleSelf.hdClr}>Add Location</Text> :
-                               <Text style={styleSelf.hdClr}>Edit Location</Text>
-                           }
-                       </Body>
-                       <Button transparent >
-                           <TouchableOpacity onPress={() => this.onMapDoneClick()}>
-                             <Text style={styleSelf.backBt} >Done</Text>
-                           </TouchableOpacity>
-                       </Button>
-                   </Header>
                    
-                   <View>
+                   <View style={{ position: 'relative' }}>
                    <FSpinner visible={this.state.IsSpinnerVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
+                        <View style={{ position: 'absolute', top: 0, left: 0, width: win, zIndex: 9999, backgroundColor: 'rgba(204, 204, 204, 0.9)' }}>
                    <GooglePlacesAutocomplete
+                        
                         placeholder='Search'
                         minLength={2} // minimum length of text to search
                         autoFocus={false}
@@ -196,15 +201,16 @@ class MyMap extends Component {
                         }}
                         
                         styles={{
+                           
                             textInputContainer: {
-                            width: '100%'
+                                width: '100%',
+                                backgroundColor: '#cbf0ed',
+                                borderTopWidth: 0
                             },
                             description: {
                             fontWeight: 'bold'
                             },
-                            predefinedPlacesDescription: {
-                            color: '#1faadb'
-                            }
+                           
                         }}
                         nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
                         GoogleReverseGeocodingQuery={{
@@ -227,68 +233,80 @@ class MyMap extends Component {
                                 landmark: '',
                                 formatted_address: ''
                             })
-                        }>
-                            <Text>Cancel</Text>
+                            
+                        }
+                                style={{ alignItems: 'center', justifyContent: 'center' }}
+                        >
+                                <Text style={{ color: '#1e3768', paddingRight: 10 }}>Cancel</Text>
                         </TouchableOpacity>
                         }
                     />
-                   </View>
-                   <View style={{ height: 200 }}>
-                       <MapView
-                           style={{ width: width, height: 200 }}
-                           zoomEnabled
-                           zoomControlEnabled
-                           maxZoomLevel={20}
-                           minZoomLevel={14}
-                           region={this.state.region}
-                           onRegionChangeComplete={this.onRegionChange}
-                           onRegionChange={this.onLocationChange}
-                       >
-                            <Marker
-                                coordinate={{latitude: this.state.region.latitude, longitude: this.state.region.longitude}}
-                                title={this.state.BusinessName}
-                            />
-                       </MapView>
-                   </View>
-                   <View style={{ alignSelf: 'center', height: 30 }} >
-                       <Text style={{ fontSize: 20 }} >ADDITIONAL INFORMATION</Text>
-                   </View>
-                   <View style={{ padding: 10 }}>
-                       <View>
-                           <Text style={styleSelf.inputTitleStyle} >Name</Text>
-                           <TextInput 
-                                placeholder="Home"
-                                onChangeText={(text) => this.ChangeNameText(text)}
-                                value={this.state.name}
-                            />
-                       </View>
-                       <View>
-                           <Text style={styleSelf.inputTitleStyle}>Building/Community</Text>
-                           <TextInput 
-                                placeholder="Enter Building Name"
-                                onChangeText={(text) => this.ChangeBuildingText(text)}
-                                value={this.state.buildingName}
-                            />
-                       </View>
-                       <View>
-                           <Text style={styleSelf.inputTitleStyle}>APARTMENT / VILLA NO.</Text>
-                           <TextInput 
-                                placeholder="Enter Apartment/ vill No."
-                                onChangeText={(text) => this.ChangeVillaNoText(text)}
-                                value={this.state.villaNo}
-                           />
-                       </View>
-                       <View>
-                           <Text style={styleSelf.inputTitleStyle}>ADDRESS (NEAREST LANDMARK)</Text>
-                           <TextInput 
-                                placeholder="Enter landmark" 
-                                onChangeText={(text) => this.ChangeLandmarkText(text)}
-                                value={this.state.formatted_address? this.state.formatted_address : this.state.landmark}
-                           />
-                       </View>
+                        </View>
+                   
+                        <View>
+                            <MapView
+                                style={{ width: width, height: 250 }}
+                                zoomEnabled
+                                zoomControlEnabled
+                                maxZoomLevel={20}
+                                minZoomLevel={14}
+                                region={this.state.region}
+                                onRegionChangeComplete={this.onRegionChange}
+                                onRegionChange={this.onLocationChange}
+                            >
+                                    <Marker
+                                        coordinate={{latitude: this.state.region.latitude, longitude: this.state.region.longitude}}
+                                        title={this.state.BusinessName}
+                                    />
+                            </MapView>
+                        </View>
+                    </View>
+                   
+                   <View style={{ backgroundColor: '#fff' }}>
+                        <View style={{ alignSelf: 'center' }} >
+                            <Text style={{ fontSize: 18, marginTop: 15, color: '#1e3768' }} >ADDITIONAL INFORMATION</Text>
+                        </View>
+                        <View style={{ paddingRight: 10, paddingBottom: 30 }}>
+
+                            <Form>
+                                
+                                <Item floatingLabel style={{ padding: 0, margin: 0 }}>
+                                    <Label style={styleSelf.inputTitleStyle}>Name</Label>
+                                    <Input 
+                                        onChangeText={(text) => this.ChangeNameText(text)}
+                                        value={this.state.name}
+                                    />
+                                </Item>
+
+                                <Item floatingLabel style={{ padding: 0, margin: 0 }}>
+                                    <Label style={styleSelf.inputTitleStyle}>Enter Building Name</Label>
+                                    <Input
+                                        value={this.state.buildingName}
+                                        onChangeText={(text) => this.ChangeBuildingText(text)}
+                                    />
+                                </Item>
+
+
+                                <Item floatingLabel style={{ padding: 0, margin: 0 }}>
+                                    <Label style={styleSelf.inputTitleStyle}>APARTMENT / VILLA NO.</Label>
+                                    <Input
+                                        onChangeText={(text) => this.ChangeVillaNoText(text)}
+                                        value={this.state.villaNo}
+                                    />
+                                </Item>
+
+                                <Item floatingLabel style={{ padding: 0, margin: 0 }}>
+                                    <Label style={styleSelf.inputTitleStyle}>ADDRESS (NEAREST LANDMARK)</Label>
+                                    <Input
+                                        onChangeText={(text) => this.ChangeLandmarkText(text)}
+                                        value={this.state.formatted_address ? this.state.formatted_address : this.state.landmark}
+                                    />
+                                </Item>
+
+                            </Form>
+                        </View>
                    </View>
               </Content>
-              </ScrollView>
           </Container>
         );
     }
@@ -310,7 +328,7 @@ styleSelf = {
   },
   hdClr:{
       color: '#1e3768',
-      fontSize: 22
+      fontSize: 20
   },
   appHdr2: {
       backgroundColor: '#cbf0ed',
