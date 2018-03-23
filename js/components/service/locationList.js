@@ -191,7 +191,7 @@ class LocationList extends Component {
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
                     <Button transparent onPress={() => this.props.navigation.navigate('MyMap', {screenType: 'add', customerId: this.props.auth.data.id})} >
-                        <Text>Add</Text>
+                        <Text>{I18n.t('add')}</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>My Location</Title>

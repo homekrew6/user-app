@@ -41,4 +41,5 @@ export default {
   cancel: 'إلغاء',
   done: 'فعله',
   edit: 'تصحيح',
+  add: 'إضافة'
 };
