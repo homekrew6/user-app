@@ -35,6 +35,7 @@ export default {
   browse_by_categories: 'Browse By Categories',
   cancel: 'Cancel',
   done:'Done',
-  edit: 'Edit'
+  edit: 'Edit',
+  add: 'Add'
 
 };

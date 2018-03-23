@@ -42,7 +42,7 @@ class MyPromoCode extends Component {
                   <Title style={styles.headerTitle}>My Promo Code</Title>
                 </Body>
                     <Button transparent onPress={() => this.addPromoCode()} >
-                    <Text>Add</Text>
+                    <Text>{I18n.t('add')}</Text>
                 </Button>
               </Header>
               <Content>
