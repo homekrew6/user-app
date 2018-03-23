@@ -43,7 +43,7 @@ class LocationList extends Component {
             ],
             homeValue: 'Home',
             serviceDetails: this.props.service.data,
-
+            serviceLocationid: ''
         }
     }
 
@@ -105,6 +105,7 @@ class LocationList extends Component {
         });
     }
     selectActive(data) {
+        this.setState({ serviceLocationid: data.id });
         let index;
         for (let i = 0; i < this.state.homeArray.length; i++) {
             if (this.state.homeArray[i].id == data.id) {
@@ -146,8 +147,10 @@ class LocationList extends Component {
         })
         if (loc) {
             let data = this.state.serviceDetails;
+            let serviceLocationid = this.state.serviceLocationid;
             // data.serviceLocation = this.state.homeArray;
             data.serviceLocation = loc;
+            data.serviceLocationid = serviceLocationid;
             this.props.setServiceDetails(data);
             this.navigate();
         }
