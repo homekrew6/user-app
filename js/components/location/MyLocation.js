@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Container, Header, Button, Content, Body, Item, Frame, Input, Label } from 'native-base';
 import LocationList from './LocationList';
 import api from '../../api';
+import I18n from '../../i18n/i18n';
 
 const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
 const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
@@ -39,7 +40,7 @@ class MyLocation extends Component {
                        </Body>
                        <Button transparent >
                            <TouchableOpacity onPress={() => console.log("dsf")}>
-                             <Text style={styleSelf.backBt} >Done</Text>
+                             <Text style={styleSelf.backBt} >{I18n.t('done')}</Text>
                            </TouchableOpacity>
                        </Button>
                    </Header>

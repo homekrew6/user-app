@@ -143,7 +143,7 @@ class Categories extends Component {
         />
         <Content style={styles.bgWhite} >
           <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
-          <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
+          <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow >
             <Button transparent >
               <SimpleLineIcons name="grid" style={styles.hd_lft_icon} />
             </Button>

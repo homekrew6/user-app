@@ -177,7 +177,7 @@ class LocationList extends Component {
                         villaNo: data.villa,
                         landmark: data.landmark
                         })} >
-                        <Text>Edit</Text>
+                        <Text>{I18n.t('edit')}</Text>
                     </TouchableOpacity>
                 </TouchableOpacity>
             ))
@@ -196,7 +196,7 @@ class LocationList extends Component {
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>My Location</Title>
                     </Body>
-                    <Button transparent onPress={() => this.locationDone()}><Text>Done</Text></Button>
+                    <Button transparent onPress={() => this.locationDone()}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >
