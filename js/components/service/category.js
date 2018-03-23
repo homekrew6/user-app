@@ -37,7 +37,8 @@ class Categories extends Component {
       selectedZoneDetails: '',
       visible: true,
       IsModalVisible: false,
-      selectedServiceName: ''
+      selectedServiceName: '',
+      serviceId: ''
     };
   }
 
@@ -76,16 +77,26 @@ class Categories extends Component {
     console.log('data on open Modal', data);
     //Alert.alert('Click is working');
     this.props.setServiceDetails(data);
-    this.setState({ IsModalVisible: true, selectedServiceName: data.name });
+    this.setState({
+       IsModalVisible: true, 
+       selectedServiceName: data.name, 
+       serviceId: data.id,
+       banner_image: data.banner_image,
+       cover_image: data.cover_image
+    });
   }
   closeModal() {
-    //Alert.alert('Click is working');
     this.setState({ IsModalVisible: false });
     const data=this.props.auth.data;
     data.activeScreen ="ServiceDetails";
     data.previousScreen="Category";
     this.props.navigateAndSaveCurrentScreen(data);
-    this.props.navigation.navigate('ServiceDetails');
+    this.props.navigation.navigate('ServiceDetails', {
+      serviceId: this.state.serviceId,
+      banner_image: this.state.banner_image,
+      cover_image: this.state.cover_image,
+      ServiceName: this.state.selectedServiceName
+    });
   }
   onValueChange(value) {
     //console.log(value);
