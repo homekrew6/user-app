@@ -3,7 +3,7 @@ import { NavigationActions } from "react-navigation";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { logout } from './elements/authActions'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler, AsyncStorage } from "react-native";
 
 import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title } from "native-base";
 
@@ -36,6 +36,7 @@ class Menu extends Component {
   }
 
   logout() {
+    AsyncStorage.clear();
     this.props.logout(res => {
       if (res) {
         //this.props.navigation.navigate("Login")
