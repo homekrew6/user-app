@@ -15,7 +15,7 @@ import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
-const resetAction = NavigationActions.reset({
+const reseteAction = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });

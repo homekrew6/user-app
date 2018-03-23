@@ -3,7 +3,7 @@ import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login, getUserDetail } from './elements/authActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage } from 'react-native';
 import { FBLogin, FBLoginManager } from 'react-native-facebook-login';
 // import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 import api from '../../api';
@@ -24,12 +24,17 @@ const resetAction = NavigationActions.reset({
   index: 0,
   actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });
+
+const resetAction1 = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Confirmation' })],
+});
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-	        email: '',
-      password: '',
+	      email: '',
+        password: '',
     };
   }
   pressForgotPassword() {
@@ -55,7 +60,17 @@ class Login extends Component {
             this.props.getUserDetail(res.userId, res.id).then((userRes) => {
               console.log(userRes);
               // this.props.navigation.navigate("Menu");
-              this.props.navigation.dispatch(resetAction);
+              AsyncStorage.getItem('keyQuestionList').then((value)=>{
+                if(value)
+                {
+                  this.props.navigation.dispatch(resetAction1);
+                }
+                else
+                {
+                  this.props.navigation.dispatch(resetAction);
+                }
+              })
+              
             }).catch((err) => {
               Alert.alert('Login failed, please try again');
             });
