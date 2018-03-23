@@ -38,11 +38,13 @@ class Categories extends Component {
       visible: true,
       IsModalVisible: false,
       selectedServiceName: '',
-      serviceId: ''
+      serviceId: '',
+      locationArray: ''
     };
   }
 
   componentWillMount() {
+    console.log("login check"+ this.props.auth.data);
     api.get('Zones/getParentZone').then((res) => {
       //console.log(res);
       if (res.zone.length > 0) {
@@ -72,6 +74,19 @@ class Categories extends Component {
     }).catch((err) => {
       this.setState({ visible: false });
     });
+    if(this.props.auth.data)
+    {
+      debugger;
+      let customerId = this.props.auth.data.id;
+      const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`;
+      api.get(getLocationUrl).then(res => {
+        console.log('user-locations' +  res);
+        this.setState({ locationArray: res });
+      }).catch((err) => {
+        console.log(err);
+      });
+
+    }
   }
   openModal(data) {
     console.log('data on open Modal', data);
@@ -118,22 +133,35 @@ class Categories extends Component {
     });
     //console.log(this.state.coverImgWith);
   }
-
+  takeToServiceDetails(data)
+  {
+    this.props.setServiceDetails(data);
+    this.props.navigation.navigate('ServiceDetails');
+  }
   render() {
     let serviceListing;
     if (this.state.serviceList.length > 0) {
 
       serviceListing = (
         this.state.serviceList.map((data, key) => {
-          console.log('category list', data)
           if (!data.service) return;
           return (
             <View key={data.id} style={styles.catIten}>
               <View style={styles.catIten_img_view}>
-                <TouchableOpacity onPress={() => this.openModal(data.service)}>
+                {
+                  this.props.auth.data ? (
+                    <TouchableOpacity onPress={() => this.openModal(data.service)} >
 
-                  <Image source={{ uri: data.service.banner_image || null }} style={styles.catIten_img} />
-                </TouchableOpacity>
+                      <Image source={{ uri: data.service.banner_image || null }} style={styles.catIten_img} />
+                    </TouchableOpacity>
+                  ) : (
+                      <TouchableOpacity onPress={() => this.takeToServiceDetails(data.service)} >
+
+                        <Image source={{ uri: data.service.banner_image || null }} style={styles.catIten_img} />
+                      </TouchableOpacity>
+                    )
+                }
+              
               </View>
               <Text style={styles.catIten_txt}>{data.service.name || null}</Text>
             </View>

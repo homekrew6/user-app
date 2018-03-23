@@ -22,6 +22,7 @@ import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import { RNS3 } from 'react-native-aws3';
 import config from '../../config';
 import api from '../../api';
+import { NavigationActions } from 'react-navigation';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -34,6 +35,10 @@ const img19 = require('../../../img/swiper-2.png');
 const img20 = require('../../../img/swiper-2.png');
 const img21 = require('../../../img/swiper-2.png');
 const img22 = require('../../../img/swiper-2.png');
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Login' })],
+});
 
 var BUTTONS = [
   { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
@@ -736,13 +741,20 @@ class serviceDetails extends Component {
   }
 
 
-  goToConfirmation() {
-    const data = this.props.auth.data;
-    data.activeScreen = "Confirmation";
-    data.previousScreen = "ServiceDetails";
-    this.props.navigateAndSaveCurrentScreen(data);
-    this.props.navigation.navigate('Confirmation');
-  }
+  goToConfirmation()
+  {
+    if(this.props.auth.data){
+      const data = this.props.auth.data;
+      data.activeScreen = "Confirmation";
+      data.previousScreen = "ServiceDetails";
+      this.props.navigateAndSaveCurrentScreen(data);
+      this.props.navigation.navigate('Confirmation');
+    }
+    else{
+      this.props.navigation.dispatch(resetAction);
+    }
+    
+
 
   render() {
 
