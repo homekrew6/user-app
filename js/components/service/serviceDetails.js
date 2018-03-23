@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList } from 'react-native';
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -21,6 +21,8 @@ import { setServiceDetails } from './elements/serviceActions';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import { RNS3 } from 'react-native-aws3';
 import config from '../../config';
+import api from '../../api';
+
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require('../../../img/logo2.png');
@@ -44,57 +46,22 @@ class serviceDetails extends Component {
       isOpen: true,
       value: 0.2,
       questionList: [],
-      serviceName: props.service.data.name,
-      banner_image: props.service.data.banner_image,
-      cover_image: props.service.data.cover_image,
+      serviceName: 'props.service.data.name',
+      banner_image: 'props.service.data.banner_image',
+      cover_image: 'props.service.data.cover_image',
+      start_range: 0,
       numberValue: 1,
       activeRadioArray: [false, false, false],
       IsSpinnerVisible: false,
-      // sliderData: [
-      //   {
-      //     'src': img19,
-      //     'key': 1
-      //   },
-      //   {
-      //     'src': img20,
-      //     'key': 2
-      //   },
-      //   {
-      //     'src': img21,
-      //     'key': 3
-      //   },
-      //   {
-      //     'src': img22,
-      //     'key': 4
-      //   },
-      //   {
-      //     'src': img19,
-      //     'key': 5
-      //   },
-      //   {
-      //     'src': img20,
-      //     'key': 6
-      //   },
-      //   {
-      //     'src': img21,
-      //     'key': 7
-      //   }
-      // ]
       sliderData: [
-        {
-          'src': 'https://homekrewbooking.s3.amazonaws.com/66665615_.png',
-          'key': 1
-        }
+        
       ]
     };
     super(props);
-    console.log("propsDetails in service details", props);
-
 
   }
-  captureFile()
-  {
-this.setState({ IsSpinnerVisible: true });
+  captureFile(data) {
+    this.setState({ IsSpinnerVisible: true });
     ImagePicker.openCamera({
       width: 400,
       height: 300,
@@ -115,9 +82,7 @@ this.setState({ IsSpinnerVisible: true });
       console.log(file);
 
       const options = config.s3;
-      console.log(options);
       RNS3.put(file, config.s3).then((response) => {
-        console.log(response);
         if (response.status !== 201) {
           this.setState({ IsSpinnerVisible: false });
           throw new Error('Failed to upload image to S3');
@@ -126,20 +91,59 @@ this.setState({ IsSpinnerVisible: true });
 
         if (response.status == 201) {
           let slider = [];
-          this.state.sliderData.map(sdata => {
+          data.sliderValues.map(sdata => {
             slider.push(sdata);
           });
-          let lengthOfSlider = slider.length;
-          lengthOfSlider = lengthOfSlider - 1;
-          let latestKey = slider[lengthOfSlider].key;
-          latestKey = latestKey + 1;
-          let newData = {
-            'src': response.body.postResponse.location,
-            'key': latestKey
-          };
-          slider.push(newData);
-          this.setState({ IsSpinnerVisible: false });
-          this.setState({ sliderData: slider });
+
+          let lengthOfSlider = data.sliderValues.length;
+          if(lengthOfSlider === 0)
+          {
+            let newData = {
+              'src': response.body.postResponse.location,
+              'key': 1
+            };
+          
+            slider.push(newData);
+            this.setState({ IsSpinnerVisible: false });
+            //this.setState({ sliderData: slider });
+          }else{
+            lengthOfSlider = lengthOfSlider - 1;
+            let latestKey = slider[lengthOfSlider].key;
+            latestKey = latestKey + 1;
+            let newData = {
+              'src': response.body.postResponse.location,
+              'key': latestKey
+            };
+            slider.push(newData);
+            this.setState({ IsSpinnerVisible: false });
+            //this.setState({ sliderData: slider });
+          }
+          
+
+          const questionId = data.id;
+          const sliderDump = slider;
+          
+          AsyncStorage.getItem("keyQuestionList").then((value) => {
+            if(value !== ''){
+              const jsonKeyQuestion = JSON.parse(value);
+              jsonKeyQuestion.map((dataQ, key) => {
+                if(dataQ.id === questionId){
+                  console.log('sliderDump', sliderDump);
+                  jsonKeyQuestion[key].sliderValues = sliderDump;
+                }
+              });
+              console.log('jsonKeyQuestion cature photo', jsonKeyQuestion);
+              this.setState({ questionList: jsonKeyQuestion });
+              const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+              AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                console.log('====FirstPage====captureFile===' + res);
+              });
+            }
+          }).catch(res => {
+              //AsyncStorage.setItem('StoreData', dataRemoteString);
+              console.log('switchChange err', res);
+          });
+
         }
       }).catch((err) => {
         this.setState({ IsSpinnerVisible: false });
@@ -151,7 +155,7 @@ this.setState({ IsSpinnerVisible: true });
     });
   }
 
-  attachFile() {
+  attachFile(data) {
     // this.setState({ uploadButton: false });
 
     ImagePicker.openPicker({
@@ -183,21 +187,74 @@ this.setState({ IsSpinnerVisible: true });
 
 
         if (response.status == 201) {
+          // let slider = [];
+          // this.state.sliderData.map(sdata => {
+          //   slider.push(sdata);
+          // });
+          // let lengthOfSlider = slider.length;
+          // lengthOfSlider = lengthOfSlider - 1;
+          // let latestKey = slider[lengthOfSlider].key;
+          // latestKey = latestKey + 1;
+          // let newData = {
+          //   'src': response.body.postResponse.location,
+          //   'key': latestKey
+          // };
+          // slider.push(newData);
+          // this.setState({ IsSpinnerVisible: false });
+          // this.setState({ sliderData: slider });
           let slider = [];
-          this.state.sliderData.map(sdata => {
+          data.sliderValues.map(sdata => {
             slider.push(sdata);
           });
-          let lengthOfSlider = slider.length;
-          lengthOfSlider = lengthOfSlider - 1;
-          let latestKey = slider[lengthOfSlider].key;
-          latestKey = latestKey + 1;
-          let newData = {
-            'src': response.body.postResponse.location,
-            'key': latestKey
-          };
-          slider.push(newData);
-          this.setState({ IsSpinnerVisible: false });
-          this.setState({ sliderData: slider });
+
+          let lengthOfSlider = data.sliderValues.length;
+          if(lengthOfSlider === 0)
+          {
+            let newData = {
+              'src': response.body.postResponse.location,
+              'key': 1
+            };
+          
+            slider.push(newData);
+            this.setState({ IsSpinnerVisible: false });
+            //this.setState({ sliderData: slider });
+          }else{
+            lengthOfSlider = lengthOfSlider - 1;
+            let latestKey = slider[lengthOfSlider].key;
+            latestKey = latestKey + 1;
+            let newData = {
+              'src': response.body.postResponse.location,
+              'key': latestKey
+            };
+            slider.push(newData);
+            this.setState({ IsSpinnerVisible: false });
+            //this.setState({ sliderData: slider });
+          }
+
+          const questionId = data.id;
+          const sliderDump = slider;
+          
+          AsyncStorage.getItem("keyQuestionList").then((value) => {
+            if(value !== ''){
+              const jsonKeyQuestion = JSON.parse(value);
+              jsonKeyQuestion.map((dataQ, key) => {
+                if(dataQ.id === questionId){
+                  console.log('sliderDump', sliderDump);
+                  jsonKeyQuestion[key].sliderValues = sliderDump;
+                }
+              });
+              console.log('jsonKeyQuestion cature photo', jsonKeyQuestion);
+              this.setState({ questionList: jsonKeyQuestion });
+              const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+              AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                console.log('====FirstPage====captureFile===' + res);
+              });
+            }
+          }).catch(res => {
+              //AsyncStorage.setItem('StoreData', dataRemoteString);
+              console.log('switchChange err', res);
+          });
+
         }
       }).catch((err) => {
         console.log(err);
@@ -209,15 +266,16 @@ this.setState({ IsSpinnerVisible: true });
       // this.setState({ uploadButton: true });
     });
   }
-  fileUploadType(buttonIndex) {
+  fileUploadType(buttonIndex, data) {
+    console.log('fileUploadType func', data);
     if (buttonIndex == 0) {
-      this.captureFile();
+      this.captureFile(data);
     }
     if (buttonIndex == 1) {
-      this.attachFile();
+      this.attachFile(data);
     }
   }
-  uploadPhoto() {
+  uploadPhoto(data) {
     ActionSheet.show(
       {
         options: BUTTONS,
@@ -225,15 +283,43 @@ this.setState({ IsSpinnerVisible: true });
       (buttonIndex) => {
         this.setState({ clicked: BUTTONS[buttonIndex] });
         // this.setState({ filecat: buttonIndex });
-        console.log(buttonIndex);
+        //console.log(buttonIndex);
         // this.setState({ filecat: buttonIndex});
-        this.fileUploadType(buttonIndex);
+        this.fileUploadType(buttonIndex, data);
       },
     )
     
   }
   changeActiveRadio(data) {
-    debugger;
+    console.log('data changeActiveRadio', data);
+    const answersId = data.id;
+    const questionId = data.questionId;
+    AsyncStorage.getItem("keyQuestionList").then((value) => {
+    if(value !== ''){
+        const jsonKeyQuestion = JSON.parse(value);
+        jsonKeyQuestion.map((dataQ, key) => {
+        if(dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId){
+            dataQ.answers.map((dataA, keyA) => {
+              if(dataA.id === answersId){
+                jsonKeyQuestion[key].answers[keyA].selected = true;
+              }else{
+                jsonKeyQuestion[key].answers[keyA].selected = false;
+              }
+               
+            })
+        }
+        });
+        const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+        AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+        console.log('====FirstPage====changeActiveRadio==='+res)
+        });
+    }
+    }).catch(res => {
+        //AsyncStorage.setItem('StoreData', dataRemoteString);
+        console.log('switchChange err', res);
+    });
+
+
     data.selected = !data.selected;
     let dataselected = data;
     let item;
@@ -313,10 +399,30 @@ this.setState({ IsSpinnerVisible: true });
     // this.setState({
     //   isOpen: !this.state.isOpen,
     // });
+    const questionId = data.answers[0].questionId;
+    const switchStatus = data;
+    AsyncStorage.getItem("keyQuestionList").then((value) => {
+      if(value !== ''){
+        
+        const jsonKeyQuestion = JSON.parse(value);
+        jsonKeyQuestion.map((dataQ, key) => {
+          if(dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId){
+            jsonKeyQuestion[key].Status = switchStatus.Status;
+          }
+        });
+        const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+        AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+          console.log('====FirstPage====switch change==='+res)
+        });
+      }
+    }).catch(res => {
+        //AsyncStorage.setItem('StoreData', dataRemoteString);
+        console.log('switchChange err', res);
+    });
+
     var price = this.props.service.data.price;
     price=Number(price);
     data.Status = !data.Status;
-    console.log(data.Status);
     let index;
     for (var i = 0; i < this.state.questionList.length; i++) {
       if (this.state.questionList[i].id == data.id) {
@@ -359,12 +465,73 @@ this.setState({ IsSpinnerVisible: true });
     }
   }
 
+  componentDidMount(){
+    console.log('componentDidMount begin', this.props);
+    const serviceId = this.props.service.data.id;
+    // this.setState({
+    //   serviceName: this.props.navigation.state.params.ServiceName,
+    //   cover_image: this.props.navigation.state.params.cover_image,
+    //   banner_image: this.props.navigation.state.params.banner_image
+    // });
+    this.setState({
+      serviceName: this.props.service.data.name,
+      cover_image: this.props.service.data.cover_image,
+      banner_image: this.props.service.data.banner_image
+    })
+   // AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
+    AsyncStorage.getItem('serviceId').then((serviceValue) => {
+      console.log('AsyncStorage serviceId', serviceValue);
+      if(serviceValue && serviceValue === serviceId.toString()) {
+        AsyncStorage.getItem("keyQuestionList").then((value) => {
+          if(value){
+            const jsonDump = JSON.parse(value);
+            this.setState({ questionList: jsonDump });
+            console.log('jsonDump DidMount', jsonDump);
+          }else{
+            let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
+            api.get(questionServiceUrl).then(responseJson => {
+              console.log('questionServiceUrl', responseJson);
+              this.setState({ questionList: responseJson });
+              const dataStringQuestion = JSON.stringify(responseJson);
+              AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                console.log('====FirstPage====keyQuestionList==='+res)
+              });
+            }).catch(err => {
+              console.log(err);
+              reject(err)
+            })
+          }
+        }).catch(res => {
+            //AsyncStorage.setItem('StoreData', dataRemoteString);
+            console.log('switchChange err', res);
+        });
+      }else{
+        console.log('AsyncStorage inside else' );
+        AsyncStorage.setItem('serviceId', serviceId.toString(), (res) => {
+          AsyncStorage.getItem("keyQuestionList").then((value) => {
+            AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
+          }).catch(res => {
+            console.log('switchChange err', res);
+          });
+        });
+        
+      }
+    }).catch(err =>{
+      AsyncStorage.setItem('serviceId', toString(serviceId), (res) => {
+        console.log('serviceId set in catch');
+      });
+    })
+    //AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
+    
+    
+
+  }
  
   componentWillMount() {
     this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
       if (res.type == "success") {
-        console.log("success", res);
-        this.setState({ questionList: res });
+        console.log("success componentWillMount", res);
+        //this.setState({ questionList: res });
         var price = 0.0;
         for (var i = 0; i < this.state.questionList.length; i++) {
           if (this.state.questionList[i].type == 1 || this.state.questionList[i].type == 2 || this.state.questionList[i].type == 3 || this.state.questionList[i].type == 4) {
@@ -395,7 +562,6 @@ this.setState({ IsSpinnerVisible: true });
         this.props.setServiceDetails(data);
       }
     }).catch((err) => {
-      console.log("error in catch");
       console.log(err);
     });
   }
@@ -412,10 +578,33 @@ this.setState({ IsSpinnerVisible: true });
   }
 
   sliderChanged(value, data) {
-    debugger;
+    console.log('sliderChanged', value, data);
     if (value != 0) {
       value = parseFloat(Math.round(value * 100) / 100).toFixed(2);
       value = Number(value);
+     
+      const setRangeValue = value;
+      this.setState({ start_range: value });
+      const questionId = data.answers[0].questionId;
+      AsyncStorage.getItem("keyQuestionList").then((value) => {
+      if(value !== ''){
+          const jsonKeyQuestion = JSON.parse(value);
+          jsonKeyQuestion.map((dataQ, key) => {
+          if(dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId){
+              jsonKeyQuestion[key].start_range = setRangeValue;
+          }
+          });
+          console.log('jsonKeyQuestion', jsonKeyQuestion);
+          const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+          AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+          console.log('====FirstPage====sliderChanged==='+res)
+          });
+      }
+      }).catch(res => {
+          //AsyncStorage.setItem('StoreData', dataRemoteString);
+          console.log('switchChange err', res);
+      });
+
       var price = this.props.service.data.price;
       price=Number(price);
       if (data.answers) {
@@ -468,7 +657,6 @@ this.setState({ IsSpinnerVisible: true });
     data.activeScreen = "Confirmation";
     data.previousScreen ="ServiceDetails";
     this.props.navigateAndSaveCurrentScreen(data);
-    console.log(this.props.auth.data);
     this.props.navigation.navigate('Confirmation');
   }
 
@@ -488,7 +676,11 @@ this.setState({ IsSpinnerVisible: true });
               } </Text>
             </View>
             <Text style={styles.confirmationMainTxt}>{data.name}</Text>
-            <IncrimentDecriment massage={data} onIncrement={this.handleIncrement} onDecrement={this.handleDecrement} />
+            <IncrimentDecriment 
+              massage={data} 
+              //onIncrement={this.handleIncrement} 
+              //onDecrement={this.handleDecrement} 
+            />
           </Item>
         </View> : data.type == "2" ? <View key={data.id}>
           <Item style={styles.confirmationItem}>
@@ -522,13 +714,13 @@ this.setState({ IsSpinnerVisible: true });
             <Text style={{ flex: 1 }}>
               Insert Photo
                 </Text>
-            <TouchableOpacity onPress={() => this.uploadPhoto()}>
+            <TouchableOpacity onPress={() => this.uploadPhoto(data)}>
               <Icon name="camera" style={{ fontSize: 16 }}></Icon>
             </TouchableOpacity>
           </View>
           <View style={styles.imagesSliderWarp}>
             <FlatList
-              data={this.state.sliderData}
+              data={data.sliderValues === null ? this.state.sliderData : data.sliderValues}
               renderItem={({ item }) =>
                 <View>
                   <Image key={item.key} source={{ uri: item.src }} style={styles.imagesSliderImage}></Image>
@@ -558,13 +750,15 @@ this.setState({ IsSpinnerVisible: true });
                         {
                           data.answers.map((data1, key1) => {
                             return (<View key={data1.id}>
-                              <TouchableOpacity style={[{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom: 4, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }, [
-                                data1.selected ?
-                                  { backgroundColor: '#ccc' } : {}
-                              ]]} onPress={() => this.changeActiveRadio(data1)}><Text style={[[
-                                data1.selected ?
-                                  { color: '#fff' } : {}
-                              ]]}>{data1.title}</Text></TouchableOpacity>
+                              <TouchableOpacity 
+                                style={[{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom: 4, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }, [
+                                data1.selected ? { backgroundColor: '#ccc' } : {}]]} 
+                                  onPress={() => this.changeActiveRadio(data1)}
+                              >
+                                  <Text style={[[ data1.selected ? { color: '#fff' } : {} ]]}>
+                                    {data1.title}
+                                  </Text>
+                              </TouchableOpacity>
                             </View>)
 
                           })

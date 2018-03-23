@@ -63,6 +63,8 @@ class Confirmation extends Component {
                 }
             ).then(responseJson => {
                 // console.log(responseJson);
+                AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
+                AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
                 Alert.alert("Job Posted Successfully");
                 this.setState({
                     loader: false,

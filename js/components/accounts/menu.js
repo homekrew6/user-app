@@ -124,20 +124,20 @@ class Menu extends Component {
           saveData.activeScreen = "ServiceDetails";
           saveData.previousScreen = "Category";
           this.props.navigateAndSaveCurrentScreen(saveData);
-          console.log('stack menu', this.props);
-          this.props.navigation.dispatch({
-            routeName: 'ServiceDetails'
-          });
-          Alert.alert(
-            'Confirm',
-            'Your data will be lost',
-            [
-              { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-              { text: 'OK', onPress: () => this.props.navigation.navigate('ServiceDetails') },
-            ],
-            { cancelable: false }
-          )
-          //this.props.navigation.navigate('ServiceDetails');
+          // console.log('stack menu', this.props);
+          // this.props.navigation.dispatch({
+          //   routeName: 'ServiceDetails'
+          // });
+          // Alert.alert(
+          //   'Confirm',
+          //   'Your data will be lost',
+          //   [
+          //     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+          //     { text: 'OK', onPress: () => this.props.navigation.navigate('ServiceDetails') },
+          //   ],
+          //   { cancelable: false }
+          // )
+          this.props.navigation.navigate('ServiceDetails');
           //console.log()
           //this.props.navigation.dispatch(NavigationActions.back({ routeName:'ServiceDetails'}));
           return true;
