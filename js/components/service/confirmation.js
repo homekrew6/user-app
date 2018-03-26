@@ -30,7 +30,7 @@ class Confirmation extends Component {
         this.state = {
             dateTime: props.service.data.serviceTime,
             saveDateDB: props.service.data.saveDateDB,
-            serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : 'Home',
+            serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : '',
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,
             continueButtonDesable: false,
@@ -53,7 +53,6 @@ class Confirmation extends Component {
             AsyncStorage.getItem("zoneId").then((zoneValue)=>{
                 if(zoneValue)
                 {
-                    debugger;
                     api.post('jobs',
                         {
                             // "serviceId": this.props.service.data.id,
@@ -66,7 +65,7 @@ class Confirmation extends Component {
                             // "userId": this.props.auth.data.id,
                             // "workerId": "0"
                             "price": this.props.service.data.price,
-                            "postedDate": this.state.dateTime,
+                            "postedDate": this.props.service.data.saveDateDB,
                             "payment": "Credit Card",
                             "faourite_sp": this.props.service.data.favouriteSp,
                             "promo_code": "AED 50 off",
