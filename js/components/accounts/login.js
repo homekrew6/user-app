@@ -30,9 +30,10 @@ const resetAction = NavigationActions.reset({
 //   actions: [NavigationActions.navigate({ routeName: 'Confirmation' })],
 // });
 const resetAction1 = NavigationActions.reset({
-  index: 0,
-  actions: [ NavigationActions.navigate({ routeName: 'Confirmation'}),
-    NavigationActions.navigate({ routeName: 'ServiceDetails'})],
+  index: 1,
+  actions: [NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+    NavigationActions.navigate({ routeName: 'Confirmation'})
+   ],
 });
 class Login extends Component {
   constructor(props) {
@@ -68,7 +69,10 @@ class Login extends Component {
               AsyncStorage.getItem('keyQuestionList').then((value)=>{
                 if(value)
                 {
-                  this.props.navigation.dispatch(resetAction1);
+                  AsyncStorage.setItem("fromLogin", "true").then((resT)=>{
+                    this.props.navigation.dispatch(resetAction1);
+                  })
+                 
                 }
                 else
                 {
