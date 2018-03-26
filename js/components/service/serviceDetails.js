@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList } from 'react-native';
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList, BackHandler } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -535,6 +535,7 @@ class serviceDetails extends Component {
   }
 
   componentDidMount() {
+    debugger;
     console.log('componentDidMount begin', this.props);
     const serviceId = this.props.service.data.id;
     // this.setState({
@@ -599,6 +600,20 @@ class serviceDetails extends Component {
             AsyncStorage.getItem("keyQuestionList").then((value) => {
               AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
               AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
+              let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
+              api.get(questionServiceUrl).then(responseJson => {
+                AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
+                console.log('questionServiceUrl', responseJson);
+                this.setState({ questionList: responseJson });
+                const dataStringQuestion = JSON.stringify(responseJson);
+                AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                  this.calculatePriceOnStart();
+                  console.log('====FirstPage====keyQuestionList===' + res)
+                });
+              }).catch(err => {
+                console.log(err);
+                reject(err)
+              })
             }).catch(res => {
               console.log('switchChange err', res);
             });
@@ -618,6 +633,31 @@ class serviceDetails extends Component {
   }
 
   componentWillMount() {
+    // BackHandler.addEventListener('hardwareBackPress', function () {
+    //   const { dispatch, navigation, nav } = this.props;
+    //   AsyncStorage.getItem("fromLogin").then((storeValue)=>{
+    //     debugger;
+    //     if(storeValue)
+    //     {
+    //       if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Menu') {
+    //         Alert.alert(
+    //           'Confirm',
+    //           'Are you sure to exit the app?',
+    //           [
+    //             { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+    //             { text: 'OK', onPress: () => BackHandler.exitApp() },
+    //           ],
+    //           { cancelable: false }
+    //         )
+    //       }
+    //     }
+    //   })
+
+
+
+
+    //   return true;
+    // }.bind(this));
     // this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
     //   if (res.type == "success") {
     //     console.log("success componentWillMount", res);
