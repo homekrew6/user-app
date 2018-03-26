@@ -25,9 +25,14 @@ const resetAction = NavigationActions.reset({
   actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });
 
+// const resetAction1 = NavigationActions.reset({
+//   index: 0,
+//   actions: [NavigationActions.navigate({ routeName: 'Confirmation' })],
+// });
 const resetAction1 = NavigationActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Confirmation' })],
+  actions: [ NavigationActions.navigate({ routeName: 'Confirmation'}),
+    NavigationActions.navigate({ routeName: 'ServiceDetails'})],
 });
 class Login extends Component {
   constructor(props) {

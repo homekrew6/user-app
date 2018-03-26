@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setDateAndTime } from './elements/serviceActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, ScrollView } from "react-native";
+import { setDateAndTime ,setServiceDetails} from './elements/serviceActions';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, ScrollView, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Card, CardItem } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import styles from './styles';
@@ -35,7 +35,7 @@ class DateAndTime extends Component {
 
         date = today.getFullYear() + "-" + dy + "-" + dm;
         this.state = {
-            daYSelected: [date],
+            daYSelected:'' ,
             minDate: [today],
             weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
@@ -69,11 +69,26 @@ class DateAndTime extends Component {
             setTime: '',
             setWeek: '',
             serviceDetails: this.props.service.data,
+            selectedDate: '',
+            selectedTimeID: ''
         };
     }
 
     componentDidMount(){
         console.log('this service timing', this);
+    }
+
+    componentWillMount(){
+
+        let newColectionData = this.state.colectionData;
+        let newIndex = this.props.service.data.selectedTimeID;
+        let sltdt = this.props.service.data.selectedDate;
+        if(sltdt){
+            this.onDaySelect(sltdt);
+        }
+        if(newIndex){
+           this.pressOnCircle(newIndex);
+        }
     }
 
     onDaySelect(day) {
@@ -94,23 +109,35 @@ class DateAndTime extends Component {
             setWeek: n
         })
 
+        let data = this.props.service.data;
+        data.selectedDate = day;
+        this.props.setServiceDetails(data);
+
     }
     pressOnCircle(index) {
         let newColectionData = this.state.colectionData;
-
+        let selectedTimeId; 
         for (var i = 0; i < (newColectionData.length); i++) {
             newColectionData[i].isActive = false;
             if (newColectionData[i].key == index) {
                 newColectionData[i].isActive = true;
+                selectedTimeId=newColectionData[i].key;
                 this.setState({
                     setTime: newColectionData[i].time,
+                    selectedTimeID: newColectionData[i].key,
                 })
             }
 
         }
+
+        
         this.setState({
             colectionData: newColectionData,
         })
+        let data = this.props.service.data;
+        //data.selectedTimeID = this.state.selectedTimeID;
+        data.selectedTimeID = selectedTimeId;
+        this.props.setServiceDetails(data);
     }
     navigate() {
         const data = this.props.auth.data;
@@ -161,7 +188,7 @@ class DateAndTime extends Component {
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
                                 <Text>Date</Text>
                             </CardItem>
-                            <CardItem>
+                            <CardItem style={{  alignItems: 'center', justifyContent: 'center' }}>
                                 <Calendar
                                     onDayPress={(day) => this.onDaySelect(day)}
                                     monthFormat={'MMM yyyy'}
@@ -238,6 +265,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setDateAndTime: (data) => dispatch(setDateAndTime(data)),
+        setServiceDetails: (data) => dispatch(setServiceDetails(data)),
         navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
     }
 }

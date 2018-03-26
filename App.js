@@ -1,8 +1,16 @@
 import React from "react";
 import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from "react-native-fcm";
 import App from "./js/App";
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import api from './js/api/';
+import { checkAuth } from './js/components/accounts/elements/authActions';
+export class App1 extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log(props);
 
-export default class App1 extends React.Component {
+  }
 state = { isReady: false};
 
 
@@ -10,6 +18,16 @@ state = { isReady: false};
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
       console.log("TOKEN (getFCMToken)", token);
+      this.props.checkAuth((res) => {
+        console.log(res);
+  			if (res) {
+        api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token}).then((resEdit) => {
+        }).catch((err) => {
+    			});
+  			}
+  		},(err)=>{
+        console.log(err);
+      });
     });
     
     // This method get all notification from server side.
@@ -30,6 +48,19 @@ state = { isReady: false};
     // this method call when FCM token is update(FCM token update any time so will get updated token from this method)
      this.refreshUnsubscribe = FCM.on(FCMEvent.Notification, token => {
        console.log("TOKEN (refreshUnsubscribe)", token);
+        FCM.getFCMToken().then(token => {
+          console.log("TOKEN (getFCMToken)", token);
+          this.props.checkAuth((res) => {
+            console.log(res);
+            if (res) {
+            api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token}).then((resEdit) => {
+            }).catch((err) => {
+              });
+            }
+          },(err)=>{
+            console.log(err);
+          });
+        });
      });
 
   }
@@ -94,3 +125,16 @@ state = { isReady: false};
     return <App />;
   }
 }
+
+App1.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+const mapDispatchToProps = dispatch => ({
+ checkAuth: cb => dispatch(checkAuth(cb)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App1);
