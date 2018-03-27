@@ -10,7 +10,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 const win = Dimensions.get('window').width;
 
 import styles from "./styles";
-class JobListing extends Component {
+class JobDetails extends Component {
 	constructor(props) {
         super(props);
 				this.state = {
@@ -26,17 +26,16 @@ class JobListing extends Component {
 					backgroundColor="#81cdc7"
 				/>
                 <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7">
-                    <Button transparent onPress={() => this.props.navigation.goBack()}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
                     <Title>Job Details</Title>
-                        {/* <Image source={require('../../../img/logo2.png')} style={{ height: 20, width: 115 }} /> */}
                     </Body>
-                    <Button transparent />
+                    <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
                 </Header>
                 <Content style={{ backgroundColor: '#ccc' }}>
-                    <ImageBackground source={require('../../../img/bg-6.png')} style={{ alignItems: 'center', justifyContent: 'center', width: win, height: (win * 0.62) }}>
+                    <ImageBackground source={require('../../../img/bg-6.png')} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                         <View style={{alignItems: 'center'}}>
                             <Text style={{ fontWeight: '700', fontSize: 18 }}>Home Cleaning</Text>
                             <Text>ARD 100</Text>
@@ -105,4 +104,4 @@ class JobListing extends Component {
 	}
 }
 
-export default JobListing;
+export default JobDetails;
