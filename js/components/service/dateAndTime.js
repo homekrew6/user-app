@@ -106,7 +106,7 @@ class DateAndTime extends Component {
         this.setState({
             daYSelected: day.dateString,
             satDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
-            setWeek: n
+            setWeek: n,
         })
 
         let data = this.props.service.data;
@@ -147,7 +147,8 @@ class DateAndTime extends Component {
         this.props.navigation.navigate('Confirmation');
     }
     setDateAndTime() {
-        const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00';
+        //const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00';
+        const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00' + " " + this.state.setTime.slice(5).toLowerCase();
         console.log('saveDateDB', saveDateDB);
 
         if (this.state.satDate == '') {
