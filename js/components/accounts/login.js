@@ -63,28 +63,7 @@ class Login extends Component {
         this.props.login(email, password).then((res) => {
           console.log(res);
           if (res.type == 'success') {
-            this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-              console.log(userRes);
-              // this.props.navigation.navigate("Menu");
-              AsyncStorage.getItem('keyQuestionList').then((value)=>{
-                if(value)
-                {
-                  // AsyncStorage.setItem("fromLogin", "true").then((resT)=>{
-                  //   this.props.navigation.dispatch(resetAction1);
-                  // })
-                  Alert.alert('question list found');
-                  this.props.navigation.dispatch(resetAction1);
-                 
-                }
-                else
-                {
-                  this.props.navigation.dispatch(resetAction);
-                }
-              })
-              
-            }).catch((err) => {
-              Alert.alert('Login failed, please try again');
-            });
+            this.props.getUserDetail(res.userId, res.id).then((userRes) => { console.log(userRes); AsyncStorage.getItem('keyQuestionList').then((value) => { if (value) { AsyncStorage.setItem("fromLogin", "true").then((resT) => { const data = this.props.auth.data; data.activeScreen = "Confirmation"; data.previousScreen = "ServiceDetails"; this.props.navigateAndSaveCurrentScreen(data); this.props.navigation.dispatch(resetAction1); }) } else { this.props.navigation.dispatch(resetAction1); } }) }).catch((err) => { Alert.alert('Login failed, please try again'); });
           } else {
             Alert.alert('Login failed, please try again');
           }

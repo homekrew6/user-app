@@ -42,6 +42,16 @@ class Confirmation extends Component {
 
     componentDidMount(){
         console.log('this confirm', this);
+        AsyncStorage.getItem("fromLogin").then((storeValue) => {
+            if (storeValue) {
+                BackHandler.addEventListener('hardwareBackPress', function () {
+                    const { dispatch, navigation, nav } = this.props;
+                    if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Confirmation') {
+                        this.props.navigation.navigate('ServiceDetails');
+                    }
+                }.bind(this));
+            }
+        })
     }
    
 
