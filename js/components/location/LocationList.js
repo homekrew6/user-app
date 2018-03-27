@@ -15,7 +15,17 @@ class LocationList extends Component {
             <View style={{ flex: 2, justifyContent: 'center' }}><Image source={icon3} style={styleSelf.menuCardIcon} /></View>
             <View style={{ flex: 12, justifyContent: 'center' }}><Text>{this.props.listName}</Text></View>
             <View style={{ flex: 3, justifyContent: 'center' }}>
-              <TouchableOpacity onPress={() => this.props.Self.navigation.navigate('MyMap', {screenType: 'edit', customerId: this.props.customerId})}>
+              <TouchableOpacity onPress={() => this.props.Self.navigation.navigate('MyMap', {
+                screenType: 'edit',
+                customerId: this.props.customerId,
+                id: this.props.uid,
+                latitude: this.props.latitude,
+                longitude: this.props.longitude,
+                name: this.props.listName,
+                buildingName: this.props.buildingName,
+                villaNo: this.props.villa,
+                landmark: this.props.landmark
+                })}>
                 <Text>{I18n.t('edit')}</Text>
               </TouchableOpacity>
             </View>

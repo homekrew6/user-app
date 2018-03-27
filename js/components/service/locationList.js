@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, AsyncStorage } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -52,14 +52,12 @@ class LocationList extends Component {
         const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`
         api.get(getLocationUrl).then(res => {
             console.log('user-locations', res);
-            let finalArray=[];
-            res.map((item)=>{
+            let finalArray = [];
+            res.map((item) => {
                 let data;
-                if(this.props.service.data.serviceLocation)
-                {
-                    if(this.props.service.data.serviceLocation===item.name)
-                    {
-                        data={
+                if (this.props.service.data.serviceLocation) {
+                    if (this.props.service.data.serviceLocation === item.name) {
+                        data = {
                             "text": item.name,
                             "id": item.id,
                             "status": true,
@@ -70,9 +68,8 @@ class LocationList extends Component {
                             "landmark": item.landmark
                         }
                     }
-                    else
-                    {
-                        data={
+                    else {
+                        data = {
                             "text": item.name,
                             "id": item.id,
                             "status": false,
@@ -84,8 +81,8 @@ class LocationList extends Component {
                         }
                     }
                 }
-                else{
-                    data={
+                else {
+                    data = {
                         "text": item.name,
                         "id": item.id,
                         "status": false,
@@ -96,7 +93,7 @@ class LocationList extends Component {
                         "landmark": item.landmark
                     }
                 }
-                 
+
                 finalArray.push(data);
             })
             this.setState({ homeArray: finalArray });
@@ -154,9 +151,21 @@ class LocationList extends Component {
             this.props.setServiceDetails(data);
             this.navigate();
         }
+        else {
+            Alert.alert('Please select a location first.');
+        }
 
     }
+    goToMyMap() {
+        const data = this.props.auth.data;
+        data.activeScreen = "MyMap";
+        data.previousScreen = "LocationList";
+        this.props.navigateAndSaveCurrentScreen(data);
+        AsyncStorage.setItem("fromConfirmation", "true").then((res) => {
+            this.props.navigation.navigate('MyMap', { screenType: 'add', customerId: this.props.auth.data.id });
+        })
 
+    }
     render() {
 
         let featureList = (
@@ -179,7 +188,7 @@ class LocationList extends Component {
                         buildingName: data.buildingName,
                         villaNo: data.villa,
                         landmark: data.landmark
-                        })} >
+                    })} >
                         <Text>{I18n.t('edit')}</Text>
                     </TouchableOpacity>
                 </TouchableOpacity>
@@ -193,7 +202,7 @@ class LocationList extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.navigate('MyMap', {screenType: 'add', customerId: this.props.auth.data.id})} >
+                    <Button transparent onPress={() => this.goToMyMap()} >
                         <Text>{I18n.t('add')}</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>

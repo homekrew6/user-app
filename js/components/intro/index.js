@@ -62,8 +62,10 @@ class Intro extends Component {
 		const { slides } = this.state
 
 		return (
-			<Swiper showsButtons={false} loop={true} autoplay={true}
-				autoplayTimeout={2.5} index={0}>
+			<Swiper showsButtons={false} loop={true}
+				//autoplay={true}
+				//autoplayTimeout={2.5} index={0}
+			>
 				{this.state.sliderArray.map((slide, index) => {
 					return (
 						<View key={slide.id}>
