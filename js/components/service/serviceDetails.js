@@ -535,7 +535,6 @@ class serviceDetails extends Component {
   }
 
   componentDidMount() {
-    debugger;
     console.log('componentDidMount begin', this.props);
     const serviceId = this.props.service.data.id;
     // this.setState({

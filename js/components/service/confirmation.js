@@ -82,6 +82,7 @@ class Confirmation extends Component {
                         AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
                         AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
                         AsyncStorage.removeItem('fromLogin', (err) => console.log('finished', err));
+                        AsyncStorage.removeItem('fromConfirmation', (err) => console.log('finished', err));
                         Alert.alert("Job Posted Successfully");
                         this.setState({
                             loader: false,

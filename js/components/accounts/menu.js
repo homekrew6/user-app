@@ -97,9 +97,14 @@ class Menu extends Component {
             // this.props.navigateAndSaveCurrentScreen(saveData);
             break;
           case "MyLocation":
-            saveData.activeScreen = "Menu";
-            saveData.previousScreen = "";
-            this.props.navigateAndSaveCurrentScreen(saveData);
+            // saveData.activeScreen = "Menu";
+            // saveData.previousScreen = "";
+            // this.props.navigateAndSaveCurrentScreen(saveData);
+            break;
+            case "MyMap":
+            // saveData.activeScreen = "MyLocation";
+            // saveData.previousScreen = "Menu";
+            // this.props.navigateAndSaveCurrentScreen(saveData);
             break;
           case "ServiceDetails":
             //saveData.activeScreen = "Category";
@@ -117,9 +122,9 @@ class Menu extends Component {
             this.props.navigateAndSaveCurrentScreen(saveData);
             break;
           case "LocationList":
-            saveData.activeScreen = "Confirmation";
-            saveData.previousScreen = "ServiceDetails";
-            this.props.navigateAndSaveCurrentScreen(saveData);
+            // saveData.activeScreen = "Confirmation";
+            // saveData.previousScreen = "ServiceDetails";
+            // this.props.navigateAndSaveCurrentScreen(saveData);
             break;
           default:
             break;
@@ -155,7 +160,43 @@ class Menu extends Component {
           saveData.previousScreen = "";
           this.props.navigateAndSaveCurrentScreen(saveData);
           this.props.navigation.navigate('Menu')
-        }else {
+        }
+        else if(this.props.auth.data.activeScreen==='MyLocation')
+        {
+          saveData.activeScreen = "Menu";
+          saveData.previousScreen = "";
+          this.props.navigateAndSaveCurrentScreen(saveData);
+          this.props.navigation.navigate(saveData.activeScreen);
+        }
+        else if(this.props.auth.data.activeScreen==='LocationList')
+        {
+          saveData.activeScreen = "Confirmation";
+          saveData.previousScreen = "ServiceDetails";
+          this.props.navigateAndSaveCurrentScreen(saveData);
+          this.props.navigation.navigate(saveData.activeScreen);
+        }
+        else if(this.props.auth.data.activeScreen==='MyMap')
+        {
+          AsyncStorage.getItem("fromConfirmation").then((value)=>{
+            if(value)
+            {
+              saveData.activeScreen = "LocationList";
+              saveData.previousScreen = "Menu";
+              this.props.navigateAndSaveCurrentScreen(saveData);
+              this.props.navigation.navigate(saveData.activeScreen);
+            }
+            else
+            {
+              saveData.activeScreen = "MyLocation";
+              saveData.previousScreen = "Menu";
+              this.props.navigateAndSaveCurrentScreen(saveData);
+              this.props.navigation.navigate(saveData.activeScreen);
+            }
+          })
+         
+        }
+        
+        else {
           this.props.navigation.goBack(null);
           return true;
         }
