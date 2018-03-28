@@ -102,7 +102,7 @@ class DateAndTime extends Component {
         this.setState({
             daYSelected: day.dateString,
             satDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
-            setWeek: n
+            setWeek: n,
         })
 
         let data = this.props.service.data;
