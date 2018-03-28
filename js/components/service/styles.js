@@ -243,9 +243,6 @@ export default {
   imagesSliderWarp: {
     padding: 15
   },
-  imagesSliderFlatList: {
-    height: 60
-  },
   imagesSliderImage: {
     height: 60,
     width: 60,

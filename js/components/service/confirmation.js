@@ -71,7 +71,9 @@ class Confirmation extends Component {
             AsyncStorage.getItem("zoneId").then((zoneValue) => {
                 if (zoneValue) {
                     if (this.props.service.data.serviceLocationid) {
-                        api.post('Jobs/insertNewJob',
+                        if(this.props.service.data.saveDateDB)
+                        {
+                            api.post('Jobs/insertNewJob',
                             {
                                 // "serviceId": this.props.service.data.id,
                                 // "postedDate": this.props.service.data.saveDateDB,
@@ -82,6 +84,7 @@ class Confirmation extends Component {
                                 // "status": "STARTED",
                                 // "userId": this.props.auth.data.id,
                                 // "workerId": "0"
+                                "userLocationId": this.props.service.data.serviceLocationid,
                                 "price": this.props.service.data.price,
                                 "postedDate": this.props.service.data.saveDateDB,
                                 "payment": "Credit Card",
@@ -113,6 +116,13 @@ class Confirmation extends Component {
                                 loader: false,
                             })
                         })
+                        }else{
+                            this.setState({
+                                loader: false
+                            });
+                            Alert.alert('Please add time.'); 
+                        }
+                        
                     }
                     else {
                         this.setState({
