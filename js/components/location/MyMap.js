@@ -30,7 +30,6 @@ class MyMap extends Component {
     }
     componentDidMount() {
         if (this.props.navigation.state.params.screenType === 'edit') {
-            console.log('navigate mount', this.props.navigation);
             const latitude = Number(this.props.navigation.state.params.latitude);
             const longitude = Number(this.props.navigation.state.params.longitude);
             this.setState({
@@ -49,7 +48,6 @@ class MyMap extends Component {
     }
     //called user move maps
     onRegionChange = (region) => {
-        console.log('region', region);
         this.setState({ region: region });
     }
     //called when user select dropdown location
@@ -96,8 +94,6 @@ class MyMap extends Component {
                 customerId: customerId
             }).then(res => {
                 this.setState({ IsSpinnerVisible: false });
-                // this.props.navigation.navigate('MyLocation');
-                // console.log('user-locations-post', res);
                 const data = this.props.auth.data;
                 AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
                     if (fromConfirmation) {
@@ -119,29 +115,29 @@ class MyMap extends Component {
                 this.setState({ IsSpinnerVisible: false });
                 Alert.alert("Please try again later");
             });
-        }
-        //Edit Map
-        if (this.props.navigation.state.params.screenType === 'edit') {
-            const customerId = this.props.navigation.state.params.customerId;
-            const id = this.props.navigation.state.params.id;
-            const name = this.state.name;
-            const buildingName = this.state.buildingName;
-            const villaNo = this.state.villaNo;
-            const landmark = this.state.formatted_address ? this.state.formatted_address
+        } else if (this.props.navigation.state.params.screenType === 'edit') {
+            //Edit Map
+            const customerId1 = this.props.navigation.state.params.customerId;
+            const id1 = this.props.navigation.state.params.id;
+            const name1 = this.state.name;
+            const buildingName1 = this.state.buildingName;
+            const villaNo1 = this.state.villaNo;
+            const landmark1 = this.state.formatted_address ? this.state.formatted_address
                 : this.state.landmark;
-            const latitude = this.state.region.latitude;
-            const longitude = this.state.region.longitude;
-            const locationEditUrl = `user-locations/${id}`;
+            const latitude1 = this.state.region.latitude;
+            const longitude1 = this.state.region.longitude;
+            const locationEditUrl = `user-locations/${id1}`;
             api.put(locationEditUrl, {
-                name: name,
-                buildingName: buildingName,
-                villa: villaNo,
-                landmark: landmark,
-                latitude: latitude,
-                longitude: longitude,
-                customerId: customerId
+                name: name1,
+                buildingName: buildingName1,
+                villa: villaNo1,
+                landmark: landmark1,
+                latitude: latitude1,
+                longitude: longitude1,
+                customerId: customerId1
             }).then(res => {
                 this.setState({ IsSpinnerVisible: false });
+                const data = this.props.auth.data;
                 AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
                     if (fromConfirmation) {
                         data.activeScreen = "LocationList";
@@ -157,7 +153,6 @@ class MyMap extends Component {
                     }
                 })
                 //  this.props.navigation.navigate('MyLocation');
-                console.log('user-locations-post', res);
             }).catch((err) => {
                 console.log(err);
                 this.setState({ IsSpinnerVisible: false });
@@ -229,9 +224,6 @@ class MyMap extends Component {
                                 fetchDetails={true}
                                 renderDescription={row => row.description} // custom description render
                                 onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-                                    console.log('on list click of map', data, details);
-                                    console.log(typeof (details.geometry.location.lat));
-                                    console.log('lat', details.geometry.location.lat);
                                     this.setState({
                                         BusinessName: details.name,
                                         formatted_address: details.formatted_address,

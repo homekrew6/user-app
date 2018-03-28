@@ -106,12 +106,21 @@ class Categories extends Component {
        cover_image: data.cover_image
     });
   }
-  closeModal() {
+  closeModal(data1) {
     this.setState({ IsModalVisible: false });
-    const data=this.props.auth.data;
-    data.activeScreen ="ServiceDetails";
-    data.previousScreen="Category";
+    this.setState({ visible: true });
+    const data = this.props.auth.data;
+    data.activeScreen = "ServiceDetails";
+    data.previousScreen = "Category";
     this.props.navigateAndSaveCurrentScreen(data);
+    let data2 = this.props.service.data;
+    let serviceLocationid = data1.id;
+    // data.serviceLocation = this.state.homeArray;
+    data2.serviceLocation = data1.name;
+    data2.serviceLocationid = serviceLocationid;
+    this.props.setServiceDetails(data2);
+
+    this.setState({ visible: false });
     this.props.navigation.navigate('ServiceDetails', {
       serviceId: this.state.serviceId,
       banner_image: this.state.banner_image,
@@ -157,7 +166,7 @@ class Categories extends Component {
         //if (!data.service) return;
         return (
           <View style={{ backgroundColor: '#fff', borderRadius: 10, }} key={data.id}>
-            <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => this.closeModal(data)} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
               <Ico name='business' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
               <Text>{data.name}</Text>
             </TouchableOpacity>

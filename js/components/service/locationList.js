@@ -51,7 +51,6 @@ class LocationList extends Component {
         const customerId = this.props.auth.data.id;
         const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`
         api.get(getLocationUrl).then(res => {
-            console.log('user-locations', res);
             let finalArray = [];
             res.map((item) => {
                 let data;

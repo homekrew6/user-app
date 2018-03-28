@@ -74,10 +74,6 @@ class DateAndTime extends Component {
         };
     }
 
-    componentDidMount(){
-        console.log('this service timing', this);
-    }
-
     componentWillMount(){
 
         let newColectionData = this.state.colectionData;
@@ -149,8 +145,6 @@ class DateAndTime extends Component {
     setDateAndTime() {
         //const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00';
         const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00' + " " + this.state.setTime.slice(5).toLowerCase();
-        console.log('saveDateDB', saveDateDB);
-
         if (this.state.satDate == '') {
             Alert.alert('Please set a Date');
         } else if (this.state.setTime == '') {

@@ -64,6 +64,7 @@ class Menu extends Component {
     data.activeScreen = "Menu";
     this.props.navigateAndSaveCurrentScreen(data);
     BackHandler.addEventListener('hardwareBackPress', function () {
+
       const { dispatch, navigation, nav } = this.props;
       if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Menu') {
         Alert.alert(
@@ -121,6 +122,11 @@ class Menu extends Component {
             saveData.previousScreen = "ServiceDetails";
             this.props.navigateAndSaveCurrentScreen(saveData);
             break;
+          case "ServiceProviderListing":
+            saveData.activeScreen = "Confirmation";
+            saveData.previousScreen = "ServiceDetails";
+            this.props.navigateAndSaveCurrentScreen(saveData);
+          break;
           case "LocationList":
             // saveData.activeScreen = "Confirmation";
             // saveData.previousScreen = "ServiceDetails";

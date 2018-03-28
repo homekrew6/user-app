@@ -267,7 +267,7 @@ class EditProfile extends Component {
                 <Text>Phone No</Text>
               </View>
               <View style={styles.editprofileInputwrap}>
-                <Input style={styles.editprofileInput} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} />
+                <Input style={styles.editprofileInput} keyboardType={'numeric'} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} />
               </View>
             </View>
 

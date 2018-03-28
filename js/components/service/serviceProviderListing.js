@@ -10,6 +10,7 @@ import I18n from '../../i18n/i18n';
 import styles from './styles';
 import { setServiceDetails } from './elements/serviceActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import api from '../../api/index'
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -101,16 +102,34 @@ class ServiceProviderListing extends Component {
         let loc;
         this.state.spList.map((loc1) => {
             if (loc1.IsSelected == true) {
-                loc = loc1.name;
+                loc = loc1;
             }
         })
         if (loc) {
             let data = this.state.serviceDetails;
-            // data.serviceLocation = this.state.homeArray;
-            data.favouriteSp = loc;
+            // data.serviceLocation = this.state.homeArray
+
+            data.favouriteSp = loc.name;
+            data.favouriteId = loc.id;
             this.props.setServiceDetails(data);
+            
+            const data1 = this.props.auth.data;
+            data1.activeScreen = 'Confirmation';
+            data1.previousScreen = "ServiceDetails";
+            this.props.navigateAndSaveCurrentScreen(data1);
             this.props.navigation.navigate('Confirmation');
+           // this.props.navigation.navigate('Confirmation');
         }
+        else
+        {
+            const data1 = this.props.auth.data;
+            data1.activeScreen = 'Confirmation';
+            data1.previousScreen = "ServiceDetails";
+            this.props.navigateAndSaveCurrentScreen(data1);
+            this.props.navigation.navigate('Confirmation');
+            //this.props.navigation.navigate('Confirmation');
+        }
+       
     }
     render() {
         let serviceListing;
@@ -124,38 +143,35 @@ class ServiceProviderListing extends Component {
 
                             {
                                 data.IsAvailable ? (
+                                    
 
-                                    <View style={{ height: 110, width: 110, backgroundColor: 'blue' }}>
-                                        <TouchableOpacity onPress={() => this.selectServiceProvider(data)}>
+
+                                        <TouchableOpacity onPress={() => this.selectServiceProvider(data)} style={{ width: 100, paddingTop: 10, paddingBottom: 10, alignItems: 'center' }}>
+                                        <View style={{height: 80, width: 80, position: 'relative'}}>
 
                                             {/* <Image source={{ uri: data.image || null }} style={styles.catIten_img} /> */}
                                             {
                                                 data.image ? (
-                                                    <ImageBackground source={{ uri: data.image }} style={{ height: 100, width: 100, borderRadius: 50, position: 'relative' }} >
-                                                        {
-                                                            data.IsSelected ? (
-                                                                <View style={{ backgroundColor: 'black', opacity: 0.5, top: 0, left: 0, position: 'absolute', height: 100, width: 100, alignItems: 'center', justifyContent: 'center' }}>
-                                                                    <Ionicons name="ios-information-circle" style={{ color: 'white' }} />
-                                                                </View>
-                                                            ) : (<View></View>)
-                                                        }
-
-                                                    </ImageBackground>
+                                                    <Image source={{uri: data.image}} style={{ height: 80, width: 80, borderRadius: 80, borderColor: 'blue', borderWidth: 2 }} />
                                                 ) : (
-                                                        <ImageBackground source={img18} style={{ height: 100, width: 100, borderRadius: 50, position: 'relative' }} >
-                                                            {
-                                                                data.IsSelected ? (
-                                                                    <View style={{ backgroundColor: 'black', opacity: 0.5, top: 0, left: 0, position: 'absolute', height: 100, width: 100, alignItems: 'center', justifyContent: 'center' }}>
-                                                                        <Ionicons name="ios-information-circle" style={{ color: 'white' }} />
-                                                                    </View>
-                                                                ) : (<View></View>)
-                                                            }
-                                                        </ImageBackground>
+                                                        <Image source={img18} style={{ height: 80, width: 80, borderRadius: 80, borderColor: 'blue', borderWidth: 2 }} />
                                                     )
+
+                                                    
                                             }
+                                            {
+                                                data.IsSelected ? (
+                                                    <View style={{  backgroundColor: 'rgba(0,0,0, 0.3)', top: 0, left: 0, position: 'absolute', height: 80, width: 80, alignItems: 'center', justifyContent: 'center',  borderRadius: 80, zIndex: 99 }}>
+                                                        <Ionicons name="ios-done-all" style={{ color: 'white', fontSize: 40 }} />
+                                                    </View>
+                                                ) : (<View></View>)
+                                            }
+                                            </View>
+                                            <Text style={styles.catIten_txt}>{data.name || null}</Text>
+                                            
                                         </TouchableOpacity>
-                                        <Text style={styles.catIten_txt}>{data.name || null}</Text>
-                                    </View>
+                                        
+
                                 ) : (
                                         <View style={{width: 100, paddingTop: 10, paddingBottom: 10 }}>
                                             <View style={{ justifyContent: 'space-around', alignContent: 'center', flex:1, flexDirection: 'row'  }}>
@@ -225,7 +241,8 @@ const mapStateToProps = state => ({
     service: state.service,
 });
 const mapDispatchToProps = dispatch => ({
-    setServiceDetails: (data) => dispatch(setServiceDetails(data))
+    setServiceDetails: (data) => dispatch(setServiceDetails(data)),
+    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServiceProviderListing);

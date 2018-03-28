@@ -10,6 +10,7 @@ import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text } from 'native-base';
 
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -25,16 +26,16 @@ const resetAction = NavigationActions.reset({
   actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });
 
-const resetAction1 = NavigationActions.reset({
-  index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Confirmation' })],
-});
 // const resetAction1 = NavigationActions.reset({
-//   index: 1,
-//   actions: [NavigationActions.navigate({ routeName: 'ServiceDetails' }),
-//     NavigationActions.navigate({ routeName: 'Confirmation'})
-//    ],
+//   index: 0,
+//   actions: [NavigationActions.navigate({ routeName: 'Confirmation' })],
 // });
+const resetAction1 = NavigationActions.reset({
+  index: 1,
+  actions: [NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+    NavigationActions.navigate({ routeName: 'Confirmation'})
+   ],
+});
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -63,7 +64,25 @@ class Login extends Component {
         this.props.login(email, password).then((res) => {
           console.log(res);
           if (res.type == 'success') {
-            this.props.getUserDetail(res.userId, res.id).then((userRes) => { console.log(userRes); AsyncStorage.getItem('keyQuestionList').then((value) => { if (value) { AsyncStorage.setItem("fromLogin", "true").then((resT) => { const data = this.props.auth.data; data.activeScreen = "Confirmation"; data.previousScreen = "ServiceDetails"; this.props.navigateAndSaveCurrentScreen(data); this.props.navigation.dispatch(resetAction1); }) } else { this.props.navigation.dispatch(resetAction1); } }) }).catch((err) => { Alert.alert('Login failed, please try again'); });
+            this.props.getUserDetail(res.userId, res.id).then((userRes) => {
+               console.log(userRes);
+              AsyncStorage.getItem('keyQuestionList').then((value) => { 
+                if (value) { 
+                  AsyncStorage.setItem("fromLogin", "true").then((resT) => { 
+                    const data = this.props.auth.data; 
+                    data.activeScreen = "Confirmation"; 
+                    data.previousScreen = "ServiceDetails"; 
+                    this.props.navigateAndSaveCurrentScreen(data); 
+                    this.props.navigation.dispatch(resetAction1); 
+                    //this.props.navigation.navigate('Confirmation');
+                  }) 
+                    
+                  } else { 
+                    this.props.navigation.dispatch(resetAction);
+                  } }) 
+                }).catch((err) => { 
+                  Alert.alert('Login failed, please try again'); 
+                });
           } else {
             Alert.alert('Login failed, please try again');
           }
@@ -221,6 +240,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   login: (email, password) => dispatch(login(email, password)),
   getUserDetail: (id, auth) => dispatch(getUserDetail(id, auth)),
+  navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
