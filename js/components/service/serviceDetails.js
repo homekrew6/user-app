@@ -535,6 +535,24 @@ class serviceDetails extends Component {
   }
 
   componentDidMount() {
+      // AsyncStorage.getItem("fromLogin").then((storeValue) => {
+      //       if (storeValue) {
+      //           BackHandler.addEventListener('hardwareBackPress', function () {
+      //               const { dispatch, navigation, nav } = this.props;
+      //               if (this.props.auth.data.activeScreen) {
+      //                 Alert.alert(
+      //                   'Confirm',
+      //                   'Are you sure to exit the app?',
+      //                   [
+      //                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+      //                     { text: 'OK', onPress: () => BackHandler.exitApp() },
+      //                   ],
+      //                   { cancelable: false }
+      //                 )
+      //               }
+      //           }.bind(this));
+      //       }
+      //   })
     console.log('componentDidMount begin', this.props);
     const serviceId = this.props.service.data.id;
     // this.setState({
@@ -780,14 +798,16 @@ class serviceDetails extends Component {
   }
 
 
-  goToConfirmation()
-  {
+  goToConfirmation(){
     if(this.props.auth.data){
+      this.setState({IsSpinnerVisible:true});
       const data = this.props.auth.data;
       data.activeScreen = "Confirmation";
       data.previousScreen = "ServiceDetails";
       this.props.navigateAndSaveCurrentScreen(data);
+      this.setState({IsSpinnerVisible:false});
       this.props.navigation.navigate('Confirmation');
+     
     }
     else{
       this.props.navigation.dispatch(resetAction);
@@ -1080,7 +1100,9 @@ class serviceDetails extends Component {
           this.state.questionList.length > 0 ? (
             <Footer>
               <FooterTab>
-                <TouchableOpacity onPress={() => this.goToConfirmation()} style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt} >CONTINUE</Text></TouchableOpacity>
+                <TouchableOpacity onPress={this.goToConfirmation.bind(this)} style={styles.confirmationServicefooterItem}>
+                  <Text style={styles.confirmationServicefooterItmTxt} >CONTINUE</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={styles.confirmationServicefooterItem2}>
                   <Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text>
                 </TouchableOpacity>

@@ -25,12 +25,14 @@ const logo_hdr = require("../../../img/logo2.png");
 const carve = require("../../../img/icon17.png");
 
 class Confirmation extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            dateTime: props.service.data.serviceTime,
-            saveDateDB: props.service.data.saveDateDB,
+            dateTime: props.service.data.serviceTime ? props.service.data.serviceTime : '',
+            saveDateDB: props.service.data.saveDateDB ? props.service.data.saveDateDB : '',
             serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : '',
+
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,
             continueButtonDesable: false,
@@ -40,75 +42,88 @@ class Confirmation extends Component {
 
     }
 
-    componentDidMount(){
-        console.log('this confirm', this);
-        AsyncStorage.getItem("fromLogin").then((storeValue) => {
-            if (storeValue) {
-                BackHandler.addEventListener('hardwareBackPress', function () {
-                    const { dispatch, navigation, nav } = this.props;
-                    if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Confirmation') {
-                        this.props.navigation.navigate('ServiceDetails');
-                    }
-                }.bind(this));
-            }
-        })
+
+    componentDidMount() {
+        // AsyncStorage.getItem("fromLogin").then((storeValue) => {
+        //     if (storeValue) {
+        //         BackHandler.addEventListener('hardwareBackPress', function () {
+        //             const { dispatch, navigation, nav } = this.props;
+        //             if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Confirmation') {
+        //                 const data = this.props.auth.data;
+        //                 data.activeScreen = 'ServiceDetails';
+        //                 data.previousScreen = "";
+        //                 this.props.navigateAndSaveCurrentScreen(data);
+
+        //             }
+        //         }.bind(this));
+        //     }
+        // })
+        //BackHandler.removeEventListener('hardwareBackPress', this._pasEditUnmountFunction);
     }
-   
+
+
 
     confirmationContinue() {
         this.setState({
             loader: true,
         })
         if (!(this.state.dateTime == undefined)) {
-            AsyncStorage.getItem("zoneId").then((zoneValue)=>{
-                if(zoneValue)
-                {
-                    api.post('jobs',
-                        {
-                            // "serviceId": this.props.service.data.id,
-                            // "postedDate": this.props.service.data.saveDateDB,
-                            // "location": this.props.service.data.serviceLocationid,
-                            // "payment": "Credit Card",
-                            // "faourite_sp": this.props.service.data.favouriteSp,
-                            // "promo_code": "AED 50 off",
-                            // "status": "STARTED",
-                            // "userId": this.props.auth.data.id,
-                            // "workerId": "0"
-                            "price": this.props.service.data.price,
-                            "postedDate": this.props.service.data.saveDateDB,
-                            "payment": "Credit Card",
-                            "faourite_sp": this.props.service.data.favouriteSp,
-                            "promo_code": "AED 50 off",
-                            "status": "STARTED",
-                            "customerId": this.props.auth.data.id,
-                            "currencyId": 0,
-                            "workerId": 0,
-                            "zoneId": zoneValue,
-                            "serviceId": this.props.service.data.id
-                        }
-                    ).then(responseJson => {
-                        // console.log(responseJson);
-                        AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
-                        AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
-                        AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
-                        AsyncStorage.removeItem('fromLogin', (err) => console.log('finished', err));
-                        AsyncStorage.removeItem('fromConfirmation', (err) => console.log('finished', err));
-                        Alert.alert("Job Posted Successfully");
-                        this.setState({
-                            loader: false,
-                            continueButtonDesable: true
-                        });
-                        this.props.navigation.dispatch(reseteAction);
-                    }).catch(err => {
-                        console.log(err);
-                        Alert.alert("Job Post not save");
-                        this.setState({
-                            loader: false,
+            AsyncStorage.getItem("zoneId").then((zoneValue) => {
+                if (zoneValue) {
+                    if (this.props.service.data.serviceLocationid) {
+                        api.post('Jobs/insertNewJob',
+                            {
+                                // "serviceId": this.props.service.data.id,
+                                // "postedDate": this.props.service.data.saveDateDB,
+                                // "location": this.props.service.data.serviceLocationid,
+                                // "payment": "Credit Card",
+                                // "faourite_sp": this.props.service.data.favouriteSp,
+                                // "promo_code": "AED 50 off",
+                                // "status": "STARTED",
+                                // "userId": this.props.auth.data.id,
+                                // "workerId": "0"
+                                "price": this.props.service.data.price,
+                                "postedDate": this.props.service.data.saveDateDB,
+                                "payment": "Credit Card",
+                                "faourite_sp": this.props.service.data.favouriteId,
+                                "promo_code": "AED 50 off",
+                                "status": "STARTED",
+                                "customerId": this.props.auth.data.id,
+                                "currencyId": 0,
+                                "workerId": 0,
+                                "zoneId": zoneValue,
+                                "serviceId": this.props.service.data.id
+                            }
+                        ).then(responseJson => {
+                            AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
+                            AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
+                            AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
+                            AsyncStorage.removeItem('fromLogin', (err) => console.log('finished', err));
+                            AsyncStorage.removeItem('fromConfirmation', (err) => console.log('finished', err));
+                            Alert.alert("Job Posted Successfully");
+                            this.setState({
+                                loader: false,
+                                continueButtonDesable: true
+                            });
+                            this.props.navigation.dispatch(reseteAction);
+                        }).catch(err => {
+                            console.log(err);
+                            Alert.alert("Job Post not save");
+                            this.setState({
+                                loader: false,
+                            })
                         })
-                    })
+                    }
+                    else {
+                        this.setState({
+                            loader: false
+                        });
+                        Alert.alert('Please add a location.');
+                    }
+
                 }
             })
-           
+
         }
         else {
             this.setState({
@@ -126,8 +141,9 @@ class Confirmation extends Component {
         this.props.navigation.navigate(screen);
     }
 
+
     goToSpListing() {
-        
+
         if (this.state.dateTime) {
             this.navigate('ServiceProviderListing');
         }
@@ -266,10 +282,7 @@ class Confirmation extends Component {
     }
 }
 
-Confirmation.propTypes = {
-    service: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
-}
+
 const mapStateToProps = (state) => {
     return {
         service: state.service,
