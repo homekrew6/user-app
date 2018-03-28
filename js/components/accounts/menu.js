@@ -60,7 +60,6 @@ class Menu extends Component {
   }
 
   componentWillMount() {
-    
     const data = this.props.auth.data;
     data.activeScreen = "Menu";
     this.props.navigateAndSaveCurrentScreen(data);
