@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { login, getUserDetail } from './elements/authActions';
+import { login, getUserDetail, checkAuth } from './elements/authActions';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage } from 'react-native';
 import { FBLogin, FBLoginManager } from 'react-native-facebook-login';
-// import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+import FCM, { FCMEvent, NotificationType } from "react-native-fcm";
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text } from 'native-base';
@@ -42,8 +43,90 @@ class Login extends Component {
     this.state = {
 	      email: '',
         password: '',
+        deviceToken: '',
     };
   }
+  componentDidMount(){
+    FCM.getFCMToken().then(token => {
+      this.setState({ deviceToken: token });
+    });
+    GoogleSignin.configure({
+      webClientId: '16831185707-hpfq3aigemrct3qnfogjf19t864fr0kp.apps.googleusercontent.com', 
+      offlineAccess: true 
+    }).then(() => {
+      // you can now call currentUserAsync()
+    });
+  }
+
+  clickGmail(){
+    GoogleSignin.signIn().then((user) => {
+        if (user.email) {
+          api.post('Customers/socialLoginEmailCheck', { email: user.email }).then((res) => {
+            if (res.response.exist == 1) {
+              Alert.alert('Email already exist');
+            } else if (res.response.exist == 2) {
+              this.props.login(user.email, user.id).then((resLogin) => {
+                if (resLogin.type == 'success') {
+                  //updating Device token for push notification
+                  this.props.checkAuth((res) => {
+                    if (res) {
+                      api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: this.state.deviceToken }).then((resEdit) => {
+                        //getting user details
+                        this.props.getUserDetail(resLogin.userId, resLogin.id).then((userRes) => {
+                          this.props.navigation.dispatch(resetAction);
+                        }).catch((err) => {
+                          Alert.alert('Login failed, please try again');
+                        });
+                        //getting user details end
+                      }).catch((err) => {
+
+                      });
+                    }
+                  }, (err) => {
+                  });
+                  //update device token for push notification end
+
+                } else {
+                  Alert.alert('Login failed, please try again');
+                }
+              }).catch((err) => {
+                Alert.alert('Login fail,please try again');
+                // return err
+              });
+            } else {
+              api.post('Customers/signup', { name: user.name, email: user.email, password: user.id, social_type: 'google', social_id: user.id, is_active: 1, "deviceToken": this.state.deviceToken }).then((responseJson) => {
+                this.props.login(user.email, user.id).then((resLogin) => {
+                  if (resLogin.type == 'success') {
+                    this.props.getUserDetail(resLogin.userId, resLogin.id).then((userRes) => {
+                      // this.props.navigation.navigate("Menu");
+                      this.props.navigation.dispatch(resetAction);
+                    }).catch((err) => {
+                      Alert.alert('Login failed, please try again');
+                    });
+                  } else {
+                    Alert.alert('Login failed, please try again');
+                  }
+                }).catch((err) => {
+                  Alert.alert('Login fail,please try again');
+                  // return err
+                });
+              }).catch((err) => {
+              });
+            }
+          }).catch((err) => {
+            Alert.alert('please try again.');
+          });
+        } else {
+          Alert.alert('Email not found');
+        }
+        //this.setState({ user: user });
+      })
+      .catch((err) => {
+        Alert.alert('Login failed, please try again');
+      })
+      .done();
+  }
+
   pressForgotPassword() {
     this.props.navigation.navigate('ForgotPassword');
   }
@@ -62,32 +145,47 @@ class Login extends Component {
     api.post('Customers/approveChecking', { email: this.state.email }).then((resEdit) => {
       if (resEdit.response.is_active) {
         this.props.login(email, password).then((res) => {
-          console.log(res);
           if (res.type == 'success') {
-            this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-               console.log(userRes);
-              AsyncStorage.getItem('keyQuestionList').then((value) => { 
-                if (value) { 
-                  AsyncStorage.setItem("fromLogin", "true").then((resT) => { 
-                    const data = this.props.auth.data; 
-                    data.activeScreen = "Confirmation"; 
-                    data.previousScreen = "ServiceDetails"; 
-                    this.props.navigateAndSaveCurrentScreen(data); 
-                    this.props.navigation.dispatch(resetAction1); 
-                    //this.props.navigation.navigate('Confirmation');
-                  }) 
-                    
-                  } else { 
-                    this.props.navigation.dispatch(resetAction);
-                  } }) 
-                }).catch((err) => { 
-                  Alert.alert('Login failed, please try again'); 
+
+            //updating Device token for push notification
+            this.props.checkAuth((res) => {
+              if (res) {
+                api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: this.state.deviceToken }).then((resEdit) => {
+                  //check from local storage
+                  this.props.getUserDetail(res.userId, res.id).then((userRes) => {
+                    AsyncStorage.getItem('keyQuestionList').then((value) => {
+                      if (value) {
+                        AsyncStorage.setItem("fromLogin", "true").then((resT) => {
+                          const data = this.props.auth.data;
+                          data.activeScreen = "Confirmation";
+                          data.previousScreen = "ServiceDetails";
+                          this.props.navigateAndSaveCurrentScreen(data);
+                          this.props.navigation.dispatch(resetAction1);
+                          //this.props.navigation.navigate('Confirmation');
+                        })
+
+                      } else {
+                        this.props.navigation.dispatch(resetAction);
+                      }
+                    })
+                  }).catch((err) => {
+                    Alert.alert('Login failed, please try again');
+                  });
+                  //local storage check end
+                }).catch((err) => {
+                  Alert.alert('Login failed, please try again');
                 });
+              }
+            }, (err) => {
+              Alert.alert('Login failed, please try again');
+            });
+            //update device token for push notification end
+
+            
           } else {
             Alert.alert('Login failed, please try again');
           }
         }).catch((err) => {
-          console.log(err);
           Alert.alert('Login fail,please try again');
           // return err
         });
@@ -102,39 +200,50 @@ class Login extends Component {
   clcikFacebook() {
     FBLoginManager.loginWithPermissions(['email', 'user_friends'], (error, data) => {
 			  if (!error) {
-        console.log('Login data: ', data);
         const profileDetails = JSON.parse(data.profile);
         if (profileDetails.email) {
           api.post('Customers/socialLoginEmailCheck', { email: profileDetails.email }).then((res) => {
-            console.log(res);
             if (res.response.exist == 1) {
               Alert.alert('Email already exist');
             } else if (res.response.exist == 2) {
               this.props.login(profileDetails.email, profileDetails.id).then((resLogin) => {
-                console.log(resLogin);
                 if (resLogin.type == 'success') {
-                  this.props.getUserDetail(resLogin.userId, resLogin.id).then((userRes) => {
-                    console.log(userRes);
-                    // this.props.navigation.navigate("Menu");
-                    this.props.navigation.dispatch(resetAction);
-                  }).catch((err) => {
+
+                  //updating Device token for push notification
+                  this.props.checkAuth((res) => {
+                    if (res) {
+                      api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: this.state.deviceToken }).then((resEdit) => {
+                        //getting user details
+                        this.props.getUserDetail(resLogin.userId, resLogin.id).then((userRes) => {
+                          // this.props.navigation.navigate("Menu");
+                          this.props.navigation.dispatch(resetAction);
+                        }).catch((err) => {
+                          Alert.alert('Login failed, please try again');
+                        });
+                        //getting user details end
+                      }).catch((err) => {
+
+                      });
+                    }
+                  }, (err) => {
                     Alert.alert('Login failed, please try again');
                   });
+                  //update device token for push notification end
+
+
+                  
                 } else {
                   Alert.alert('Login failed, please try again');
                 }
               }).catch((err) => {
-                console.log(err);
 							 Alert.alert('Login fail,please try again');
 							  // return err
               });
             } else {
-              api.post('Customers/signup', { name: profileDetails.name, email: profileDetails.email, password: profileDetails.id, social_type: 'facebook', social_id: profileDetails.id, is_active: 1 }).then((responseJson) => {
+              api.post('Customers/signup', { name: profileDetails.name, email: profileDetails.email, password: profileDetails.id, social_type: 'facebook', social_id: profileDetails.id, is_active: 1, "deviceToken": this.state.deviceToken }).then((responseJson) => {
                 this.props.login(profileDetails.email, profileDetails.id).then((resLogin) => {
-                  console.log(resLogin);
                   if (resLogin.type == 'success') {
                     this.props.getUserDetail(resLogin.userId, resLogin.id).then((userRes) => {
-                      console.log(userRes);
                       // this.props.navigation.navigate("Menu");
                       this.props.navigation.dispatch(resetAction);
                     }).catch((err) => {
@@ -144,12 +253,11 @@ class Login extends Component {
                     Alert.alert('Login failed, please try again');
                   }
                 }).catch((err) => {
-                  console.log(err);
 								 Alert.alert('Login fail,please try again');
 								  // return err
                 });
               }).catch((err) => {
-                console.log(err);
+                Alert.alert('Login fail,please try again');
               });
             }
           }).catch((err) => {
@@ -159,10 +267,8 @@ class Login extends Component {
           Alert.alert('Email not found');
         }
 
-
-        // console.log(profileDetails);
 			  } else {
-						  console.log('Error: ', error);
+            Alert.alert(error.message);
 			  }
 					  });
 		  }
@@ -211,7 +317,7 @@ class Login extends Component {
               </Button>
   </View>
     <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, paddingLeft: 15, paddingRight: 15 }}>
-              <Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1 }}>
+              <Button block transparent style={{ borderWidth: 1, borderColor: '#29416f', flex: 1 }} onPress={() => this.clickGmail()}>
     <Icon name="gmail" style={{ color: '#29416f', marginRight: 5, fontSize: 20 }} />
     <Text style={{ color: '#29416f' }}>{I18n.t('via_gmail')}</Text>
   </Button>
@@ -240,6 +346,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   login: (email, password) => dispatch(login(email, password)),
   getUserDetail: (id, auth) => dispatch(getUserDetail(id, auth)),
+  checkAuth: cb => dispatch(checkAuth(cb)),
   navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
