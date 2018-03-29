@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, AsyncStorage } from "react-native";
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './styles';
@@ -10,9 +10,12 @@ import { setServiceDetails } from './elements/serviceActions';
 class incrimentDecriment extends Component {
     state = { massage: "", totalData: "" }
     componentDidMount() {
-        console.log(this.props);
-        this.setState({ massage: this.props.massage.IncrementId });
-        this.setState({ totalData: this.props.massage });
+        this.setState({ 
+            massage: this.props.massage.IncrementId,
+            totalData: this.props.massage,
+            questionId: this.props.massage.answers[0].questionId
+         });
+
     }
 
     increment() {
@@ -24,10 +27,31 @@ class incrimentDecriment extends Component {
     }
 
     handleIncrement = () => {
-        var price = this.props.service.data.price;
-        price=Number(price);
+        const questionId = this.state.questionId;
         const massage = Number(this.state.massage) + 1;
         this.setState({ massage: massage });
+        const incrementStatus = data;
+        AsyncStorage.getItem("keyQuestionList").then((value) => {
+        if(value !== ''){
+            const jsonKeyQuestion = JSON.parse(value);
+            jsonKeyQuestion.map((dataQ, key) => {
+            if(dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId){
+                jsonKeyQuestion[key].IncrementId = massage;
+            }
+            });
+            const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+            AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+            console.log('====FirstPage====handleIncrement==='+res)
+            });
+        }
+        }).catch(res => {
+            //AsyncStorage.setItem('StoreData', dataRemoteString);
+            console.log('switchChange err', res);
+        });
+
+        var price = this.props.service.data.price;
+        price=Number(price);
+        
         if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
             if (this.state.totalData.answers[0].option_price_impact == "Addition") {
                 // price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));
@@ -39,19 +63,43 @@ class incrimentDecriment extends Component {
             var data = this.props.service.data;
             price = this.addZeroes(price);
             data.price = price;
+            AsyncStorage.setItem("servicePrice", price).then((success)=>{
+            
+            })
             this.props.setServiceDetails(data);
         }
 
     }
     handleDecrement = () => {
+        
         price=Number(price);
         var price = this.props.service.data.price;
         if (Number(this.state.massage) == 0) {
 
         }
         else {
+            const questionId = this.state.questionId;
             const massage = Number(this.state.massage) - 1;
             this.setState({ massage: massage });
+            const incrementStatus = data;
+            AsyncStorage.getItem("keyQuestionList").then((value) => {
+            if(value !== ''){
+                const jsonKeyQuestion = JSON.parse(value);
+                jsonKeyQuestion.map((dataQ, key) => {
+                if(dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId){
+                    jsonKeyQuestion[key].IncrementId = massage;
+                }
+                });
+                const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+                AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                console.log('====FirstPage====handleDecrement==='+res)
+                });
+            }
+            }).catch(res => {
+                //AsyncStorage.setItem('StoreData', dataRemoteString);
+                console.log('switchChange err', res);
+            });
+            
             if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
                 if (this.state.totalData.answers[0].option_price_impact == "Addition") {
                     price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));
@@ -64,6 +112,9 @@ class incrimentDecriment extends Component {
                 var data = this.props.service.data;
                 price = this.addZeroes(price);
                 data.price = price;
+                AsyncStorage.setItem("servicePrice", price).then((success)=>{
+            
+                })
                 this.props.setServiceDetails(data);
             }
         }

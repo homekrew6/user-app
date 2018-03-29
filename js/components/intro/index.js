@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, Dimensions, StyleSheet, ImageBackground } from "react-native";
+import { Image, View, StatusBar, Dimensions, StyleSheet, ImageBackground, AsyncStorage } from "react-native";
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right, Grid } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import Swiper from 'react-native-swiper';
@@ -30,6 +30,9 @@ class Intro extends Component {
 	}
 
 	componentWillMount() {
+		AsyncStorage.setItem("IsSliderShown", "true").then((res)=>{
+			
+		})
 		this.setState({
 			interval: setInterval(() => {
 				this.setState({ position: this.state.position === 2 ? 0 : this.state.position + 1 });
@@ -59,8 +62,10 @@ class Intro extends Component {
 		const { slides } = this.state
 
 		return (
-			<Swiper showsButtons={false} loop={true} autoplay={true}
-				autoplayTimeout={2.5} index={0}>
+			<Swiper showsButtons={false} loop={true}
+				//autoplay={true}
+				//autoplayTimeout={2.5} index={0}
+			>
 				{this.state.sliderArray.map((slide, index) => {
 					return (
 						<View key={slide.id}>
@@ -157,7 +162,7 @@ class Intro extends Component {
 					style={styles.wrapper}
 					loop={true}
 					autoplay={true}
-					autoplayTimeout={5}
+					autoplayTimeout={10}
 					dotColor={'#81cdc7'}
 					activeDotColor={'#1e3768'}
 
@@ -195,7 +200,7 @@ class Intro extends Component {
 					paddingLeft: 10, paddingRight: 10, paddingTop: 10,
 					paddingBottom: 10
 				}}>
-						<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Login')} ><Text>{I18n.t('book_now')}</Text></Button>
+						<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Category')} ><Text>{I18n.t('book_now')}</Text></Button>
 				</View>
 
 				</Container>

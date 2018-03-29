@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setDateAndTime } from './elements/serviceActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, ScrollView } from "react-native";
+import { setDateAndTime ,setServiceDetails} from './elements/serviceActions';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, ScrollView, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Card, CardItem } from "native-base";
 // import ImageSlider from 'react-native-image-slider';
 import styles from './styles';
 import { Calendar } from 'react-native-calendars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import I18n from '../../i18n/i18n';
 
-
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 
 
 
@@ -34,7 +35,7 @@ class DateAndTime extends Component {
 
         date = today.getFullYear() + "-" + dy + "-" + dm;
         this.state = {
-            daYSelected: [date],
+            daYSelected:'' ,
             minDate: [today],
             weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
@@ -68,7 +69,22 @@ class DateAndTime extends Component {
             setTime: '',
             setWeek: '',
             serviceDetails: this.props.service.data,
+            selectedDate: '',
+            selectedTimeID: ''
         };
+    }
+
+    componentWillMount(){
+
+        let newColectionData = this.state.colectionData;
+        let newIndex = this.props.service.data.selectedTimeID;
+        let sltdt = this.props.service.data.selectedDate;
+        if(sltdt){
+            this.onDaySelect(sltdt);
+        }
+        if(newIndex){
+           this.pressOnCircle(newIndex);
+        }
     }
 
     onDaySelect(day) {
@@ -83,34 +99,52 @@ class DateAndTime extends Component {
         weekday[6] = "Sat";
 
         let n = weekday[d.getDay()];
-        console.log(n);
-        //console.log(day);
         this.setState({
             daYSelected: day.dateString,
             satDate: day.day + '-' + this.state.months[day.month - 1] + '-' + day.year,
-            setWeek: n
+            setWeek: n,
         })
+
+        let data = this.props.service.data;
+        data.selectedDate = day;
+        this.props.setServiceDetails(data);
 
     }
     pressOnCircle(index) {
         let newColectionData = this.state.colectionData;
-
+        let selectedTimeId; 
         for (var i = 0; i < (newColectionData.length); i++) {
             newColectionData[i].isActive = false;
             if (newColectionData[i].key == index) {
                 newColectionData[i].isActive = true;
+                selectedTimeId=newColectionData[i].key;
                 this.setState({
                     setTime: newColectionData[i].time,
+                    selectedTimeID: newColectionData[i].key,
                 })
             }
 
         }
+
+        
         this.setState({
             colectionData: newColectionData,
         })
+        let data = this.props.service.data;
+        //data.selectedTimeID = this.state.selectedTimeID;
+        data.selectedTimeID = selectedTimeId;
+        this.props.setServiceDetails(data);
+    }
+    navigate() {
+        const data = this.props.auth.data;
+        data.activeScreen = 'Confirmation';
+        data.previousScreen = "ServiceDetails";
+        this.props.navigateAndSaveCurrentScreen(data);
+        this.props.navigation.navigate('Confirmation');
     }
     setDateAndTime() {
-        console.log(this.props.service);
+        //const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00';
+        const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00' + " " + this.state.setTime.slice(5).toLowerCase();
         if (this.state.satDate == '') {
             Alert.alert('Please set a Date');
         } else if (this.state.setTime == '') {
@@ -118,8 +152,9 @@ class DateAndTime extends Component {
         } else {
             let data = this.state.serviceDetails;
             data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
+            data.saveDateDB = saveDateDB;
             this.props.setDateAndTime(data);
-            this.props.navigation.navigate('Confirmation');
+            this.navigate();
         }
     }
 
@@ -131,13 +166,13 @@ class DateAndTime extends Component {
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
                     <Button transparent onPress={() => this.props.navigation.navigate('Confirmation')}>
-                        <Text>Cancel</Text>
+                        <Text>{I18n.t('cancel')}</Text>
                     </Button>
                     <Body style={styles.tac}>
                         <Text style={styles.hdClr}>My Timings</Text>
                     </Body>
                     <Button transparent onPress={() => this.setDateAndTime()}>
-                        <Text>Done</Text>
+                        <Text>{I18n.t('done')}</Text>
                     </Button>
                 </Header>
 
@@ -148,7 +183,7 @@ class DateAndTime extends Component {
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
                                 <Text>Date</Text>
                             </CardItem>
-                            <CardItem>
+                            <CardItem style={{  alignItems: 'center', justifyContent: 'center' }}>
                                 <Calendar
                                     onDayPress={(day) => this.onDaySelect(day)}
                                     monthFormat={'MMM yyyy'}
@@ -211,18 +246,22 @@ class DateAndTime extends Component {
 }
 
 DateAndTime.propTypes = {
-    service: PropTypes.object.isRequired
+    service: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => {
     return {
         service: state.service,
+        auth: state.auth
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setDateAndTime: (data) => dispatch(setDateAndTime(data))
+        setDateAndTime: (data) => dispatch(setDateAndTime(data)),
+        setServiceDetails: (data) => dispatch(setServiceDetails(data)),
+        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
     }
 }
 

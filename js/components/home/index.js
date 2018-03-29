@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {NavigationActions} from "react-navigation";
-import { Image, View, StatusBar, ImageBackground } from "react-native";
+import { Image, View, StatusBar, ImageBackground, Alert, AsyncStorage} from "react-native";
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {checkAuth, getUserDetail} from '../accounts/elements/authActions'
@@ -19,6 +19,10 @@ const resetActionIntro = NavigationActions.reset({
 	index: 0,
 	actions: [NavigationActions.navigate({ routeName: 'Intro' })],
   });
+const resetActionCategory = NavigationActions.reset({
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'Category' })],
+});
 class Home extends Component {
 	// eslint-disable-line
 	constructor(params){
@@ -39,8 +43,20 @@ class Home extends Component {
 					})
 					//this.props.navigation.navigate("Menu")
 				}else{
+					AsyncStorage.getItem('IsSliderShown').then((res)=>{
+						if(res)
+						{
+							this.props.navigation.dispatch(resetActionCategory);
+						}
+						else
+						{
+							this.props.navigation.dispatch(resetActionIntro);
+						}
+					}).catch((err)=>{
+						this.props.navigation.dispatch(resetActionIntro);
+					})
 					//this.props.navigation.navigate("Intro")
-					this.props.navigation.dispatch(resetActionIntro);
+					// this.props.navigation.dispatch(resetActionIntro);
 				}
 			})
 		}, 4000);

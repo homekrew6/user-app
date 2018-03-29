@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList } from 'react-native';
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList, BackHandler } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -13,13 +13,17 @@ import IncrimentDecriment from './incrimentDecrimentCompt';
 import Slider from 'react-native-slider';
 import { getQuestionListByServiceId } from './elements/serviceActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker, Switch, Footer, FooterTab } from 'native-base';
+import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker, Switch, Footer, FooterTab, ActionSheet } from 'native-base';
 import I18n from '../../i18n/i18n';
 import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';
 import { setServiceDetails } from './elements/serviceActions';
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import { RNS3 } from 'react-native-aws3';
 import config from '../../config';
+import api from '../../api';
+import { NavigationActions } from 'react-navigation';
+
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require('../../../img/logo2.png');
@@ -31,8 +35,15 @@ const img19 = require('../../../img/swiper-2.png');
 const img20 = require('../../../img/swiper-2.png');
 const img21 = require('../../../img/swiper-2.png');
 const img22 = require('../../../img/swiper-2.png');
+const resetAction = NavigationActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Login' })],
+});
 
-
+var BUTTONS = [
+  { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
+  { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+];
 class serviceDetails extends Component {
   constructor(props) {
     super(props);
@@ -40,55 +51,21 @@ class serviceDetails extends Component {
       isOpen: true,
       value: 0.2,
       questionList: [],
-      serviceName: props.service.data.name,
-      banner_image: props.service.data.banner_image,
-      cover_image: props.service.data.cover_image,
+      serviceName: 'props.service.data.name',
+      banner_image: 'props.service.data.banner_image',
+      cover_image: 'props.service.data.cover_image',
+      start_range: 0,
       numberValue: 1,
       activeRadioArray: [false, false, false],
       IsSpinnerVisible: false,
-      // sliderData: [
-      //   {
-      //     'src': img19,
-      //     'key': 1
-      //   },
-      //   {
-      //     'src': img20,
-      //     'key': 2
-      //   },
-      //   {
-      //     'src': img21,
-      //     'key': 3
-      //   },
-      //   {
-      //     'src': img22,
-      //     'key': 4
-      //   },
-      //   {
-      //     'src': img19,
-      //     'key': 5
-      //   },
-      //   {
-      //     'src': img20,
-      //     'key': 6
-      //   },
-      //   {
-      //     'src': img21,
-      //     'key': 7
-      //   }
-      // ]
       sliderData: [
-        {
-          'src': 'https://homekrewbooking.s3.amazonaws.com/66665615_.png',
-          'key': 1
-        }
+
       ]
     };
     super(props);
-    console.log("propsDetails in service details", props);
-
 
   }
-  uploadPhoto() {
+  captureFile(data) {
     this.setState({ IsSpinnerVisible: true });
     ImagePicker.openCamera({
       width: 400,
@@ -110,9 +87,7 @@ class serviceDetails extends Component {
       console.log(file);
 
       const options = config.s3;
-      console.log(options);
       RNS3.put(file, config.s3).then((response) => {
-        console.log(response);
         if (response.status !== 201) {
           this.setState({ IsSpinnerVisible: false });
           throw new Error('Failed to upload image to S3');
@@ -121,20 +96,58 @@ class serviceDetails extends Component {
 
         if (response.status == 201) {
           let slider = [];
-          this.state.sliderData.map(sdata => {
+          data.sliderValues.map(sdata => {
             slider.push(sdata);
           });
-          let lengthOfSlider = slider.length;
-          lengthOfSlider = lengthOfSlider - 1;
-          let latestKey = slider[lengthOfSlider].key;
-          latestKey = latestKey + 1;
-          let newData = {
-            'src': response.body.postResponse.location,
-            'key': latestKey
-          };
-          slider.push(newData);
-          this.setState({ IsSpinnerVisible: false });
-          this.setState({ sliderData: slider });
+
+          let lengthOfSlider = data.sliderValues.length;
+          if (lengthOfSlider === 0) {
+            let newData = {
+              'src': response.body.postResponse.location,
+              'key': 1
+            };
+
+            slider.push(newData);
+            this.setState({ IsSpinnerVisible: false });
+            //this.setState({ sliderData: slider });
+          } else {
+            lengthOfSlider = lengthOfSlider - 1;
+            let latestKey = slider[lengthOfSlider].key;
+            latestKey = latestKey + 1;
+            let newData = {
+              'src': response.body.postResponse.location,
+              'key': latestKey
+            };
+            slider.push(newData);
+            this.setState({ IsSpinnerVisible: false });
+            //this.setState({ sliderData: slider });
+          }
+
+
+          const questionId = data.id;
+          const sliderDump = slider;
+
+          AsyncStorage.getItem("keyQuestionList").then((value) => {
+            if (value !== '') {
+              const jsonKeyQuestion = JSON.parse(value);
+              jsonKeyQuestion.map((dataQ, key) => {
+                if (dataQ.id === questionId) {
+                  console.log('sliderDump', sliderDump);
+                  jsonKeyQuestion[key].sliderValues = sliderDump;
+                }
+              });
+              console.log('jsonKeyQuestion cature photo', jsonKeyQuestion);
+              this.setState({ questionList: jsonKeyQuestion });
+              const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+              AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                console.log('====FirstPage====captureFile===' + res);
+              });
+            }
+          }).catch(res => {
+            //AsyncStorage.setItem('StoreData', dataRemoteString);
+            console.log('switchChange err', res);
+          });
+
         }
       }).catch((err) => {
         this.setState({ IsSpinnerVisible: false });
@@ -145,7 +158,171 @@ class serviceDetails extends Component {
       console.log(err);
     });
   }
+
+  attachFile(data) {
+    // this.setState({ uploadButton: false });
+
+    ImagePicker.openPicker({
+      width: 400,
+      height: 300,
+      cropping: true,
+    }).then((response) => {
+      this.setState({ visible: true });
+      let uri;
+      if (!response.path) {
+        uri = response.uri;
+      } else {
+        uri = response.path;
+      }
+      const file = {
+        uri,
+        name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
+        type: response.mime || 'image/png',
+      };
+
+      const options = config.s3;
+
+      RNS3.put(file, config.s3).then((response) => {
+        console.log(response);
+        if (response.status !== 201) {
+          this.setState({ IsSpinnerVisible: false });
+          throw new Error('Failed to upload image to S3');
+        }
+
+
+        if (response.status == 201) {
+          // let slider = [];
+          // this.state.sliderData.map(sdata => {
+          //   slider.push(sdata);
+          // });
+          // let lengthOfSlider = slider.length;
+          // lengthOfSlider = lengthOfSlider - 1;
+          // let latestKey = slider[lengthOfSlider].key;
+          // latestKey = latestKey + 1;
+          // let newData = {
+          //   'src': response.body.postResponse.location,
+          //   'key': latestKey
+          // };
+          // slider.push(newData);
+          // this.setState({ IsSpinnerVisible: false });
+          // this.setState({ sliderData: slider });
+          let slider = [];
+          data.sliderValues.map(sdata => {
+            slider.push(sdata);
+          });
+
+          let lengthOfSlider = data.sliderValues.length;
+          if (lengthOfSlider === 0) {
+            let newData = {
+              'src': response.body.postResponse.location,
+              'key': 1
+            };
+
+            slider.push(newData);
+            this.setState({ IsSpinnerVisible: false });
+            //this.setState({ sliderData: slider });
+          } else {
+            lengthOfSlider = lengthOfSlider - 1;
+            let latestKey = slider[lengthOfSlider].key;
+            latestKey = latestKey + 1;
+            let newData = {
+              'src': response.body.postResponse.location,
+              'key': latestKey
+            };
+            slider.push(newData);
+            this.setState({ IsSpinnerVisible: false });
+            //this.setState({ sliderData: slider });
+          }
+
+          const questionId = data.id;
+          const sliderDump = slider;
+
+          AsyncStorage.getItem("keyQuestionList").then((value) => {
+            if (value !== '') {
+              const jsonKeyQuestion = JSON.parse(value);
+              jsonKeyQuestion.map((dataQ, key) => {
+                if (dataQ.id === questionId) {
+                  console.log('sliderDump', sliderDump);
+                  jsonKeyQuestion[key].sliderValues = sliderDump;
+                }
+              });
+              console.log('jsonKeyQuestion cature photo', jsonKeyQuestion);
+              this.setState({ questionList: jsonKeyQuestion });
+              const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+              AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                console.log('====FirstPage====captureFile===' + res);
+              });
+            }
+          }).catch(res => {
+            //AsyncStorage.setItem('StoreData', dataRemoteString);
+            console.log('switchChange err', res);
+          });
+
+        }
+      }).catch((err) => {
+        console.log(err);
+        this.setState({ IsSpinnerVisible: false });
+      });
+    }).catch((err) => {
+      this.setState({ IsSpinnerVisible: false });
+      // console.log(err);
+      // this.setState({ uploadButton: true });
+    });
+  }
+  fileUploadType(buttonIndex, data) {
+    console.log('fileUploadType func', data);
+    if (buttonIndex == 0) {
+      this.captureFile(data);
+    }
+    if (buttonIndex == 1) {
+      this.attachFile(data);
+    }
+  }
+  uploadPhoto(data) {
+    ActionSheet.show(
+      {
+        options: BUTTONS,
+      },
+      (buttonIndex) => {
+        this.setState({ clicked: BUTTONS[buttonIndex] });
+        // this.setState({ filecat: buttonIndex });
+        //console.log(buttonIndex);
+        // this.setState({ filecat: buttonIndex});
+        this.fileUploadType(buttonIndex, data);
+      },
+    )
+
+  }
   changeActiveRadio(data) {
+    console.log('data changeActiveRadio', data);
+    const answersId = data.id;
+    const questionId = data.questionId;
+    AsyncStorage.getItem("keyQuestionList").then((value) => {
+      if (value !== '') {
+        const jsonKeyQuestion = JSON.parse(value);
+        jsonKeyQuestion.map((dataQ, key) => {
+          if (dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId) {
+            dataQ.answers.map((dataA, keyA) => {
+              if (dataA.id === answersId) {
+                jsonKeyQuestion[key].answers[keyA].selected = true;
+              } else {
+                jsonKeyQuestion[key].answers[keyA].selected = false;
+              }
+
+            })
+          }
+        });
+        const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+        AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+          console.log('====FirstPage====changeActiveRadio===' + res)
+        });
+      }
+    }).catch(res => {
+      //AsyncStorage.setItem('StoreData', dataRemoteString);
+      console.log('switchChange err', res);
+    });
+
+
     data.selected = !data.selected;
     let dataselected = data;
     let item;
@@ -171,7 +348,7 @@ class serviceDetails extends Component {
               if (item1.selected == true) {
                 item1.selected = false;
                 var price = this.props.service.data.price;
-                price=Number(price);
+                price = Number(price);
                 if (dataselected.option_price_impact == "Addition") {
                   price = price - Number(dataselected.price_impact);
                 }
@@ -180,6 +357,9 @@ class serviceDetails extends Component {
                 }
                 var data = this.props.service.data;
                 price = this.addZeroes(price);
+                AsyncStorage.setItem("servicePrice", price).then((success) => {
+
+                })
                 data.price = price;
                 this.props.setServiceDetails(data);
               }
@@ -190,7 +370,7 @@ class serviceDetails extends Component {
       }
     }
     var price = this.props.service.data.price;
-    price=Number(price);
+    price = Number(price);
     if (data.selected == false) {
       if (data.option_price_impact == "Addition") {
         price = price - Number(data.price_impact);
@@ -211,6 +391,9 @@ class serviceDetails extends Component {
     var data = this.props.service.data;
     price = this.addZeroes(price);
     data.price = price;
+    AsyncStorage.setItem("servicePrice", price).then((success) => {
+
+    })
     this.props.setServiceDetails(data);
   }
   activeRadio(index) {
@@ -225,10 +408,30 @@ class serviceDetails extends Component {
     // this.setState({
     //   isOpen: !this.state.isOpen,
     // });
+    const questionId = data.answers[0].questionId;
+    const switchStatus = data;
+    AsyncStorage.getItem("keyQuestionList").then((value) => {
+      if (value !== '') {
+
+        const jsonKeyQuestion = JSON.parse(value);
+        jsonKeyQuestion.map((dataQ, key) => {
+          if (dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId) {
+            jsonKeyQuestion[key].Status = switchStatus.Status;
+          }
+        });
+        const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+        AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+          console.log('====FirstPage====switch change===' + res)
+        });
+      }
+    }).catch(res => {
+      //AsyncStorage.setItem('StoreData', dataRemoteString);
+      console.log('switchChange err', res);
+    });
+
     var price = this.props.service.data.price;
-    price=Number(price);
+    price = Number(price);
     data.Status = !data.Status;
-    console.log(data.Status);
     let index;
     for (var i = 0; i < this.state.questionList.length; i++) {
       if (this.state.questionList[i].id == data.id) {
@@ -249,6 +452,9 @@ class serviceDetails extends Component {
           var data = this.props.service.data;
           price = this.addZeroes(price);
           data.price = price;
+          AsyncStorage.setItem("servicePrice", price).then((success) => {
+
+          })
           this.props.setServiceDetails(data);
         }
       }
@@ -264,53 +470,247 @@ class serviceDetails extends Component {
           var data = this.props.service.data;
           price = this.addZeroes(price);
           data.price = price;
+          AsyncStorage.setItem("servicePrice", price).then((success) => {
+
+          })
           this.props.setServiceDetails(data);
         }
       }
 
-
-
-
     }
   }
-  componentWillMount() {
+
+  calculatePriceOnStart() {
     this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
       if (res.type == "success") {
-        console.log("success", res);
-        this.setState({ questionList: res });
+        console.log("success componentWillMount", res);
+        //this.setState({ questionList: res });
         var price = 0.0;
-        for (var i = 0; i < this.state.questionList.length; i++) {
-          if (this.state.questionList[i].type == 1 || this.state.questionList[i].type == 2 || this.state.questionList[i].type == 3 || this.state.questionList[i].type == 4) {
-            if (this.state.questionList[i].answers && this.state.questionList[i].answers.length > 0) {
-              if (this.state.questionList[i].type == 1) {
-                if (this.state.questionList[i].answers[0].option_price_impact == "Addition") {
-                  price = price + (this.state.questionList[i].IncrementId + Number(this.state.questionList[i].answers[0].price_impact));
-                }
-                else {
-                  price = price + (this.state.questionList[i].IncrementId * Number(this.state.questionList[i].answers[0].price_impact));
-                }
-              }
-              else if (this.state.questionList[i].type == 2) {
-                if (this.state.questionList[i].answers[0].option_price_impact == "Addition") {
-                  price = price + Number(this.state.questionList[i].answers[0].price_impact);
-                }
-                else {
-                  price = price * Number(this.state.questionList[i].answers[0].price_impact);
+        AsyncStorage.getItem("servicePrice").then((priceValue) => {
+          if (priceValue) {
+            var data = this.props.service.data;
+            data.questionList = this.state.questionList;
+            //priceValue = this.addZeroes(priceValue);
+            data.price = priceValue;
+            this.props.setServiceDetails(data);
+          }
+          else {
+            for (var i = 0; i < this.state.questionList.length; i++) {
+              if (this.state.questionList[i].type == 1 || this.state.questionList[i].type == 2 || this.state.questionList[i].type == 3 || this.state.questionList[i].type == 4) {
+                if (this.state.questionList[i].answers && this.state.questionList[i].answers.length > 0) {
+                  if (this.state.questionList[i].type == 1) {
+                    if (this.state.questionList[i].answers[0].option_price_impact == "Addition") {
+                      price = price + (this.state.questionList[i].IncrementId + Number(this.state.questionList[i].answers[0].price_impact));
+                    }
+                    else {
+                      price = price + (this.state.questionList[i].IncrementId * Number(this.state.questionList[i].answers[0].price_impact));
+                    }
+                  }
+                  else if (this.state.questionList[i].type == 2) {
+                    if (this.state.questionList[i].answers[0].option_price_impact == "Addition") {
+                      price = price + Number(this.state.questionList[i].answers[0].price_impact);
+                    }
+                    else {
+                      price = price * Number(this.state.questionList[i].answers[0].price_impact);
+                    }
+                  }
                 }
               }
             }
+            var data = this.props.service.data;
+            data.questionList = this.state.questionList;
+            price = this.addZeroes(price);
+            data.price = price;
+            AsyncStorage.setItem("servicePrice", price).then((success) => {
+
+            })
+            this.props.setServiceDetails(data);
           }
-        }
-        var data = this.props.service.data;
-        data.questionList = this.state.questionList;
-        price = this.addZeroes(price);
-        data.price = price;
-        this.props.setServiceDetails(data);
+        })
+
       }
     }).catch((err) => {
-      console.log("error in catch");
       console.log(err);
     });
+  }
+
+  componentDidMount() {
+      // AsyncStorage.getItem("fromLogin").then((storeValue) => {
+      //       if (storeValue) {
+      //           BackHandler.addEventListener('hardwareBackPress', function () {
+      //               const { dispatch, navigation, nav } = this.props;
+      //               if (this.props.auth.data.activeScreen) {
+      //                 Alert.alert(
+      //                   'Confirm',
+      //                   'Are you sure to exit the app?',
+      //                   [
+      //                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+      //                     { text: 'OK', onPress: () => BackHandler.exitApp() },
+      //                   ],
+      //                   { cancelable: false }
+      //                 )
+      //               }
+      //           }.bind(this));
+      //       }
+      //   })
+    console.log('componentDidMount begin', this.props);
+    const serviceId = this.props.service.data.id;
+    // this.setState({
+    //   serviceName: this.props.navigation.state.params.ServiceName,
+    //   cover_image: this.props.navigation.state.params.cover_image,
+    //   banner_image: this.props.navigation.state.params.banner_image
+    // });
+    this.setState({
+      serviceName: this.props.service.data.name,
+      cover_image: this.props.service.data.cover_image,
+      banner_image: this.props.service.data.banner_image
+    })
+    // AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
+    AsyncStorage.getItem('serviceId').then((serviceValue) => {
+      console.log('AsyncStorage serviceId', serviceValue);
+      if (serviceValue && serviceValue === serviceId.toString()) {
+        AsyncStorage.getItem("keyQuestionList").then((value) => {
+          if (value) {
+            const jsonDump = JSON.parse(value);
+            this.setState({ questionList: jsonDump });
+            this.calculatePriceOnStart();
+            console.log('jsonDump DidMount', jsonDump);
+          } else {
+            let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
+            api.get(questionServiceUrl).then(responseJson => {
+              console.log('questionServiceUrl', responseJson);
+              this.setState({ questionList: responseJson });
+              const dataStringQuestion = JSON.stringify(responseJson);
+              AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                this.calculatePriceOnStart();
+                console.log('====FirstPage====keyQuestionList===' + res)
+              });
+            }).catch(err => {
+              console.log(err);
+              reject(err)
+            })
+          }
+        }).catch(res => {
+          //AsyncStorage.setItem('StoreData', dataRemoteString);
+          console.log('switchChange err', res);
+        });
+      } else {
+
+        console.log('AsyncStorage inside else');
+        AsyncStorage.setItem('serviceId', serviceId.toString(), (res) => {
+          if(serviceValue){
+            let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
+            api.get(questionServiceUrl).then(responseJson => {
+              AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
+              console.log('questionServiceUrl', responseJson);
+              this.setState({ questionList: responseJson });
+              const dataStringQuestion = JSON.stringify(responseJson);
+              AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                this.calculatePriceOnStart();
+                console.log('====FirstPage====keyQuestionList===' + res)
+              });
+            }).catch(err => {
+              console.log(err);
+              reject(err)
+            })
+          }else{
+            AsyncStorage.getItem("keyQuestionList").then((value) => {
+              AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
+              AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
+              let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
+              api.get(questionServiceUrl).then(responseJson => {
+                AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
+                console.log('questionServiceUrl', responseJson);
+                this.setState({ questionList: responseJson });
+                const dataStringQuestion = JSON.stringify(responseJson);
+                AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+                  this.calculatePriceOnStart();
+                  console.log('====FirstPage====keyQuestionList===' + res)
+                });
+              }).catch(err => {
+                console.log(err);
+                reject(err)
+              })
+            }).catch(res => {
+              console.log('switchChange err', res);
+            });
+          }
+        });
+
+      }
+    }).catch(err => {
+      AsyncStorage.setItem('serviceId', toString(serviceId), (res) => {
+        console.log('serviceId set in catch');
+      });
+    })
+    //AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
+
+
+
+  }
+
+  componentWillMount() {
+    // BackHandler.addEventListener('hardwareBackPress', function () {
+    //   const { dispatch, navigation, nav } = this.props;
+    //   AsyncStorage.getItem("fromLogin").then((storeValue)=>{
+    //     debugger;
+    //     if(storeValue)
+    //     {
+    //       if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Menu') {
+    //         Alert.alert(
+    //           'Confirm',
+    //           'Are you sure to exit the app?',
+    //           [
+    //             { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+    //             { text: 'OK', onPress: () => BackHandler.exitApp() },
+    //           ],
+    //           { cancelable: false }
+    //         )
+    //       }
+    //     }
+    //   })
+
+
+
+
+    //   return true;
+    // }.bind(this));
+    // this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
+    //   if (res.type == "success") {
+    //     console.log("success componentWillMount", res);
+    //     //this.setState({ questionList: res });
+    //     var price = 0.0;
+    //     for (var i = 0; i < this.state.questionList.length; i++) {
+    //       if (this.state.questionList[i].type == 1 || this.state.questionList[i].type == 2 || this.state.questionList[i].type == 3 || this.state.questionList[i].type == 4) {
+    //         if (this.state.questionList[i].answers && this.state.questionList[i].answers.length > 0) {
+    //           if (this.state.questionList[i].type == 1) {
+    //             if (this.state.questionList[i].answers[0].option_price_impact == "Addition") {
+    //               price = price + (this.state.questionList[i].IncrementId + Number(this.state.questionList[i].answers[0].price_impact));
+    //             }
+    //             else {
+    //               price = price + (this.state.questionList[i].IncrementId * Number(this.state.questionList[i].answers[0].price_impact));
+    //             }
+    //           }
+    //           else if (this.state.questionList[i].type == 2) {
+    //             if (this.state.questionList[i].answers[0].option_price_impact == "Addition") {
+    //               price = price + Number(this.state.questionList[i].answers[0].price_impact);
+    //             }
+    //             else {
+    //               price = price * Number(this.state.questionList[i].answers[0].price_impact);
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //     var data = this.props.service.data;
+    //     data.questionList = this.state.questionList;
+    //     price = this.addZeroes(price);
+    //     data.price = price;
+    //     this.props.setServiceDetails(data);
+    //   }
+    // }).catch((err) => {
+    //   console.log(err);
+    // });
   }
 
 
@@ -320,17 +720,40 @@ class serviceDetails extends Component {
     // if (res.length == 1 || (res[1].length < 3)) {
     //   value = value.toFixed(2);
     // }
-    let value=num.toFixed(2);
+    let value = num.toFixed(2);
     return value
   }
 
   sliderChanged(value, data) {
-    debugger;
+    console.log('sliderChanged', value, data);
     if (value != 0) {
       value = parseFloat(Math.round(value * 100) / 100).toFixed(2);
       value = Number(value);
+
+      const setRangeValue = value;
+      this.setState({ start_range: value });
+      const questionId = data.answers[0].questionId;
+      AsyncStorage.getItem("keyQuestionList").then((value) => {
+        if (value !== '') {
+          const jsonKeyQuestion = JSON.parse(value);
+          jsonKeyQuestion.map((dataQ, key) => {
+            if (dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId) {
+              jsonKeyQuestion[key].start_range = setRangeValue;
+            }
+          });
+          console.log('jsonKeyQuestion', jsonKeyQuestion);
+          const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+          AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+            console.log('====FirstPage====sliderChanged===' + res)
+          });
+        }
+      }).catch(res => {
+        //AsyncStorage.setItem('StoreData', dataRemoteString);
+        console.log('switchChange err', res);
+      });
+
       var price = this.props.service.data.price;
-      price=Number(price);
+      price = Number(price);
       if (data.answers) {
         if (data.answers[0].option_price_impact == "Addition") {
           if (this.props.service.data.value) {
@@ -374,6 +797,25 @@ class serviceDetails extends Component {
 
   }
 
+
+  goToConfirmation(){
+    if(this.props.auth.data){
+      this.setState({IsSpinnerVisible:true});
+      const data = this.props.auth.data;
+      data.activeScreen = "Confirmation";
+      data.previousScreen = "ServiceDetails";
+      this.props.navigateAndSaveCurrentScreen(data);
+      this.setState({IsSpinnerVisible:false});
+      this.props.navigation.navigate('Confirmation');
+     
+    }
+    else{
+      this.props.navigation.dispatch(resetAction);
+    }
+  }
+    
+
+
   render() {
 
     let questionList = (
@@ -390,7 +832,11 @@ class serviceDetails extends Component {
               } </Text>
             </View>
             <Text style={styles.confirmationMainTxt}>{data.name}</Text>
-            <IncrimentDecriment massage={data} onIncrement={this.handleIncrement} onDecrement={this.handleDecrement} />
+            <IncrimentDecriment
+              massage={data}
+            //onIncrement={this.handleIncrement} 
+            //onDecrement={this.handleDecrement} 
+            />
           </Item>
         </View> : data.type == "2" ? <View key={data.id}>
           <Item style={styles.confirmationItem}>
@@ -424,13 +870,13 @@ class serviceDetails extends Component {
             <Text style={{ flex: 1 }}>
               Insert Photo
                 </Text>
-            <TouchableOpacity onPress={() => this.uploadPhoto()}>
+            <TouchableOpacity onPress={() => this.uploadPhoto(data)}>
               <Icon name="camera" style={{ fontSize: 16 }}></Icon>
             </TouchableOpacity>
           </View>
           <View style={styles.imagesSliderWarp}>
             <FlatList
-              data={this.state.sliderData}
+              data={data.sliderValues === null ? this.state.sliderData : data.sliderValues}
               renderItem={({ item }) =>
                 <View>
                   <Image key={item.key} source={{ uri: item.src }} style={styles.imagesSliderImage}></Image>
@@ -460,13 +906,15 @@ class serviceDetails extends Component {
                         {
                           data.answers.map((data1, key1) => {
                             return (<View key={data1.id}>
-                              <TouchableOpacity style={[{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom: 4, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }, [
-                                data1.selected ?
-                                  { backgroundColor: '#ccc' } : {}
-                              ]]} onPress={() => this.changeActiveRadio(data1)}><Text style={[[
-                                data1.selected ?
-                                  { color: '#fff' } : {}
-                              ]]}>{data1.title}</Text></TouchableOpacity>
+                              <TouchableOpacity
+                                style={[{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom: 4, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }, [
+                                  data1.selected ? { backgroundColor: '#ccc' } : {}]]}
+                                onPress={() => this.changeActiveRadio(data1)}
+                              >
+                                <Text style={[[data1.selected ? { color: '#fff' } : {}]]}>
+                                  {data1.title}
+                                </Text>
+                              </TouchableOpacity>
                             </View>)
 
                           })
@@ -652,8 +1100,12 @@ class serviceDetails extends Component {
           this.state.questionList.length > 0 ? (
             <Footer>
               <FooterTab>
-                <TouchableOpacity style={styles.confirmationServicefooterItem}><Text style={styles.confirmationServicefooterItmTxt} onPress={() => this.props.navigation.navigate('Confirmation')}>CONTINUE</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
+                <TouchableOpacity onPress={this.goToConfirmation.bind(this)} style={styles.confirmationServicefooterItem}>
+                  <Text style={styles.confirmationServicefooterItmTxt} >CONTINUE</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.confirmationServicefooterItem2}>
+                  <Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text>
+                </TouchableOpacity>
               </FooterTab>
             </Footer>
           ) : (
@@ -676,7 +1128,8 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
   getQuestionListByServiceId: (data) => dispatch(getQuestionListByServiceId(data)),
-  setServiceDetails: (data) => dispatch(setServiceDetails(data))
+  setServiceDetails: (data) => dispatch(setServiceDetails(data)),
+  navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(serviceDetails);

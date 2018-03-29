@@ -22,6 +22,14 @@ export function login(email, password) {
   };
 }
 
+
+
+export function navigateAndSaveCurrentScreen(data)
+{
+  return function (dispatch) {
+    dispatch(authStateSuccess(data));
+  };
+}
 export function getUserDetail(id, auth) {
   return function (dispatch) {
     dispatch(authStateBusy());

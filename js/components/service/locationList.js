@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, AsyncStorage } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -10,6 +10,7 @@ import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api';
 import { setServiceDetails } from './elements/serviceActions';
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
@@ -22,32 +23,85 @@ class LocationList extends Component {
                 {
                     "text": "Home",
                     "id": 1,
-                    "status": true
+                    "status": true,
+                    "latitude": '',
+                    "longitude": '',
+                    "buildingName": '',
+                    "villa": '',
+                    "landmark": ''
                 },
                 {
                     "text": "Mother Home",
                     "id": 2,
-                    "status": false
+                    "status": false,
+                    "latitude": '',
+                    "longitude": '',
+                    "buildingName": '',
+                    "villa": '',
+                    "landmark": ''
                 }
             ],
             homeValue: 'Home',
             serviceDetails: this.props.service.data,
-
+            serviceLocationid: ''
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const customerId = this.props.auth.data.id;
         const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`
         api.get(getLocationUrl).then(res => {
-            console.log('user-locations', res);
-            this.setState({ homeArray: res });
-            this.setState({ locationData: res });
+            let finalArray = [];
+            res.map((item) => {
+                let data;
+                if (this.props.service.data.serviceLocation) {
+                    if (this.props.service.data.serviceLocation === item.name) {
+                        data = {
+                            "text": item.name,
+                            "id": item.id,
+                            "status": true,
+                            "latitude": item.latitude,
+                            "longitude": item.longitude,
+                            "buildingName": item.buildingName,
+                            "villa": item.villa,
+                            "landmark": item.landmark
+                        }
+                    }
+                    else {
+                        data = {
+                            "text": item.name,
+                            "id": item.id,
+                            "status": false,
+                            "latitude": item.latitude,
+                            "longitude": item.longitude,
+                            "buildingName": item.buildingName,
+                            "villa": item.villa,
+                            "landmark": item.landmark
+                        }
+                    }
+                }
+                else {
+                    data = {
+                        "text": item.name,
+                        "id": item.id,
+                        "status": false,
+                        "latitude": item.latitude,
+                        "longitude": item.longitude,
+                        "buildingName": item.buildingName,
+                        "villa": item.villa,
+                        "landmark": item.landmark
+                    }
+                }
+
+                finalArray.push(data);
+            })
+            this.setState({ homeArray: finalArray });
         }).catch((err) => {
             console.log(err);
         });
     }
     selectActive(data) {
+        this.setState({ serviceLocationid: data.id });
         let index;
         for (let i = 0; i < this.state.homeArray.length; i++) {
             if (this.state.homeArray[i].id == data.id) {
@@ -72,6 +126,14 @@ class LocationList extends Component {
         }
 
     }
+
+    navigate() {
+        const data = this.props.auth.data;
+        data.activeScreen = 'Confirmation';
+        data.previousScreen = "ServiceDetails";
+        this.props.navigateAndSaveCurrentScreen(data);
+        this.props.navigation.navigate('Confirmation');
+    }
     locationDone() {
         let loc;
         this.state.homeArray.map((loc1) => {
@@ -81,14 +143,28 @@ class LocationList extends Component {
         })
         if (loc) {
             let data = this.state.serviceDetails;
+            let serviceLocationid = this.state.serviceLocationid;
             // data.serviceLocation = this.state.homeArray;
             data.serviceLocation = loc;
+            data.serviceLocationid = serviceLocationid;
             this.props.setServiceDetails(data);
-            this.props.navigation.navigate('Confirmation');
+            this.navigate();
+        }
+        else {
+            Alert.alert('Please select a location first.');
         }
 
     }
+    goToMyMap() {
+        const data = this.props.auth.data;
+        data.activeScreen = "MyMap";
+        data.previousScreen = "LocationList";
+        this.props.navigateAndSaveCurrentScreen(data);
+        AsyncStorage.setItem("fromConfirmation", "true").then((res) => {
+            this.props.navigation.navigate('MyMap', { screenType: 'add', customerId: this.props.auth.data.id });
+        })
 
+    }
     render() {
 
         let featureList = (
@@ -101,8 +177,18 @@ class LocationList extends Component {
                     <View style={{ flex: 1 }}>
                         <Text>{data.text}</Text>
                     </View>
-                    <TouchableOpacity >
-                        <Text>Edit</Text>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('MyMap', {
+                        screenType: 'edit',
+                        id: data.id,
+                        customerId: this.props.auth.data.id,
+                        latitude: data.latitude,
+                        longitude: data.longitude,
+                        name: data.text,
+                        buildingName: data.buildingName,
+                        villaNo: data.villa,
+                        landmark: data.landmark
+                    })} >
+                        <Text>{I18n.t('edit')}</Text>
                     </TouchableOpacity>
                 </TouchableOpacity>
             ))
@@ -115,13 +201,13 @@ class LocationList extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()} >
-                        <Text>Add</Text>
+                    <Button transparent onPress={() => this.goToMyMap()} >
+                        <Text>{I18n.t('add')}</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>My Location</Title>
                     </Body>
-                    <Button transparent onPress={() => this.locationDone()}><Text>Done</Text></Button>
+                    <Button transparent onPress={() => this.locationDone()}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >
@@ -144,7 +230,8 @@ const mapStateToProps = state => ({
     service: state.service,
 });
 const mapDispatchToProps = dispatch => ({
-    setServiceDetails: (data) => dispatch(setServiceDetails(data))
+    setServiceDetails: (data) => dispatch(setServiceDetails(data)),
+    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocationList);

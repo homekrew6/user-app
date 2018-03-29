@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler } from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -13,8 +13,9 @@ import { NavigationActions } from 'react-navigation';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-import api from '../../api/index'
-const resetAction = NavigationActions.reset({
+import api from '../../api/index';
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
+const reseteAction = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });
@@ -24,11 +25,14 @@ const logo_hdr = require("../../../img/logo2.png");
 const carve = require("../../../img/icon17.png");
 
 class Confirmation extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            dateTime: props.service.data.serviceTime,
-            serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : 'Home',
+            dateTime: props.service.data.serviceTime ? props.service.data.serviceTime : '',
+            saveDateDB: props.service.data.saveDateDB ? props.service.data.saveDateDB : '',
+            serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : '',
+
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,
             continueButtonDesable: false,
@@ -38,40 +42,88 @@ class Confirmation extends Component {
 
     }
 
-   
+
+    componentDidMount() {
+        // AsyncStorage.getItem("fromLogin").then((storeValue) => {
+        //     if (storeValue) {
+        //         BackHandler.addEventListener('hardwareBackPress', function () {
+        //             const { dispatch, navigation, nav } = this.props;
+        //             if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Confirmation') {
+        //                 const data = this.props.auth.data;
+        //                 data.activeScreen = 'ServiceDetails';
+        //                 data.previousScreen = "";
+        //                 this.props.navigateAndSaveCurrentScreen(data);
+
+        //             }
+        //         }.bind(this));
+        //     }
+        // })
+        //BackHandler.removeEventListener('hardwareBackPress', this._pasEditUnmountFunction);
+    }
+
+
 
     confirmationContinue() {
         this.setState({
             loader: true,
         })
         if (!(this.state.dateTime == undefined)) {
-            api.post('jobs',
-                {
-                    "serviceId": this.props.service.data.id,
-                    "postedDate": this.state.dateTime,
-                    "location": "Home",
-                    "payment": "Credit Card",
-                    "faourite_sp": this.props.service.data.favouriteSp,
-                    "promo_code": "AED 50 off",
-                    "status": "STARTED",
-                    "userId": "3",
-                    "workerId": "1"
+            AsyncStorage.getItem("zoneId").then((zoneValue) => {
+                if (zoneValue) {
+                    if (this.props.service.data.serviceLocationid) {
+                        api.post('Jobs/insertNewJob',
+                            {
+                                // "serviceId": this.props.service.data.id,
+                                // "postedDate": this.props.service.data.saveDateDB,
+                                // "location": this.props.service.data.serviceLocationid,
+                                // "payment": "Credit Card",
+                                // "faourite_sp": this.props.service.data.favouriteSp,
+                                // "promo_code": "AED 50 off",
+                                // "status": "STARTED",
+                                // "userId": this.props.auth.data.id,
+                                // "workerId": "0"
+                                "price": this.props.service.data.price,
+                                "postedDate": this.props.service.data.saveDateDB,
+                                "payment": "Credit Card",
+                                "faourite_sp": this.props.service.data.favouriteId,
+                                "promo_code": "AED 50 off",
+                                "status": "STARTED",
+                                "customerId": this.props.auth.data.id,
+                                "currencyId": 0,
+                                "workerId": 0,
+                                "zoneId": zoneValue,
+                                "serviceId": this.props.service.data.id
+                            }
+                        ).then(responseJson => {
+                            AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
+                            AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
+                            AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
+                            AsyncStorage.removeItem('fromLogin', (err) => console.log('finished', err));
+                            AsyncStorage.removeItem('fromConfirmation', (err) => console.log('finished', err));
+                            Alert.alert("Job Posted Successfully");
+                            this.setState({
+                                loader: false,
+                                continueButtonDesable: true
+                            });
+                            this.props.navigation.dispatch(reseteAction);
+                        }).catch(err => {
+                            console.log(err);
+                            Alert.alert("Job Post not save");
+                            this.setState({
+                                loader: false,
+                            })
+                        })
+                    }
+                    else {
+                        this.setState({
+                            loader: false
+                        });
+                        Alert.alert('Please add a location.');
+                    }
+
                 }
-            ).then(responseJson => {
-                // console.log(responseJson);
-                Alert.alert("Job Posted Successfully");
-                this.setState({
-                    loader: false,
-                    continueButtonDesable: true
-                });
-                this.props.navigation.dispatch(resetAction);
-            }).catch(err => {
-                console.log(err);
-                Alert.alert("Job Post not save");
-                this.setState({
-                    loader: false,
-                })
             })
+
         }
         else {
             this.setState({
@@ -81,21 +133,181 @@ class Confirmation extends Component {
         }
 
     }
+    navigate(screen) {
+        const data = this.props.auth.data;
+        data.activeScreen = screen;
+        data.previousScreen = "Confirmation";
+        this.props.navigateAndSaveCurrentScreen(data);
+        this.props.navigation.navigate(screen);
+    }
 
 
     goToSpListing() {
+
         if (this.state.dateTime) {
-            this.props.navigation.navigate('ServiceProviderListing');
+            this.navigate('ServiceProviderListing');
         }
         else {
             Alert.alert('Please select date and time to see the service providers available.');
         }
     }
 
+
+    componentWillMount() {
+
+        AsyncStorage.getItem("fromLogin").then((fromLogin) => {
+            if (fromLogin) {
+                BackHandler.addEventListener('hardwareBackPress', function () {
+
+                    const { dispatch, navigation, nav } = this.props;
+                    if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Menu') {
+                        Alert.alert(
+                            'Confirm',
+                            'Are you sure to exit the app?',
+                            [
+                                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                                { text: 'OK', onPress: () => BackHandler.exitApp() },
+                            ],
+                            { cancelable: false }
+                        )
+                    }
+                    else {
+                        let saveData = this.props.auth.data;
+                        // if (this.props.auth.data.previousScreen)
+                        //   this.props.navigation.navigate(this.props.auth.data.previousScreen);
+                        // else {
+                        //   this.props.navigation.navigate('Menu');
+                        // }
+
+                        switch (this.props.auth.data.activeScreen) {
+                            case "EditProfile":
+                                saveData.activeScreen = "Menu";
+                                saveData.previousScreen = "";
+                                this.props.navigateAndSaveCurrentScreen(saveData);
+                                break;
+
+                            case "Category":
+                                // saveData.activeScreen = "Menu";
+                                // saveData.previousScreen = "";
+                                // this.props.navigateAndSaveCurrentScreen(saveData);
+                                break;
+                            case "MyLocation":
+                                // saveData.activeScreen = "Menu";
+                                // saveData.previousScreen = "";
+                                // this.props.navigateAndSaveCurrentScreen(saveData);
+                                break;
+                            case "MyMap":
+                                // saveData.activeScreen = "MyLocation";
+                                // saveData.previousScreen = "Menu";
+                                // this.props.navigateAndSaveCurrentScreen(saveData);
+                                break;
+                            case "ServiceDetails":
+                                //saveData.activeScreen = "Category";
+                                //saveData.previousScreen = "Menu";
+                                //this.props.navigateAndSaveCurrentScreen(saveData);
+                                break;
+                            case "Confirmation":
+                                saveData.activeScreen = "Confirmation";
+                                saveData.previousScreen = "Category";
+                                this.props.navigateAndSaveCurrentScreen(saveData);
+                                break;
+                            case "DateAndTime":
+                                saveData.activeScreen = "Confirmation";
+                                saveData.previousScreen = "ServiceDetails";
+                                this.props.navigateAndSaveCurrentScreen(saveData);
+                                break;
+                            case "ServiceProviderListing":
+                                saveData.activeScreen = "Confirmation";
+                                saveData.previousScreen = "ServiceDetails";
+                                this.props.navigateAndSaveCurrentScreen(saveData);
+                                break;
+                            case "LocationList":
+                                // saveData.activeScreen = "Confirmation";
+                                // saveData.previousScreen = "ServiceDetails";
+                                // this.props.navigateAndSaveCurrentScreen(saveData);
+                                break;
+                            default:
+                                break;
+                        }
+                        if (this.props.auth.data.activeScreen == 'Confirmation') {
+                            saveData.activeScreen = "ServiceDetails";
+                            saveData.previousScreen = "Category";
+                            this.props.navigateAndSaveCurrentScreen(saveData);
+                            // console.log('stack menu', this.props);
+                            // this.props.navigation.dispatch({
+                            //   routeName: 'ServiceDetails'
+                            // });
+                            // Alert.alert(
+                            //   'Confirm',
+                            //   'Your data will be lost',
+                            //   [
+                            //     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                            //     { text: 'OK', onPress: () => this.props.navigation.navigate('ServiceDetails') },
+                            //   ],
+                            //   { cancelable: false }
+                            // )
+                            this.props.navigation.navigate('ServiceDetails');
+                            //console.log()
+                            //this.props.navigation.dispatch(NavigationActions.back({ routeName:'ServiceDetails'}));
+                            return true;
+                        } else if (this.props.auth.data.activeScreen === 'ServiceDetails') {
+                            saveData.activeScreen = "Category";
+                            saveData.previousScreen = "Menu";
+                            this.props.navigateAndSaveCurrentScreen(saveData);
+                            this.props.navigation.navigate('Category')
+                        } else if (this.props.auth.data.activeScreen === 'Category') {
+                            saveData.activeScreen = "Menu";
+                            saveData.previousScreen = "";
+                            this.props.navigateAndSaveCurrentScreen(saveData);
+                            this.props.navigation.navigate('Menu')
+                        }
+                        else if (this.props.auth.data.activeScreen === 'MyLocation') {
+                            saveData.activeScreen = "Menu";
+                            saveData.previousScreen = "";
+                            this.props.navigateAndSaveCurrentScreen(saveData);
+                            this.props.navigation.navigate(saveData.activeScreen);
+                        }
+                        else if (this.props.auth.data.activeScreen === 'LocationList') {
+                            saveData.activeScreen = "Confirmation";
+                            saveData.previousScreen = "ServiceDetails";
+                            this.props.navigateAndSaveCurrentScreen(saveData);
+                            this.props.navigation.navigate(saveData.activeScreen);
+                        }
+                        else if (this.props.auth.data.activeScreen === 'MyMap') {
+                            AsyncStorage.getItem("fromConfirmation").then((value) => {
+                                if (value) {
+                                    saveData.activeScreen = "LocationList";
+                                    saveData.previousScreen = "Menu";
+                                    this.props.navigateAndSaveCurrentScreen(saveData);
+                                    this.props.navigation.navigate(saveData.activeScreen);
+                                }
+                                else {
+                                    saveData.activeScreen = "MyLocation";
+                                    saveData.previousScreen = "Menu";
+                                    this.props.navigateAndSaveCurrentScreen(saveData);
+                                    this.props.navigation.navigate(saveData.activeScreen);
+                                }
+                            })
+
+                        }
+
+                        else {
+                            this.props.navigation.goBack(null);
+                            return true;
+                        }
+
+                    }
+
+
+
+                    return true;
+                }.bind(this));
+            }
+        })
+
+    }
+
     render() {
-        BackHandler.addEventListener('hardwareBackPress', function() {
-            this.props.navigation.navigate('ServiceDetails');
-        });
         return (
             <Container >
                 <FSpinner visible={this.state.loader} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
@@ -132,7 +344,7 @@ class Confirmation extends Component {
                     </View>
                     <View>
 
-                        <TouchableOpacity style={[styles.confirmationItem]} onPress={() => this.props.navigation.navigate('DateAndTime')}>
+                        <TouchableOpacity style={[styles.confirmationItem]} onPress={() => this.navigate('DateAndTime')}>
                             <View style={styles.confirmationIconView}>
                                 <Ico name='alarm' style={styles.confirmationViewIcon}></Ico>
                             </View>
@@ -143,7 +355,7 @@ class Confirmation extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate('LocationList')}>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.navigate('LocationList')}>
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='location' style={styles.confirmationViewIcon} />
                             </View>
@@ -225,10 +437,7 @@ class Confirmation extends Component {
     }
 }
 
-Confirmation.propTypes = {
-    service: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
-}
+
 const mapStateToProps = (state) => {
     return {
         service: state.service,
@@ -236,7 +445,7 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {}
-}
+const mapDispatchToProps = dispatch => ({
+    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
+});
 export default connect(mapStateToProps, mapDispatchToProps)(Confirmation);

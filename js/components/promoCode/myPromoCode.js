@@ -42,7 +42,7 @@ class MyPromoCode extends Component {
                   <Title style={styles.headerTitle}>My Promo Code</Title>
                 </Body>
                     <Button transparent onPress={() => this.addPromoCode()} >
-                    <Text>Add</Text>
+                    <Text>{I18n.t('add')}</Text>
                 </Button>
               </Header>
               <Content>
@@ -85,7 +85,7 @@ class MyPromoCode extends Component {
                                         </Form>
 
                                     <View style={{ flexDirection: 'row' }}>
-                                        <TouchableOpacity style={styles.promoCodeCancel} onPress={() => this.addPromoCode()}><Text style={{ fontSize: 14 }}>CANCEL</Text></TouchableOpacity>
+                                        <TouchableOpacity style={styles.promoCodeCancel} onPress={() => this.addPromoCode()}><Text style={{ fontSize: 14 }}>{I18n.t('cancel')}</Text></TouchableOpacity>
                                         <TouchableOpacity style={styles.promoCodeAdd}><Text style={styles.promoCodeCancelText}>ADD</Text></TouchableOpacity>
                                     </View>
                                </View>
