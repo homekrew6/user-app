@@ -96,6 +96,9 @@ class serviceDetails extends Component {
 
         if (response.status == 201) {
           let slider = [];
+          if (!data.sliderValues) {
+            data.sliderValues = [];
+          }
           data.sliderValues.map(sdata => {
             slider.push(sdata);
           });
@@ -207,6 +210,9 @@ class serviceDetails extends Component {
           // this.setState({ IsSpinnerVisible: false });
           // this.setState({ sliderData: slider });
           let slider = [];
+          if (!data.sliderValues) {
+            data.sliderValues = [];
+          }
           data.sliderValues.map(sdata => {
             slider.push(sdata);
           });
@@ -535,24 +541,24 @@ class serviceDetails extends Component {
   }
 
   componentDidMount() {
-      // AsyncStorage.getItem("fromLogin").then((storeValue) => {
-      //       if (storeValue) {
-      //           BackHandler.addEventListener('hardwareBackPress', function () {
-      //               const { dispatch, navigation, nav } = this.props;
-      //               if (this.props.auth.data.activeScreen) {
-      //                 Alert.alert(
-      //                   'Confirm',
-      //                   'Are you sure to exit the app?',
-      //                   [
-      //                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-      //                     { text: 'OK', onPress: () => BackHandler.exitApp() },
-      //                   ],
-      //                   { cancelable: false }
-      //                 )
-      //               }
-      //           }.bind(this));
-      //       }
-      //   })
+    // AsyncStorage.getItem("fromLogin").then((storeValue) => {
+    //       if (storeValue) {
+    //           BackHandler.addEventListener('hardwareBackPress', function () {
+    //               const { dispatch, navigation, nav } = this.props;
+    //               if (this.props.auth.data.activeScreen) {
+    //                 Alert.alert(
+    //                   'Confirm',
+    //                   'Are you sure to exit the app?',
+    //                   [
+    //                     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+    //                     { text: 'OK', onPress: () => BackHandler.exitApp() },
+    //                   ],
+    //                   { cancelable: false }
+    //                 )
+    //               }
+    //           }.bind(this));
+    //       }
+    //   })
     console.log('componentDidMount begin', this.props);
     const serviceId = this.props.service.data.id;
     // this.setState({
@@ -598,7 +604,7 @@ class serviceDetails extends Component {
 
         console.log('AsyncStorage inside else');
         AsyncStorage.setItem('serviceId', serviceId.toString(), (res) => {
-          if(serviceValue){
+          if (serviceValue) {
             let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
             api.get(questionServiceUrl).then(responseJson => {
               AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
@@ -613,7 +619,7 @@ class serviceDetails extends Component {
               console.log(err);
               reject(err)
             })
-          }else{
+          } else {
             AsyncStorage.getItem("keyQuestionList").then((value) => {
               AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
               AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
@@ -798,22 +804,70 @@ class serviceDetails extends Component {
   }
 
 
-  goToConfirmation(){
-    if(this.props.auth.data){
-      this.setState({IsSpinnerVisible:true});
+  goToConfirmation() {
+    if (this.props.auth.data) {
+      this.setState({ IsSpinnerVisible: true });
       const data = this.props.auth.data;
       data.activeScreen = "Confirmation";
       data.previousScreen = "ServiceDetails";
       this.props.navigateAndSaveCurrentScreen(data);
-      this.setState({IsSpinnerVisible:false});
+      this.setState({ IsSpinnerVisible: false });
       this.props.navigation.navigate('Confirmation');
-     
+
     }
-    else{
+    else {
       this.props.navigation.dispatch(resetAction);
     }
   }
-    
+  delete(data, item) {
+    this.setState({ IsSpinnerVisible: true });
+    let newArray = [];
+    data.sliderValues.map((item1) => {
+      if (item1.key != item.key) {
+        newArray.push(item1);
+      }
+    });
+    let existingQuestion = [];
+    this.state.questionList.map((questn) => {
+      existingQuestion.push(questn);
+    })
+    existingQuestion.map((question) => {
+      if (question.id == data.id) {
+        question.sliderValues = newArray;
+      }
+    });
+    this.setState({ questionList: existingQuestion });
+    AsyncStorage.getItem("keyQuestionList").then((value) => {
+      if (value !== '') {
+        const jsonKeyQuestion = JSON.parse(value);
+        jsonKeyQuestion.map((dataQ, key) => {
+          if (dataQ.id === data.id) {
+            jsonKeyQuestion[key].sliderValues = newArray;
+          }
+        });
+        const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+        AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+          this.setState({ IsSpinnerVisible: false });
+        });
+      }
+    }).catch(res => {
+      this.setState({ IsSpinnerVisible: false });
+      //AsyncStorage.setItem('StoreData', dataRemoteString);
+    });
+
+  }
+  deleteImage(data, item) {
+    Alert.alert(
+      'Confirm',
+      'Are you sure to delete this image?',
+      [
+        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        { text: 'OK', onPress: () => this.delete(data, item) },
+      ],
+      { cancelable: false }
+    )
+  }
+
 
 
   render() {
@@ -876,10 +930,16 @@ class serviceDetails extends Component {
           </View>
           <View style={styles.imagesSliderWarp}>
             <FlatList
+              showsHorizontalScrollIndicator={false}
               data={data.sliderValues === null ? this.state.sliderData : data.sliderValues}
               renderItem={({ item }) =>
                 <View>
                   <Image key={item.key} source={{ uri: item.src }} style={styles.imagesSliderImage}></Image>
+                  <TouchableOpacity style={{ marginTop: 5, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={() => this.deleteImage(data, item)}>
+                    <View>
+                      <Ionicons name="ios-close-circle-outline" style={{ fontSize: 20, color: '#8B0000' }} />
+                    </View>
+                  </TouchableOpacity>
                 </View>
               }
               horizontal={true}

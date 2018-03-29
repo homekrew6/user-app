@@ -165,7 +165,7 @@ class Categories extends Component {
       this.state.locationArray.map((data, key) => {
         //if (!data.service) return;
         return (
-          <View style={{ backgroundColor: '#fff', borderRadius: 10, }} key={data.id}>
+          <View style={{ borderBottomWidth: 1 , borderBottomColor: '#ccc', borderRadius: 10}} key={data.id}>
             <TouchableOpacity onPress={() => this.closeModal(data)} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
               <Ico name='business' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
               <Text>{data.name}</Text>
@@ -184,7 +184,7 @@ class Categories extends Component {
             <View key={data.id} style={styles.catIten}>
               <View style={styles.catIten_img_view}>
                 {
-                  this.props.auth.data ? (
+                  this.props.auth.data && this.state.locationArray.length>0 ? (
                     <TouchableOpacity onPress={() => this.openModal(data.service)} >
 
                       <Image source={{ uri: data.service.banner_image || null }} style={styles.catIten_img} />
@@ -273,7 +273,7 @@ class Categories extends Component {
               <View style={{ alignItems: 'center', marginBottom: 15 }}>
                 <Text style={{ color: '#fff', fontSize: 20 }}>{this.state.selectedServiceName}</Text>
               </View>
-              <View style={{   }} >
+              <View style={{  backgroundColor: '#fff', borderRadius: 10 }} >
                   {/* <View style={{ backgroundColor: '#fff', borderRadius: 10, }}>
                    <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
                     <Ionicons name='md-home' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
