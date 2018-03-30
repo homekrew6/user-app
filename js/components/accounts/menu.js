@@ -281,7 +281,7 @@ class Menu extends Component {
             </CardItem>
 
             <CardItem style={styles.menuCarditem}>
-              <View style={styles.menuCardView}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('JobList')}>
                 <Image source={icon2} style={styles.menuCardIcon} />
                 <Text style={styles.menuCardTxt}>My Jobs</Text>
                 <View style={styles.artNt}>
@@ -290,7 +290,7 @@ class Menu extends Component {
                 <View style={styles.arw_lft}>
                   <Image source={back_arow} style={styles.arw_lft_img} />
                 </View>
-              </View>
+              </TouchableOpacity>
             </CardItem>
 
             <CardItem style={styles.menuCarditem}>
