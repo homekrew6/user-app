@@ -66,10 +66,32 @@ class Confirmation extends Component {
     confirmationContinue() {
         this.setState({
             loader: true,
-        })
+        });
+        
+        
         if (!(this.state.dateTime == undefined)) {
             AsyncStorage.getItem("zoneId").then((zoneValue) => {
                 if (zoneValue) {
+
+                    // console.log('confirmationContinue', this.props);
+                    // let resCons = {
+                    //     "userLocationId": this.props.service.data.serviceLocationid,
+                    //     "price": this.props.service.data.price,
+                    //     "postedDate": this.props.service.data.saveDateDB,
+                    //     "payment": "Credit Card",
+                    //     "faourite_sp": this.props.service.data.favouriteId,
+                    //     "promo_code": "AED 50 off",
+                    //     "status": "STARTED",
+                    //     "customerId": this.props.auth.data.id,
+                    //     "currencyId": 0,
+                    //     "workerId": 0,
+                    //     "zoneId": zoneValue,
+                    //     "serviceId": this.props.service.data.id,
+                    //     "saveDBTime": this.props.service.data.saveDBTime,
+                    //     "saveDbDay": this.props.service.data.saveDbDay
+                    // };
+                    // console.log('resCons', resCons);
+
                     if (this.props.service.data.serviceLocationid) {
                         if(this.props.service.data.saveDateDB)
                         {
@@ -95,7 +117,9 @@ class Confirmation extends Component {
                                 "currencyId": 0,
                                 "workerId": 0,
                                 "zoneId": zoneValue,
-                                "serviceId": this.props.service.data.id
+                                "serviceId": this.props.service.data.id,
+                                "saveDBTime": this.props.service.saveDBTime,
+                                "saveDbDay": this.props.data.saveDbDay
                             }
                         ).then(responseJson => {
                             AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));

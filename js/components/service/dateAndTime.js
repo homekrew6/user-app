@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { setDateAndTime ,setServiceDetails} from './elements/serviceActions';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, ScrollView, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Card, CardItem } from "native-base";
@@ -143,6 +144,19 @@ class DateAndTime extends Component {
         this.props.navigation.navigate('Confirmation');
     }
     setDateAndTime() {
+        let saveDBTime = this.state.setTime.slice(0, -5) + " " + this.state.setTime.slice(5).toLowerCase();
+        let zeroPos = saveDBTime.search("0");
+        if(zeroPos >= 0 ){
+        if(this.state.setTime === "10:00AM" || this.state.setTime === "10:00PM"){
+            saveDBTime = saveDBTime;
+        }else{
+            saveDBTime = saveDBTime.slice(1);
+        }
+        }else{
+            saveDBTime = saveDBTime
+        }
+        let saveDbDay = this.state.setWeek;
+
         //const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00';
         const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00' + " " + this.state.setTime.slice(5).toLowerCase();
         if (this.state.satDate == '') {
@@ -153,6 +167,8 @@ class DateAndTime extends Component {
             let data = this.state.serviceDetails;
             data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
             data.saveDateDB = saveDateDB;
+            data.saveDBTime = saveDBTime;
+            data.saveDbDay = saveDbDay;
             this.props.setDateAndTime(data);
             this.navigate();
         }
