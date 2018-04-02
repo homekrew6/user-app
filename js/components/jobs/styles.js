@@ -33,10 +33,11 @@ export default {
         flexDirection: 'row',
         paddingLeft: 10,
         paddingRight: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#fff'
     },
-    listWarpImageWarp: { height: 65, width: 65, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#81cdc7', borderRadius: 60 },
-    listWarpImage: { height: 30, width: 30 },
+    listWarpImageWarp: { height: 65, width: 65, borderRadius: 10, alignItems: 'center', justifyContent: 'center', borderColor: '#81cdc7', borderRadius: 60, borderWidth: 1 },
+    listWarpImage: { height: 40, width: 40 },
     listWarpTextWarp: { flex: 1, paddingLeft: 15 },
     listWarpPriceUp: { fontSize: 14 },
     listWarpPriceDown: { fontSize: 12 },

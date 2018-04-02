@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, ListView } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, ListView, Picker } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text, List, ListItem } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -27,7 +27,6 @@ class JobList extends Component {
     componentDidMount() {
         this.setState({ visible: true });
         api.post('Jobs/getJobListingForUser', { customerId: this.state.customerId, status: this.state.status }).then((res) => {
-            //this.setState({ jobList: res.response.message, visible: false });
             var finalList = res.response.message;
             var services = {};
             for (var i = 0; i < finalList.length; i++) {
@@ -78,9 +77,11 @@ class JobList extends Component {
                     <Body style={styles.headBody}>
                         <Title>Job List</Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
+                    <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} >
+                        <SimpleLineIcons name="options" style={{ color: '#fff' }} />
+                    </Button>
                 </Header>
-                <Content style={{ backgroundColor: '#ccc' }}>
+                <Content>
                     {this.state.jobList.map((dataQ, key) => {
                         return (
                             <View key={key}>
@@ -90,44 +91,35 @@ class JobList extends Component {
                                 <List
                                     dataArray={dataQ.jobList}
                                     renderRow={(item) =>
-                                        <ListItem >
+                                        <ListItem style={{ marginLeft: 0 }}>
                                             <TouchableOpacity style={styles.listWarp} onPress={() => this.goToDetails(item)}>
                                                 <View style={styles.listWarpImageWarp}>
                                                     {
                                                         item.service.banner_image ? (
                                                             <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
                                                         ) : (
-                                                                <Image source={imageIcon1} style={styles.listWarpImage} />
-                                                            )
+                                                            <Image source={imageIcon1} style={styles.listWarpImage} />
+                                                        )
                                                     }
-
                                                 </View>
                                                 <View style={styles.listWarpTextWarp}>
                                                     <View style={styles.flexDirectionRow}>
                                                         <Text>{item.service.name}</Text>
                                                     </View>
                                                     <View style={styles.flexDirectionRow}>
-                                                        <Text style={[styles.fontWeight700, { fontSize: 14 }]}>
-
-                                                            Tuesday
-                                                            </Text>
+                                                        <Text style={[styles.fontWeight700, { fontSize: 14 }]}> Tuesday </Text>
                                                         <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
                                                     </View>
                                                     <View style={styles.flexDirectionRow}>
                                                         <Text>{item.userLocation.name}</Text>
                                                     </View>
-                                                    {/* <View style={styles.flexDirectionRow}>
-                                                        <Text style={{ color: '#81cdc7' }}>{item.startTime.startTime}</Text>
-                                                    </View> */}
                                                 </View>
                                                 <View>
-                                                    {/* <Text style={styles.listWarpPriceUp}>AED {item.price}</Text> */}
                                                     <Text style={styles.listWarpPriceDown}>{item.status}</Text>
                                                 </View>
                                             </TouchableOpacity>
                                         </ListItem>
                                     }
-
                                 />
                             </View>
                         )
