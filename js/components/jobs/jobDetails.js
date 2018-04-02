@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Communications from 'react-native-communications';
+import I18n from '../../i18n/i18n';
 const win = Dimensions.get('window').width;
 
 import styles from "./styles";
@@ -31,7 +32,7 @@ class JobDetails extends Component {
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Title>Job Details</Title>
+                        <Title>{I18n.t('jobDetails')}</Title>
                     </Body>
                     <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
                 </Header>
@@ -59,7 +60,7 @@ class JobDetails extends Component {
                         <View style={{ width: 20 }}>
                             <Ionicons name="ios-man-outline" style={styles.jobItemIconIonicons} />
                         </View>
-                        <Text style={styles.jobItemName}>Job Tracker</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('jobTracker')}</Text>
                         <Text style={styles.jobItemValue}>Job Requested</Text>
                     </View>
                     {
@@ -82,7 +83,7 @@ class JobDetails extends Component {
                                     </View>
                                     <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails:this.state.jobDetails}) } >
                                         <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
-                                        <Text style={{ fontSize: 12 }}>Chat/Call</Text>
+                                        <Text style={{ fontSize: 12 }}>{I18n.t('chat')}/{I18n.t('call')}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -95,35 +96,35 @@ class JobDetails extends Component {
                         <View style={{ width: 20 }}>
                             <MaterialIcons name="date-range" style={styles.jobItemIcon} />
                         </View>
-                        <Text style={styles.jobItemName}>Date & Time</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('dateAndTime')}</Text>
                         <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>{this.state.jobDetails.postedDate}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 20 }}>
                             <MaterialIcons name="location-on" style={styles.jobItemIcon} />
                         </View>
-                        <Text style={styles.jobItemName}>Location</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('location')}</Text>
                         <Text style={styles.jobItemValue}>{this.state.jobDetails.userLocation.name}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 20 }}>
                             <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
                         </View>
-                        <Text style={styles.jobItemName}>Job Summary</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('jobSummary')}</Text>
                         <Text style={styles.jobItemValue}>AED {this.state.jobDetails.price}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 20 }}>
                             <Ionicons name="ios-flag-outline" style={styles.jobItemIconIonicons} />
                         </View>
-                        <Text style={styles.jobItemName}>Quote/Follow</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('quoteOrFollow')}</Text>
                         <Text style={styles.jobItemValue}>Yes</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 20 }}>
                             <MaterialIcons name="payment" style={styles.jobItemIcon} />
                         </View>
-                        <Text style={styles.jobItemName}>Payment</Text>
+                        <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
                         <Text style={styles.jobItemValue}>1234</Text>
                     </View>
                 </Content>

@@ -8,6 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
+import I18n from '../../i18n/i18n';
 const win = Dimensions.get('window').width;
 const imageIcon1 = require('../../../img/icon/home.png');
 import styles from "./styles";
@@ -75,7 +76,7 @@ class JobList extends Component {
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Title>Job List</Title>
+                        <Title>{I18n.t('jobList')}</Title>
                     </Body>
                     <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} >
                         <SimpleLineIcons name="options" style={{ color: '#fff' }} />
