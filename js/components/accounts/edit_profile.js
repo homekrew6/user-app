@@ -205,7 +205,7 @@ class EditProfile extends Component {
               <Icon name="chevron-left" style={{ fontSize: 18, color: '#71beb8' }} />
             </Button>
             <Body style={styles.appHdrtitleWarp}>
-              <Text style={{ color: '#1e3768' }}>Edit My Profile</Text>
+              <Text style={{ color: '#1e3768' }}>{I18n.t('edit_my_profile')}</Text>
             </Body>
             <Button transparent />
           </Header>
@@ -236,7 +236,7 @@ class EditProfile extends Component {
                       this.fileUploadType(buttonIndex);
                     },
                   )}
-              ><Text> Change Photo </Text></Button>
+              ><Text> {I18n.t('change_photo')} </Text></Button>
             </View>
           </View>
 
@@ -247,7 +247,7 @@ class EditProfile extends Component {
           <View>
             <View style={styles.editprofileLst}>
               <View style={styles.editprofileWarp}>
-                <Text>Name</Text>
+                <Text>{I18n.t('name')}</Text>
               </View>
               <View style={styles.editprofileInputwrap}>
                 <Input style={styles.editprofileInput} onChangeText={text => this.setState({ name: text })} value={this.state.name} />
@@ -255,7 +255,7 @@ class EditProfile extends Component {
             </View>
             <View style={styles.editprofileLst}>
               <View style={styles.editprofileWarp}>
-                <Text>Email Id</Text>
+                <Text>{I18n.t('email_id')}</Text>
               </View>
               <View style={styles.editprofileInputwrap}>
                 <Input editable={false} style={styles.editprofileInput} onChangeText={text => this.setState({ email: text })} value={this.state.email} />
@@ -264,7 +264,7 @@ class EditProfile extends Component {
 
             <View style={styles.editprofileLst}>
               <View style={styles.editprofileWarp}>
-                <Text>Phone No</Text>
+                <Text>{I18n.t('phone_number')}</Text>
               </View>
               <View style={styles.editprofileInputwrap}>
                 <Input style={styles.editprofileInput} keyboardType={'numeric'} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} />
@@ -288,7 +288,7 @@ class EditProfile extends Component {
           <Footer>
             <FooterTab>
               <TouchableOpacity full style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.pressSave()}>
-                <Text style={{ color: '#fff', fontSize: 16 }}>Save</Text>
+                <Text style={{ color: '#fff', fontSize: 16 }}>{I18n.t('save')}</Text>
               </TouchableOpacity>
             </FooterTab>
           </Footer>
