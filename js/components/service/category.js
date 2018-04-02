@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ImageBackground, AsyncStorage  } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ImageBackground, AsyncStorage } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -9,7 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api';
 import { setServiceDetails } from './elements/serviceActions';
-import { navigateAndSaveCurrentScreen} from '../accounts/elements/authActions';
+import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker } from 'native-base';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -44,7 +44,7 @@ class Categories extends Component {
   }
 
   componentWillMount() {
-    
+
     api.get('Zones/getParentZone').then((res) => {
       //console.log(res);
       if (res.zone.length > 0) {
@@ -55,17 +55,34 @@ class Categories extends Component {
         api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
           console.log('khalid', resService);
           if (resService.response.length > 0) {
-
-
-            let zoneServiceIdCheck = [];
+            api.get('WorkerSkills').then((workerSkillsList) => {
+              let checkServiceIdsList=[];
+              workerSkillsList.map((item)=>{
+                checkServiceIdsList.push(item.serviceId);
+              });
+               let zoneServiceIdCheck = [];
             resService.response.map((data, key)=>{
               if(data.service && (data.service.is_active === true || data.service.is_active === null)){
-                zoneServiceIdCheck.push(data)
+                if(checkServiceIdsList.includes(data.service.id))
+                {
+                  zoneServiceIdCheck.push(data)
+                }
+               
               }
             })
             this.setState({ serviceList: zoneServiceIdCheck });
-            //console.log(this.state.serviceList)
             this.setState({ visible: false });
+            }).catch((err1) => {
+              let zoneServiceIdCheck = [];
+              resService.response.map((data, key) => {
+                if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
+                  zoneServiceIdCheck.push(data)
+                }
+              })
+              this.setState({ serviceList: zoneServiceIdCheck });
+              this.setState({ visible: false });
+              this.setState({ visible: false });
+            })
           }
         }).catch((err) => {
           //console.log(err);
@@ -76,9 +93,8 @@ class Categories extends Component {
     }).catch((err) => {
       this.setState({ visible: false });
     });
-    if(this.props.auth.data)
-    {
-     
+    if (this.props.auth.data) {
+
       let customerId = this.props.auth.data.id;
       const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`;
       api.get(getLocationUrl).then(res => {
@@ -86,9 +102,9 @@ class Categories extends Component {
         console.log('this is test');
         this.setState({ locationArray: res });
         console.log(this.state.locationArray);
-        
+
       }).catch((err) => {
-        console.log("this is an error");        
+        console.log("this is an error");
         console.log(err);
       });
       console.log(this.state.locationArray);
@@ -99,11 +115,11 @@ class Categories extends Component {
     //Alert.alert('Click is working');
     this.props.setServiceDetails(data);
     this.setState({
-       IsModalVisible: true, 
-       selectedServiceName: data.name, 
-       serviceId: data.id,
-       banner_image: data.banner_image,
-       cover_image: data.cover_image
+      IsModalVisible: true,
+      selectedServiceName: data.name,
+      serviceId: data.id,
+      banner_image: data.banner_image,
+      cover_image: data.cover_image
     });
   }
   closeModal(data1) {
@@ -129,7 +145,7 @@ class Categories extends Component {
     });
   }
   onValueChange(value) {
-    AsyncStorage.setItem("zoneId", value.toString()).then((res)=>{
+    AsyncStorage.setItem("zoneId", value.toString()).then((res) => {
 
     });
     //console.log(value);
@@ -151,8 +167,7 @@ class Categories extends Component {
     });
     //console.log(this.state.coverImgWith);
   }
-  takeToServiceDetails(data)
-  {
+  takeToServiceDetails(data) {
     this.props.setServiceDetails(data);
     this.props.navigation.navigate('ServiceDetails');
   }
@@ -165,7 +180,7 @@ class Categories extends Component {
       this.state.locationArray.map((data, key) => {
         //if (!data.service) return;
         return (
-          <View style={{ borderBottomWidth: 1 , borderBottomColor: '#ccc', borderRadius: 10}} key={data.id}>
+          <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', borderRadius: 10 }} key={data.id}>
             <TouchableOpacity onPress={() => this.closeModal(data)} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
               <Ico name='business' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
               <Text>{data.name}</Text>
@@ -184,7 +199,7 @@ class Categories extends Component {
             <View key={data.id} style={styles.catIten}>
               <View style={styles.catIten_img_view}>
                 {
-                  this.props.auth.data && this.state.locationArray.length>0 ? (
+                  this.props.auth.data && this.state.locationArray.length > 0 ? (
                     <TouchableOpacity onPress={() => this.openModal(data.service)} >
 
                       <Image source={{ uri: data.service.banner_image || null }} style={styles.catIten_img} />
@@ -196,7 +211,7 @@ class Categories extends Component {
                       </TouchableOpacity>
                     )
                 }
-              
+
               </View>
               <Text style={styles.catIten_txt}>{data.service.name || null}</Text>
             </View>
@@ -233,7 +248,7 @@ class Categories extends Component {
           </Header>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
-              <ImageBackground  source={{ uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
+              <ImageBackground source={{ uri: this.state.selectedZoneDetails.banner_image }} style={styles.carveImage}>
                 <View style={{ width: 120 }}>
                   <Picker
                     mode="dropdown"
@@ -260,20 +275,20 @@ class Categories extends Component {
             animationOut="slideOutRight"
             hideModalContentWhileAnimating={true}
           >
-          <TouchableOpacity 
-            activeOpacity={1} 
-            onPressOut={() => this.setState({IsModalVisible : false})}
-            style={{  flex: 1, alignItems: 'center', justifyContent: 'center' , flexDirection: 'row'}}
-          >
-            {/* <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, height: 20, width: 20 }} onPress={() => this.setState({ IsModalVisible: false })}>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPressOut={() => this.setState({ IsModalVisible: false })}
+              style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}
+            >
+              {/* <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, height: 20, width: 20 }} onPress={() => this.setState({ IsModalVisible: false })}>
               <Ionicons name='md-close-circle' style={{ fontSize: 20, color: 'white' }} />
             </TouchableOpacity> */}
 
-            <View style={{ flex: 1 }}>
-              <View style={{ alignItems: 'center', marginBottom: 15 }}>
-                <Text style={{ color: '#fff', fontSize: 20 }}>{this.state.selectedServiceName}</Text>
-              </View>
-              <View style={{  backgroundColor: '#fff', borderRadius: 10 }} >
+              <View style={{ flex: 1 }}>
+                <View style={{ alignItems: 'center', marginBottom: 15 }}>
+                  <Text style={{ color: '#fff', fontSize: 20 }}>{this.state.selectedServiceName}</Text>
+                </View>
+                <View style={{ backgroundColor: '#fff', borderRadius: 10 }} >
                   {/* <View style={{ backgroundColor: '#fff', borderRadius: 10, }}>
                    <TouchableOpacity onPress={() => this.closeModal()} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', flexDirection: 'row', alignItems: 'center' }}>
                     <Ionicons name='md-home' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
@@ -285,10 +300,10 @@ class Categories extends Component {
                   </TouchableOpacity> 
                 </View> */}
                   {serviceType}
+                </View>
               </View>
-            </View>
-            
-          </TouchableOpacity>
+
+            </TouchableOpacity>
           </Modal>
           <View style={styles.catIten_txt_warp}>
             {serviceListing}
