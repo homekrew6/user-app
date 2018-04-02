@@ -81,7 +81,6 @@ class ServiceProviderDetails extends Component {
                                     <TouchableOpacity style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#81cdc7', height: 40 }} onPress={() => Communications.phonecall(this.state.jobDetails.worker.phone, true)}><Text style={{ color: '#fff' }}>{I18n.t('call')}</Text></TouchableOpacity>
                                 </View>
                             </View>
-
                         </TouchableOpacity>
                     </Modal>
 
@@ -110,7 +109,7 @@ class ServiceProviderDetails extends Component {
 
                                         </Text>
                                     ) : (
-                                        <Text></Text>
+                                            <Text></Text>
                                         )
                                 }
                                 
