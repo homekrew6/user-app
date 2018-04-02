@@ -36,6 +36,20 @@ export default {
   cancel: 'Cancel',
   done:'Done',
   edit: 'Edit',
-  add: 'Add'
+  add: 'Add',
+  serviceProvider: 'Service Provider',
+  skills: 'Skills',
+  liveChat: 'LIVE CHAT',
+  callMe: 'CALL ME',
+  call: 'Call',
+  chat: 'Chat',
+  jobList: 'Job List',
+  jobDetails: 'Job Details',
+  jobTracker: 'Job Tracker',
+  dateAndTime: 'Date & Time', 
+  location: 'Location',
+  jobSummary: 'Job Summary',
+  quoteOrFollow: 'Quote / Follow',
+  payment: 'Payment',
 
 };

@@ -93,4 +93,13 @@ export default {
         paddingBottom: 20,
         marginTop: 15
     },
+
+    // header
+    appHdrtitleWarp: {
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    appHdr2: {
+        backgroundColor: '#81cdc7',
+    }
 };
