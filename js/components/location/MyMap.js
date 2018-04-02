@@ -198,8 +198,8 @@ class MyMap extends Component {
                     <Body style={styleSelf.tac}>
                         {
                             this.props.navigation.state.params.screenType === 'add' ?
-                                <Text style={styleSelf.hdClr}>Add Location</Text> :
-                                <Text style={styleSelf.hdClr}>Edit Location</Text>
+                                <Text style={styleSelf.hdClr}>{I18n.t('add_location')}</Text> :
+                                <Text style={styleSelf.hdClr}>{I18n.t('edit_location')}</Text>
                         }
                     </Body>
 
@@ -282,7 +282,7 @@ class MyMap extends Component {
                                     }
                                         style={{ alignItems: 'center', justifyContent: 'center' }}
                                     >
-                                        <Text style={{ color: '#1e3768', paddingRight: 10 }}>Cancel</Text>
+                                        <Text style={{ color: '#1e3768', paddingRight: 10 }}>{I18n.t('cancel')}</Text>
                                     </TouchableOpacity>
                                 }
                             />
@@ -312,14 +312,14 @@ class MyMap extends Component {
 
                     <View style={{ backgroundColor: '#fff' }}>
                         <View style={{ alignSelf: 'center' }} >
-                            <Text style={{ fontSize: 18, marginTop: 15, color: '#1e3768' }} >ADDITIONAL INFORMATION</Text>
+                            <Text style={{ fontSize: 18, marginTop: 15, color: '#1e3768' }} >{I18n.t('additional_information')}</Text>
                         </View>
                         <View style={{ paddingRight: 10, paddingBottom: 30 }}>
 
                             <Form>
 
                                 <Item floatingLabel style={{ padding: 0, margin: 0 }}>
-                                    <Label style={styleSelf.inputTitleStyle}>Name</Label>
+                                    <Label style={styleSelf.inputTitleStyle}>{I18n.t('name')}</Label>
                                     <Input
                                         onChangeText={(text) => this.ChangeNameText(text)}
                                         value={this.state.name}
@@ -327,7 +327,7 @@ class MyMap extends Component {
                                 </Item>
 
                                 <Item floatingLabel style={{ padding: 0, margin: 0 }}>
-                                    <Label style={styleSelf.inputTitleStyle}>Enter Building Name</Label>
+                                    <Label style={styleSelf.inputTitleStyle}>{I18n.t('enter_building_name')}</Label>
                                     <Input
                                         value={this.state.buildingName}
                                         onChangeText={(text) => this.ChangeBuildingText(text)}
@@ -336,7 +336,7 @@ class MyMap extends Component {
 
 
                                 <Item floatingLabel style={{ padding: 0, margin: 0 }}>
-                                    <Label style={styleSelf.inputTitleStyle}>APARTMENT / VILLA NO.</Label>
+                                    <Label style={styleSelf.inputTitleStyle}>{I18n.t('appartment_no')}</Label>
                                     <Input
                                         onChangeText={(text) => this.ChangeVillaNoText(text)}
                                         value={this.state.villaNo}
@@ -344,7 +344,7 @@ class MyMap extends Component {
                                 </Item>
 
                                 <Item floatingLabel style={{ padding: 0, margin: 0 }}>
-                                    <Label style={styleSelf.inputTitleStyle}>ADDRESS (NEAREST LANDMARK)</Label>
+                                    <Label style={styleSelf.inputTitleStyle}>{I18n.t('address')}</Label>
                                     <Input
                                         onChangeText={(text) => this.ChangeLandmarkText(text)}
                                         value={this.state.formatted_address ? this.state.formatted_address : this.state.landmark}

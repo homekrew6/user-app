@@ -35,6 +35,25 @@ class authApi {
 		})
 	}
 
+	static getAllLanguagesList() {
+		return new Promise((resolve, reject) => {
+			api.get('Languages').then(responseJson => {
+				resolve(responseJson)
+			}).catch(err => {
+				reject(err)
+			})
+		})
+	}
+	static getAllCurrencyList() {
+		return new Promise((resolve, reject) => {
+			api.get('Currencies').then(responseJson => {
+				resolve(responseJson)
+			}).catch(err => {
+				reject(err)
+			})
+		})
+	}
+
 
 
 

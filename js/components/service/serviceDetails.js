@@ -922,7 +922,7 @@ class serviceDetails extends Component {
         </View> : data.type == "5" ? <View key={data.id}>
           <View style={{ flexDirection: 'row', padding: 15 }}>
             <Text style={{ flex: 1 }}>
-              Insert Photo
+                    {I18n.t('insert_photo')}
                 </Text>
             <TouchableOpacity onPress={() => this.uploadPhoto(data)}>
               <Icon name="camera" style={{ fontSize: 16 }}></Icon>

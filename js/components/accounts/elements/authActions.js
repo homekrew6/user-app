@@ -79,7 +79,30 @@ export function checkAuth(cb) {
     });
   };
 }
+export function getAllLanguagesList(id, auth) {
+  return function (dispatch) {
+    return authApi.getAllLanguagesList(id, auth).then(res => {
+      res.type = 'success';
+      return res
 
+    }).catch(err => {
+      err.type = 'error';
+      return err
+    })
+  }
+}
+export function getAllCurrencyList(id, auth) {
+  return function (dispatch) {
+    return authApi.getAllCurrencyList(id, auth).then(res => {
+      res.type = 'success';
+      return res
+
+    }).catch(err => {
+      err.type = 'error';
+      return err
+    })
+  }
+}
 export function logout(cb) {
   return function (dispatch) {
     dispatch(authStateBusy());

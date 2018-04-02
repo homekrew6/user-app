@@ -77,7 +77,7 @@ class MyPromoCode extends Component {
                         >
                             <View style={styles.modalWarp}>
                                <View>
-                                    <Text style={styles.promoCodeHeader}>Add Promo Code</Text>
+                                    <Text style={styles.promoCodeHeader}>{I18n.t('add_promo_code')}</Text>
                                     <Form style={styles.promoCodeInput}>
                                         <Item style={styles.promoCodeInputItem}>
                                             <Input placeholder="Enter Promo Code " style={styles.promoCodeInputTag} />
@@ -86,7 +86,7 @@ class MyPromoCode extends Component {
 
                                     <View style={{ flexDirection: 'row' }}>
                                         <TouchableOpacity style={styles.promoCodeCancel} onPress={() => this.addPromoCode()}><Text style={{ fontSize: 14 }}>{I18n.t('cancel')}</Text></TouchableOpacity>
-                                        <TouchableOpacity style={styles.promoCodeAdd}><Text style={styles.promoCodeCancelText}>ADD</Text></TouchableOpacity>
+                                        <TouchableOpacity style={styles.promoCodeAdd}><Text style={styles.promoCodeCancelText}>{I18n.t('add')}</Text></TouchableOpacity>
                                     </View>
                                </View>
                             </View>
