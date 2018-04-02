@@ -185,7 +185,7 @@ class DateAndTime extends Component {
                         <Text>{I18n.t('cancel')}</Text>
                     </Button>
                     <Body style={styles.tac}>
-                        <Text style={styles.hdClr}>My Timings</Text>
+                        <Text style={styles.hdClr}>{I18n.t('my_timings')}</Text>
                     </Body>
                     <Button transparent onPress={() => this.setDateAndTime()}>
                         <Text>{I18n.t('done')}</Text>
@@ -197,7 +197,7 @@ class DateAndTime extends Component {
                         <Card style={{ backgroundColor: 'transparent', marginBottom: 20 }}>
                             <CardItem style={{ marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
-                                <Text>Date</Text>
+                                <Text>{I18n.t('date')}</Text>
                             </CardItem>
                             <CardItem style={{  alignItems: 'center', justifyContent: 'center' }}>
                                 <Calendar
@@ -231,7 +231,7 @@ class DateAndTime extends Component {
 
                             <CardItem style={{ marginTop: 2, marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='clock-o' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
-                                <Text> Time</Text>
+                                <Text> {I18n.t('time')}</Text>
                             </CardItem>
                             <CardItem>
                                 <View style={{ flex: 1, flexDirection: 'row', }}>

@@ -50,11 +50,11 @@ class MyLocation extends Component {
                     <Header style={styleSelf.appHdr2} androidStatusBarColor="#cbf0ed">
                         <Button transparent >
                             <TouchableOpacity onPress={() => this.goToMyMap()}>
-                                <Text style={styleSelf.backBt} >Add</Text>
+                                <Text style={styleSelf.backBt} >{I18n.t('add')}</Text>
                             </TouchableOpacity>
                         </Button>
                         <Body style={styleSelf.tac}>
-                            <Text style={styleSelf.hdClr}>My Location</Text>
+                            <Text style={styleSelf.hdClr}>{I18n.t('my_location')}</Text>
                         </Body>
                         <Button transparent onPress={() => this.goBack()} >
                             <Text style={styleSelf.backBt} >{I18n.t('done')}</Text>

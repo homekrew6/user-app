@@ -29,7 +29,9 @@ import ThankYou from "./components/promoCode/thankYou";
 import JobDetails from "./components/jobs/jobDetails";
 import JobList from './components/jobs/jobList';
 import ServiceProviderDetails from './components/jobs/serviceProviderDetails';
-
+import Settings from './components/settings/settings';
+import LanguageList from './components/settings/languageList';
+import CurrencyList from './components/settings/currencyList';
 const AppNavigator = StackNavigator(
     {
         Drawer: { screen: Drawer },
@@ -54,7 +56,10 @@ const AppNavigator = StackNavigator(
         ThankYou: { screen: ThankYou },
         JobDetails: { screen: JobDetails },
         JobList: { screen: JobList},
-        ServiceProviderDetails: { screen: ServiceProviderDetails}
+        ServiceProviderDetails: { screen: ServiceProviderDetails},
+        Settings: { screen: Settings },
+        LanguageList: { screen: LanguageList },
+        CurrencyList: { screen: CurrencyList }
     },
     {
         initialRouteName: "Drawer",

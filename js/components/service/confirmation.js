@@ -382,7 +382,7 @@ class Confirmation extends Component {
                             <View style={styles.confirmationIconView}>
                                 <Ico name='alarm' style={styles.confirmationViewIcon}></Ico>
                             </View>
-                            <Text style={styles.confirmationMainTxt}>Date & Time</Text>
+                            <Text style={styles.confirmationMainTxt}>{I18n.t('date_and_time')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.state.dateTime}</Text>
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
@@ -393,7 +393,7 @@ class Confirmation extends Component {
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='location' style={styles.confirmationViewIcon} />
                             </View>
-                            <Text style={styles.confirmationMainTxt}>Location</Text>
+                            <Text style={styles.confirmationMainTxt}>{I18n.t('location')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.state.serviceName}</Text>
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
@@ -404,7 +404,7 @@ class Confirmation extends Component {
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='credit-card' style={styles.confirmationViewIcon} />
                             </View>
-                            <Text style={styles.confirmationMainTxt}>Payment</Text>
+                            <Text style={styles.confirmationMainTxt}>{I18n.t('payment')}</Text>
                             <Text style={styles.confirmationDateTime}>Credit Card / Debit Card</Text>
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
@@ -415,7 +415,7 @@ class Confirmation extends Component {
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='heart' style={styles.confirmationViewIcon} />
                             </View>
-                            <Text style={styles.confirmationMainTxt}>Favorite SP</Text>
+                            <Text style={styles.confirmationMainTxt}>{I18n.t('favourite_sp')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.props.service.data.favouriteSp}</Text>
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
@@ -426,7 +426,7 @@ class Confirmation extends Component {
                             <View style={styles.confirmationIconView}>
                                 <Entypo name='scissors' style={styles.confirmationViewIcon} />
                             </View>
-                            <Text style={styles.confirmationMainTxt}>Promo Code</Text>
+                            <Text style={styles.confirmationMainTxt}>{I18n.t('promo_code')}</Text>
                             <Text style={styles.confirmationDateTime}>AED 50 off</Text>
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
@@ -461,7 +461,7 @@ class Confirmation extends Component {
                 </Content>
                 <Footer>
                     <FooterTab>
-                        <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.confirmationContinue()} disabled={this.state.continueButtonDesable}><Text style={styles.confirmationServicefooterItmTxt}>CONTINUE</Text></TouchableOpacity>
+                        <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.confirmationContinue()} disabled={this.state.continueButtonDesable}><Text style={styles.confirmationServicefooterItmTxt}>{I18n.t('continue')}</Text></TouchableOpacity>
                         <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
                     </FooterTab>
                 </Footer>
