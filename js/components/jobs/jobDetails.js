@@ -30,8 +30,6 @@ class JobDetails extends Component {
         })
     }
 
-
-
     render() {
         return (
             <Container style={{ backgroundColor: '#fff' }}>
