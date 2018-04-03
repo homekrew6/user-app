@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, AsyncStorage } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -22,8 +22,19 @@ class Expect extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            serviceDetails: props.service.data
+            serviceDetails: props.service.data,
+            jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : '',
+            currency: 'USD'
         }
+    }
+    
+    componentDidMount() {
+        AsyncStorage.getItem("currency").then((value) => {
+            if (value) {
+                const value1 = JSON.parse(value);
+                this.setState({ currency: value1.language })
+            }
+        })
     }
 
     render() {
@@ -84,7 +95,7 @@ class Expect extends Component {
                                 <EvilIcons name="clock" style={{ fontSize: 14, color: "#747474" }} />
                                 <Text style={{ color: "#747474", fontSize: 14 }}>4 hours</Text>
                             </View>
-                            <Text style={{ color: '#1e3768', fontSize: 16 }}>AED 360</Text>
+                            <Text style={{ color: '#1e3768', fontSize: 16 }}>{this.state.currency} 360</Text>
                         </View>
                     </View>
 

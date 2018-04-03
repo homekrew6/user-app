@@ -32,7 +32,8 @@ class Confirmation extends Component {
             dateTime: props.service.data.serviceTime ? props.service.data.serviceTime : '',
             saveDateDB: props.service.data.saveDateDB ? props.service.data.saveDateDB : '',
             serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : '',
-
+            jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : '',
+            currency: 'USD',
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,
             continueButtonDesable: false,
@@ -44,6 +45,12 @@ class Confirmation extends Component {
 
 
     componentDidMount() {
+        AsyncStorage.getItem("currency").then((value) => {
+            if (value) {
+                const value1 = JSON.parse(value);
+                this.setState({ currency: value1.language })
+            }
+        })
         // AsyncStorage.getItem("fromLogin").then((storeValue) => {
         //     if (storeValue) {
         //         BackHandler.addEventListener('hardwareBackPress', function () {
@@ -369,7 +376,7 @@ class Confirmation extends Component {
                                 <EvilIcons name="clock" style={{ fontSize: 14, color: "#747474" }} />
                                 <Text style={{ color: "#747474", fontSize: 14 }}>4 hours</Text>
                             </View>
-                            <Text style={{ color: '#1e3768', fontSize: 16 }}>AED {this.props.service.data.price}</Text>
+                            <Text style={{ color: '#1e3768', fontSize: 16 }}>{this.state.currency} {this.props.service.data.price}</Text>
                         </View>
                     </View>
 
@@ -427,7 +434,7 @@ class Confirmation extends Component {
                                 <Entypo name='scissors' style={styles.confirmationViewIcon} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>{I18n.t('promo_code')}</Text>
-                            <Text style={styles.confirmationDateTime}>AED 50 off</Text>
+                            <Text style={styles.confirmationDateTime}>{this.state.currency} 50 off</Text>
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
                             </View>
@@ -462,7 +469,9 @@ class Confirmation extends Component {
                 <Footer>
                     <FooterTab>
                         <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.confirmationContinue()} disabled={this.state.continueButtonDesable}><Text style={styles.confirmationServicefooterItmTxt}>{I18n.t('continue')}</Text></TouchableOpacity>
-                        <TouchableOpacity style={styles.confirmationServicefooterItem2}><Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text></TouchableOpacity>
+                        <TouchableOpacity style={styles.confirmationServicefooterItem2}>
+                            <Text style={styles.confirmationServicefooterItmTxt}>{this.state.currency} {this.props.service.data.price}</Text>
+                        </TouchableOpacity>
                     </FooterTab>
                 </Footer>
 

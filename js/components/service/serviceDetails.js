@@ -56,6 +56,8 @@ class serviceDetails extends Component {
       cover_image: 'props.service.data.cover_image',
       start_range: 0,
       numberValue: 1,
+      jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : '',
+      currency: 'USD',
       activeRadioArray: [false, false, false],
       IsSpinnerVisible: false,
       sliderData: [
@@ -541,6 +543,13 @@ class serviceDetails extends Component {
   }
 
   componentDidMount() {
+    
+    AsyncStorage.getItem("currency").then((value) => {
+      if (value) {
+          const value1 = JSON.parse(value);
+          this.setState({ currency: value1.language })
+      }
+    })
     // AsyncStorage.getItem("fromLogin").then((storeValue) => {
     //       if (storeValue) {
     //           BackHandler.addEventListener('hardwareBackPress', function () {
@@ -1164,7 +1173,7 @@ class serviceDetails extends Component {
                   <Text style={styles.confirmationServicefooterItmTxt} >CONTINUE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.confirmationServicefooterItem2}>
-                  <Text style={styles.confirmationServicefooterItmTxt}>AED {this.props.service.data.price}</Text>
+                  <Text style={styles.confirmationServicefooterItmTxt}>{this.state.currency} {this.props.service.data.price}</Text>
                 </TouchableOpacity>
               </FooterTab>
             </Footer>
