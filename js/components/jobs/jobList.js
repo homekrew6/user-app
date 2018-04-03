@@ -9,6 +9,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
+import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 const win = Dimensions.get('window').width;
 const imageIcon1 = require('../../../img/icon/home.png');
 import styles from "./styles";
@@ -25,9 +26,13 @@ class JobList extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
+        this.getData(this.state.status);
+    }
+
+    getData(status){
         this.setState({ visible: true });
-        api.post('Jobs/getJobListingForUser', { customerId: this.state.customerId, status: this.state.status }).then((res) => {
+        api.post('Jobs/getJobListingForUser', { customerId: this.state.customerId, status: status }).then((res) => {
             var finalList = res.response.message;
             var services = {};
             for (var i = 0; i < finalList.length; i++) {
@@ -49,7 +54,7 @@ class JobList extends Component {
                 }
                 finalServiceList.push(data);
             }
-            console.log(finalServiceList);
+
             this.setState({ jobList: finalServiceList });
             this.setState({ visible: false });
 
@@ -64,8 +69,32 @@ class JobList extends Component {
         this.props.navigation.navigate('JobDetails', {jobDetails:data});
     }
 
+    setMenuRef = ref => {
+        this.menu = ref;
+    };
+
+    jobType(data)
+    {
+        this.menu.hide();
+        this.setState({ status: data })      
+        this.getData(data);
+    }
+
+    showMenu = () => {
+        this.menu.show();
+    };
+    
+
     render() {
+            let jobListNow;
+            jobListNow = (
+                <Text>hi</Text>
+            )
         return (
+            
+
+
+
             <Container style={{ backgroundColor: '#fff' }}>
                 <StatusBar
                     backgroundColor="#81cdc7"
@@ -78,12 +107,30 @@ class JobList extends Component {
                     <Body style={styles.headBody}>
                         <Title>{I18n.t('jobList')}</Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} >
-                        <SimpleLineIcons name="options" style={{ color: '#fff' }} />
-                    </Button>
+                    <View>
+                        <Menu
+                            ref={this.setMenuRef}
+                            button={
+                                <Button transparent onPress={this.showMenu} style={{ width: 30 }} >
+                                    <SimpleLineIcons name="options" style={{ color: '#fff' }} />
+                                </Button>
+                            }
+                        >
+                            <MenuItem onPress={() =>this.jobType('ALL')}>ALL</MenuItem>
+                            <MenuItem onPress={() =>this.jobType('ACCEPTED')}>ACCEPTED</MenuItem>
+                            <MenuItem onPress={() =>this.jobType('STARTED')}>STARTED</MenuItem>
+                            <MenuItem onPress={() =>this.jobType('DECLINED')}>DECLINED</MenuItem>
+                            <MenuItem onPress={() => this.jobType('CANCELLED')}>CANCELLED</MenuItem>
+                            <MenuItem onPress={() => this.jobType('COMPLETED')}>COMPLETED</MenuItem>
+                        </Menu>
+                    </View>
+                    
                 </Header>
                 <Content>
-                    {this.state.jobList.map((dataQ, key) => {
+                    {
+                        this.state.jobList.length ? (
+                            <View>
+                             { this.state.jobList.map((dataQ, key) => {
                         return (
                             <View key={key}>
                                 <View style={styles.dayHeading}>
@@ -99,8 +146,8 @@ class JobList extends Component {
                                                         item.service.banner_image ? (
                                                             <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
                                                         ) : (
-                                                            <Image source={imageIcon1} style={styles.listWarpImage} />
-                                                        )
+                                                                <Image source={imageIcon1} style={styles.listWarpImage} />
+                                                            )
                                                     }
                                                 </View>
                                                 <View style={styles.listWarpTextWarp}>
@@ -125,6 +172,13 @@ class JobList extends Component {
                             </View>
                         )
                     })}
+                            </View>
+                        ) : (<View style={{ alignItems: 'center', padding: 10 }}><Text>No Data Found</Text></View>)
+
+
+                   
+                    }
+                    
                 </Content>
 
             </Container>

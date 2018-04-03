@@ -45,6 +45,7 @@
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-maps": "^0.20.1",
     "react-native-maps-directions": "^1.6.0",
+    "react-native-material-menu": "^0.2.7",
     "react-native-modal": "^5.3.0",
     "react-native-popover-tooltip": "^1.1.4",
     "react-native-slider": "^0.11.0",
