@@ -79,6 +79,8 @@ export default {
   settings:'Settings',
   logout:'Logout',
   language:'Language',
-  currency:'Currency'
-
+  currency:'Currency',
+  start_time: 'Start Time',
+  end_time: 'End Time',
+  cancel_job: 'CANCEL JOB'
 };
