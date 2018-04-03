@@ -36,6 +36,7 @@ class Confirmation extends Component {
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,
             continueButtonDesable: false,
+            currencyId : 3,
             //homeValuearray: props.service.data.homeArray,
             // homeValue: 'Home'
         }
@@ -47,7 +48,7 @@ class Confirmation extends Component {
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
-                this.setState({ currency: value1.language })
+                this.setState({ currency: value1.language, currencyId: value1.langId })
             }
         })
         // AsyncStorage.getItem("fromLogin").then((storeValue) => {
@@ -120,7 +121,7 @@ class Confirmation extends Component {
                                 "promo_code": "AED 50 off",
                                 "status": "STARTED",
                                 "customerId": this.props.auth.data.id,
-                                "currencyId": 0,
+                                "currencyId": this.state.currencyId,
                                 "workerId": 0,
                                 "zoneId": zoneValue,
                                 "serviceId": this.props.service.data.id,
