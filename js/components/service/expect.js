@@ -23,7 +23,6 @@ class Expect extends Component {
         super(props);
         this.state = {
             serviceDetails: props.service.data,
-            jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : '',
             currency: 'USD'
         }
     }
