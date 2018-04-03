@@ -12,7 +12,6 @@ export function setServiceDetails(data) {
 }
 
 
-
 export function setDateAndTime(data) {
   return function (dispatch) {
     dispatch(serviceStateSuccess(data));    
@@ -27,8 +26,19 @@ export function getQuestionListByServiceId(data) {
       return res;
     }).catch((err) => {
       err.type = 'error';
-      console.log(err);
       dispatch(serviceStateFailed());
+      return err;
+    });
+  };
+}
+
+export function checkIfThePostingDateIsValid(data) {
+  return function (dispatch) {
+    return serviceApi.checkIfThePostingDateIsValid(data).then((res) => {
+      res.type = 'success';
+      return res;
+    }).catch((err) => {
+      err.type = 'error';
       return err;
     });
   };
