@@ -56,7 +56,6 @@ class serviceDetails extends Component {
       cover_image: 'props.service.data.cover_image',
       start_range: 0,
       numberValue: 1,
-      jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : '',
       currency: 'USD',
       activeRadioArray: [false, false, false],
       IsSpinnerVisible: false,

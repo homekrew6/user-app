@@ -32,7 +32,6 @@ class Confirmation extends Component {
             dateTime: props.service.data.serviceTime ? props.service.data.serviceTime : '',
             saveDateDB: props.service.data.saveDateDB ? props.service.data.saveDateDB : '',
             serviceName: props.service.data.serviceLocation ? props.service.data.serviceLocation : '',
-            jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : '',
             currency: 'USD',
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,

@@ -15,7 +15,6 @@ class JobDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : '',
             currency: 'USD'
         }
     }
