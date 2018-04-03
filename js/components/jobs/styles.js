@@ -10,7 +10,7 @@ export default {
     flexDirectionRow: { flexDirection: 'row' },
     fontWeight700: { fontWeight: '700' },
     headIcon: { fontSize: 22, color: '#fff' },
-    headBody: { alignItems: 'center' },
+    headBody: { alignItems: 'center', flex: 1 },
     headCenter: { color: '#1e3768', textAlign: 'center' },
     headerWarp: { backgroundColor: '#81cdc7' },
     container: { flex: 1 },

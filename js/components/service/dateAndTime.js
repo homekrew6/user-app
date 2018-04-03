@@ -2,17 +2,16 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { setDateAndTime ,setServiceDetails} from './elements/serviceActions';
+import { setDateAndTime, setServiceDetails, checkIfThePostingDateIsValid } from './elements/serviceActions';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, ScrollView, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Card, CardItem } from "native-base";
-// import ImageSlider from 'react-native-image-slider';
 import styles from './styles';
 import { Calendar } from 'react-native-calendars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import I18n from '../../i18n/i18n';
 
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
-
+import FSpinner from 'react-native-loading-spinner-overlay';
 
 
 
@@ -36,7 +35,7 @@ class DateAndTime extends Component {
 
         date = today.getFullYear() + "-" + dy + "-" + dm;
         this.state = {
-            daYSelected:'' ,
+            daYSelected: '',
             minDate: [today],
             weekday: ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'],
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
@@ -71,20 +70,21 @@ class DateAndTime extends Component {
             setWeek: '',
             serviceDetails: this.props.service.data,
             selectedDate: '',
-            selectedTimeID: ''
+            selectedTimeID: '',
+            IsSpinnerVisible: false
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
 
         let newColectionData = this.state.colectionData;
         let newIndex = this.props.service.data.selectedTimeID;
         let sltdt = this.props.service.data.selectedDate;
-        if(sltdt){
+        if (sltdt) {
             this.onDaySelect(sltdt);
         }
-        if(newIndex){
-           this.pressOnCircle(newIndex);
+        if (newIndex) {
+            this.pressOnCircle(newIndex);
         }
     }
 
@@ -113,12 +113,12 @@ class DateAndTime extends Component {
     }
     pressOnCircle(index) {
         let newColectionData = this.state.colectionData;
-        let selectedTimeId; 
+        let selectedTimeId;
         for (var i = 0; i < (newColectionData.length); i++) {
             newColectionData[i].isActive = false;
             if (newColectionData[i].key == index) {
                 newColectionData[i].isActive = true;
-                selectedTimeId=newColectionData[i].key;
+                selectedTimeId = newColectionData[i].key;
                 this.setState({
                     setTime: newColectionData[i].time,
                     selectedTimeID: newColectionData[i].key,
@@ -127,7 +127,7 @@ class DateAndTime extends Component {
 
         }
 
-        
+
         this.setState({
             colectionData: newColectionData,
         })
@@ -146,13 +146,13 @@ class DateAndTime extends Component {
     setDateAndTime() {
         let saveDBTime = this.state.setTime.slice(0, -5) + " " + this.state.setTime.slice(5).toLowerCase();
         let zeroPos = saveDBTime.search("0");
-        if(zeroPos >= 0 ){
-        if(this.state.setTime === "10:00AM" || this.state.setTime === "10:00PM"){
-            saveDBTime = saveDBTime;
-        }else{
-            saveDBTime = saveDBTime.slice(1);
-        }
-        }else{
+        if (zeroPos >= 0) {
+            if (this.state.setTime === "10:00AM" || this.state.setTime === "10:00PM") {
+                saveDBTime = saveDBTime;
+            } else {
+                saveDBTime = saveDBTime.slice(1);
+            }
+        } else {
             saveDBTime = saveDBTime
         }
         let saveDbDay = this.state.setWeek;
@@ -164,13 +164,29 @@ class DateAndTime extends Component {
         } else if (this.state.setTime == '') {
             Alert.alert('Please set a Time');
         } else {
-            let data = this.state.serviceDetails;
-            data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
-            data.saveDateDB = saveDateDB;
-            data.saveDBTime = saveDBTime;
-            data.saveDbDay = saveDbDay;
-            this.props.setDateAndTime(data);
-            this.navigate();
+            this.setState({ IsSpinnerVisible: true });
+            data = { serviceId: this.props.service.data.id, saveDbDay: saveDbDay, saveDBTime: saveDBTime }
+            this.props.checkIfThePostingDateIsValid(data).then((response) => {
+                this.setState({ IsSpinnerVisible: false });
+                if (response.response.type == "Error") {
+                    Alert.alert(response.response.message);
+                }
+                else {
+                    let data = this.state.serviceDetails;
+                    data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
+                    data.saveDateDB = saveDateDB;
+                    data.saveDBTime = saveDBTime;
+                    data.saveDbDay = saveDbDay;
+                    this.props.setDateAndTime(data);
+                    this.navigate();
+                }
+
+            }).catch((error) => {
+                console.log(error);
+                this.setState({ IsSpinnerVisible: false });
+            })
+
+
         }
     }
 
@@ -179,7 +195,7 @@ class DateAndTime extends Component {
             <Container>
                 <StatusBar
                     backgroundColor="#81cdc7" />
-
+                <FSpinner visible={this.state.IsSpinnerVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
                     <Button transparent onPress={() => this.props.navigation.navigate('Confirmation')}>
                         <Text>{I18n.t('cancel')}</Text>
@@ -199,7 +215,7 @@ class DateAndTime extends Component {
                                 <FontAwesome name='calendar' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
                                 <Text>{I18n.t('date')}</Text>
                             </CardItem>
-                            <CardItem style={{  alignItems: 'center', justifyContent: 'center' }}>
+                            <CardItem style={{ alignItems: 'center', justifyContent: 'center' }}>
                                 <Calendar
                                     onDayPress={(day) => this.onDaySelect(day)}
                                     monthFormat={'MMM yyyy'}
@@ -277,7 +293,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setDateAndTime: (data) => dispatch(setDateAndTime(data)),
         setServiceDetails: (data) => dispatch(setServiceDetails(data)),
-        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
+        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data)),
+        checkIfThePostingDateIsValid: (data) => dispatch(checkIfThePostingDateIsValid(data))
     }
 }
 

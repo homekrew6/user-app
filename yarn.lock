@@ -4111,6 +4111,12 @@ react-native-maps@^0.20.1:
     babel-plugin-module-resolver "^2.3.0"
     babel-preset-react-native "1.9.0"
 
+react-native-material-menu@^0.2.7:
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/react-native-material-menu/-/react-native-material-menu-0.2.7.tgz#d7a8772f1ca9efe854fcd6760c80ebaa59199a60"
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-modal@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-5.3.0.tgz#000ccc40034a097125d6dfbe9ce846ec5958e3fc"
