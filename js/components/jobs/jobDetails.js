@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -15,8 +15,19 @@ class JobDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : ''
+            jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : '',
+            currency: 'USD'
         }
+    }
+
+    componentDidMount() {
+
+        AsyncStorage.getItem("currency").then((value) => {
+            if (value) {
+                const value1 = JSON.parse(value);
+                this.setState({ currency: value1.language })
+            }
+        })
     }
 
 
@@ -42,14 +53,14 @@ class JobDetails extends Component {
                             <ImageBackground source={{ uri: this.state.jobDetails.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                 <View style={{ alignItems: 'center' }}>
                                     <Text style={{ fontWeight: '700', fontSize: 18 }}>{this.state.jobDetails.service.name}</Text>
-                                    <Text>ARD {this.state.jobDetails.price}</Text>
+                                    <Text>{this.state.currency} {this.state.jobDetails.price}</Text>
                                 </View>
                             </ImageBackground>
                         ) : (
                                 <ImageBackground source={require('../../../img/bg-6.png')} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                     <View style={{ alignItems: 'center' }}>
                                         <Text style={{ fontWeight: '700', fontSize: 18 }}>{this.state.jobDetails.service.name}</Text>
-                                        <Text>ARD {this.state.jobDetails.price}</Text>
+                                        <Text>{this.state.currency} {this.state.jobDetails.price}</Text>
                                     </View>
                                 </ImageBackground>
                             )
@@ -81,7 +92,7 @@ class JobDetails extends Component {
                                         <Text style={{ fontSize: 14, fontWeight: '700' }}>Service Provider</Text>
                                         <Text style={{ fontSize: 12 }}>{this.state.jobDetails.worker.name}</Text>
                                     </View>
-                                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails:this.state.jobDetails}) } >
+                                    <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })} >
                                         <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
                                         <Text style={{ fontSize: 12 }}>{I18n.t('chat')}/{I18n.t('call')}</Text>
                                     </TouchableOpacity>
@@ -111,7 +122,7 @@ class JobDetails extends Component {
                             <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
                         </View>
                         <Text style={styles.jobItemName}>{I18n.t('jobSummary')}</Text>
-                        <Text style={styles.jobItemValue}>AED {this.state.jobDetails.price}</Text>
+                        <Text style={styles.jobItemValue}>{this.state.currency} {this.state.jobDetails.price}</Text>
                     </View>
                     <View style={styles.jobItemWarp}>
                         <View style={{ width: 20 }}>
