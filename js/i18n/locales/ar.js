@@ -83,5 +83,7 @@ export default {
   settings: 'إعدادات',
   logout: 'الخروج',
   language: 'لغة',
-  currency:'دقة'
+  currency:'دقة',
+  ok: 'حسنا',
+  back: 'الى الخلف'
 };
