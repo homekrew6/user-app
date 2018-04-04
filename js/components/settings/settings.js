@@ -3,17 +3,19 @@ import { Image, View, StatusBar, ImageBackground, TouchableOpacity, AsyncStorage
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right, Content, Item, Footer, FooterTab } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from './styles';
-import Entypo from 'react-native-vector-icons/Entypo';
+import Entypo from 'react-native-vector-icons/Entypo'; 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import I18n from '../../i18n/i18n';
+import Ionicons from 'react-native-vector-icons/Ionicons'; 
 const carve = require("../../../img/icon17.png");
 class Settings extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            language: '',
+            language: 'English',
             visible: false,
-            currency: ''
+            currency: 'USD'
         }
 
     }
@@ -65,8 +67,8 @@ class Settings extends Component {
             <Container >
                 <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()}>
-
+                    <Button transparent onPress={() => this.props.navigation.goBack()} >
+                        <Ionicons name="ios-arrow-back" style={{ fontSize: 26, color: '#fff' }} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title>Settings</Title>
@@ -84,24 +86,18 @@ class Settings extends Component {
 
                         <TouchableOpacity style={[styles.confirmationItem]} onPress={() => this.props.navigation.navigate('LanguageList')}>
                             <View style={styles.confirmationIconView}>
-                                <Entypo name='language' style={{ fontSize: 20, marginRight: 8, color: '#1e3768' }} />
+                                <Ionicons name='language' style={{ fontSize: 20, color: '#1e3768' }} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>{I18n.t('language')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.state.language}</Text>
-                            <View style={styles.confirmationArwNxt}>
-
-                            </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate('CurrencyList')}>
                             <View style={styles.confirmationIconView}>
-
+                            <MaterialCommunityIcons name='currency-usd' style={{ fontSize: 20, color: '#1e3768' }} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>{I18n.t('currency')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.state.currency}</Text>
-                            <View style={styles.confirmationArwNxt}>
-
-                            </View>
                         </TouchableOpacity>
 
 

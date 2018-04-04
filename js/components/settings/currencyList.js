@@ -111,7 +111,8 @@ class CurrencyList extends Component {
 
         }
         else {
-            Alert.alert('Please select a location first.');
+            this.setState({ visible: false });
+            this.props.navigation.navigate('Settings');
         }
 
     }
@@ -123,7 +124,6 @@ class CurrencyList extends Component {
                     data.status == true ?
                         { backgroundColor: '#ccc' } : { backgroundColor: 'white' }
                 ]]} onPress={() => this.selectActive(data)}>
-                    <Entypo name='language' style={{ fontSize: 20, marginRight: 8, color: '#1e3768' }} />
                     <View style={{ flex: 1 }}>
                         <Text>{data.name}</Text>
                     </View>
@@ -138,10 +138,11 @@ class CurrencyList extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 80, backgroundColor: 'transparent' }}><Text>{I18n.t('cancel')}</Text></Button>                    
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>My Language</Title>
+                        <Title style={styles.appHdr2Txt}>My Currency</Title>
                     </Body>
-                    <Button transparent onPress={() => this.languageDone()}><Text>{I18n.t('done')}</Text></Button>
+                    <Button transparent onPress={() => this.languageDone()} style={{width: 80}}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >

@@ -46,8 +46,8 @@ export default {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 10,
   },
   catIten_hdr: {
