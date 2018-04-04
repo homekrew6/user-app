@@ -277,7 +277,7 @@ class JobDetails extends Component {
                 </Header>
                 <Content style={{ backgroundColor: '#ccc' }}>
                 
-                    {
+                    
                     { this.state.topScreenStatus === 'image' ?
                         this.state.jobDetails.service.banner_image ? (
                             <ImageBackground source={{ uri: this.state.jobDetails.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
