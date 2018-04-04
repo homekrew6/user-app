@@ -295,14 +295,14 @@ class Login extends Component {
                 <Input onChangeText={text => this.setState({ password: text })} value={this.state.password} placeholder={I18n.t('password')} secureTextEntry style={{ textAlign: 'center', color: '#29416f', fontSize: 14 }} />
               </Item>
   </View>
-            <TouchableOpacity transparent style={{ height: 70, marginTop: 2, flexDirection: 'row', paddingLeft: 15, paddingRight: 15 }} onPress={() => this.pressLogin()}>
-    <ImageBackground source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
+            <TouchableOpacity transparent style={{ height: 50, marginTop: 2, flexDirection: 'row', paddingLeft: 15, paddingRight: 15 }} onPress={() => this.pressLogin()}>
+              <ImageBackground source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 55 }} >
                 <Text style={{ color: '#fff', fontSize: 20, marginTop: -10, height: 30 }}>{I18n.t('login')}</Text>
               </ImageBackground>
-  </TouchableOpacity>
+            </TouchableOpacity>
     <View>
-              <TouchableOpacity onPress={() => this.pressForgotPassword()}>
-    <Text style={{ textAlign: 'center', color: 'red', fontSize: 16, paddingBottom: 20 }}>
+              <TouchableOpacity onPress={() => this.pressForgotPassword()} style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 15 }}>
+                <Text style={{ textAlign: 'right', color: '#29416f', fontSize: 12, paddingBottom: 20,  }}>
                   {I18n.t('forgot_password')}
                 </Text>
   </TouchableOpacity>

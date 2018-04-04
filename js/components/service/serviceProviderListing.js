@@ -213,7 +213,7 @@ class ServiceProviderListing extends Component {
 
                 <Content style={styles.bgWhite} >
 
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' , alignItems: 'center', justifyContent: 'center'}}>
                         {/* <View style={{ height: 120, width: 120 }}>
 
                             <Image source={carve} style={{ height: 100, width: 100, borderRadius: 50 }}></Image>

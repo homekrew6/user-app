@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import moment from 'moment';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,8 +13,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Communications from 'react-native-communications';
+import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
-
+import api from '../../api/index'
 const win = Dimensions.get('window').width;
 const { width } = Dimensions.get('window');
 const height = parseInt(Dimensions.get('window').height / 20);
@@ -24,6 +26,8 @@ class JobDetails extends Component {
         super(props);
         this.state = {
             currency: 'USD',
+            loader: true,
+            jobDetails: '',
             markerStatus: false,
             topScreenStatus: 'timing',
             cancelJobButton: false,
@@ -33,8 +37,7 @@ class JobDetails extends Component {
             waypointMid: { latitude: '', longitude: '' },
             latitudeUser: '',
             longitudeUser: '',
-            errorLocationUser: '',
-            jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails : '',
+            errorLocationUser: ''
         }
         const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
         const progressSpeed = (time_interval / 100) * 60000;
@@ -44,6 +47,21 @@ class JobDetails extends Component {
     }
 
     componentDidMount() {
+        let newtime = parseInt(123 / 60) + "." + ( (123 % 60 )< 10 ? "0" + 123 % 60 : 123 % 60 )+ 'hour';
+        console.log(newtime);
+        api.post('Jobs/getJobDetailsById', { id: this.state.jobDetails.id }).then((res) => {
+            console.log(res.response.message[0]);
+            this.setState({
+                loader: false,  
+                jobDetails: res.response.message[0],  
+            })
+        }).catch(err => {
+            console.log(err);
+            //reject(err)
+            this.setState({
+                loader: false,
+            })
+        })
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
@@ -242,11 +260,12 @@ class JobDetails extends Component {
         );
     }
     render() {
+        if (this.state.jobDetails){
         return (
             <Container style={{ backgroundColor: '#fff' }}>
                 <StatusBar
                     backgroundColor="#81cdc7"
-                />
+                />                
                 <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7">
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
@@ -257,6 +276,8 @@ class JobDetails extends Component {
                     <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
                 </Header>
                 <Content style={{ backgroundColor: '#ccc' }}>
+                
+                    {
                     { this.state.topScreenStatus === 'image' ?
                         this.state.jobDetails.service.banner_image ? (
                             <ImageBackground source={{ uri: this.state.jobDetails.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
@@ -266,12 +287,12 @@ class JobDetails extends Component {
                                 </View>
                             </ImageBackground>
                         ) : (
-                                <ImageBackground source={require('../../../img/bg-6.png')} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
-                                    <View style={{ alignItems: 'center' }}>
-                                        <Text style={{ fontWeight: '700', fontSize: 18 }}>{this.state.jobDetails.service.name}</Text>
-                                        <Text>{this.state.currency} {this.state.jobDetails.price}</Text>
-                                    </View>
-                                </ImageBackground>
+                            <ImageBackground source={require('../../../img/bg-6.png')} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text style={{ fontWeight: '700', fontSize: 18 }}>{this.state.jobDetails.service.name}</Text>
+                                    <Text>{this.state.currency} {this.state.jobDetails.price}</Text>
+                                </View>
+                            </ImageBackground>
                             )
                           (
                             <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win * 0.1), marginTop: -(win * 0.1) }} />
@@ -373,6 +394,14 @@ class JobDetails extends Component {
 
             </Container>
         );
+        }
+        else{
+            return(
+                <Container>
+                    <FSpinner visible={true} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
+                </Container>
+            )
+        }
     }
 }
 

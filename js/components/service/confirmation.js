@@ -374,7 +374,9 @@ class Confirmation extends Component {
                             <Text style={{ color: '#1e3768', fontSize: 18, padding: 5, fontSize: 16 }}>{this.state.serviceName}</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                                 <EvilIcons name="clock" style={{ fontSize: 14, color: "#747474" }} />
-                                <Text style={{ color: "#747474", fontSize: 14 }}>4 hours</Text>
+                                <Text style={{ color: "#747474", fontSize: 14 }}>
+                                    {parseInt(this.props.service.data.time_interval / 60)} hour {this.props.service.data.time_interval % 60 < 10 ? "0" + this.props.service.data.time_interval % 60 : this.props.service.data.time_interval % 60}  min
+                                </Text>
                             </View>
                             <Text style={{ color: '#1e3768', fontSize: 16 }}>{this.state.currency} {this.props.service.data.price}</Text>
                         </View>

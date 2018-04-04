@@ -183,7 +183,7 @@ class Categories extends Component {
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', borderRadius: 10 }} key={data.id}>
             <TouchableOpacity onPress={() => this.closeModal(data)} style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
               <Ico name='business' style={{ fontSize: 20, marginRight: 10, color: '#1e3768' }} />
-              <Text>{data.name}</Text>
+              <Text numberOfLines={1}>{data.name}</Text>
             </TouchableOpacity>
           </View>
         )
@@ -213,7 +213,7 @@ class Categories extends Component {
                 }
 
               </View>
-              <Text style={styles.catIten_txt}>{data.service.name || null}</Text>
+              <Text style={styles.catIten_txt} numberOfLines={1}> {data.service.name || null} </Text>
             </View>
           )
         })
