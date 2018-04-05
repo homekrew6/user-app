@@ -82,5 +82,7 @@ export default {
   currency:'Currency',
   start_time: 'Start Time',
   end_time: 'End Time',
-  cancel_job: 'CANCEL JOB'
+  cancel_job: 'CANCEL JOB',
+  ok: 'OK',
+  back: 'Back'
 };

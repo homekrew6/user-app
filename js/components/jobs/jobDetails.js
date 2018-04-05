@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import moment from 'moment';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage } from "react-native";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -16,6 +16,8 @@ import Communications from 'react-native-communications';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index'
+import Modal from "react-native-modal";
+
 const win = Dimensions.get('window').width;
 const { width } = Dimensions.get('window');
 const height = parseInt(Dimensions.get('window').height / 20);
@@ -26,7 +28,9 @@ class JobDetails extends Component {
         super(props);
         this.state = {
             currency: 'USD',
+            otherReason: 0,
             loader: true,
+            jobCancelModal: false,
             jobDetails: '',
             markerStatus: false,
             topScreenStatus: 'timing',
@@ -47,14 +51,16 @@ class JobDetails extends Component {
     }
 
     componentDidMount() {
-        let newtime = parseInt(123 / 60) + "." + ( (123 % 60 )< 10 ? "0" + 123 % 60 : 123 % 60 )+ 'hour';
-        console.log(newtime);
         api.post('Jobs/getJobDetailsById', { id: this.state.jobDetails.id }).then((res) => {
-            console.log(res.response.message[0]);
             this.setState({
-                loader: false,  
-                jobDetails: res.response.message[0],  
+                loader: false,
+                jobDetails: res.response.message[0]
             })
+            if (this.state.jobDetails.status == "STARTED" && this.state.jobDetails.status == "ACCEPTED"){
+                this.setState({
+                    cancelJobButton: true
+                })
+            }
         }).catch(err => {
             console.log(err);
             //reject(err)
@@ -380,14 +386,111 @@ class JobDetails extends Component {
                         <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
                         <Text style={styles.jobItemValue}>1234</Text>
                     </View>
+
+                    <Modal isVisible={this.state.jobCancelModal}>
+                            <TouchableOpacity
+                                transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }}
+                                onPress={() => this.setState({ jobCancelModal: false })}
+                                activeOpacity={1}
+                            >
+
+                                <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, zIndex: 99999, }} onPress={() => this.setState({ jobCancelModal: false })}>
+                                    <Ionicons style={{ color: 'rgba(255,255,255,0.5)', fontSize: 36 }} name='md-close-circle' />
+                                </TouchableOpacity>
+
+                            <View style={{ padding: 15, borderRadius: 10, alignItems: 'center', justifyContent: 'center', width: '100%' }} >
+
+                                {
+                                    (this.state.otherReason == 0 || this.state.otherReason == 1) ? (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> What went wrong? </Text>) : (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> Please rate us in the App Store </Text>)
+                                }
+                                {
+                                    this.state.otherReason == 0 ? (
+                                        <View style={{ width: '100%', backgroundColor: '#fff', borderRadius: 10 }}>
+                                            <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <Text style={{ color: '#000' }}>Reason1</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <Text style={{ color: '#000' }}>Reason2</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <Text style={{ color: '#000' }}>Reason3</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <Text style={{ color: '#000' }}>Reason4</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.setState({ otherReason: 1 })}>
+                                                <Text style={{ color: '#000' }}>Others Reason</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    ) : (console.log())
+                                }
+                                {
+                                    this.state.otherReason == 1 ? (
+                                        <View style={{ width: '100%', backgroundColor: '#fff', borderRadius: 10, overflow: 'hidden' }}>
+                                            <View style={{ backgroundColor: '#81cdc7', alignItems: 'center', paddingTop: 10, paddingBottom: 10 }}>
+                                                <Text style={{ color: '#fff' }}>
+                                                    Others Reason
+                                                </Text>
+                                            </View>
+                                            <View style={{ backgroundColor: '#ccc', flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <TextInput placeholder="Tell us here what went wrong?" style={{ width: '100%', backgroundColor: '#fff', borderWidth: 0, borderRadius: 10, paddingLeft: 10, paddingRight: 10, height: 200, textAlign: 'center', textAlignVertical: 'top' }} multiline={true} underlineColorAndroid='transparent'  >
+
+                                                </TextInput>
+                                            </View>
+                                            <View style={{ backgroundColor: '#fff', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center', marginBottom: -1 }}>
+                                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 45, justifyContent: 'center' }} onPress={() => this.setState({ otherReason: 0 })}><Text style={{ color: '#fff' }} >{I18n.t('back')}</Text></TouchableOpacity>
+                                                <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 45, justifyContent: 'center', alignItems: 'center' }} onPress={() => this.setState({ otherReason: 2 })}><Text style={{ color: '#fff' }}>{I18n.t('ok')}</Text></TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    ) : (console.log())
+                                }
+                                {
+                                    this.state.otherReason == 2 ? (
+                                        <View style={{ width: '100%', backgroundColor: '#fff', borderRadius: 10, overflow: 'hidden' }}>
+                                            <View style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 20, paddingBottom: 20, justifyContent: 'center' }}>
+                                                <Text style={{ color: '#000' }}>Please rate us in the App Store</Text>
+                                            </View>
+                                            <View style={{ backgroundColor: '#fff', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center', marginBottom: -1 }}>
+                                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 45, justifyContent: 'center' }} onPress={() => this.setState({ otherReason: 1 })}><Text style={{ color: '#fff' }} >{I18n.t('back')}</Text></TouchableOpacity>
+                                                <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 45, justifyContent: 'center', alignItems: 'center' }} ><Text style={{ color: '#fff' }}>{I18n.t('ok')}</Text></TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    ) : (console.log())
+                                }
+
+                                {
+                                    (this.state.otherReason == 0 || this.state.otherReason == 1) ? (
+                                        <View style={{ width: '100%', flexDirection: 'row', padding: 15 }}>
+                                            <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: false, otherReason: 0 })}>
+                                                <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('cancel')}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    ) : ( console.log() )
+                                }
+                                    
+                                </View>
+
+                            </TouchableOpacity>
+                        </Modal>
+
                     {
-                        this.state.cancelJobButton === true ? 
+                        (this.state.jobDetails.status == "STARTED")? 
                         <View style={styles.jobItemWarp}>
-                            <TouchableOpacity style={{ flex: 1, backgroundColor: 'grey', height: 40, borderBottomRightRadius: 10, borderTopRightRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                                <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: true })}>
                                 <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('cancel_job')}</Text>                                    
                             </TouchableOpacity>
                         </View>
                         : console.log()
+                    }
+
+                    {
+                        this.state.jobDetails.status == "ACCEPTED" ?
+                            <View style={styles.jobItemWarp}>
+                                <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: true })}>
+                                    <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('cancel_job')}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            : console.log()
                     }
                     
                 </Content>
