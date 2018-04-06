@@ -52,7 +52,8 @@ class JobDetails extends Component {
             trackingRef: '',
             job_start_time:'',
             job_end_time:'',
-            jobTrackingStatus:''
+            jobTrackingStatus:'',
+            workerRate: 0
         }
         // const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
         // const progressSpeed = (time_interval / 100) * 60000;
@@ -124,6 +125,11 @@ class JobDetails extends Component {
                 jobDetails: res.response.message[0],
                 topScreenStatus:res.response.message[0].status
             })
+            // this.setState({
+            //     loader: false,
+            //     jobDetails: res.response.message[0],
+            //     topScreenStatus: 'COMPLETED'
+            // })
             if(this.state.jobDetails.status=='STARTED')
             {
                 this.setState({ jobTrackingStatus:'Job Requested'});
@@ -307,10 +313,34 @@ class JobDetails extends Component {
         );
     }
 
+    workerRateing(rating){
+        this.setState({
+            loader: true,
+            workerRate: rating
+        })
+        console.log(rating);
+
+        let d = new Date();
+        api.post('ratings', { 
+            "IsWorkerSender": false,
+            "ratingDate": d,
+            "rating": rating,
+            "customerId": this.props.auth.data.id,
+            "workerId": this.state.jobDetails.workerId,
+         }).then((res) => {
+            this.props.navigation.navigate('Menu');
+            this.setState({
+                loader: false,
+            })
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
     renderWorkerRating() {
         return (
-            <View stylw={{ padding: 25 }}>
-                <View style={{ alignSelf: 'center' }}>
+            <View stylw={{ }}>
+                <View style={{ alignSelf: 'center', paddingTop: 20 }}>
                     <Icon name="user-o" size={50} backgroundColor="#3b5998" />
                 </View>
                 <View style={{ alignSelf: 'center' }}>
@@ -318,13 +348,13 @@ class JobDetails extends Component {
                         isActive={true}
                         rateMax={5}
                         isHalfStarEnabled={false}
-                        onStarPress={(rating) => console.log(rating)}
-                        rate={3}
-                        size={50}
+                        onStarPress={(rating) => this.workerRateing(rating)}
+                        rate={this.state.workerRate}
+                        size={30}
                     />
                 </View>
-                <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
-                    <Text style={{ alignItems: 'center' }}>Please rate our KREW and your over all experience with us</Text>
+                <View style={{ paddingBottom: 20, paddingLeft: 15, paddingRight: 15 }}>
+                    <Text style={{ textAlign: 'center', width: '100%', fontSize: 14 }}>Please rate our KREW and your over all experience with us</Text>
                 </View>
             </View>
         );
@@ -356,6 +386,8 @@ class JobDetails extends Component {
             </View>
         );
     }
+
+
     render() {
         if (this.state.jobDetails) {
             return (
@@ -373,7 +405,6 @@ class JobDetails extends Component {
                         <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
                     </Header>
                     <Content style={{ backgroundColor: '#ccc' }}>
-
 
                         {this.state.topScreenStatus === 'STARTED' ?
                             this.state.jobDetails.service.banner_image ? (
@@ -428,8 +459,16 @@ class JobDetails extends Component {
 
                                         </View>
                                         <View style={{ paddingLeft: 10, flex: 1 }}>
-                                            <Text style={{ fontSize: 14, fontWeight: '700' }}>Service Provider</Text>
+                                            <Text style={{ fontSize: 14, fontWeight: '700' }}>{I18n.t('serviceProvider')}</Text>
                                             <Text style={{ fontSize: 12 }}>{this.state.jobDetails.worker.name}</Text>
+                                            <Stars
+                                                isActive={false}
+                                                rateMax={5}
+                                                isHalfStarEnabled={false}
+                                                rate={ this.state.jobDetails.workerRating}
+                                                size={14}
+                                            />
+
                                         </View>
                                         <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })} >
                                             <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
