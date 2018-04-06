@@ -62,7 +62,7 @@ class MyLocation extends Component {
                     </Header>
                     <ScrollView>
                         <View>
-                            {this.state.locationData !== '' ?
+                            {this.state.locationData.length && this.state.locationData.length>0 ?
                                 this.state.locationData.map((lData, key) => {
                                     let Self = this.props;
                                     return (
@@ -80,7 +80,7 @@ class MyLocation extends Component {
                                             uid={lData.id}
                                         />
                                     )
-                                }) : console.log('none')
+                                }) : <View style={{ alignItems: 'center', padding: 10 }}><Text>No records found.</Text></View>
                             }
                         </View>
                     </ScrollView>

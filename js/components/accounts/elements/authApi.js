@@ -7,8 +7,7 @@ class authApi {
 			api.post('Customers/login',{email:email,password:password}).then(responseJson=>{
 				resolve(responseJson)
 			}).catch(err=>{
-					console.log(err);
-					reject(err)
+				reject(err)
 			})
 		})
 	}
@@ -18,8 +17,7 @@ class authApi {
 			api.post('Customers/signup',{name:name,email:email,password:password,phone:phone,is_active:1 }).then(responseJson=>{
 				resolve(responseJson)
 			}).catch(err=>{
-					console.log(err);
-					reject(err)
+				reject(err)
 			})
 		})
 	}

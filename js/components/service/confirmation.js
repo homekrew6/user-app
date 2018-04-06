@@ -98,7 +98,7 @@ class Confirmation extends Component {
                     //     "saveDbDay": this.props.service.data.saveDbDay
                     // };
                     // console.log('resCons', resCons);
-
+                    console.log(this.props.service.data.serviceLocationid);
                     if (this.props.service.data.serviceLocationid) {
                         if(this.props.service.data.saveDateDB)
                         {

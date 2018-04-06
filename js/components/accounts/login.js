@@ -144,8 +144,8 @@ class Login extends Component {
     const password = this.state.password;
     api.post('Customers/approveChecking', { email: this.state.email }).then((resEdit) => {
       if (resEdit.response.is_active) {
-        this.props.login(email, password).then((res) => {
-          if (res.type == 'success') {
+        this.props.login(email, password).then((res1) => {
+          if (res1.type == 'success') {
 
             //updating Device token for push notification
             this.props.checkAuth((res) => {

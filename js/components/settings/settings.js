@@ -110,7 +110,7 @@ class Settings extends Component {
                 </Content>
                 <Footer>
                     <FooterTab>
-                        <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.props.navigation.navigate('Menu')} ><Text style={styles.confirmationServicefooterItmTxt}>{I18n.t('continue')}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Menu')} style={styles.confirmationServicefooterItem} onPress={() => this.props.navigation.navigate('Menu')} ><Text style={styles.confirmationServicefooterItmTxt}>{I18n.t('continue')}</Text></TouchableOpacity>
                     </FooterTab>
                 </Footer>
 
