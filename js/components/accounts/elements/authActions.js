@@ -66,14 +66,14 @@ export function signup(name, email, password, phone) {
 
 export function checkAuth(cb) {
   return function (dispatch) {
-    dispatch(authStateBusy());
+    //dispatch(authStateBusy());
     AsyncStorage.getItem('userToken', (err, result) => {
       if (result) {
         const data = JSON.parse(result);
-        dispatch(authStateSuccess(data));
+        //dispatch(authStateSuccess(data));
         cb(data);
       } else{
-        dispatch(authStateFailed());
+        //dispatch(authStateFailed());
         cb(false);
       }
     });

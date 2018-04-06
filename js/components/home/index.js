@@ -5,9 +5,9 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {checkAuth, getUserDetail} from '../accounts/elements/authActions'
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right } from "native-base";
-
+import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from "react-native-fcm";
 import styles from "./styles";
-
+import api from '../../api';
 //const launchscreenBg = require("../../../img/launchscreen-bg.png");
 const launchscreenBg = require("../../../img/splash.png");
 const launchscreenLogo = require("../../../img/logo-kitchen-sink.png");
@@ -27,8 +27,66 @@ class Home extends Component {
 	// eslint-disable-line
 	constructor(params){
 		super(params)
+		this.state={
+			isPush:false,
+			jobId:''
+		}
 	}
 	componentWillMount(){
+		FCM.requestPermissions();
+		FCM.getFCMToken().then(token => {
+			console.log("TOKEN (getFCMToken)", token);
+			this.props.checkAuth((res) => {
+				console.log(res);
+				if (res) {
+					api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token }).then((resEdit) => {
+					}).catch((err) => {
+					});
+				}
+			}, (err) => {
+				console.log(err);
+			});
+		});
+
+		// This method get all notification from server side.
+		FCM.getInitialNotification().then(notif => {
+			//  console.log("INITIAL NOTIFICATION", notif)
+			if (notif.screenType && notif.screenType =='JobDetails')
+			{
+				// this.props.navigation.navigate('JobDetails', { jobDetails: notif.jobId });
+				this.setState({ isPush: true, jobId:notif.jobId});
+			}
+			
+		});
+
+		// This method give received notifications to mobile to display.
+
+		this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
+			console.log("a", notif);
+			if (notif && notif.local_notification) {
+				return;
+			}
+			
+			this.sendRemote(notif);
+		});
+
+		// this method call when FCM token is update(FCM token update any time so will get updated token from this method)
+		this.refreshUnsubscribe = FCM.on(FCMEvent.Notification, token => {
+			console.log("TOKEN (refreshUnsubscribe)", token);
+			FCM.getFCMToken().then(token => {
+				console.log("TOKEN (getFCMToken)", token);
+				this.props.checkAuth((res) => {
+					console.log(res);
+					if (res) {
+						api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token }).then((resEdit) => {
+						}).catch((err) => {
+						});
+					}
+				}, (err) => {
+					console.log(err);
+				});
+			});
+		});
 		setTimeout(() => {
 			this.props.checkAuth(res=>{
 				console.log(res);
@@ -36,7 +94,17 @@ class Home extends Component {
 					this.props.getUserDetail(res.userId,res.id).then(userRes=>{
 						//console.log(userRes)
 						//this.props.navigation.navigate("Menu");
+						// if(this.state.isPush==false)
+						// {
+						// 	this.props.navigation.dispatch(resetAction);
+
+						// }
+						// else
+						// {
+						// 	this.props.navigation.navigate('JobDetails', { jobDetails: notif.this.state.jobId });
+						// }
 						this.props.navigation.dispatch(resetAction);
+						
 					}).catch(err=>{
 						Alert.alert('Please login');
 						this.props.navigation.navigate("Login")
@@ -61,6 +129,37 @@ class Home extends Component {
 			})
 		}, 4000);
 
+	}
+	sendRemote(notif) {
+		console.log('notify sent', notif);
+		FCM.presentLocalNotification({
+			id: new Date().valueOf().toString(),
+			title: notif.fcm.body,
+			body: notif.fcm.body,
+			ticker: notif.fcm.body,
+			priority: "high",
+			click_action: notif.click_action,
+			show_in_foreground: true,
+			local: true,
+			vibrate: 300,
+			wake_screen: true,
+			lights: true,
+			auto_cancel: true,
+			group: "group",
+			icon: "ic_launcher",
+			large_icon: "ic_launcher",
+			data: { screenType: 'cleaner' },
+			//picture: "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg", 
+			// android_actions: JSON.stringify([{
+			//   id: "view",
+			//   title: 'view'
+			// },{
+			//   id: "dismiss",
+			//   title: 'dismiss'
+			// }])
+		});
+
+		
 	}
 	render() {
 		return (
