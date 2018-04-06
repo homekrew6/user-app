@@ -236,7 +236,7 @@ class EditProfile extends Component {
                       this.fileUploadType(buttonIndex);
                     },
                   )}
-              ><Text> {I18n.t('change_photo')} </Text></Button>
+              ><Text>{I18n.t('change_photo')}</Text></Button>
             </View>
           </View>
 
@@ -270,19 +270,6 @@ class EditProfile extends Component {
                 <Input style={styles.editprofileInput} keyboardType={'numeric'} onChangeText={text => this.setState({ phone: text })} value={this.state.phone} />
               </View>
             </View>
-
-            {/* <View style={styles.editprofileLst}>
-                    <View style={styles.editprofileWarp}>
-                      <Text>Password</Text>
-                    </View>
-                    <View style={styles.editprofileInputwrap}>
-                      <Input style={styles.editprofileInput} value={'password'} secureTextEntry />
-                    </View>
-                  </View> */}
-            {/* <View style={{ padding: 10 }}>
-                    <Text>Skills</Text>
-                    <View></View>
-                  </View> */}
           </View>
 
           <Footer>

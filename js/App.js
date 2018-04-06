@@ -32,6 +32,11 @@ import ServiceProviderDetails from './components/jobs/serviceProviderDetails';
 import Settings from './components/settings/settings';
 import LanguageList from './components/settings/languageList';
 import CurrencyList from './components/settings/currencyList';
+import FollowUp from './components/jobs/followUp';
+
+
+
+
 const AppNavigator = StackNavigator(
     {
         Drawer: { screen: Drawer },
@@ -59,7 +64,8 @@ const AppNavigator = StackNavigator(
         ServiceProviderDetails: { screen: ServiceProviderDetails},
         Settings: { screen: Settings },
         LanguageList: { screen: LanguageList },
-        CurrencyList: { screen: CurrencyList }
+        CurrencyList: { screen: CurrencyList },
+        FollowUp: { screen: FollowUp }
     },
     {
         initialRouteName: "Drawer",

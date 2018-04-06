@@ -233,152 +233,146 @@ class Menu extends Component {
           backgroundColor="#81cdc7"
         />
         <Content>
-          <Header style={{ backgroundColor: '#fff' }}>
-            <Button transparent />
-            <Body style={styles.appHdrtitleWarp}>
-              <Image source={logo_hdr} style={{ height: 18, width: 110 }} />
-            </Body>
-            <Button transparent >
-              <Icon name='search' style={{ color: '#81cdc7' }} />
-            </Button>
 
-          </Header>
+        <Header style={{ backgroundColor: '#fff' }}>
+          <Button transparent />
+          <Body style={styles.appHdrtitleWarp}>
+            <Image source={logo_hdr} style={{ height: 18, width: 110 }} />
+          </Body>
+          <Button transparent >
+            <Icon name='search' style={{ color: '#81cdc7' }} />
+          </Button>
+        </Header>
 
 
-          <Card>
-            <CardItem style={styles.pcard}>
+        <Card>
+          <CardItem style={styles.pcard}>
 
-              <View style={styles.flx_View}>
-                {
-                  this.props.auth.data.image ? (
-                    <Image source={{ uri: this.props.auth.data.image }} style={styles.profileImage} />
-                  ) : (
-                      <Image source={profileImage} style={styles.profileImage} />
-                    )
-                }
+            <View style={styles.flx_View}>
+              {
+                this.props.auth.data.image ? (
+                  <Image source={{ uri: this.props.auth.data.image }} style={styles.profileImage} />
+                ) : (
+                    <Image source={profileImage} style={styles.profileImage} />
+                  )
+              }
 
-                <View>
-                  <TouchableOpacity onPress={() => this.navigate('EditProfile')}>
-                    <Text style={styles.pname}>{this.props.auth.data.name}</Text>
-                    <Text style={styles.pemail}>{this.props.auth.data.email}</Text>
-                    <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
-                  </TouchableOpacity>
-                </View>
-
+              <View>
+                <TouchableOpacity onPress={() => this.navigate('EditProfile')}>
+                  <Text style={styles.pname}>{this.props.auth.data.name}</Text>
+                  <Text style={styles.pemail}>{this.props.auth.data.email}</Text>
+                  <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
+                </TouchableOpacity>
               </View>
-            </CardItem>
+            </View>
+          </CardItem>
 
-            <CardItem>
-              <View style={styles.pBtmTxt}>
-                <Text style={styles.pBtmTxt_Txt}>Credit: AED 0.00</Text>
+          <CardItem>
+            <View style={styles.pBtmTxt}>
+              <Text style={styles.pBtmTxt_Txt}>Credit: AED 0.00</Text>
+            </View>
+          </CardItem>
+        </Card>
+
+        <Card>
+
+          <CardItem style={styles.menuCarditem}>
+            <View style={styles.menuCardView}>
+              <Image source={icon1} style={styles.menuCardIcon} />
+              <Text style={styles.menuCardTxt}>Google Plus</Text>
+              <View style={styles.artNt}>
+                <Text style={styles.artNtTxt}>4</Text>
               </View>
-            </CardItem>
-
-          </Card>
-
-          <Card>
-
-            <CardItem style={styles.menuCarditem}>
-              <View style={styles.menuCardView}>
-                <Image source={icon1} style={styles.menuCardIcon} />
-                <Text style={styles.menuCardTxt}>Google Plus</Text>
-                <View style={styles.artNt}>
-                  <Text style={styles.artNtTxt}>4</Text>
-                </View>
-                <View style={styles.arw_lft}>
-                  <Image source={back_arow} style={styles.arw_lft_img} />
-                </View>
+              <View style={styles.arw_lft}>
+                <Image source={back_arow} style={styles.arw_lft_img} />
               </View>
-            </CardItem>
+            </View>
+          </CardItem>
 
-            <CardItem style={styles.menuCarditem}>
-              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('JobList')}>
-                <Image source={icon2} style={styles.menuCardIcon} />
-                <Text style={styles.menuCardTxt}>{I18n.t('my_jobs')}</Text>
-                <View style={styles.artNt}>
-                  <Text style={styles.artNtTxt}>2</Text>
-                </View>
-                <View style={styles.arw_lft}>
-                  <Image source={back_arow} style={styles.arw_lft_img} />
-                </View>
-              </TouchableOpacity>
-            </CardItem>
-
-            <CardItem style={styles.menuCarditem}>
-              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('Category')}>
-                <Image source={icon2} style={styles.menuCardIcon} />
-                <Text style={styles.menuCardTxt}>{I18n.t('post_new_job')}</Text>
-                <View style={styles.arw_lft}>
-                  <Image source={back_arow} style={styles.arw_lft_img} />
-                </View>
-              </TouchableOpacity>
-            </CardItem>
-
-            <CardItem style={styles.menuCarditem}>
-              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('MyLocation')}>
-                <Image source={icon3} style={styles.menuCardIcon} />
-                <Text style={styles.menuCardTxt}>{I18n.t('my_location')}</Text>
-                <View style={styles.arw_lft}>
-                  <Image source={back_arow} style={styles.arw_lft_img} />
-                </View>
-              </TouchableOpacity>
-            </CardItem>
-
-            <CardItem style={styles.menuCarditem}>
-              <View style={styles.menuCardView}>
-                <Image source={icon4} style={styles.menuCardIcon} />
-                <Text style={styles.menuCardTxt}>{I18n.t('my_card')}</Text>
-                <View style={styles.arw_lft}>
-                  <Image source={back_arow} style={styles.arw_lft_img} />
-                </View>
+          <CardItem style={styles.menuCarditem}>
+            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('JobList')}>
+              <Image source={icon2} style={styles.menuCardIcon} />
+              <Text style={styles.menuCardTxt}>{I18n.t('my_jobs')}</Text>
+              <View style={styles.arw_lft}>
+                <Image source={back_arow} style={styles.arw_lft_img} />
               </View>
-            </CardItem>
+            </TouchableOpacity>
+          </CardItem>
 
-            <CardItem style={styles.menuCarditem}>
-              <View style={styles.menuCardView}>
-                <Image source={icon5} style={styles.menuCardIcon} />
-                <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
-                <View style={styles.arw_lft}>
-                  <Image source={back_arow} style={styles.arw_lft_img} />
-                </View>
+          <CardItem style={styles.menuCarditem}>
+            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('Category')}>
+              <Image source={icon2} style={styles.menuCardIcon} />
+              <Text style={styles.menuCardTxt}>{I18n.t('post_new_job')}</Text>
+              <View style={styles.arw_lft}>
+                <Image source={back_arow} style={styles.arw_lft_img} />
               </View>
-            </CardItem>
+            </TouchableOpacity>
+          </CardItem>
 
-            <CardItem style={styles.menuCarditem}>
-              <View style={styles.menuCardView}>
-                <Image source={icon6} style={styles.menuCardIcon} />
-                <Text style={styles.menuCardTxt}>{I18n.t('support')}</Text>
-                <View style={styles.arw_lftgit}>
-                  <Image source={back_arow} style={styles.arw_lft_img} />
-                </View>
+          <CardItem style={styles.menuCarditem}>
+            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('MyLocation')}>
+              <Image source={icon3} style={styles.menuCardIcon} />
+              <Text style={styles.menuCardTxt}>{I18n.t('my_location')}</Text>
+              <View style={styles.arw_lft}>
+                <Image source={back_arow} style={styles.arw_lft_img} />
               </View>
-            </CardItem>
+            </TouchableOpacity>
+          </CardItem>
 
-            <CardItem style={styles.menuCarditem}>
-              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('Settings')}>
-                <Image source={icon7} style={styles.menuCardIcon} />
-                <Text style={styles.menuCardTxt}>{I18n.t('settings')}</Text>
-                <View style={styles.arw_lft}>
-                  <Image source={back_arow} style={styles.arw_lft_img} />
-                </View>
-              </TouchableOpacity>
-            </CardItem>
-
-            <CardItem style={styles.menuCarditem} >
-              <View style={styles.menuCardView} >
-
-                <Image source={icon8} style={styles.menuCardIcon} onPress={() => this.logout()} />
-                <Text style={styles.menuCardTxt} onPress={() => this.logout()}>{I18n.t('logout')}</Text>
-                <View style={styles.arw_lft}>
-                  <Image source={back_arow} style={styles.arw_lft_img} />
-                </View>
+          <CardItem style={styles.menuCarditem}>
+            <View style={styles.menuCardView}>
+              <Image source={icon4} style={styles.menuCardIcon} />
+              <Text style={styles.menuCardTxt}>{I18n.t('my_card')}</Text>
+              <View style={styles.arw_lft}>
+                <Image source={back_arow} style={styles.arw_lft_img} />
               </View>
-            </CardItem>
+            </View>
+          </CardItem>
 
-          </Card>
-          <View >
-            <Text style={styles.version}>Ver 2.5 Build 2425 - Aug 2017</Text>
-          </View>
+          <CardItem style={styles.menuCarditem}>
+            <View style={styles.menuCardView}>
+              <Image source={icon5} style={styles.menuCardIcon} />
+              <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
+              <View style={styles.arw_lft}>
+                <Image source={back_arow} style={styles.arw_lft_img} />
+              </View>
+            </View>
+          </CardItem>
+
+          <CardItem style={styles.menuCarditem}>
+            <View style={styles.menuCardView}>
+              <Image source={icon6} style={styles.menuCardIcon} />
+              <Text style={styles.menuCardTxt}>{I18n.t('support')}</Text>
+              <View style={styles.arw_lftgit}>
+                <Image source={back_arow} style={styles.arw_lft_img} />
+              </View>
+            </View>
+          </CardItem>
+
+          <CardItem style={styles.menuCarditem}>
+            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('Settings')}>
+              <Image source={icon7} style={styles.menuCardIcon} />
+              <Text style={styles.menuCardTxt}>{I18n.t('settings')}</Text>
+              <View style={styles.arw_lft}>
+                <Image source={back_arow} style={styles.arw_lft_img} />
+              </View>
+            </TouchableOpacity>
+          </CardItem>
+
+          <CardItem style={styles.menuCarditem} >
+            <View style={styles.menuCardView} >
+              <Image source={icon8} style={styles.menuCardIcon} onPress={() => this.logout()} />
+              <Text style={styles.menuCardTxt} onPress={() => this.logout()}>{I18n.t('logout')}</Text>
+              <View style={styles.arw_lft}>
+                <Image source={back_arow} style={styles.arw_lft_img} />
+              </View>
+            </View>
+          </CardItem>
+
+        </Card>
+        <View >
+          <Text style={styles.version}>Ver 2.5 Build 2425 - Aug 2017</Text>
+        </View>
         </Content>
       </Container>
     );
