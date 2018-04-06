@@ -84,5 +84,7 @@ export default {
   end_time: 'End Time',
   cancel_job: 'CANCEL JOB',
   ok: 'OK',
-  back: 'Back'
+  back: 'Back',
+  followUp: 'Follow Up',
+  serviceDetails: 'Service Details'
 };

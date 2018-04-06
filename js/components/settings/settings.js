@@ -5,7 +5,7 @@ import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from './styles';
 import Entypo from 'react-native-vector-icons/Entypo'; 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import I18n from '../../i18n/i18n';
+import I18n from '../../i18n/i18n'; 
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 const carve = require("../../../img/icon17.png");
 class Settings extends Component {
@@ -65,8 +65,14 @@ class Settings extends Component {
     render() {
         return (
             <Container >
+                
                 <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
-                <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
+
+                <StatusBar
+                    backgroundColor="#81cdc7"
+                />
+
+                <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
                     <Button transparent onPress={() => this.props.navigation.goBack()} >
                         <Ionicons name="ios-arrow-back" style={{ fontSize: 26, color: '#fff' }} />
                     </Button>
@@ -86,7 +92,7 @@ class Settings extends Component {
 
                         <TouchableOpacity style={[styles.confirmationItem]} onPress={() => this.props.navigation.navigate('LanguageList')}>
                             <View style={styles.confirmationIconView}>
-                                <Ionicons name='language' style={{ fontSize: 20, color: '#1e3768' }} />
+                                <Entypo name='language' style={{ fontSize: 20, color: '#1e3768' }} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>{I18n.t('language')}</Text>
                             <Text style={styles.confirmationDateTime}>{this.state.language}</Text>
@@ -105,7 +111,6 @@ class Settings extends Component {
                 <Footer>
                     <FooterTab>
                         <TouchableOpacity style={styles.confirmationServicefooterItem} onPress={() => this.props.navigation.navigate('Menu')} ><Text style={styles.confirmationServicefooterItmTxt}>{I18n.t('continue')}</Text></TouchableOpacity>
-
                     </FooterTab>
                 </Footer>
 

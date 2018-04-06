@@ -244,17 +244,17 @@ class DateAndTime extends Component {
                                     minDate={this.state.minDate}
                                 />
                             </CardItem>
-
+                            
                             <CardItem style={{ marginTop: 2, marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='clock-o' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
                                 <Text> {I18n.t('time')}</Text>
                             </CardItem>
+
                             <CardItem>
                                 <View style={{ flex: 1, flexDirection: 'row', }}>
                                     <FlatList
-                                        data={
-                                            this.state.colectionData
-                                        }
+                                        data={ this.state.colectionData }
+                                        showsHorizontalScrollIndicator = {false}
                                         renderItem={({ item }) =>
                                             <TouchableOpacity onPress={() => this.pressOnCircle(item.key)} id={item.key} >
                                                 <Text style={{ paddingTop: 5, paddingBottom: 5, paddingRight: 8, paddingLeft: 8, borderRadius: 4, borderWidth: 1, borderColor: '#ccc', backgroundColor: (item.isActive ? '#81cdc7' : '#ffffff'), color: (item.isActive ? '#ffffff' : '#81cdc7'), marginRight: 5 }}>

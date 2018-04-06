@@ -85,5 +85,7 @@ export default {
   language: 'لغة',
   currency:'دقة',
   ok: 'حسنا',
-  back: 'الى الخلف'
+  back: 'الى الخلف',
+  followUp: 'متابعة',
+  serviceDetails: 'تفاصيل الخدمة'
 };

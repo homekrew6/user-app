@@ -967,19 +967,19 @@ class serviceDetails extends Component {
                         }
                       </Text>
                     </View>
-                    <Text style={styles.confirmationMainTxt}>{data.name}</Text>
-                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginRight: 15 }}>
+                      <Text style={styles.confirmationMainTxt}>{data.name}</Text>
+                      
                       <View style={{ borderRadius: 10, borderWidth: 1, borderColor: "#ccc", flexDirection: 'row', overflow: 'hidden', }}>
 
                         {
                           data.answers.map((data1, key1) => {
                             return (<View key={data1.id}>
                               <TouchableOpacity
-                                style={[{ paddingRight: 10, paddingLeft: 10, paddingTop: 3, paddingBottom: 4, borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }, [
+                                style={[{ paddingRight: 10, paddingLeft: 10, height: 25, alignItems: 'center', justifyContent: 'center' }, [
                                   data1.selected ? { backgroundColor: '#ccc' } : {}]]}
                                 onPress={() => this.changeActiveRadio(data1)}
                               >
-                                <Text style={[[data1.selected ? { color: '#fff' } : {}]]}>
+                                <Text style={[data1.selected ? { color: '#fff' } : {}]}>
                                   {data1.title}
                                 </Text>
                               </TouchableOpacity>
@@ -1009,7 +1009,6 @@ class serviceDetails extends Component {
                       { color: '#fff' } : {}
                   ]]}>Three</Text></TouchableOpacity> */}
                       </View>
-                    </View>
                   </Item>
                 </View>
 
@@ -1034,11 +1033,8 @@ class serviceDetails extends Component {
             <SimpleLineIcons name="grid" style={styles.hd_lft_icon} />
           </Button>
           <Body style={styles.appHdr2Bdy}>
-            <Title style={styles.appHdr2Txt}>Service Details</Title>
+            <Title style={styles.appHdr2Txt}>{I18n.t('serviceDetails')}</Title>
           </Body>
-          {/* <Button transparent onPress={() => this.props.navigation.navigate('Expect')} >
-            <Ionicons name="ios-information-circle" style={styles.hd_rt_icon} />
-          </Button> */}
           {
             this.props.service.data.features ? (
               <Button transparent onPress={() => this.props.navigation.navigate('Expect')} >
@@ -1052,8 +1048,6 @@ class serviceDetails extends Component {
         <Content style={{ flex: 1, backgroundColor: '#fff' }}>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ flex: 1, flexDirection: 'row', position: 'relative' }}>
-              {/* <Image source={carveImage} style={styles.carveImage} /> */}
-
               {
                 this.state.cover_image ? (
                   <Image source={{ uri: this.state.cover_image }} style={styles.carveImage} />
@@ -1067,13 +1061,12 @@ class serviceDetails extends Component {
             <Image source={img17} style={{ width: deviceWidth, height: 50 }} />
           </View>
 
-          <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center', marginBottom: 15, marginRight: 15 }}>
-            <View>
-              <View style={{ flex: 1, flexDirection: 'row', marginTop: -40, justifyContent: 'flex-end', marginRight: 20 }}>
-                {/* <Image source={img18} style={{ width: 50, height: 50 }} /> */}
+          <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center', marginBottom: 15, marginRight: 15, overflow: 'visible' }}>
+            <View style={{ overflow: 'visible', alignItems: 'center' }}>
+              <View style={{ flex: 1, flexDirection: 'row', marginTop: -40, justifyContent: 'center', borderWidth: 1, borderRadius: 100, borderColor: 'transparent', height: 50, width: 50, alignItems: 'center', shadowColor: '#ccc', shadowOffset: { width: 10, height: 10 }, shadowOpacity: 0.5, shadowRadius: 100, elevation: 5, backgroundColor: '#fff'  }}>
                 {
                   this.state.banner_image ? (
-                    <Image source={{ uri: this.state.banner_image }} style={{ width: 50, height: 50 }} />
+                    <Image source={{ uri: this.state.banner_image }} style={{ width: 40, height: 40 }} />
                   ) : (
                       <Image source={img18} style={{ width: 50, height: 50 }} />
                     )
@@ -1082,28 +1075,7 @@ class serviceDetails extends Component {
               <Text style={{ color: '#1e3768' }}>{this.state.serviceName}</Text>
             </View>
           </View>
-
-
-          {/* <View style={styles.confirmationServicewarp}>
-            <View style={styles.confirmationServiceItem}>
-              <View style={styles.confirmationServiceItemIcon2}>
-                <Ionicons name="ios-man-outline" style={styles.confirmationServiceItemIconIcn2} />
-              </View>
-              <Text style={styles.confirmationServiceTxt}>Cleaners</Text>
-              <IncrimentDecriment />
-            </View>
-            <View style={styles.confirmationServiceDvdr} />
-            <View style={styles.confirmationServiceItem}>
-              <View style={styles.confirmationServiceItemIcon2}>
-                <MaterialCommunityIcons name="timer-sand-empty" style={styles.confirmationServiceItemIconIcn2} />
-              </View>
-              <Text style={styles.confirmationServiceTxt}>Hours</Text>
-              <IncrimentDecriment />
-            </View>
-          </View> */}
-
           <View>
-            {/* {questionList} */}
             {
               this.state.questionList.length > 0 ? (
                 questionList
@@ -1111,57 +1083,6 @@ class serviceDetails extends Component {
                   <View style={{ flex: 1, alignItems: 'center' }}><Text>No questions found.</Text></View>
                 )
             }
-            {/* <Item style={styles.confirmationItem}>
-              <View style={styles.confirmationIconView}>
-                <Image source={logo22} style={{ height: 20, width: 20 }} />
-              </View>
-              <Text style={styles.confirmationMainTxt}>Question A</Text>
-              <Switch value={this.state.isOpen} onValueChange={() => this.switchChange()} />
-            </Item>
-
-            <View style={styles.confirmationItem2}>
-              <Entypo name="home" style={styles.confirmationViewIcon2} />
-              <View style={styles.confirmationMainTxt}>
-                <Slider
-                  minimumTrackTintColor="#81cdc7"
-                  maximumTrackTintColor="#e1e1e1"
-                  thumbTintColor="#81cdc7"
-                  value={this.state.value}
-                  onValueChange={value => this.setState({ value })}
-                />
-                <Text style={styles.bedroomCount}>2 Bedroom</Text>
-              </View>
-              <Entypo name="home" style={styles.confirmationViewIcon2} />
-            </View>
-            <View style={styles.confirmationItem} />
-
-            <Item style={styles.confirmationItem}>
-              <View style={styles.confirmationIconView}>
-                <Text name="scissors" style={styles.confirmationViewIcon} > ? </Text>
-              </View>
-              <Text style={styles.confirmationMainTxt}>Question A</Text>
-              <IncrimentDecriment />
-            </Item>
-
-            <Item style={styles.confirmationItem}>
-              <View style={styles.confirmationIconView}>
-                <Text name="scissors" style={styles.confirmationViewIcon} > ? </Text>
-              </View>
-              <Text style={styles.confirmationMainTxt}>Question B</Text>
-              <View style={styles.confirmationArwNxt}>
-                <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
-              </View>
-            </Item>
-            <Item style={styles.confirmationItem}>
-              <View style={styles.confirmationIconView}>
-                <Icon name="file-photo-o" style={styles.confirmationViewIcon} />
-              </View>
-              <Text style={styles.confirmationMainTxt}>Insert Photo</Text>
-              <View style={{ alignItems: 'center' }}>
-                <EvilIcons name="camera" style={{ color: '#81cdc7' }} />
-                <Text style={{ fontSize: 10 }}>Take Photo</Text>
-              </View>
-            </Item> */}
           </View>
         </Content>
         {
