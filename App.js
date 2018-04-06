@@ -1,10 +1,8 @@
 import React from "react";
-import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from "react-native-fcm";
 import App from "./js/App";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import api from './js/api/';
-import { checkAuth } from './js/components/accounts/elements/authActions';
 export class App1 extends React.Component {
   constructor(props) {
     super(props);
@@ -126,15 +124,16 @@ state = { isReady: false};
   }
 }
 
-App1.propTypes = {
-  auth: PropTypes.object.isRequired,
-};
-const mapStateToProps = state => ({
-  auth: state.auth
-});
+// App1.propTypes = {
+//   auth: PropTypes.object.isRequired,
+// };
+// const mapStateToProps = state => ({
+//   auth: state.auth
+// });
 
-const mapDispatchToProps = dispatch => ({
- checkAuth: cb => dispatch(checkAuth(cb)),
-});
+// const mapDispatchToProps = dispatch => ({
+//  checkAuth: cb => dispatch(checkAuth(cb)),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App1);
+// export default connect(mapStateToProps, mapDispatchToProps)(App1);
+export default App1;

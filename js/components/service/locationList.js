@@ -20,26 +20,6 @@ class LocationList extends Component {
         this.state = {
             active: [false, false],
             homeArray: [
-                {
-                    "text": "Home",
-                    "id": 1,
-                    "status": true,
-                    "latitude": '',
-                    "longitude": '',
-                    "buildingName": '',
-                    "villa": '',
-                    "landmark": ''
-                },
-                {
-                    "text": "Mother Home",
-                    "id": 2,
-                    "status": false,
-                    "latitude": '',
-                    "longitude": '',
-                    "buildingName": '',
-                    "villa": '',
-                    "landmark": ''
-                }
             ],
             homeValue: 'Home',
             serviceDetails: this.props.service.data,
@@ -205,14 +185,22 @@ class LocationList extends Component {
                         <Text>{I18n.t('add')}</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>My Location</Title>
+                        <Title style={styles.appHdr2Txt}>{I18n.t('my_location')}</Title>
                     </Body>
                     <Button transparent onPress={() => this.locationDone()}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >
 
-                    {featureList}
+                    {/* {featureList} */}
+
+                    {
+                        this.state.homeArray.length>0?(
+                             featureList
+                        ):(
+                                <View style={{ alignItems: 'center', padding: 10 }}><Text>No Data Found</Text></View>
+                        )
+                    }
 
                 </Content>
             </Container>

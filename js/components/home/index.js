@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import {NavigationActions} from "react-navigation";
-import { Image, View, StatusBar, ImageBackground, Alert, AsyncStorage} from "react-native";
+import { NavigationActions } from "react-navigation";
+import { Image, View, StatusBar, ImageBackground, Alert, AsyncStorage } from "react-native";
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {checkAuth, getUserDetail} from '../accounts/elements/authActions'
+import { connect } from 'react-redux'
+import { checkAuth, getUserDetail } from '../accounts/elements/authActions'
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right } from "native-base";
 import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from "react-native-fcm";
 import styles from "./styles";
@@ -12,51 +12,56 @@ import api from '../../api';
 const launchscreenBg = require("../../../img/splash.png");
 const launchscreenLogo = require("../../../img/logo-kitchen-sink.png");
 const resetAction = NavigationActions.reset({
-  index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Menu' })],
+	index: 0,
+	actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 });
 const resetActionIntro = NavigationActions.reset({
 	index: 0,
 	actions: [NavigationActions.navigate({ routeName: 'Intro' })],
-  });
+});
 const resetActionCategory = NavigationActions.reset({
 	index: 0,
 	actions: [NavigationActions.navigate({ routeName: 'Category' })],
 });
 class Home extends Component {
 	// eslint-disable-line
-	constructor(params){
+	constructor(params) {
 		super(params)
-		this.state={
-			isPush:false,
-			jobId:''
+		this.state = {
+			isPush: false,
+			jobId: ''
 		}
 	}
-	componentWillMount(){
+	componentWillMount() {
 		FCM.requestPermissions();
 		FCM.getFCMToken().then(token => {
 			console.log("TOKEN (getFCMToken)", token);
-			this.props.checkAuth((res) => {
-				console.log(res);
-				if (res) {
-					api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token }).then((resEdit) => {
+			// this.props.checkAuth((res) => {
+			// 	if (res) {
+			// 		api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token }).then((resEdit) => {
+			// 		}).catch((err) => {
+			// 		});
+			// 	}
+			// }, (err) => {
+
+			// });
+			AsyncStorage.getItem("userToken").then((userToken) => {
+				if (userToken) {
+					const userToken1 = JSON.parse(userToken);
+					api.put(`Customers/editCustomer/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: token }).then((resEdit) => {
 					}).catch((err) => {
 					});
 				}
-			}, (err) => {
-				console.log(err);
-			});
+			})
 		});
 
 		// This method get all notification from server side.
 		FCM.getInitialNotification().then(notif => {
-			//  console.log("INITIAL NOTIFICATION", notif)
-			if (notif.screenType && notif.screenType =='JobDetails')
-			{
+			if (notif.screenType && notif.screenType == 'JobDetails') {
 				// this.props.navigation.navigate('JobDetails', { jobDetails: notif.jobId });
-				this.setState({ isPush: true, jobId:notif.jobId});
+				this.setState({ isPush: true, jobId: notif.jobId });
 			}
-			
+
 		});
 
 		// This method give received notifications to mobile to display.
@@ -66,7 +71,7 @@ class Home extends Component {
 			if (notif && notif.local_notification) {
 				return;
 			}
-			
+
 			this.sendRemote(notif);
 		});
 
@@ -75,56 +80,72 @@ class Home extends Component {
 			console.log("TOKEN (refreshUnsubscribe)", token);
 			FCM.getFCMToken().then(token => {
 				console.log("TOKEN (getFCMToken)", token);
-				this.props.checkAuth((res) => {
-					console.log(res);
-					if (res) {
-						api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token }).then((resEdit) => {
+				AsyncStorage.getItem("userToken").then((userToken) => {
+					if (userToken) {
+						const userToken1 = JSON.parse(userToken);
+						api.put(`Customers/editCustomer/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: token }).then((resEdit) => {
 						}).catch((err) => {
 						});
 					}
-				}, (err) => {
-					console.log(err);
-				});
+				})
+				// this.props.checkAuth((res) => {
+				// 	if (res) {
+				// 		api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token }).then((resEdit) => {
+				// 		}).catch((err) => {
+				// 		});
+				// 	}
+				// }, (err) => {
+
+				// });
 			});
 		});
 		setTimeout(() => {
-			this.props.checkAuth(res=>{
-				console.log(res);
-				if(res){
-					this.props.getUserDetail(res.userId,res.id).then(userRes=>{
-						//console.log(userRes)
-						//this.props.navigation.navigate("Menu");
-						// if(this.state.isPush==false)
-						// {
-						// 	this.props.navigation.dispatch(resetAction);
+			// this.props.checkAuth(res => {
 
-						// }
-						// else
-						// {
-						// 	this.props.navigation.navigate('JobDetails', { jobDetails: notif.this.state.jobId });
-						// }
+			// 	if (res) {
+			// 		this.props.getUserDetail(res.userId, res.id).then(userRes => {
+			// 			this.props.navigation.dispatch(resetAction);
+
+			// 		}).catch(err => {
+			// 			Alert.alert('Please login');
+			// 			this.props.navigation.navigate("Login")
+			// 		})
+			// 	} else {
+			// 		AsyncStorage.getItem('IsSliderShown').then((res) => {
+			// 			if (res) {
+			// 				this.props.navigation.dispatch(resetActionCategory);
+			// 			}
+			// 			else {
+			// 				this.props.navigation.dispatch(resetActionIntro);
+			// 			}
+			// 		}).catch((err) => {
+			// 			this.props.navigation.dispatch(resetActionIntro);
+			// 		})
+
+			// 	}
+			// })
+			AsyncStorage.getItem("userToken").then((userToken) => {
+				if (userToken) {
+					const userToken1 = JSON.parse(userToken);
+					this.props.getUserDetail(userToken1.userId, userToken1.id).then(userRes => {
 						this.props.navigation.dispatch(resetAction);
-						
-					}).catch(err=>{
+
+					}).catch(err => {
 						Alert.alert('Please login');
 						this.props.navigation.navigate("Login")
 					})
-					//this.props.navigation.navigate("Menu")
-				}else{
-					AsyncStorage.getItem('IsSliderShown').then((res)=>{
-						if(res)
-						{
+				} else {
+					AsyncStorage.getItem('IsSliderShown').then((res) => {
+						if (res) {
 							this.props.navigation.dispatch(resetActionCategory);
 						}
-						else
-						{
+						else {
 							this.props.navigation.dispatch(resetActionIntro);
 						}
-					}).catch((err)=>{
+					}).catch((err) => {
 						this.props.navigation.dispatch(resetActionIntro);
 					})
-					//this.props.navigation.navigate("Intro")
-					// this.props.navigation.dispatch(resetActionIntro);
+
 				}
 			})
 		}, 4000);
@@ -159,7 +180,7 @@ class Home extends Component {
 			// }])
 		});
 
-		
+
 	}
 	render() {
 		return (
@@ -192,20 +213,20 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-	auth : PropTypes.object.isRequired,
-	checkAuth : PropTypes.func.isRequired
+	auth: PropTypes.object.isRequired,
+	checkAuth: PropTypes.func.isRequired
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
 	return {
-		auth:state.auth
+		auth: state.auth
 	}
 }
 
-const mapDispatchToProps = (dispatch)=>{
+const mapDispatchToProps = (dispatch) => {
 	return {
-		checkAuth:(cb)=>dispatch(checkAuth(cb)),
-		getUserDetail:(id,auth)=>dispatch(getUserDetail(id,auth))
+		checkAuth: (cb) => dispatch(checkAuth(cb)),
+		getUserDetail: (id, auth) => dispatch(getUserDetail(id, auth))
 	}
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

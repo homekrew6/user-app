@@ -28,12 +28,10 @@ class ForgotPassword extends Component {
 	    }
 			this.setState({visible:true});
 			api.post('Customers/emailChecking',{email:this.state.email}).then(res=>{
-        //console.log(res);
 				api.post('Customers/reset',{email:this.state.email}).then(resReset=>{
 					this.setState({visible:false});
 					this.props.navigation.navigate("ResetPassword");
 	      }).catch((errReset) => {
-					//console.log(errReset)
 					this.setState({visible:false});
 					Alert.alert('Please try again')
 				})

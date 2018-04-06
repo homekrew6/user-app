@@ -25,7 +25,6 @@ var BUTTONS = [
 class EditProfile extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
 	        email: props.auth.data.email,
 	        name: props.auth.data.name,
@@ -66,7 +65,6 @@ class EditProfile extends Component {
       const options = config.s3;
 
       RNS3.put(file, config.s3).then((response) => {
-        console.log(response);
         if (response.status !== 201) {
           this.setState({ uploadButton: true });
 
@@ -84,12 +82,10 @@ class EditProfile extends Component {
           this.setState({ visible: false });
         }
       }).catch((err) => {
-        console.log(err);
         this.setState({ visible: false });
       });
     }).catch((err) => {
       this.setState({ visible: false });
-      // console.log(err);
       // this.setState({ uploadButton: true });
     });
   }
@@ -115,12 +111,9 @@ class EditProfile extends Component {
               name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
               type: response.mime || 'image/png',
           };
-          console.log(file);
 
           const options = config.s3;
-          console.log(options);
           RNS3.put(file, config.s3).then((response) => {
-              console.log(response);
               if (response.status !== 201) {
                   this.setState({ cameraButton: true });
                   this.setState({ visible: true });
@@ -136,11 +129,9 @@ class EditProfile extends Component {
               }
           }).catch((err) => {
               this.setState({ visible: false });
-              console.log(err);
           });
       }).catch((err) => {
           this.setState({ visible: false });
-          console.log(err);
           this.setState({ cameraButton: true });
       });
   }
@@ -160,11 +151,9 @@ class EditProfile extends Component {
 	    }
     this.setState({ visible: true });
     this.props.checkAuth((res) => {
-  			console.log(res);
   			if (res) {
         api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { name: this.state.name, phone: this.state.phone, image: this.state.image }).then((resEdit) => {
           this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-  						// console.log(userRes)
   						// this.props.navigation.navigate("Menu");
             this.setState({ visible: false });
             Alert.alert('Sucessfully saved');
@@ -231,7 +220,6 @@ class EditProfile extends Component {
                     (buttonIndex) => {
                       this.setState({ clicked: BUTTONS[buttonIndex] });
                       // this.setState({ filecat: buttonIndex });
-                      console.log(buttonIndex);
                       // this.setState({ filecat: buttonIndex});
                       this.fileUploadType(buttonIndex);
                     },

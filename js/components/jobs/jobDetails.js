@@ -85,7 +85,7 @@ class JobDetails extends Component {
         //          ref.update(data); } })
         this.state.trackingRef.on('child_added', (snapshot) => {
             const snapShotVal=snapshot.val();
-            if (snapShotVal.customerId == this.props.auth.data.id.toString())
+            if (snapShotVal.jobId == this.state.jobDetails.id.toString())
             {
                     if (snapShotVal.status == 'ONMYWAY') {
                         this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng });
@@ -100,15 +100,15 @@ class JobDetails extends Component {
         })
         this.state.trackingRef.on('child_changed', (snapshot) => {
             const snapShotVal = snapshot.val();
-            if (snapShotVal.customerId == this.props.auth.data.id.toString()) {
+            if (snapShotVal.jobId == this.state.jobDetails.id.toString()) {
                 if(snapShotVal.status=='ONMYWAY')
                 {
-                    this.setState({ topScreenStatus:'ONMYWAY', latitudeUser:snapShotVal.lat, longitudeUser:snapShotVal.lng});
+                    this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus:'Krew On The Way'});
                 }
                 else if (snapShotVal.status=='JOBSTARTED')
                 {
                     const  jobDetails=this.state.jobDetails;
-                    this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: jobDetails.jobStartTime, job_end_time:jobDetails.jobEndTime});
+                    this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: jobDetails.jobStartTime, job_end_time: jobDetails.jobEndTime, jobTrackingStatus:'Job Started'});
                 }
             }
 

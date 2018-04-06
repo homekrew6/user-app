@@ -150,7 +150,6 @@ class Menu extends Component {
           saveData.activeScreen = "ServiceDetails";
           saveData.previousScreen = "Category";
           this.props.navigateAndSaveCurrentScreen(saveData);
-          // console.log('stack menu', this.props);
           // this.props.navigation.dispatch({
           //   routeName: 'ServiceDetails'
           // });
@@ -164,7 +163,6 @@ class Menu extends Component {
           //   { cancelable: false }
           // )
           this.props.navigation.navigate('ServiceDetails');
-          //console.log()
           //this.props.navigation.dispatch(NavigationActions.back({ routeName:'ServiceDetails'}));
           return true;
         }else if(this.props.auth.data.activeScreen === 'ServiceDetails'){
@@ -227,6 +225,7 @@ class Menu extends Component {
   }
 
   render() {
+    
     return (
       <Container >
         <StatusBar
