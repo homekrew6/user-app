@@ -119,7 +119,6 @@ class JobList extends Component {
                             <MenuItem onPress={() => this.jobType('STARTED')}>STARTED</MenuItem>
                             <MenuItem onPress={() => this.jobType('ONMYWAY')}>WORKER ON WAY</MenuItem>
                             <MenuItem onPress={() => this.jobType('JOBSTARTED')}>JOB STARTED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('DECLINED')}>DECLINED</MenuItem>
                             <MenuItem onPress={() => this.jobType('CANCELLED')}>CANCELLED</MenuItem>
                             <MenuItem onPress={() => this.jobType('COMPLETED')}>COMPLETED</MenuItem>
                         </Menu>

@@ -95,7 +95,9 @@ class JobDetails extends Component {
                     }
                     else if (snapShotVal.status == 'JOBSTARTED') {
                         const jobDetails = this.state.jobDetails;
-                        this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: jobDetails.jobStartTime, job_end_time: jobDetails.jobEndTime });
+                        let job_start_time = snapShotVal.startTime? moment(snapShotVal.startTime).format('LT'):'';
+                        let job_end_time = snapShotVal.endTime? moment(snapShotVal.endTime).format('LT'):'';
+                        this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: job_start_time, job_end_time: job_end_time });
                     }
 
                 }
@@ -112,8 +114,10 @@ class JobDetails extends Component {
                         this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
                     }
                     else if (snapShotVal.status == 'JOBSTARTED') {
+                        let job_start_time = moment(snapShotVal.startTime).format('LT');
+                        let job_end_time = moment(snapShotVal.endTime).format('LT');
                         const jobDetails = this.state.jobDetails;
-                        this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: snapShotVal.startTime, job_end_time: snapShotVal.endTime, jobTrackingStatus: 'Job Started' });
+                        this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: job_start_time, job_end_time: job_end_time, jobTrackingStatus: 'Job Started' });
                     }
                     else if (snapShotVal.status == 'COMPLETED') {
                         const jobDetails = this.state.jobDetails;
@@ -212,7 +216,9 @@ cancelJob(reason, IsOther)
             }
             else if (this.state.jobDetails.status == 'JOBSTARTED') {
                 const jobDetails=this.state.jobDetails;
-                this.setState({ jobTrackingStatus: 'Job Started', job_start_time:jobDetails.jobStartTime, job_end_time:jobDetails.jobEndTime });
+                let job_start_time = moment(jobDetails.jobStartTime).format('LT');
+                let job_end_time = moment(jobDetails.jobEndTime).format('LT');
+                this.setState({ jobTrackingStatus: 'Job Started', job_start_time: job_start_time, job_end_time: job_end_time });
             }
             else if (this.state.jobDetails.status == 'COMPLETED') {
                 this.setState({ jobTrackingStatus: 'Job Completed' });
