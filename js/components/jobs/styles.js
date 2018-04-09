@@ -119,6 +119,35 @@ export default {
     // footer
 
     footerTab:{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' },
-    footerTabText: { fontSize: 14, color: '#fff' }
+    footerTabText: { fontSize: 14, color: '#fff' },
+
+    // job tracking
+
+    trackLogo:{ height: 50, width: 50, backgroundColor: '#ccc', borderRadius: 60, alignItems: 'center', justifyContent: 'center' },
+    trackLogoImg: { width: 35, height: 35 },
+    trackArrowWarp:{ height: 25, width: 25 },
+    trackArrow:{ width: 25, height: 25 },
+
+    trackmetterWarp: { backgroundColor: '#fff', paddingTop: 20, paddingBottom: 20, marginBottom: 10 },
+    trackmetterHeader: { width: '100%', textAlign: 'center', paddingBottom: 15 },
+    trackmetterMainWarp:{ width: '100%', alignItems: 'center', justifyContent: 'center' },
+    trackmetterItem: { alignItems: 'center', justifyContent: 'center', width: 250, position: 'relative', },
+    trackmetterItemInner: { position: 'relative', paddingLeft: 20, paddingRight: 20 },
+    trackmetterItemDate: { color: '#ccc', fontSize: 12, paddingBottom: 15 },
+    crcl: { height: 10, width: 10, borderRadius: 10, position: 'absolute', top: 5, left: 0, backgroundColor: '#fed421' },
+    line:{ width: 2, height: '100%', backgroundColor: '#fed421', position: 'absolute', top: 7, left: 4 },
+
+
+
+    // Reschedule
+
+    dateWarp: { padding: 15, backgroundColor: '#fff', marginTop: 10 },
+    headerWarp: { flexDirection: 'row', backgroundColor: '#fff', justifyContent: 'center' },
+    headerWarpTxt: { color: '#81cdc7', fontSize: 20, marginRight: 5 },
+    colorWarp: { justifyContent: 'center', alignItems: 'center' },
+    colorWarpItem: { width: '100%', flexDirection: 'row', alignItems: 'center', paddingBottom: 8 },
+    colorbox: { height: 15, width: 15, backgroundColor: '#81cdc7', borderColor: '#ccc', borderWidth: 1 },
+    colorTxt: { fontSize: 14, paddingLeft: 10 }
+
 
 };
