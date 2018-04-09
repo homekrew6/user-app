@@ -53,7 +53,8 @@ class JobDetails extends Component {
             job_start_time:'',
             job_end_time:'',
             jobTrackingStatus:'',
-            workerRate: 0
+            workerRate: 0,
+            reason:''
         }
         // const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
         // const progressSpeed = (time_interval / 100) * 60000;
@@ -86,8 +87,9 @@ class JobDetails extends Component {
         //          ref.update(data); } })
         this.state.trackingRef.on('child_added', (snapshot) => {
             const snapShotVal=snapshot.val();
-            if (snapShotVal.jobId == this.state.jobDetails.id.toString())
+            if (this.state.jobDetails.id)
             {
+                if (snapShotVal.jobId == this.state.jobDetails.id.toString()) {
                     if (snapShotVal.status == 'ONMYWAY') {
                         this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng });
                     }
@@ -95,21 +97,28 @@ class JobDetails extends Component {
                         const jobDetails = this.state.jobDetails;
                         this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: jobDetails.jobStartTime, job_end_time: jobDetails.jobEndTime });
                     }
-                
+
+                }
             }
+           
 
         })
         this.state.trackingRef.on('child_changed', (snapshot) => {
             const snapShotVal = snapshot.val();
-            if (snapShotVal.jobId == this.state.jobDetails.id.toString()) {
-                if(snapShotVal.status=='ONMYWAY')
-                {
-                    this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus:'Krew On The Way'});
-                }
-                else if (snapShotVal.status=='JOBSTARTED')
-                {
-                    const  jobDetails=this.state.jobDetails;
-                    this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: jobDetails.jobStartTime, job_end_time: jobDetails.jobEndTime, jobTrackingStatus:'Job Started'});
+            if(this.state.jobDetails.id)
+            {
+                if (snapShotVal.jobId == this.state.jobDetails.id.toString()) {
+                    if (snapShotVal.status == 'ONMYWAY') {
+                        this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
+                    }
+                    else if (snapShotVal.status == 'JOBSTARTED') {
+                        const jobDetails = this.state.jobDetails;
+                        this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: snapShotVal.startTime, job_end_time: snapShotVal.endTime, jobTrackingStatus: 'Job Started' });
+                    }
+                    else if (snapShotVal.status == 'COMPLETED') {
+                        const jobDetails = this.state.jobDetails;
+                        this.setState({ topScreenStatus: 'COMPLETED', job_start_time: '', job_end_time: '', jobTrackingStatus: 'Job Completed' });
+                    }
                 }
             }
 
@@ -117,7 +126,67 @@ class JobDetails extends Component {
       
         
     }
+showConfirmDialog(reason)
+{
+     Alert.alert(
+          'Confirm',
+          'Are you sure to cancel this job?',
+          [
+            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+            { text: 'OK', onPress: () => this.cancelJob(reason) },
+          ],
+          { cancelable: false }
+        )
+}
+showConfirm()
+{
+     Alert.alert(
+          'Confirm',
+          'Are you sure to cancel this job?',
+          [
+            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+            { text: 'OK', onPress: () => this.cancelJob(this.state.reason, true) },
+          ],
+          { cancelable: false }
+        )
+}
+cancelJob(reason, IsOther)
+{
+    
+    if(IsOther!= undefined && IsOther==true)
+    {
+ this.setState({jobCancelModal:false});
+    let cancelJobData={postingTime:this.state.jobDetails.postingTime, id:this.state.jobDetails.id, status:"CANCELLED", reason:this.state.reason};
+    api.post('Jobs/cancelJobByUser', cancelJobData).then((res)=>{
+        if(res.response.type=="SUCCESS")
+        {
+            this.props.navigation.navigate('JobList');
+        }
+        else
 
+        {
+            Alert.alert('Please try again later.');
+        }
+    })
+    }
+    else
+    {
+         this.setState({jobCancelModal:false});
+    let cancelJobData1={postingTime:this.state.jobDetails.postingTime, id:this.state.jobDetails.id, status:"CANCELLED", reason:reason};
+    api.post('Jobs/cancelJobByUser', cancelJobData1).then((res)=>{
+        if(res.response.type=="SUCCESS")
+        {
+            this.props.navigation.navigate('JobList');
+        }
+        else
+
+        {
+            Alert.alert('Please try again later.');
+        }
+    })
+    }
+   
+}
     componentDidMount() {
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
             this.setState({
@@ -142,7 +211,8 @@ class JobDetails extends Component {
                 this.setState({ jobTrackingStatus: 'Krew On The Way' });
             }
             else if (this.state.jobDetails.status == 'JOBSTARTED') {
-                this.setState({ jobTrackingStatus: 'Job Started' });
+                const jobDetails=this.state.jobDetails;
+                this.setState({ jobTrackingStatus: 'Job Started', job_start_time:jobDetails.jobStartTime, job_end_time:jobDetails.jobEndTime });
             }
             else if (this.state.jobDetails.status == 'COMPLETED') {
                 this.setState({ jobTrackingStatus: 'Job Completed' });
@@ -152,7 +222,7 @@ class JobDetails extends Component {
             const progressInterval = setInterval(() => {
                 this.setState({ workProgressTime: this.state.workProgressTime + 1 });
             }, progressSpeed);
-            if (this.state.jobDetails.status == "STARTED" && this.state.jobDetails.status == "ACCEPTED") {
+            if (this.state.jobDetails.status == "STARTED" || this.state.jobDetails.status == "ACCEPTED") {
                 this.setState({
                     cancelJobButton: true
                 })
@@ -536,19 +606,19 @@ class JobDetails extends Component {
                                     {
                                         this.state.otherReason == 0 ? (
                                             <View style={{ width: '100%', backgroundColor: '#fff', borderRadius: 10 }}>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}  onPress={() => this.showConfirmDialog('Reason1')}>
                                                     <Text style={{ color: '#000' }}>Reason1</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason2')}>
                                                     <Text style={{ color: '#000' }}>Reason2</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason3')}>
                                                     <Text style={{ color: '#000' }}>Reason3</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason4')}>
                                                     <Text style={{ color: '#000' }}>Reason4</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.setState({ otherReason: 1 })}>
+                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}  onPress={() => this.setState({ otherReason: 1 })}>
                                                     <Text style={{ color: '#000' }}>Others Reason</Text>
                                                 </TouchableOpacity>
                                             </View>
@@ -563,13 +633,13 @@ class JobDetails extends Component {
                                                 </Text>
                                                 </View>
                                                 <View style={{ backgroundColor: '#ccc', flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
-                                                    <TextInput placeholder="Tell us here what went wrong?" style={{ width: '100%', backgroundColor: '#fff', borderWidth: 0, borderRadius: 10, paddingLeft: 10, paddingRight: 10, height: 200, textAlign: 'center', textAlignVertical: 'top' }} multiline={true} underlineColorAndroid='transparent'  >
+                                                    <TextInput placeholder="Tell us here what went wrong?" style={{ width: '100%', backgroundColor: '#fff', borderWidth: 0, borderRadius: 10, paddingLeft: 10, paddingRight: 10, height: 200, textAlign: 'center', textAlignVertical: 'top' }} multiline={true} underlineColorAndroid='transparent'  onChangeText={text => this.setState({ reason: text })} value={this.state.reason} >
 
                                                     </TextInput>
                                                 </View>
                                                 <View style={{ backgroundColor: '#fff', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center', marginBottom: -1 }}>
                                                     <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 45, justifyContent: 'center' }} onPress={() => this.setState({ otherReason: 0 })}><Text style={{ color: '#fff' }} >{I18n.t('back')}</Text></TouchableOpacity>
-                                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 45, justifyContent: 'center', alignItems: 'center' }} onPress={() => this.setState({ otherReason: 2 })}><Text style={{ color: '#fff' }}>{I18n.t('ok')}</Text></TouchableOpacity>
+                                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 45, justifyContent: 'center', alignItems: 'center' }} onPress={() => this.showConfirm()}><Text style={{ color: '#fff' }}>{I18n.t('ok')}</Text></TouchableOpacity>
                                                 </View>
                                             </View>
                                         ) : (console.log())
