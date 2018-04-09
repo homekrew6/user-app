@@ -30,7 +30,7 @@ class JobList extends Component {
         this.getData(this.state.status);
     }
 
-    getData(status){
+    getData(status) {
         this.setState({ visible: true });
         api.post('Jobs/getJobListingForUser', { customerId: this.state.customerId, status: status }).then((res) => {
             var finalList = res.response.message;
@@ -64,34 +64,32 @@ class JobList extends Component {
         })
     }
 
-    goToDetails(data)
-    {
-        this.props.navigation.navigate('JobDetails', {jobDetails:data});
+    goToDetails(data) {
+        this.props.navigation.navigate('JobDetails', { jobDetails: data });
     }
 
     setMenuRef = ref => {
         this.menu = ref;
     };
 
-    jobType(data)
-    {
+    jobType(data) {
         this.menu.hide();
-        this.setState({ status: data })      
+        this.setState({ status: data })
         this.getData(data);
     }
 
     showMenu = () => {
         this.menu.show();
     };
-    
+
 
     render() {
-            let jobListNow;
-            jobListNow = (
-                <Text>hi</Text>
-            )
+        let jobListNow;
+        jobListNow = (
+            <Text>hi</Text>
+        )
         return (
-            
+
 
 
 
@@ -116,71 +114,100 @@ class JobList extends Component {
                                 </Button>
                             }
                         >
-                            <MenuItem onPress={() =>this.jobType('ALL')}>ALL</MenuItem>
-                            <MenuItem onPress={() =>this.jobType('ACCEPTED')}>ACCEPTED</MenuItem>
-                            <MenuItem onPress={() =>this.jobType('STARTED')}>STARTED</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ALL')}>ALL</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ACCEPTED')}>ACCEPTED</MenuItem>
+                            <MenuItem onPress={() => this.jobType('STARTED')}>STARTED</MenuItem>
                             <MenuItem onPress={() => this.jobType('ONMYWAY')}>WORKER ON WAY</MenuItem>
                             <MenuItem onPress={() => this.jobType('JOBSTARTED')}>JOB STARTED</MenuItem>
-                            <MenuItem onPress={() =>this.jobType('DECLINED')}>DECLINED</MenuItem>
+                            <MenuItem onPress={() => this.jobType('DECLINED')}>DECLINED</MenuItem>
                             <MenuItem onPress={() => this.jobType('CANCELLED')}>CANCELLED</MenuItem>
                             <MenuItem onPress={() => this.jobType('COMPLETED')}>COMPLETED</MenuItem>
                         </Menu>
                     </View>
-                    
+
                 </Header>
                 <Content>
                     {
                         this.state.jobList.length ? (
                             <View>
-                             { this.state.jobList.map((dataQ, key) => {
-                        return (
-                            <View key={key}>
-                                <View style={styles.dayHeading}>
-                                    <Text>{dataQ.serviceName}</Text>
-                                </View>
-                                <List
-                                    dataArray={dataQ.jobList}
-                                    renderRow={(item) =>
-                                        <ListItem style={{ marginLeft: 0 }}>
-                                            <TouchableOpacity style={styles.listWarp} onPress={() => this.goToDetails(item)}>
-                                                <View style={styles.listWarpImageWarp}>
-                                                    {
-                                                        item.service.banner_image ? (
-                                                            <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
+                                {this.state.jobList.map((dataQ, key) => {
+                                    return (
+                                        <View key={key}>
+                                            <View style={styles.dayHeading}>
+                                                <Text>{dataQ.serviceName}</Text>
+                                            </View>
+                                            <List
+                                                dataArray={dataQ.jobList}
+                                                renderRow={(item) =>
+                                                    <ListItem style={{ marginLeft: 0 }}>
+                                                        {item.status != 'CANCELLED' ? (
+                                                            <TouchableOpacity style={styles.listWarp} onPress={() => this.goToDetails(item)}>
+                                                                <View style={styles.listWarpImageWarp}>
+                                                                    {
+                                                                        item.service.banner_image ? (
+                                                                            <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
+                                                                        ) : (
+                                                                                <Image source={imageIcon1} style={styles.listWarpImage} />
+                                                                            )
+                                                                    }
+                                                                </View>
+                                                                <View style={styles.listWarpTextWarp}>
+                                                                    <View style={styles.flexDirectionRow}>
+                                                                        <Text>{item.service.name}</Text>
+                                                                    </View>
+                                                                    <View style={styles.flexDirectionRow}>
+                                                                        <Text style={[styles.fontWeight700, { fontSize: 14 }]}> Tuesday </Text>
+                                                                        <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
+                                                                    </View>
+                                                                    <View style={styles.flexDirectionRow}>
+                                                                        <Text>{item.userLocation.name}</Text>
+                                                                    </View>
+                                                                </View>
+                                                                <View>
+                                                                    <Text style={styles.listWarpPriceDown}>{item.status}</Text>
+                                                                </View>
+                                                            </TouchableOpacity>
                                                         ) : (
-                                                                <Image source={imageIcon1} style={styles.listWarpImage} />
-                                                            )
-                                                    }
-                                                </View>
-                                                <View style={styles.listWarpTextWarp}>
-                                                    <View style={styles.flexDirectionRow}>
-                                                        <Text>{item.service.name}</Text>
-                                                    </View>
-                                                    <View style={styles.flexDirectionRow}>
-                                                        <Text style={[styles.fontWeight700, { fontSize: 14 }]}> Tuesday </Text>
-                                                        <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
-                                                    </View>
-                                                    <View style={styles.flexDirectionRow}>
-                                                        <Text>{item.userLocation.name}</Text>
-                                                    </View>
-                                                </View>
-                                                <View>
-                                                    <Text style={styles.listWarpPriceDown}>{item.status}</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        </ListItem>
-                                    }
-                                />
-                            </View>
-                        )
-                    })}
+                                                                <View style={styles.listWarp}>
+                                                                    <View style={styles.listWarpImageWarp}>
+                                                                        {
+                                                                            item.service.banner_image ? (
+                                                                                <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
+                                                                            ) : (
+                                                                                    <Image source={imageIcon1} style={styles.listWarpImage} />
+                                                                                )
+                                                                        }
+                                                                    </View>
+                                                                    <View style={styles.listWarpTextWarp}>
+                                                                        <View style={styles.flexDirectionRow}>
+                                                                            <Text>{item.service.name}</Text>
+                                                                        </View>
+                                                                        <View style={styles.flexDirectionRow}>
+                                                                            <Text style={[styles.fontWeight700, { fontSize: 14 }]}> Tuesday </Text>
+                                                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
+                                                                        </View>
+                                                                        <View style={styles.flexDirectionRow}>
+                                                                            <Text>{item.userLocation.name}</Text>
+                                                                        </View>
+                                                                    </View>
+                                                                    <View>
+                                                                        <Text style={styles.listWarpPriceDown}>{item.status}</Text>
+                                                                    </View>
+                                                                </View>
+                                                            )}
+                                                    </ListItem>
+                                                }
+                                            />
+                                        </View>
+                                    )
+                                })}
                             </View>
                         ) : (<View style={{ alignItems: 'center', padding: 10 }}><Text>No Data Found</Text></View>)
 
 
-                   
+
                     }
-                    
+
                 </Content>
 
             </Container>
