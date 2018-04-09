@@ -87,5 +87,6 @@ export default {
   ok: 'حسنا',
   back: 'الى الخلف',
   followUp: 'متابعة',
-  serviceDetails: 'تفاصيل الخدمة'
+  serviceDetails: 'تفاصيل الخدمة',
+  reschedule: 'إعادة جدولة'
 };

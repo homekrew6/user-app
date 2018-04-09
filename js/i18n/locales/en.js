@@ -86,5 +86,6 @@ export default {
   ok: 'OK',
   back: 'Back',
   followUp: 'Follow Up',
-  serviceDetails: 'Service Details'
+  serviceDetails: 'Service Details',
+  reschedule: 'Reschedule'
 };

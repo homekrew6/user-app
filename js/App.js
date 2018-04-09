@@ -31,8 +31,10 @@ import JobList from './components/jobs/jobList';
 import ServiceProviderDetails from './components/jobs/serviceProviderDetails';
 import Settings from './components/settings/settings';
 import LanguageList from './components/settings/languageList';
-import CurrencyList from './components/settings/currencyList';
+import CurrencyList from './components/settings/currencyList'; 
 import FollowUp from './components/jobs/followUp';
+import JobTracker from './components/jobs/jobTracker';
+import Reschedule from './components/jobs/reschedule';
 
 
 
@@ -65,7 +67,9 @@ const AppNavigator = StackNavigator(
         Settings: { screen: Settings },
         LanguageList: { screen: LanguageList },
         CurrencyList: { screen: CurrencyList },
-        FollowUp: { screen: FollowUp }
+        FollowUp: { screen: FollowUp },
+        JobTracker: { screen: JobTracker },
+        Reschedule: { screen: Reschedule }
     },
     {
         initialRouteName: "Drawer",
