@@ -142,7 +142,7 @@ export default {
     // Reschedule
 
     dateWarp: { padding: 15, backgroundColor: '#fff', marginTop: 10 },
-    headerWarp: { flexDirection: 'row', backgroundColor: '#fff', justifyContent: 'center' },
+    headerWarp2: { flexDirection: 'row', backgroundColor: '#fff', justifyContent: 'center' },
     headerWarpTxt: { color: '#81cdc7', fontSize: 20, marginRight: 5 },
     colorWarp: { justifyContent: 'center', alignItems: 'center' },
     colorWarpItem: { width: '100%', flexDirection: 'row', alignItems: 'center', paddingBottom: 8 },

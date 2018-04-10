@@ -34,7 +34,7 @@ class Reschedule extends Component {
                 </Header>
                 <Content>
                     <View style={styles.dateWarp}>
-                        <View style={styles.headerWarp}>
+                        <View style={styles.headerWarp2}>
                             <FontAwesome name='calendar' style={styles.headerWarpTxt} />
                             <Text>{I18n.t('date')}</Text>
                         </View>
@@ -84,7 +84,7 @@ class Reschedule extends Component {
                         </View>
                     </View>
                     <View style={{ backgroundColor: '#fff', marginTop: 10, paddingTop: 15, paddingLeft: 5, paddingRight: 5, marginBottom: 10 }}>
-                        <View style={styles.headerWarp}>
+                        <View style={styles.headerWarp2}>
                             <FontAwesome name='clock-o' style={styles.headerWarpTxt} />
                             <Text style={{ marginBottom: 20 }}>{I18n.t('time')}</Text>
                         </View>

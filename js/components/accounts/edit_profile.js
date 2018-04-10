@@ -26,8 +26,8 @@ class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-	        email: props.auth.data.email,
-	        name: props.auth.data.name,
+	    email: props.auth.data.email,
+	    name: props.auth.data.name,
       phone: props.auth.data.phone,
       image: props.auth.data.image,
       id: props.auth.data.id,
@@ -36,7 +36,7 @@ class EditProfile extends Component {
       uploaded: false,
       cameraButton: true,
       cameraUploaded: false,
-	      };
+	  };
   }
 
 
