@@ -34,6 +34,10 @@ class ServiceProviderDetails extends Component {
     call() {
         this.setState({ IsModalVisible: true });
     }
+    pressChat(){
+        this.props.navigation.navigate('Chat', { workerDetails: this.state.jobDetails.worker });
+        console.log(this.state.jobDetails.worker.id);
+    }
     render() {
         return (
             <Container >
@@ -125,7 +129,7 @@ class ServiceProviderDetails extends Component {
                 </Content>
                 <Footer>
                     <FooterTab>
-                        <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.pressSave()}>
+                        <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.pressChat()}>
                             <Text style={{ color: '#fff', fontSize: 14 }}>{I18n.t('liveChat')}</Text>
                         </TouchableOpacity>
 
