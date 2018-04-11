@@ -88,5 +88,6 @@ export default {
   back: 'الى الخلف',
   followUp: 'متابعة',
   serviceDetails: 'تفاصيل الخدمة',
-  reschedule: 'إعادة جدولة'
+  reschedule: 'إعادة جدولة',
+  canelledJob:'لقد قمت بإلغاء هذه الوظيفة'
 };
