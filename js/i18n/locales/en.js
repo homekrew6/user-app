@@ -87,5 +87,6 @@ export default {
   back: 'Back',
   followUp: 'Follow Up',
   serviceDetails: 'Service Details',
-  reschedule: 'Reschedule'
+  reschedule: 'Reschedule',
+  canelledJob:'You have cancelled this job.'
 };

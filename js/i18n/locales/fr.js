@@ -33,5 +33,6 @@ export default {
   settings: 'Paramètres',
   logout: 'Connectez - Out',
   language: 'La langue',
-  currency: 'Devise'
+  currency: 'Devise',
+  canelledJob: 'Vous avez annulé cet emploi'
 };

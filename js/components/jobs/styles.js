@@ -46,6 +46,7 @@ export default {
     jobItemIconIonicons: { color: '#81cdc7', fontSize: 30 },
     jobItemIcon: { color: '#81cdc7', fontSize: 20 },
     jobItemName: { flex: 1, fontSize: 14, paddingLeft: 10 },
+    cancelName: { color: 'red', flex: 1, fontSize: 14, paddingLeft: 10, alignItems:'center'},
     jobItemValue: { fontSize: 14, color: '#ccc', paddingLeft: 10 },
     jobItemValueDateandTime: { fontSize: 12 },
     editprofileLst: {
@@ -142,7 +143,7 @@ export default {
     // Reschedule
 
     dateWarp: { padding: 15, backgroundColor: '#fff', marginTop: 10 },
-    headerWarp: { flexDirection: 'row', backgroundColor: '#fff', justifyContent: 'center' },
+    headerWarp2: { flexDirection: 'row', backgroundColor: '#fff', justifyContent: 'center' },
     headerWarpTxt: { color: '#81cdc7', fontSize: 20, marginRight: 5 },
     colorWarp: { justifyContent: 'center', alignItems: 'center' },
     colorWarpItem: { width: '100%', flexDirection: 'row', alignItems: 'center', paddingBottom: 8 },
