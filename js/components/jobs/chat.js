@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, TextInput } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, TextInput, ScrollView } from 'react-native';
 import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -50,24 +50,27 @@ class Chat extends Component {
             this.state.chatRef = firebase.apps[0].database().ref().child('messages');
         }
 
-        this.state.chatRef.on('child_changed', (snapshot) => {
+        this.state.chatRef.on('child_added', (snapshot) => {
             const snapShotVal = snapshot.val();
-            console.log(snapShotVal);
-           if(snapShotVal.IsCustomerSender!=true)
-           {
-               let chatList = this.state.chatList;
-               const item = snapShotVal;
-               chatList.push(item);
-               this.setState({ typeMessage: '', chatList: chatList });
-           }
-        })
-       
+            if ( snapShotVal.chatRoomId == this.state.chatRoomId ){
+                let chatList = this.state.chatList;
+                const item = snapShotVal;
+                chatList.push(item);
+                this.setState({ typeMessage: '', chatList: chatList });
+            }
+            setTimeout(() => {
+                this.refs.ScrollViewStart.scrollToEnd(true);
+            }, 400);
 
-        
-
+        })  
     }
     componentDidMount()
     {
+
+        setTimeout(() => {
+            this.refs.ScrollViewStart.scrollToEnd();
+        }, 50);
+
         console.log(this.props.auth.data)
         if (this.state.customerId && this.state.workerId) {
             const chatRoomId=this.state.customerId+"_"+this.state.workerId;
@@ -93,12 +96,7 @@ class Chat extends Component {
     }
     sendMessage() {
         if (this.state.typeMessage){
-            console.log(this.state.typeMessage);
             this.state.chatRef.push({ "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "Message": this.state.typeMessage });
-            let chatList=this.state.chatList;
-            const item = { "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "Message": this.state.typeMessage};
-            chatList.push(item);
-            this.setState({ typeMessage: '' , chatList:chatList});
         }
         else{
             Alert.alert("Please type your message to send.")
@@ -163,11 +161,7 @@ class Chat extends Component {
                 if (response.status == 201) {
                 
                     this.state.chatRef.push({ "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "MessageImage": response.body.postResponse.location });
-                    let chatList = this.state.chatList;
-                    const item = { "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "MessageImage": response.body.postResponse.location };
-                    chatList.push(item);
                     this.setState({
-                        chatList: chatList,
                         visible: false
                     });
 
@@ -215,11 +209,10 @@ class Chat extends Component {
 
                 if (response.status == 201) {
                     this.state.chatRef.push({ "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "MessageImage": response.body.postResponse.location });
-                    let chatList = this.state.chatList;
-                    const item = { "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "MessageImage": response.body.postResponse.location };
-                    chatList.push(item);
+                    // let chatList = this.state.chatList;
+                    // const item = { "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "MessageImage": response.body.postResponse.location };
+                    // chatList.push(item);
                     this.setState({
-                        chatList: chatList,
                         visible: false
                     });  
                                      
@@ -257,7 +250,7 @@ class Chat extends Component {
                             <EvilIcons name="close" style={styles.headIcon} />
                         </Button>
                     </Header>
-                    <Content>
+                    <View style={{ flex: 1 }}>
                         <View style={{ backgroundColor: '#cccccc', padding: 15 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <View style={{ marginBottom: 10 }}>
@@ -283,13 +276,16 @@ class Chat extends Component {
 
 
 
-                        <View style={{ padding: 10 }}>
+                        <ScrollView 
+                        ref='ScrollViewStart'
+                        style={{ padding: 10, flex: 1 }}
+                        >
 
                             {
                                 this.state.chatList.map((data, key) => (
                                     data.IsCustomerSender ? (
                                     <View style={{ flexDirection: 'row', marginBottom: 15 }} key={ key }>
-                                        <View style={{ flex: 1, marginBottom: 15, overflow: 'visible', position: 'relative', alignItems: 'flex-end' }}>
+                                        <View style={{ flex: 1, marginBottom: 10, overflow: 'visible', position: 'relative', alignItems: 'flex-end' }}>
                                             <View style={{  maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
                                                 {
                                                     data.Message ? (
@@ -297,13 +293,13 @@ class Chat extends Component {
                                                     ) : (<Image source={{ uri: data.MessageImage }} style={{ height: 100, width: 100, borderRadius:4 }} />)
                                                 }
                                             </View>
-                                            {/* <Image source={require('../../../img/icon/chats.png')} style={{ height: 12, width: 12, position: 'absolute', right: -4, bottom: -4, zIndex: 999 }} /> */}
+                                            <Image source={require('../../../img/icon/chats2.png')} style={{ height: 12, width: 12, position: 'absolute', right: -3, bottom: -4, zIndex: 999 }} />
                                         </View>
                                         <TouchableOpacity style={{ marginLeft: 15, justifyContent: 'flex-end' }} onPress={() => console.log('test 1')} >
                                             {
                                                 this.props.auth.data.image ? (
-                                                    <Image source={{ uri: this.props.auth.data.image }} style={{ height: 50, width: 50, borderRadius: 70 }} />
-                                                ) : (<Image source={require('../../../img/atul.png')} style={{ height: 50, width: 50, borderRadius: 70 }}  />)
+                                                    <Image source={{ uri: this.props.auth.data.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />
+                                                ) : (<Image source={require('../../../img/atul.png')} style={{ height: 30, width: 30, borderRadius: 70 }}  />)
                                             }
                                         </TouchableOpacity>
                                     </View>
@@ -312,8 +308,8 @@ class Chat extends Component {
                                             <View style={{ marginRight: 15, justifyContent: 'flex-end' }}>
                                             {
                                                 this.props.auth.data.image ? (
-                                                    <Image source={{ uri: this.props.auth.data.image }} style={{ height: 50, width: 50, borderRadius: 70 }} />
-                                                ) : (<Image source={require('../../../img/atul.png')} style={{ height: 50, width: 50, borderRadius: 70 }} />)
+                                                    <Image source={{ uri: this.props.auth.data.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />
+                                                ) : (<Image source={require('../../../img/atul.png')} style={{ height: 30, width: 30, borderRadius: 70 }} />)
                                             }
                                         </View>
                                         <View style={{ flex: 1, marginBottom: 15, overflow: 'visible', position: 'relative' }}>
@@ -330,13 +326,13 @@ class Chat extends Component {
 
                             }
 
-                        </View>
-                    </Content>
+                        </ScrollView>
+                    </View>
                     <Footer>
                         <FooterTab>
-                            <View style={{ backgroundColor: '#ccc', flexDirection: 'row', flex: 1, alignItems: 'center', }}>
+                            <View style={{ backgroundColor: '#ccc', flexDirection: 'row', flex: 1, alignItems: 'center', backgroundColor: '#81cdc7' }}>
                             <TouchableOpacity style={{ paddingLeft: 10, paddingRight: 10 }} onPress={() => this.uploadPhoto()}>
-                                    <Entypo name="camera" style={{ fontSize: 24, color: '#81cdc7' }} />
+                                    <Entypo name="camera" style={{ fontSize: 24, color: '#fff' }} />
                                 </TouchableOpacity>
                                 <View style={{ flex: 1, overflow: 'hidden' }}>
                                     <TextInput
@@ -347,7 +343,7 @@ class Chat extends Component {
                                     />
                                 </View>
                                 <TouchableOpacity onPress={() => this.sendMessage()} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                                    <Ionicons name="md-send" style={{ fontSize: 24, color: '#81cdc7' }} />
+                                    <Ionicons name="md-send" style={{ fontSize: 24, color: '#fff' }} />
                                 </TouchableOpacity>
                             </View>
                         </FooterTab>
