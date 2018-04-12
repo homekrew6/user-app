@@ -314,8 +314,11 @@ class Chat extends Component {
                                         </View>
                                         <View style={{ flex: 1, marginBottom: 15, overflow: 'visible', position: 'relative' }}>
                                             <View style={{ width: '100%', maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
-                                                <Text style={{ fontSize: 14 }}>{data.Message} </Text>
-                                                {/* <Text style={{ fontSize: 14 }}>{this.props.auth.data.name}</Text> */}
+                                                    {
+                                                        data.Message ? (
+                                                            <Text style={{ fontSize: 14 }}> {data.Message} </Text>
+                                                        ) : (<Image source={{ uri: data.MessageImage }} style={{ height: 100, width: 100, borderRadius: 4 }} />)
+                                                    }
                                             </View>
                                             <Image source={require('../../../img/icon/chats.png')} style={{ height: 12, width: 12, position: 'absolute', left: -4, bottom: -4, zIndex: 999 }} />
                                         </View>

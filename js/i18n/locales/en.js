@@ -88,5 +88,12 @@ export default {
   followUp: 'Follow Up',
   serviceDetails: 'Service Details',
   reschedule: 'Reschedule',
+  no: 'No',
+  yes: 'Yes',
+  currentDate: 'Current Date',
+  selectedDate: 'Selected Date',
+  blockDates: 'Block Dates',
+  selectedTime: 'Selected Time',
+  blockTime: 'Block Time',
   canelledJob:'You have cancelled this job.'
 };

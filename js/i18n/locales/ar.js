@@ -89,5 +89,12 @@ export default {
   followUp: 'متابعة',
   serviceDetails: 'تفاصيل الخدمة',
   reschedule: 'إعادة جدولة',
+  no: 'لا',
+  yes: 'نعم فعلا',
+  currentDate: 'التاريخ الحالي',
+  selectedDate: 'التاريخ المحدد',
+  blockDates: 'حظر التواريخ',
+  selectedTime: 'الوقت المحدد',
+  blockTime: 'وقت الحظر',
   canelledJob:'لقد قمت بإلغاء هذه الوظيفة'
 };

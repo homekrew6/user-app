@@ -56,7 +56,7 @@ class serviceDetails extends Component {
       cover_image: 'props.service.data.cover_image',
       start_range: 0,
       numberValue: 1,
-      currency: 'USD',
+      currency: 'AED',
       activeRadioArray: [false, false, false],
       IsSpinnerVisible: false,
       sliderData: [

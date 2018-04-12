@@ -15,7 +15,7 @@ class FollowUp extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currency: 'USD'
+            currency: 'AED'
         }
     }
 
