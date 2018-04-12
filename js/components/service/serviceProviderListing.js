@@ -61,7 +61,7 @@ class ServiceProviderListing extends Component {
             this.setState({ selectedTime: time });
             let day = this.props.service.data.serviceTime.split(' ')[0].toLowerCase();
             const data = { "serviceId": 8, 'time': time, 'day': day };
-            api.post('worker-available-timings/getUserFavSVListing', data).then((data) => {
+            api.post('Workeravailabletimings/getUserFavSVListing', data).then((data) => {
                 if (data.response.type == 'success') {
                     this.setState({ isVisible: false });
                     this.setState({ spList: data.response.list });

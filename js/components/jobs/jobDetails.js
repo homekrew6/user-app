@@ -34,7 +34,7 @@ class JobDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currency: 'USD',
+            currency: 'AED',
             otherReason: 0,
             loader: true,
             jobCancelModal: false,
@@ -680,20 +680,13 @@ cancelJob(reason, IsOther)
                         </Modal>
 
                         {
-                            (this.state.jobDetails.status == "STARTED") ?
+                            (this.state.jobDetails.status == "STARTED" || this.state.jobDetails.status == "ACCEPTED") ?
                                 <View style={styles.jobItemWarp}>
                                     <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: true })}>
-                                        <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('cancel_job')}</Text>
+                                        <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('cancel_job')} </Text>
                                     </TouchableOpacity>
-                                </View>
-                                : console.log()
-                        }
-
-                        {
-                            this.state.jobDetails.status == "ACCEPTED" ?
-                                <View style={styles.jobItemWarp}>
-                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: true })}>
-                                        <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('cancel_job')}</Text>
+                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#1e3768', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.props.navigation.navigate('Reschedule', { jobDetails: this.state.jobDetails })}>
+                                        <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('reschedule')}</Text>
                                     </TouchableOpacity>
                                 </View>
                                 : console.log()

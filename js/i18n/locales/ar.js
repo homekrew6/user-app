@@ -88,5 +88,12 @@ export default {
   back: 'الى الخلف',
   followUp: 'متابعة',
   serviceDetails: 'تفاصيل الخدمة',
-  reschedule: 'إعادة جدولة'
+  reschedule: 'إعادة جدولة',
+  no: 'لا',
+  yes: 'نعم فعلا',
+  currentDate: 'التاريخ الحالي',
+  selectedDate: 'التاريخ المحدد',
+  blockDates: 'حظر التواريخ',
+  selectedTime: 'الوقت المحدد',
+  blockTime: 'وقت الحظر'
 };

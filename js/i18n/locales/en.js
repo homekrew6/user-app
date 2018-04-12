@@ -87,5 +87,12 @@ export default {
   back: 'Back',
   followUp: 'Follow Up',
   serviceDetails: 'Service Details',
-  reschedule: 'Reschedule'
+  reschedule: 'Reschedule',
+  no: 'No',
+  yes: 'Yes',
+  currentDate: 'Current Date',
+  selectedDate: 'Selected Date',
+  blockDates: 'Block Dates',
+  selectedTime: 'Selected Time',
+  blockTime: 'Block Time'
 };
