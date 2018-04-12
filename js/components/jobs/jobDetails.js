@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput } from "react-native";
+import { Image, View, CheckBox, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -426,7 +426,17 @@ class JobDetails extends Component {
                     />
                 </View>
                 <View style={{ paddingBottom: 20, paddingLeft: 15, paddingRight: 15 }}>
-                    <Text style={{ textAlign: 'center', width: '100%', fontSize: 14 }}>Please rate our KREW and your over all experience with us</Text>
+                    <View>
+                        <Text style={{ textAlign: 'center', width: '100%', fontSize: 14 }}>
+                            Please rate our KREW and your over all experience with us
+                        </Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <CheckBox
+                            onValueChange={() => this.onClickMakeFav()}
+                        />
+                        <Text style={{ justifyContent: 'center' }} >{I18n.t('mark_worker_fav')}</Text>
+                    </View>
                 </View>
             </View>
         );
@@ -457,6 +467,9 @@ class JobDetails extends Component {
                 </View>
             </View>
         );
+    }
+    onClickMakeFav(){
+
     }
 
 
@@ -612,7 +625,10 @@ class JobDetails extends Component {
                                 <View style={{ padding: 15, borderRadius: 10, alignItems: 'center', justifyContent: 'center', width: '100%' }} >
 
                                     {
-                                        (this.state.otherReason == 0 || this.state.otherReason == 1) ? (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> What went wrong? </Text>) : (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> Please rate us in the App Store </Text>)
+                                        (this.state.otherReason == 0 || this.state.otherReason == 1) ? (
+                                            <Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> What went wrong? </Text>) : (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> 
+                                                Please rate us in the App Store 
+                                            </Text>)
                                     }
                                     {
                                         this.state.otherReason == 0 ? (

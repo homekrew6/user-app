@@ -96,5 +96,6 @@ export default {
   blockDates: 'حظر التواريخ',
   selectedTime: 'الوقت المحدد',
   blockTime: 'وقت الحظر',
-  canelledJob:'لقد قمت بإلغاء هذه الوظيفة'
+  canelledJob:'لقد قمت بإلغاء هذه الوظيفة',
+  mark_worker_fav: 'مارك عامل كمفضل؟',
 };
