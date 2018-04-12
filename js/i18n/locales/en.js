@@ -95,5 +95,6 @@ export default {
   blockDates: 'Block Dates',
   selectedTime: 'Selected Time',
   blockTime: 'Block Time',
-  canelledJob:'You have cancelled this job.'
+  canelledJob:'You have cancelled this job.',
+  mark_worker_fav: 'Mark worker as favorite?'
 };
