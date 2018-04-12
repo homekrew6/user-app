@@ -9,7 +9,7 @@ import styles from './styles';
 import { Calendar } from 'react-native-calendars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import I18n from '../../i18n/i18n';
-
+import api from '../../api/index';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
 
@@ -71,7 +71,8 @@ class DateAndTime extends Component {
             serviceDetails: this.props.service.data,
             selectedDate: '',
             selectedTimeID: '',
-            IsSpinnerVisible: false
+            IsSpinnerVisible: false,
+            settings:''
         };
     }
 
@@ -142,6 +143,16 @@ class DateAndTime extends Component {
         data.previousScreen = "ServiceDetails";
         this.props.navigateAndSaveCurrentScreen(data);
         this.props.navigation.navigate('Confirmation');
+    }
+    componentDidMount() {
+        api.get("Settings").then((res) => {
+            if(res.length && res.length>0)
+            {
+                this.setState({settings:res[0]});
+            }
+        }).catch((err) => {
+
+        })
     }
     setDateAndTime() {
         let saveDBTime = this.state.setTime.slice(0, -5) + " " + this.state.setTime.slice(5).toLowerCase();
@@ -244,7 +255,7 @@ class DateAndTime extends Component {
                                     minDate={this.state.minDate}
                                 />
                             </CardItem>
-                            
+
                             <CardItem style={{ marginTop: 2, marginBottom: 2, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                                 <FontAwesome name='clock-o' style={{ color: '#81cdc7', fontSize: 20, marginRight: 5 }} />
                                 <Text> {I18n.t('time')}</Text>
@@ -253,8 +264,8 @@ class DateAndTime extends Component {
                             <CardItem>
                                 <View style={{ flex: 1, flexDirection: 'row', }}>
                                     <FlatList
-                                        data={ this.state.colectionData }
-                                        showsHorizontalScrollIndicator = {false}
+                                        data={this.state.colectionData}
+                                        showsHorizontalScrollIndicator={false}
                                         renderItem={({ item }) =>
                                             <TouchableOpacity onPress={() => this.pressOnCircle(item.key)} id={item.key} >
                                                 <Text style={{ paddingTop: 5, paddingBottom: 5, paddingRight: 8, paddingLeft: 8, borderRadius: 4, borderWidth: 1, borderColor: '#ccc', backgroundColor: (item.isActive ? '#81cdc7' : '#ffffff'), color: (item.isActive ? '#ffffff' : '#81cdc7'), marginRight: 5 }}>
