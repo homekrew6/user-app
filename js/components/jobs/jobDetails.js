@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import moment from 'moment';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Frame, Input, Label, Text } from "native-base";
@@ -130,6 +130,14 @@ class JobDetails extends Component {
       
         
     }
+
+    getLocalTimeFormat(gmtTime) {
+        //const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London"); 
+        //const timezoneDevice = DeviceInfo.getTimezone(); 
+        //const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz('Asia/Kolkata').format('ddd DD-MMM-YYYY hh:mm A'); 
+        return moment(gmtTime).format('ddd DD-MMM-YYYY hh:mm A');
+    }
+
 showConfirmDialog(reason)
 {
      Alert.alert(
@@ -206,6 +214,9 @@ cancelJob(reason, IsOther)
             if(this.state.jobDetails.status=='STARTED')
             {
                 this.setState({ jobTrackingStatus:'Job Requested'});
+            }
+            else if (this.state.jobDetails.status == 'CANCELLED') {
+                this.setState({ jobTrackingStatus: 'Job Cancelled' });
             }
             else if(this.state.jobDetails.status=='ACCEPTED')
             {
@@ -482,7 +493,7 @@ cancelJob(reason, IsOther)
                     </Header>
                     <Content style={{ backgroundColor: '#ccc' }}>
 
-                        {this.state.topScreenStatus === 'STARTED' ?
+                        {this.state.topScreenStatus === 'STARTED' || this.state.topScreenStatus === 'CANCELLED'?
                             this.state.jobDetails.service.banner_image ? (
                                 <ImageBackground source={{ uri: this.state.jobDetails.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                     <View style={{ alignItems: 'center' }}>
@@ -562,7 +573,9 @@ cancelJob(reason, IsOther)
                                 <MaterialIcons name="date-range" style={styles.jobItemIcon} />
                             </View>
                             <Text style={styles.jobItemName}>{I18n.t('dateAndTime')}</Text>
-                            <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>{this.state.jobDetails.postedDate}</Text>
+                            <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>
+                                {this.getLocalTimeFormat(this.state.jobDetails.postedDate)}
+                            </Text>
                         </View>
                         <View style={styles.jobItemWarp}>
                             <View style={{ width: 20 }}>
@@ -592,7 +605,14 @@ cancelJob(reason, IsOther)
                             <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
                             <Text style={styles.jobItemValue}>1234</Text>
                         </View>
-
+                       {this.state.topScreenStatus=='CANCELLED'?(
+                            <View style={styles.jobItemWarp}>
+                                
+                                <Text style={styles.cancelName}>{I18n.t('canelledJob')}</Text>
+                            </View>
+                       ):(
+                           <View></View>
+                       )}
                         <Modal isVisible={this.state.jobCancelModal}>
                             <TouchableOpacity
                                 transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }}

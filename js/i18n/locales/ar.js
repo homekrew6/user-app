@@ -95,5 +95,6 @@ export default {
   selectedDate: 'التاريخ المحدد',
   blockDates: 'حظر التواريخ',
   selectedTime: 'الوقت المحدد',
-  blockTime: 'وقت الحظر'
+  blockTime: 'وقت الحظر',
+  canelledJob:'لقد قمت بإلغاء هذه الوظيفة'
 };

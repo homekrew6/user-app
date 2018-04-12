@@ -94,5 +94,6 @@ export default {
   selectedDate: 'Selected Date',
   blockDates: 'Block Dates',
   selectedTime: 'Selected Time',
-  blockTime: 'Block Time'
+  blockTime: 'Block Time',
+  canelledJob:'You have cancelled this job.'
 };

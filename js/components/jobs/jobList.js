@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import moment from 'moment';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, ListView, Picker } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text, List, ListItem } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,6 +25,12 @@ class JobList extends Component {
             jobList: []
 
         }
+    }
+    getLocalTimeFormat(gmtTime) { 
+        //const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London"); 
+        //const timezoneDevice = DeviceInfo.getTimezone(); 
+        //const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz('Asia/Kolkata').format('ddd DD-MMM-YYYY hh:mm A'); 
+        return moment(gmtTime).format('ddd DD-MMM-YYYY hh:mm A'); 
     }
 
     componentWillMount() {
@@ -139,61 +146,32 @@ class JobList extends Component {
                                                 dataArray={dataQ.jobList}
                                                 renderRow={(item) =>
                                                     <ListItem style={{ marginLeft: 0 }}>
-                                                        {item.status != 'CANCELLED' ? (
-                                                            <TouchableOpacity style={styles.listWarp} onPress={() => this.goToDetails(item)}>
-                                                                <View style={styles.listWarpImageWarp}>
-                                                                    {
-                                                                        item.service.banner_image ? (
-                                                                            <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
-                                                                        ) : (
-                                                                                <Image source={imageIcon1} style={styles.listWarpImage} />
-                                                                            )
-                                                                    }
+                                                        <TouchableOpacity style={styles.listWarp} onPress={() => this.goToDetails(item)}>
+                                                            <View style={styles.listWarpImageWarp}>
+                                                                {
+                                                                    item.service.banner_image ? (
+                                                                        <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
+                                                                    ) : (
+                                                                            <Image source={imageIcon1} style={styles.listWarpImage} />
+                                                                        )
+                                                                }
+                                                            </View>
+                                                            <View style={styles.listWarpTextWarp}>
+                                                                <View style={styles.flexDirectionRow}>
+                                                                    <Text>{item.service.name}</Text>
                                                                 </View>
-                                                                <View style={styles.listWarpTextWarp}>
-                                                                    <View style={styles.flexDirectionRow}>
-                                                                        <Text>{item.service.name}</Text>
-                                                                    </View>
-                                                                    <View style={styles.flexDirectionRow}>
-                                                                        <Text style={[styles.fontWeight700, { fontSize: 14 }]}> Tuesday </Text>
-                                                                        <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
-                                                                    </View>
-                                                                    <View style={styles.flexDirectionRow}>
-                                                                        <Text>{item.userLocation.name}</Text>
-                                                                    </View>
+                                                                <View style={styles.flexDirectionRow}>
+                                                                    <Text style={[styles.fontWeight700, { fontSize: 14 }]}> {this.getLocalTimeFormat(item.postedDate)} </Text>
+                                                                    
                                                                 </View>
-                                                                <View>
-                                                                    <Text style={styles.listWarpPriceDown}>{item.status}</Text>
+                                                                <View style={styles.flexDirectionRow}>
+                                                                    <Text>{item.userLocation.name}</Text>
                                                                 </View>
-                                                            </TouchableOpacity>
-                                                        ) : (
-                                                                <View style={styles.listWarp}>
-                                                                    <View style={styles.listWarpImageWarp}>
-                                                                        {
-                                                                            item.service.banner_image ? (
-                                                                                <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
-                                                                            ) : (
-                                                                                    <Image source={imageIcon1} style={styles.listWarpImage} />
-                                                                                )
-                                                                        }
-                                                                    </View>
-                                                                    <View style={styles.listWarpTextWarp}>
-                                                                        <View style={styles.flexDirectionRow}>
-                                                                            <Text>{item.service.name}</Text>
-                                                                        </View>
-                                                                        <View style={styles.flexDirectionRow}>
-                                                                            <Text style={[styles.fontWeight700, { fontSize: 14 }]}> Tuesday </Text>
-                                                                            <Text style={{ fontSize: 14 }}> 10:00 AM</Text>
-                                                                        </View>
-                                                                        <View style={styles.flexDirectionRow}>
-                                                                            <Text>{item.userLocation.name}</Text>
-                                                                        </View>
-                                                                    </View>
-                                                                    <View>
-                                                                        <Text style={styles.listWarpPriceDown}>{item.status}</Text>
-                                                                    </View>
-                                                                </View>
-                                                            )}
+                                                            </View>
+                                                            <View>
+                                                                <Text style={styles.listWarpPriceDown}>{item.status}</Text>
+                                                            </View>
+                                                        </TouchableOpacity>
                                                     </ListItem>
                                                 }
                                             />
