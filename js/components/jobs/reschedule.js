@@ -63,12 +63,16 @@ class Reschedule extends Component {
 
     pricecalculate(){
         api.post('Jobs/recheduleCalculatePrice', { postingTime: this.state.jobDetails.postingTime, price: this.state.jobDetails.price, postedDate: this.state.jobDetails.postedDate }).then(res => {
-            console.log(res);
             this.setState({
                 loader: false,
                 reprice: res.response.message,
                 rescheduleModal: true
-            })
+            });
+            if (res.response.type!="Success")
+            {
+             Alert.alert(res.response.message);
+            }
+            
         }).catch((err) => {
             console.log(err);
             this.setState({
@@ -158,13 +162,20 @@ class Reschedule extends Component {
         this.setState({
             loader: true,
         })
-        api.post('Jobs/recheduleJob', { id: this.state.jobDetails.id, priceToCharge: this.state.reprice, postedDate: this.state.saveDateDB }).then(res => {
-            console.log(res);
+        api.post('Jobs/recheduleJob', { serviceId: this.state.jobDetails.service.id, id: this.state.jobDetails.id, priceToCharge: this.state.reprice, postedDate: this.state.saveDateDB }).then(res => {
             this.setState({
                 loader: false,
                 rescheduleModal: false
-            })
-            this.props.navigation.navigate('JobList')
+            });
+            if (res.response.type=="Error")
+            {
+                Alert.alert(res.response.message);
+            }
+            else
+            {
+
+                this.props.navigation.navigate('JobList')
+            }
         }).catch((err) => {
             console.log(err);
             this.setState({
@@ -174,6 +185,7 @@ class Reschedule extends Component {
             Alert.alert('Please try again later')
 
         }) 
+       
     }
 
 

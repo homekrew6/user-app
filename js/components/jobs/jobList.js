@@ -40,6 +40,24 @@ class JobList extends Component {
     getData(status) {
         this.setState({ visible: true });
         api.post('Jobs/getJobListingForUser', { customerId: this.state.customerId, status: status }).then((res) => {
+            res.response.message.map((item)=>{
+                if(item.status=="STARTED")
+                {
+                    item.status="JOB POSTED";
+                }
+                else if (item.status == "ACCEPTED") {
+                    item.status = "JOB ACCEPTED";
+                }
+                else if (item.status == "ONMYWAY") {
+                    item.status = "KREW ON THE WAY";
+                }
+                else if (item.status == "JOBSTARTED") {
+                    item.status = "JOB STARTED";
+                }
+                else if (item.status == "COMPLETED") {
+                    item.status = "JOB COMPLETED";
+                }
+            });
             var finalList = res.response.message;
             var services = {};
             for (var i = 0; i < finalList.length; i++) {
@@ -122,12 +140,12 @@ class JobList extends Component {
                             }
                         >
                             <MenuItem onPress={() => this.jobType('ALL')}>ALL</MenuItem>
-                            <MenuItem onPress={() => this.jobType('ACCEPTED')}>ACCEPTED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('STARTED')}>STARTED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('ONMYWAY')}>WORKER ON WAY</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ACCEPTED')}>JOB ACCEPTED</MenuItem>
+                            <MenuItem onPress={() => this.jobType('STARTED')}>JOB POSTED</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ONMYWAY')}>KREW ON WAY</MenuItem>
                             <MenuItem onPress={() => this.jobType('JOBSTARTED')}>JOB STARTED</MenuItem>
                             <MenuItem onPress={() => this.jobType('CANCELLED')}>CANCELLED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('COMPLETED')}>COMPLETED</MenuItem>
+                            <MenuItem onPress={() => this.jobType('COMPLETED')}>JOB COMPLETED</MenuItem>
                         </Menu>
                     </View>
 
