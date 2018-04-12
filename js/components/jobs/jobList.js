@@ -33,7 +33,7 @@ class JobList extends Component {
         return moment(gmtTime).format('ddd DD-MMM-YYYY hh:mm A'); 
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.getData(this.state.status);
     }
 

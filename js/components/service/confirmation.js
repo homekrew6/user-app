@@ -126,7 +126,8 @@ class Confirmation extends Component {
                                 "zoneId": zoneValue,
                                 "serviceId": this.props.service.data.id,
                                 "saveDBTime": this.props.service.data.saveDBTime,
-                                "saveDbDay": this.props.service.data.saveDbDay
+                                "saveDbDay": this.props.service.data.saveDbDay,
+                                "expectedTimeInterval":this.props.service.data.time_interval
                             }
                         ).then(responseJson => {
                             AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
