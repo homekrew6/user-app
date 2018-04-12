@@ -35,6 +35,8 @@ const img19 = require('../../../img/swiper-2.png');
 const img20 = require('../../../img/swiper-2.png');
 const img21 = require('../../../img/swiper-2.png');
 const img22 = require('../../../img/swiper-2.png');
+const krew_logo = require('../../../img/krew.png');
+
 const resetAction = NavigationActions.reset({
   index: 0,
   actions: [NavigationActions.navigate({ routeName: 'Login' })],
@@ -1096,7 +1098,9 @@ class serviceDetails extends Component {
               this.state.questionList.length > 0 ? (
                 questionList
               ) : (
-                  <View style={{ flex: 1, alignItems: 'center' }}><Text>No questions found.</Text></View>
+                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <Image source={krew_logo} style={{ justifyContent: 'center', width: 100, height: 100 }} />
+                  </View>
                 )
             }
           </View>
