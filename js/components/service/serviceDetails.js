@@ -438,6 +438,7 @@ class serviceDetails extends Component {
 
     var price = this.props.service.data.price;
     price = Number(price);
+    var timeInterval=this.props.service.data.time_interval;
     data.Status = !data.Status;
     let index;
     for (var i = 0; i < this.state.questionList.length; i++) {
@@ -450,15 +451,23 @@ class serviceDetails extends Component {
       if (data.Status == false) {
         var data1 = this.state.questionList[index];
         if (data1.answers && data1.answers.length > 0) {
+          if (data1.answers[0].option_time_impact == "Addition") {
+            timeInterval = timeInterval - Number(data1.answers[0].time_impact);
+          }
+          else {
+            timeInterval = timeInterval / Number(data1.answers[0].time_impact);
+          }
           if (data1.answers[0].option_price_impact == "Addition") {
             price = price - Number(data1.answers[0].price_impact);
           }
           else {
             price = price / Number(data1.answers[0].price_impact);
           }
+
           var data = this.props.service.data;
           price = this.addZeroes(price);
           data.price = price;
+          data.time_interval=timeInterval;
           AsyncStorage.setItem("servicePrice", price).then((success) => {
 
           })
@@ -468,6 +477,12 @@ class serviceDetails extends Component {
       else {
         var data1 = this.state.questionList[index];
         if (data1.answers && data1.answers.length > 0) {
+          if (data1.answers[0].option_time_impact == "Addition") {
+            timeInterval = timeInterval - Number(data1.answers[0].time_impact);
+          }
+          else {
+            timeInterval = timeInterval / Number(data1.answers[0].time_impact);
+          }
           if (data1.answers[0].option_price_impact == "Addition") {
             price = price + Number(data1.answers[0].price_impact);
           }
@@ -477,6 +492,7 @@ class serviceDetails extends Component {
           var data = this.props.service.data;
           price = this.addZeroes(price);
           data.price = price;
+          data.time_interval = timeInterval;
           AsyncStorage.setItem("servicePrice", price).then((success) => {
 
           })
