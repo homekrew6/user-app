@@ -296,7 +296,6 @@ class Menu extends Component {
               </View>
             </TouchableOpacity>
           </CardItem>
-
           <CardItem style={styles.menuCarditem}>
             <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('Category')}>
               <Image source={icon2} style={styles.menuCardIcon} />

@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Platform, BackHandler, Alert } from "react-native";
+import { Platform, BackHandler, Alert, Easing, Animated } from "react-native";
 import { Root } from "native-base";
 import { StackNavigator, NavigationActions } from "react-navigation";
 
@@ -39,7 +39,29 @@ import Reschedule from './components/jobs/reschedule';
 import Chat from './components/jobs/chat';
 
 
+const transitionConfig = () => {
+    return {
+        transitionSpec: {
+            duration: 750,
+            easing: Easing.out(Easing.poly(4)),
+            timing: Animated.timing,
+            useNativeDriver: true,
+        },
+        screenInterpolator: sceneProps => {
+            const { layout, position, scene } = sceneProps
 
+            const thisSceneIndex = scene.index
+            const width = layout.initWidth
+
+            const translateX = position.interpolate({
+                inputRange: [thisSceneIndex - 1, thisSceneIndex],
+                outputRange: [width, 0],
+            })
+
+            return { transform: [{ translateX }] }
+        },
+    }
+}
 
 const AppNavigator = StackNavigator(
     {
@@ -77,6 +99,7 @@ const AppNavigator = StackNavigator(
     {
         initialRouteName: "Home",
         headerMode: "none",
+        transitionConfig
     }
 );
 // const defaultStackGetStateForAction =
@@ -113,9 +136,6 @@ const AppNavigator = StackNavigator(
 
 //     return defaultStackGetStateForAction(action, state);
 // };
-
-
-
 export default () =>
     <Root>
         <AppNavigator />
