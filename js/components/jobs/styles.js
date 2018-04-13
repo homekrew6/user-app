@@ -124,19 +124,18 @@ export default {
 
     // job tracking
 
-    trackLogo:{ height: 50, width: 50, backgroundColor: '#ccc', borderRadius: 60, alignItems: 'center', justifyContent: 'center' },
-    trackLogoImg: { width: 35, height: 35 },
-    trackArrowWarp:{ height: 25, width: 25 },
-    trackArrow:{ width: 25, height: 25 },
-
+    trackLogo: { height: 40, width: 40, backgroundColor: '#ccc', borderRadius: 60, alignItems: 'center', justifyContent: 'center' },
+    trackLogoImg: { width: 30, height: 30 },
+    trackArrowWarp: { height: 20, width: 20 },
+    trackArrow: { width: 20, height: 20 },
     trackmetterWarp: { backgroundColor: '#fff', paddingTop: 20, paddingBottom: 20, marginBottom: 10 },
     trackmetterHeader: { width: '100%', textAlign: 'center', paddingBottom: 15 },
-    trackmetterMainWarp:{ width: '100%', alignItems: 'center', justifyContent: 'center' },
+    trackmetterMainWarp: { width: '100%', alignItems: 'center', justifyContent: 'center' },
     trackmetterItem: { alignItems: 'center', justifyContent: 'center', width: 250, position: 'relative', },
     trackmetterItemInner: { position: 'relative', paddingLeft: 20, paddingRight: 20 },
-    trackmetterItemDate: { color: '#ccc', fontSize: 12, paddingBottom: 15 },
-    crcl: { height: 10, width: 10, borderRadius: 10, position: 'absolute', top: 5, left: 0, backgroundColor: '#fed421' },
-    line:{ width: 2, height: '100%', backgroundColor: '#fed421', position: 'absolute', top: 7, left: 4 },
+    trackmetterItemDate: { color: '#ccc', fontSize: 12, paddingBottom: 15, width: 170 },
+    crcl: { height: 10, width: 10, borderRadius: 10, position: 'absolute', top: 5, left: 0, backgroundColor: '#fed421', zIndex: 99 },
+    line: { width: 2, height: '100%', backgroundColor: '#fed421', position: 'absolute', top: 7, left: 4 },
 
 
 

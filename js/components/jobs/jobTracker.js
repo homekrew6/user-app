@@ -7,15 +7,59 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
+import api from '../../api/index';
 
 class JobTracker extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            jobDetails:'',
+            trackerData: [],
+            loader: true,
+        }
+    }
+    componentDidMount() {
+        console.log('postedDate' , this.props.navigation.state.params.jobDetails);
+        this.setState({
+            jobDetails: this.props.navigation.state.params.jobDetails,
+        })
+        api.post('jobTrackerStatuses/getJobTrackingDetailsById', { "jobId": this.props.navigation.state.params.jobDetails.id }).then((res) => {
+            this.setState({
+                trackerData: res.response.message,
+                loader: false,
+            })
+        }).catch((error) => {
+            this.setState({
+                loader: false,
+            })
+        })
+
     }
 
-
     render() {
+
+        let statusColor = ['', '', '', '', ''];
+        if (this.state.trackerData) {
+
+
+            this.state.trackerData.map((data, key) => {
+                if (data.status == 'ACCEPTED') {
+                    statusColor[0] = data.statusChangeddate;
+                }
+                if (data.status == 'ONMYWAY') {
+                    statusColor[1] = data.statusChangeddate;
+                }
+                if (data.status == 'JOBSTARTED') {
+                    statusColor[2] = data.statusChangeddate;
+                }
+                if (data.status == 'FOLLOWEDUP') {
+                    statusColor[3] = data.statusChangeddate;
+                }
+                if (data.status == 'JOBCOMPLITED') {
+                    statusColor[4] = data.statusChangeddate;
+                }
+            })            
+        }
         return (
             <Container >
                 <StatusBar
@@ -23,93 +67,209 @@ class JobTracker extends Component {
                 />
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
-                        <EvilIcons name="close" style={styles.headIcon} />
+                        <EvilIcons name="close" style={[styles.headIcon, { color: '#fff' }]} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('followUp')}</Title>
+                        <Title>{I18n.t('jobTracker')}</Title>
                     </Body>
                     <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
                 </Header>
                 <Content>
-                    <View style={{ backgroundColor: '#fff', paddingTop: 20, paddingBottom: 20, marginBottom: 10 }}>
-                        <Text style={{ width: '100%', textAlign: 'center', paddingBottom: 15 }}>Job Status</Text>
+                    <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
+                    <View style={styles.trackmetterWarp}>
+                        <Text style={styles.trackmetterHeader}>{I18n.t('jobStatus')}</Text>
                         <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
-                            <View style={styles.trackLogo}>
+                            <View style={[styles.trackLogo, statusColor[0] ? { backgroundColor: '#ffd228' } : {}]}>
                                 <Image source={require('../../../img/icon/home.png')} style={styles.trackLogoImg} />
                             </View>
                             <View style={styles.trackArrowWarp}>
                                 <Image source={require('../../../img/icon/move-to-the-next-page-symbol.png')} style={styles.trackArrow} />
                             </View>
-                            <View style={styles.trackLogo}>
+                            <View style={[styles.trackLogo, statusColor[1] ? { backgroundColor: '#ffd228' } : {}]}>
                                 <Image source={require('../../../img/icon/man-walking-directions-button.png')} style={styles.trackLogoImg} />
                             </View>
                             <View style={styles.trackArrowWarp}>
                                 <Image source={require('../../../img/icon/move-to-the-next-page-symbol.png')} style={styles.trackArrow} />
                             </View>
-                            <View style={styles.trackLogo}>
+                            <View style={[styles.trackLogo, statusColor[2] ? { backgroundColor: '#ffd228' } : {}]}>
                                 <Image source={require('../../../img/icon/people-time.png')} style={styles.trackLogoImg} />
                             </View>
                             <View style={styles.trackArrowWarp}>
                                 <Image source={require('../../../img/icon/move-to-the-next-page-symbol.png')} style={styles.trackArrow} />
                             </View>
-                            <View style={[styles.trackLogo, true ? { backgroundColor: '#ffd228' } : {}] }>
+                            <View style={[styles.trackLogo, statusColor[3] ? { backgroundColor: '#ffd228' } : {}]}>
+                                <Image source={require('../../../img/icon/followers.png')} style={styles.trackLogoImg} />
+                            </View>
+                            <View style={styles.trackArrowWarp}>
+                                <Image source={require('../../../img/icon/move-to-the-next-page-symbol.png')} style={styles.trackArrow} />
+                            </View>
+                            <View style={[styles.trackLogo, statusColor[4] ? { backgroundColor: '#ffd228' } : {}]}>
                                 <Image source={require('../../../img/icon/home_ok.png')} style={styles.trackLogoImg} />
                             </View>
                         </View>
                     </View>
+
                     <View style={styles.trackmetterWarp}>
 
-                        <Text style={styles.trackmetterHeader}>Job Tracking</Text>
+                        <Text style={styles.trackmetterHeader}>{I18n.t('jobTracker')}</Text>
+
                         <View style={styles.trackmetterMainWarp}>
+
                             <View style={styles.trackmetterItem}>
                                 <View style={styles.trackmetterItemInner}>
-                                    <Text>Job Requested</Text>
-                                    <Text style={styles.trackmetterItemDate}>Thursday, 29 June 2017, 5:00pm</Text>
-                                    <View style={styles.crcl}></View>
-                                    <View style={styles.line}></View>
+                                    <Text>{I18n.t('jobRequested')}</Text>
+                                    <Text style={styles.trackmetterItemDate}>{this.state.jobDetails.postedDate}</Text>
+                                    <View style={[styles.crcl]}></View>
+                                    {
+                                        statusColor[0] ? (
+
+                                            <View style={styles.line}></View>
+                                        ) : (
+                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                            )
+                                    }
                                 </View>
                             </View>
-                            <View style={styles.trackmetterItem}>
-                                <View style={styles.trackmetterItemInner}>
-                                    <Text>Krew Assigned</Text>
-                                    <Text style={styles.trackmetterItemDate}>Thursday, 29 June 2017, 5:00pm</Text>
-                                    <View style={styles.crcl}></View>
-                                    <View style={styles.line}></View>
-                                </View>
-                            </View>
-                            <View style={styles.trackmetterItem}>
-                                <View style={styles.trackmetterItemInner}>
-                                    <Text>Krew On The way</Text>
-                                    <Text style={styles.trackmetterItemDate}>Thursday, 29 June 2017, 5:00pm</Text>
-                                    <View style={styles.crcl}></View>
-                                    <View style={styles.line}></View>
-                                </View>
-                            </View>
-                            <View style={styles.trackmetterItem}>
-                                <View style={styles.trackmetterItemInner}>
-                                    <Text>Job Started</Text>
-                                    <Text style={styles.trackmetterItemDate}>Thursday, 29 June 2017, 5:00pm</Text>
-                                    <View style={styles.crcl}></View>
-                                    <View style={styles.line}></View>
-                                </View>
-                            </View>
-                            <View style={styles.trackmetterItem}>
-                                <View style={styles.trackmetterItemInner}>
-                                    <Text>Follow Up</Text>
-                                    <Text style={styles.trackmetterItemDate}>Thursday, 29 June 2017, 5:00pm</Text>
-                                    <View style={styles.crcl}></View>
-                                    <View style={styles.line}></View>
-                                </View>
-                            </View>
-                            <View style={styles.trackmetterItem}>
-                                <View style={styles.trackmetterItemInner}>
-                                    <Text>Job Completed</Text>
-                                    <Text style={styles.trackmetterItemDate}>Thursday, 29 June 2017, 5:00pm</Text>
-                                    <View style={styles.crcl}></View>
-                                </View>
-                            </View>
+
+                            {
+                                
+                                statusColor[0] ? (
+                                    <View style={styles.trackmetterItem}>
+                                        <View style={styles.trackmetterItemInner}>
+                                            <Text>{I18n.t('krewAssigned')}</Text>
+                                            <Text style={styles.trackmetterItemDate}>{statusColor[0]}</Text>
+                                            <View style={styles.crcl}></View>
+                                            {
+                                                statusColor[1] ? (
+
+                                                    <View style={styles.line}></View>
+                                                ) : (
+                                                        <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                    )
+                                            }
+
+                                        </View>
+                                    </View>
+                                ) : (
+                                        <View style={styles.trackmetterItem}>
+                                            <View style={styles.trackmetterItemInner}>
+                                                <Text>{I18n.t('krewAssigned')}</Text>
+                                                <Text style={styles.trackmetterItemDate}></Text>
+                                                <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
+                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                            </View>
+                                        </View>
+                                    )
+                            }
+
+                            {
+                                statusColor[1] ? (
+                                    <View style={styles.trackmetterItem}>
+                                        <View style={styles.trackmetterItemInner}>
+                                            <Text>{I18n.t('krewOnTheWay')}</Text>
+                                            <Text style={styles.trackmetterItemDate}>{statusColor[1]}</Text>
+                                            <View style={styles.crcl}></View>
+                                            {
+                                                statusColor[2] ? (
+
+                                                    <View style={styles.line}></View>
+                                                ) : (
+                                                        <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                    )
+                                            }
+                                        </View>
+                                    </View>
+                                ) : (
+                                        <View style={styles.trackmetterItem}>
+                                            <View style={styles.trackmetterItemInner}>
+                                                <Text>{I18n.t('krewOnTheWay')}</Text>
+                                                <Text style={styles.trackmetterItemDate}></Text>
+                                                <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
+                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                            </View>
+                                        </View>
+                                    )
+                            }
+
+                            {
+                                statusColor[2] ? (
+                                    <View style={styles.trackmetterItem}>
+                                        <View style={styles.trackmetterItemInner}>
+                                            <Text>{I18n.t('jobStarted')}</Text>
+                                            <Text style={styles.trackmetterItemDate}>{statusColor[2]}</Text>
+                                            <View style={styles.crcl}></View>
+                                            {
+                                                statusColor[3] ? (
+
+                                                    <View style={styles.line}></View>
+                                                ) : (
+                                                        <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                    )
+                                            }
+                                        </View>
+                                    </View>
+                                ) : (
+                                        <View style={styles.trackmetterItem}>
+                                            <View style={styles.trackmetterItemInner}>
+                                                <Text>{I18n.t('jobStarted')}</Text>
+                                                <Text style={styles.trackmetterItemDate}></Text>
+                                                <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
+                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                            </View>
+                                        </View>
+                                    )
+                            }
+
+                            {
+                                statusColor[3] ? (
+                                    <View style={styles.trackmetterItem}>
+                                        <View style={styles.trackmetterItemInner}>
+                                            <Text>{I18n.t('followUp')}</Text>
+                                            <Text style={styles.trackmetterItemDate}>{statusColor[3]}</Text>
+                                            <View style={styles.crcl}></View>
+                                            {
+                                                statusColor[4] ? (
+
+                                                    <View style={styles.line}></View>
+                                                ) : (
+                                                        <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                                    )
+                                            }
+                                        </View>
+                                    </View>
+                                ) : (
+                                        <View style={styles.trackmetterItem}>
+                                            <View style={styles.trackmetterItemInner}>
+                                                <Text>{I18n.t('followUp')}</Text>
+                                                <Text style={styles.trackmetterItemDate}></Text>
+                                                <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
+                                                <View style={[styles.line, { backgroundColor: '#ccc' }]}></View>
+                                            </View>
+                                        </View>
+                                    )
+                            }
+                            {
+                                statusColor[4] ? (
+                                    <View style={styles.trackmetterItem}>
+                                        <View style={styles.trackmetterItemInner}>
+                                            <Text>{I18n.t('jobCompleted')}</Text>
+                                            <Text style={styles.trackmetterItemDate}>{statusColor[5]}</Text>
+                                            <View style={styles.crcl}></View>
+                                        </View>
+                                    </View>
+                                ) : (
+                                        <View style={styles.trackmetterItem}>
+                                            <View style={styles.trackmetterItemInner}>
+                                                <Text>{I18n.t('jobCompleted')}</Text>
+                                                <Text style={styles.trackmetterItemDate}></Text>
+                                                <View style={[styles.crcl, { backgroundColor: '#ccc' }]}></View>
+                                            </View>
+                                        </View>
+                                    )
+                            }
                         </View>
                     </View>
+
                 </Content>
             </Container>
         );

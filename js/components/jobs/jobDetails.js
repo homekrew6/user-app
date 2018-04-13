@@ -587,13 +587,13 @@ class JobDetails extends Component {
                         }
 
 
-                        <View style={styles.jobItemWarp}>
+                        <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('JobTracker', { jobDetails: this.state.jobDetails })}>
                             <View style={{ width: 20 }}>
                                 <Ionicons name="ios-man-outline" style={styles.jobItemIconIonicons} />
                             </View>
                             <Text style={styles.jobItemName}>{I18n.t('jobTracker')}</Text>
                             <Text style={styles.jobItemValue}>{this.state.jobTrackingStatus}</Text>
-                        </View>
+                        </TouchableOpacity>
                         {
                             this.state.jobDetails.worker ? (
                                 <View>
