@@ -34,5 +34,6 @@ export default {
   logout: 'Connectez - Out',
   language: 'La langue',
   currency: 'Devise',
-  canelledJob: 'Vous avez annulé cet emploi'
+  canelledJob: 'Vous avez annulé cet emploi',
+  choose_from_favourite: 'Choisissez parmi les favoris'
 };

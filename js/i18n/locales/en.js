@@ -96,5 +96,6 @@ export default {
   selectedTime: 'Selected Time',
   blockTime: 'Block Time',
   canelledJob:'You have cancelled this job.',
-  mark_worker_fav: 'Mark worker as favorite?'
+  mark_worker_fav: 'Mark worker as favorite?',
+  choose_from_favourite:'Choose from favourite'
 };

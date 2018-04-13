@@ -98,4 +98,5 @@ export default {
   blockTime: 'وقت الحظر',
   canelledJob:'لقد قمت بإلغاء هذه الوظيفة',
   mark_worker_fav: 'مارك عامل كمفضل؟',
+  choose_from_favourite: 'اختر من المفضلة'
 };

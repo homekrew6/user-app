@@ -193,8 +193,10 @@ class JobDetails extends Component {
             this.setState({
                 loader: false,
                 jobDetails: res.response.message[0],
-                topScreenStatus: res.response.message[0].status
-            })
+                topScreenStatus: res.response.message[0].status,
+                favValue: res.response.message[0].IsFavouriteWorker
+            });
+            
             // this.setState({
             //     loader: false,
             //     jobDetails: res.response.message[0],
