@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, ListView, Picker } from "react-native";
+import { Image, View, RefreshControl, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, ListView, Picker } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text, List, ListItem } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -22,7 +22,8 @@ class JobList extends Component {
             visible: false,
             status: 'ALL',
             customerId: this.props.auth.data.id ? this.props.auth.data.id : '',
-            jobList: []
+            jobList: [],
+            refreshing: false,
 
         }
     }
@@ -107,6 +108,10 @@ class JobList extends Component {
         this.menu.show();
     };
 
+    onRefresh(){
+        //Alert.alert('pulled');
+    }
+
 
     render() {
         let jobListNow;
@@ -114,9 +119,6 @@ class JobList extends Component {
             <Text>hi</Text>
         )
         return (
-
-
-
 
             <Container style={{ backgroundColor: '#fff' }}>
                 <StatusBar
@@ -150,7 +152,13 @@ class JobList extends Component {
                     </View>
 
                 </Header>
-                <Content>
+                <Content  
+                    refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={this.onRefresh.bind(this)}
+                    />}
+                >
                     {
                         this.state.jobList.length ? (
                             <View>
