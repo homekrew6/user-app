@@ -6,7 +6,8 @@ import { Platform, BackHandler, Alert } from "react-native";
 import { Root } from "native-base";
 import { StackNavigator, NavigationActions } from "react-navigation";
 
-import Drawer from "./Drawer";
+
+import Home from "./components/home/index"
 import Intro from "./components/intro";
 import Demo from "./components/intro/demo";
 import Signup from "./components/accounts/signup";
@@ -42,7 +43,7 @@ import Chat from './components/jobs/chat';
 
 const AppNavigator = StackNavigator(
     {
-        Drawer: { screen: Drawer },
+        Home: { screen: Home },
         Intro: { screen: Intro },
         Demo: { screen: Demo },
         Signup: { screen: Signup },
@@ -74,7 +75,7 @@ const AppNavigator = StackNavigator(
         Chat: { screen: Chat }
     },
     {
-        initialRouteName: "Drawer",
+        initialRouteName: "Home",
         headerMode: "none",
     }
 );
