@@ -109,7 +109,7 @@ class JobList extends Component {
     };
 
     onRefresh(){
-       this.getData();
+       this.getData(this.state.status);
     }
 
 
