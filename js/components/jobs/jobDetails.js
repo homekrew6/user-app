@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import moment from 'moment';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput } from "react-native";
+import { Image, View, CheckBox, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Frame, Input, Label, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -50,11 +50,13 @@ class JobDetails extends Component {
             longitudeUser: '',
             errorLocationUser: '',
             trackingRef: '',
-            job_start_time:'',
-            job_end_time:'',
-            jobTrackingStatus:'',
+            job_start_time: '',
+            job_end_time: '',
+            jobTrackingStatus: '',
             workerRate: 0,
-            reason:''
+            reason: '',
+            favValue: false,
+            refreshing: false,
         }
         // const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
         // const progressSpeed = (time_interval / 100) * 60000;
@@ -83,32 +85,30 @@ class JobDetails extends Component {
         //          Alert.alert('in snap'); const key = Object.keys(snapshot.val())[0]; 
         //          const ref = firebase.database().ref().child('tracking').child(key); 
         //          const data = { "jobId": this.props.navigation.state.params.jobDetails.id, "customerId": this.props.navigation.state.params.jobDetails.customerId, "workerId": this.props.auth.data.id, "lat": snapshot.val()[key].lat, "lng": snapshot.val()[key].lng, "status": "JOBSTARTED" };
-                 
+
         //          ref.update(data); } })
         this.state.trackingRef.on('child_added', (snapshot) => {
-            const snapShotVal=snapshot.val();
-            if (this.state.jobDetails.id)
-            {
+            const snapShotVal = snapshot.val();
+            if (this.state.jobDetails.id) {
                 if (snapShotVal.jobId == this.state.jobDetails.id.toString()) {
                     if (snapShotVal.status == 'ONMYWAY') {
                         this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng });
                     }
                     else if (snapShotVal.status == 'JOBSTARTED') {
                         const jobDetails = this.state.jobDetails;
-                        let job_start_time = snapShotVal.startTime? moment(snapShotVal.startTime).format('LT'):'';
-                        let job_end_time = snapShotVal.endTime? moment(snapShotVal.endTime).format('LT'):'';
+                        let job_start_time = snapShotVal.startTime ? moment(snapShotVal.startTime).format('LT') : '';
+                        let job_end_time = snapShotVal.endTime ? moment(snapShotVal.endTime).format('LT') : '';
                         this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: job_start_time, job_end_time: job_end_time });
                     }
 
                 }
             }
-           
+
 
         })
         this.state.trackingRef.on('child_changed', (snapshot) => {
             const snapShotVal = snapshot.val();
-            if(this.state.jobDetails.id)
-            {
+            if (this.state.jobDetails.id) {
                 if (snapShotVal.jobId == this.state.jobDetails.id.toString()) {
                     if (snapShotVal.status == 'ONMYWAY') {
                         this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
@@ -127,95 +127,93 @@ class JobDetails extends Component {
             }
 
         })
-      
-        
-    }
-showConfirmDialog(reason)
-{
-     Alert.alert(
-          'Confirm',
-          'Are you sure to cancel this job?',
-          [
-            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-            { text: 'OK', onPress: () => this.cancelJob(reason) },
-          ],
-          { cancelable: false }
-        )
-}
-showConfirm()
-{
-     Alert.alert(
-          'Confirm',
-          'Are you sure to cancel this job?',
-          [
-            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-            { text: 'OK', onPress: () => this.cancelJob(this.state.reason, true) },
-          ],
-          { cancelable: false }
-        )
-}
-cancelJob(reason, IsOther)
-{
-    
-    if(IsOther!= undefined && IsOther==true)
-    {
- this.setState({jobCancelModal:false});
-    let cancelJobData={postingTime:this.state.jobDetails.postingTime, id:this.state.jobDetails.id, status:"CANCELLED", reason:this.state.reason};
-    api.post('Jobs/cancelJobByUser', cancelJobData).then((res)=>{
-        if(res.response.type=="SUCCESS")
-        {
-            this.props.navigation.navigate('JobList');
-        }
-        else
 
-        {
-            Alert.alert('Please try again later.');
-        }
-    })
-    }
-    else
-    {
-         this.setState({jobCancelModal:false});
-    let cancelJobData1={postingTime:this.state.jobDetails.postingTime, id:this.state.jobDetails.id, status:"CANCELLED", reason:reason};
-    api.post('Jobs/cancelJobByUser', cancelJobData1).then((res)=>{
-        if(res.response.type=="SUCCESS")
-        {
-            this.props.navigation.navigate('JobList');
-        }
-        else
 
-        {
-            Alert.alert('Please try again later.');
-        }
-    })
     }
-   
-}
+
+    getLocalTimeFormat(gmtTime) {
+        //const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London"); 
+        //const timezoneDevice = DeviceInfo.getTimezone(); 
+        //const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz('Asia/Kolkata').format('ddd DD-MMM-YYYY hh:mm A'); 
+        return moment(gmtTime).format('ddd DD-MMM-YYYY hh:mm A');
+    }
+
+    showConfirmDialog(reason) {
+        Alert.alert(
+            'Confirm',
+            'Are you sure to cancel this job?',
+            [
+                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: 'OK', onPress: () => this.cancelJob(reason) },
+            ],
+            { cancelable: false }
+        )
+    }
+    showConfirm() {
+        Alert.alert(
+            'Confirm',
+            'Are you sure to cancel this job?',
+            [
+                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: 'OK', onPress: () => this.cancelJob(this.state.reason, true) },
+            ],
+            { cancelable: false }
+        )
+    }
+    cancelJob(reason, IsOther) {
+
+        if (IsOther != undefined && IsOther == true) {
+            this.setState({ jobCancelModal: false });
+            let cancelJobData = { postingTime: this.state.jobDetails.postingTime, id: this.state.jobDetails.id, status: "CANCELLED", reason: this.state.reason };
+            api.post('Jobs/cancelJobByUser', cancelJobData).then((res) => {
+                if (res.response.type == "SUCCESS") {
+                    this.props.navigation.navigate('JobList');
+                }
+                else {
+                    Alert.alert('Please try again later.');
+                }
+            })
+        }
+        else {
+            this.setState({ jobCancelModal: false });
+            let cancelJobData1 = { postingTime: this.state.jobDetails.postingTime, id: this.state.jobDetails.id, status: "CANCELLED", reason: reason };
+            api.post('Jobs/cancelJobByUser', cancelJobData1).then((res) => {
+                if (res.response.type == "SUCCESS") {
+                    this.props.navigation.navigate('JobList');
+                }
+                else {
+                    Alert.alert('Please try again later.');
+                }
+            })
+        }
+
+    }
     componentDidMount() {
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
             this.setState({
                 loader: false,
                 jobDetails: res.response.message[0],
-                topScreenStatus:res.response.message[0].status
+                topScreenStatus: res.response.message[0].status
             })
             // this.setState({
             //     loader: false,
             //     jobDetails: res.response.message[0],
             //     topScreenStatus: 'COMPLETED'
             // })
-            if(this.state.jobDetails.status=='STARTED')
-            {
-                this.setState({ jobTrackingStatus:'Job Requested'});
+            if (this.state.jobDetails.status == 'STARTED') {
+                this.setState({ jobTrackingStatus: 'Job Requested' });
             }
-            else if(this.state.jobDetails.status=='ACCEPTED')
-            {
+            else if (this.state.jobDetails.status == 'CANCELLED') {
+                this.setState({ jobTrackingStatus: 'Job Cancelled' });
+            }
+            else if (this.state.jobDetails.status == 'ACCEPTED') {
                 this.setState({ jobTrackingStatus: 'Krew Assigned' });
             }
             else if (this.state.jobDetails.status == 'ONMYWAY') {
                 this.setState({ jobTrackingStatus: 'Krew On The Way' });
             }
             else if (this.state.jobDetails.status == 'JOBSTARTED') {
-                const jobDetails=this.state.jobDetails;
+                const jobDetails = this.state.jobDetails;
                 let job_start_time = moment(jobDetails.jobStartTime).format('LT');
                 let job_end_time = moment(jobDetails.jobEndTime).format('LT');
                 this.setState({ jobTrackingStatus: 'Job Started', job_start_time: job_start_time, job_end_time: job_end_time });
@@ -264,7 +262,7 @@ cancelJob(reason, IsOther)
 
     renderMap() {
         //let JobDetailsData = this.props.navigation.state.params.jobDetails;
-        let JobDetailsData=this.state.jobDetails;
+        let JobDetailsData = this.state.jobDetails;
         let region = {
             latitude: this.state.jobDetails.userLocation.latitude ? Number(this.state.jobDetails.userLocation.latitude) : 37.78825,
             longitude: this.state.jobDetails.userLocation.longitude ? Number(this.state.jobDetails.userLocation.longitude) : -122.4324,
@@ -389,7 +387,7 @@ cancelJob(reason, IsOther)
         );
     }
 
-    workerRateing(rating){
+    workerRateing(rating) {
         this.setState({
             loader: true,
             workerRate: rating
@@ -397,13 +395,13 @@ cancelJob(reason, IsOther)
         console.log(rating);
 
         let d = new Date();
-        api.post('ratings', { 
+        api.post('ratings', {
             "IsWorkerSender": false,
             "ratingDate": d,
             "rating": rating,
             "customerId": this.props.auth.data.id,
             "workerId": this.state.jobDetails.workerId,
-         }).then((res) => {
+        }).then((res) => {
             this.props.navigation.navigate('Menu');
             this.setState({
                 loader: false,
@@ -415,7 +413,7 @@ cancelJob(reason, IsOther)
 
     renderWorkerRating() {
         return (
-            <View stylw={{ }}>
+            <View stylw={{}}>
                 <View style={{ alignSelf: 'center', paddingTop: 20 }}>
                     <Icon name="user-o" size={50} backgroundColor="#3b5998" />
                 </View>
@@ -430,7 +428,18 @@ cancelJob(reason, IsOther)
                     />
                 </View>
                 <View style={{ paddingBottom: 20, paddingLeft: 15, paddingRight: 15 }}>
-                    <Text style={{ textAlign: 'center', width: '100%', fontSize: 14 }}>Please rate our KREW and your over all experience with us</Text>
+                    <View>
+                        <Text style={{ textAlign: 'center', width: '100%', fontSize: 14 }}>
+                            Please rate our KREW and your over all experience with us
+                        </Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <CheckBox
+                            onValueChange={(value) => this.onClickMakeFav(value)}
+                            value={this.state.favValue}
+                        />
+                        <Text style={{ justifyContent: 'center' }} >{I18n.t('mark_worker_fav')}</Text>
+                    </View>
                 </View>
             </View>
         );
@@ -462,6 +471,29 @@ cancelJob(reason, IsOther)
             </View>
         );
     }
+    onClickMakeFav(value){
+        
+        let customerId = this.props.auth.data.id;
+        let workerId = this.state.jobDetails.workerId;
+        if(this.state.favValue){
+            this.setState({ favValue: false });
+            api.post('favoriteSps/removeSpAsFavourite', {workerId: workerId, customerId: customerId}).then((favRes) =>{
+
+            }).catch((favErr) => {
+                
+            })
+        }else{
+            this.setState({ favValue: true });
+            api.post('favoriteSps/addSpAsFavourite', {workerId: workerId, customerId: customerId}).then((favRes) =>{
+
+            }).catch((favErr) => {
+                
+            })
+        }
+        
+        console.log(value);
+    }
+    
 
 
     render() {
@@ -480,9 +512,9 @@ cancelJob(reason, IsOther)
                         </Body>
                         <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
                     </Header>
-                    <Content style={{ backgroundColor: '#ccc' }}>
+                    <Content style={{ backgroundColor: '#ccc' }}  >
 
-                        {this.state.topScreenStatus === 'STARTED' ?
+                        {this.state.topScreenStatus === 'STARTED' || this.state.topScreenStatus === 'CANCELLED' ?
                             this.state.jobDetails.service.banner_image ? (
                                 <ImageBackground source={{ uri: this.state.jobDetails.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                     <View style={{ alignItems: 'center' }}>
@@ -501,7 +533,7 @@ cancelJob(reason, IsOther)
                                     (
                                     <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win * 0.1), marginTop: -(win * 0.1) }} />
                                     )
-                            : this.state.topScreenStatus === 'ONMYWAY' || this.state.topScreenStatus === 'ACCEPTED'?
+                            : this.state.topScreenStatus === 'ONMYWAY' || this.state.topScreenStatus === 'ACCEPTED' ?
                                 this.renderMap()
                                 : this.state.topScreenStatus === 'JOBSTARTED' ?
                                     this.renderTimingTracking()
@@ -541,7 +573,7 @@ cancelJob(reason, IsOther)
                                                 isActive={false}
                                                 rateMax={5}
                                                 isHalfStarEnabled={false}
-                                                rate={ this.state.jobDetails.workerRating}
+                                                rate={this.state.jobDetails.workerRating}
                                                 size={14}
                                             />
 
@@ -562,7 +594,9 @@ cancelJob(reason, IsOther)
                                 <MaterialIcons name="date-range" style={styles.jobItemIcon} />
                             </View>
                             <Text style={styles.jobItemName}>{I18n.t('dateAndTime')}</Text>
-                            <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>{this.state.jobDetails.postedDate}</Text>
+                            <Text style={[styles.jobItemValue, styles.jobItemValueDateandTime]}>
+                                {this.getLocalTimeFormat(this.state.jobDetails.postedDate)}
+                            </Text>
                         </View>
                         <View style={styles.jobItemWarp}>
                             <View style={{ width: 20 }}>
@@ -592,7 +626,14 @@ cancelJob(reason, IsOther)
                             <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
                             <Text style={styles.jobItemValue}>1234</Text>
                         </View>
+                        {this.state.topScreenStatus == 'CANCELLED' ? (
+                            <View style={styles.jobItemWarp}>
 
+                                <Text style={styles.cancelName}>{I18n.t('canelledJob')}</Text>
+                            </View>
+                        ) : (
+                                <View></View>
+                            )}
                         <Modal isVisible={this.state.jobCancelModal}>
                             <TouchableOpacity
                                 transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }}
@@ -607,12 +648,15 @@ cancelJob(reason, IsOther)
                                 <View style={{ padding: 15, borderRadius: 10, alignItems: 'center', justifyContent: 'center', width: '100%' }} >
 
                                     {
-                                        (this.state.otherReason == 0 || this.state.otherReason == 1) ? (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> What went wrong? </Text>) : (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> Please rate us in the App Store </Text>)
+                                        (this.state.otherReason == 0 || this.state.otherReason == 1) ? (
+                                            <Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> What went wrong? </Text>) : (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> 
+                                                Please rate us in the App Store 
+                                            </Text>)
                                     }
                                     {
                                         this.state.otherReason == 0 ? (
                                             <View style={{ width: '100%', backgroundColor: '#fff', borderRadius: 10 }}>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}  onPress={() => this.showConfirmDialog('Reason1')}>
+                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason1')}>
                                                     <Text style={{ color: '#000' }}>Reason1</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason2')}>
@@ -624,7 +668,7 @@ cancelJob(reason, IsOther)
                                                 <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason4')}>
                                                     <Text style={{ color: '#000' }}>Reason4</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}  onPress={() => this.setState({ otherReason: 1 })}>
+                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.setState({ otherReason: 1 })}>
                                                     <Text style={{ color: '#000' }}>Others Reason</Text>
                                                 </TouchableOpacity>
                                             </View>
@@ -639,7 +683,7 @@ cancelJob(reason, IsOther)
                                                 </Text>
                                                 </View>
                                                 <View style={{ backgroundColor: '#ccc', flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
-                                                    <TextInput placeholder="Tell us here what went wrong?" style={{ width: '100%', backgroundColor: '#fff', borderWidth: 0, borderRadius: 10, paddingLeft: 10, paddingRight: 10, height: 200, textAlign: 'center', textAlignVertical: 'top' }} multiline={true} underlineColorAndroid='transparent'  onChangeText={text => this.setState({ reason: text })} value={this.state.reason} >
+                                                    <TextInput placeholder="Tell us here what went wrong?" style={{ width: '100%', backgroundColor: '#fff', borderWidth: 0, borderRadius: 10, paddingLeft: 10, paddingRight: 10, height: 200, textAlign: 'center', textAlignVertical: 'top' }} multiline={true} underlineColorAndroid='transparent' onChangeText={text => this.setState({ reason: text })} value={this.state.reason} >
 
                                                     </TextInput>
                                                 </View>

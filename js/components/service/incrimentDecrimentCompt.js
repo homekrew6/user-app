@@ -51,8 +51,16 @@ class incrimentDecriment extends Component {
 
         var price = this.props.service.data.price;
         price=Number(price);
-        
+        var timeInterval = this.props.service.data.time_interval;
         if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
+            if (this.state.totalData.answers[0].option_time_impact == "Addition")
+            {
+                timeInterval = timeInterval + (Number(massage) + Number(this.state.totalData.answers[0].time_impact));
+            }
+            else
+            {
+                timeInterval = timeInterval + (Number(massage) * Number(this.state.totalData.answers[0].time_impact));
+            }
             if (this.state.totalData.answers[0].option_price_impact == "Addition") {
                 // price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));
                 price = price + (Number(massage) + Number(this.state.totalData.answers[0].price_impact));
@@ -63,6 +71,7 @@ class incrimentDecriment extends Component {
             var data = this.props.service.data;
             price = this.addZeroes(price);
             data.price = price;
+            data.time_interval=timeInterval;
             AsyncStorage.setItem("servicePrice", price).then((success)=>{
             
             })
@@ -74,6 +83,7 @@ class incrimentDecriment extends Component {
         
         price=Number(price);
         var price = this.props.service.data.price;
+        var timeInterval = this.props.service.data.time_interval;
         if (Number(this.state.massage) == 0) {
 
         }
@@ -101,6 +111,12 @@ class incrimentDecriment extends Component {
             });
             
             if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
+                if (this.state.totalData.answers[0].option_time_impact == "Addition") {
+                    timeInterval = timeInterval + (Number(massage) + Number(this.state.totalData.answers[0].time_impact));
+                }
+                else {
+                    timeInterval = timeInterval + (Number(massage) * Number(this.state.totalData.answers[0].time_impact));
+                }
                 if (this.state.totalData.answers[0].option_price_impact == "Addition") {
                     price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));
                     // price = price + (Number(massage) + Number(this.state.totalData.answers[0].price_impact));
@@ -112,6 +128,7 @@ class incrimentDecriment extends Component {
                 var data = this.props.service.data;
                 price = this.addZeroes(price);
                 data.price = price;
+                data.time_interval=timeInterval;
                 AsyncStorage.setItem("servicePrice", price).then((success)=>{
             
                 })

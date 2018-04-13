@@ -275,7 +275,7 @@ class Menu extends Component {
 
         <Card>
 
-          <CardItem style={styles.menuCarditem}>
+          {/* <CardItem style={styles.menuCarditem}>
             <View style={styles.menuCardView}>
               <Image source={icon1} style={styles.menuCardIcon} />
               <Text style={styles.menuCardTxt}>Google Plus</Text>
@@ -286,7 +286,7 @@ class Menu extends Component {
                 <Image source={back_arow} style={styles.arw_lft_img} />
               </View>
             </View>
-          </CardItem>
+          </CardItem> */}
 
           <CardItem style={styles.menuCarditem}>
             <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('JobList')}>
