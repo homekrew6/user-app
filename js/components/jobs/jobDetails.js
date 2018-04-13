@@ -57,36 +57,13 @@ class JobDetails extends Component {
             reason: '',
             favValue: false,
             refreshing: false,
+            reasonList: [],
+            reasonName: '',
+            reasonId: '',
         }
-        // const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
-        // const progressSpeed = (time_interval / 100) * 60000;
-        // const progressInterval = setInterval(() => {
-        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-        // }, progressSpeed);
-        this.state.trackingRef = firebaseApp.database().ref().child('tracking');
-        //this.setState({ trackingRef:firebaseApp.database().ref().child('tracking')});
-        //this.state.trackingRef.push({ "jobId": "4", "customerId": "2", "workerId": "3", "lat": 22.52, "lng": 48.254, "status": "ONMYWAY" });
-        // console.log(this.state.itemsRef);
-        // this.state.trackingRef.orderByChild('workerId').equalTo("1").once('value').then((snapshot)=>{
-        //     if (snapshot && snapshot.val()) {
-        //         debugger;
-        //         const key = Object.keys(snapshot.val())[0];
-        //         const ref = this.state.trackingRef.child(key);
-        //         const data = { "jobId": "37", "customerId": "19", "workerId": "8", "lat": 22.52, "lng": 48.254, "status": "ONMYWAY" }
-        //         ref.update(data);
-        //     }
-        //     else {
-        //         this.state.trackingRef.push({ "jobId": "4", "customerId": "2", "workerId": "3", "lat": 22.52, "lng": 48.254, "status": "ONMYWAY" });
-        //     }
-        // })
-        // firebase.database().ref().child('tracking').orderByChild('jobId').equalTo(37).once('value').then((snapshot) => {
-        //     debugger;
-        //      if (snapshot && snapshot.val()) { 
-        //          Alert.alert('in snap'); const key = Object.keys(snapshot.val())[0]; 
-        //          const ref = firebase.database().ref().child('tracking').child(key); 
-        //          const data = { "jobId": this.props.navigation.state.params.jobDetails.id, "customerId": this.props.navigation.state.params.jobDetails.customerId, "workerId": this.props.auth.data.id, "lat": snapshot.val()[key].lat, "lng": snapshot.val()[key].lng, "status": "JOBSTARTED" };
 
-        //          ref.update(data); } })
+        this.state.trackingRef = firebaseApp.database().ref().child('tracking');
+
         this.state.trackingRef.on('child_added', (snapshot) => {
             const snapShotVal = snapshot.val();
             if (this.state.jobDetails.id) {
@@ -135,7 +112,19 @@ class JobDetails extends Component {
         //const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London"); 
         //const timezoneDevice = DeviceInfo.getTimezone(); 
         //const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz('Asia/Kolkata').format('ddd DD-MMM-YYYY hh:mm A'); 
-        return moment(gmtTime).format('ddd DD-MMM-YYYY hh:mm A');
+
+        let dateNow = new Date();
+        var nUTC_diff = dateNow.getTimezoneOffset();
+        let slicedDate = gmtTime.slice(0, -4);
+        let timeToMan = Math.abs(nUTC_diff);
+        let utc_check = Math.sign(nUTC_diff);
+        let localTime;
+        if(utc_check === 1 || utc_check === 0) {
+            localTime = moment(slicedDate).subtract(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+        }else{
+            localTime = moment(slicedDate).add(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+        }
+        return localTime;
     }
 
     showConfirmDialog(reason) {
@@ -164,7 +153,7 @@ class JobDetails extends Component {
 
         if (IsOther != undefined && IsOther == true) {
             this.setState({ jobCancelModal: false });
-            let cancelJobData = { postingTime: this.state.jobDetails.postingTime, id: this.state.jobDetails.id, status: "CANCELLED", reason: this.state.reason };
+            let cancelJobData = { postingTime: this.state.jobDetails.postingTime, id: this.state.jobDetails.id, status: "CANCELLED", reason: reason.name };
             api.post('Jobs/cancelJobByUser', cancelJobData).then((res) => {
                 if (res.response.type == "SUCCESS") {
                     this.props.navigation.navigate('JobList');
@@ -176,7 +165,7 @@ class JobDetails extends Component {
         }
         else {
             this.setState({ jobCancelModal: false });
-            let cancelJobData1 = { postingTime: this.state.jobDetails.postingTime, id: this.state.jobDetails.id, status: "CANCELLED", reason: reason };
+            let cancelJobData1 = { postingTime: this.state.jobDetails.postingTime, id: this.state.jobDetails.id, status: "CANCELLED", reason: reason.name };
             api.post('Jobs/cancelJobByUser', cancelJobData1).then((res) => {
                 if (res.response.type == "SUCCESS") {
                     this.props.navigation.navigate('JobList');
@@ -189,7 +178,26 @@ class JobDetails extends Component {
 
     }
     componentDidMount() {
+
+  
+    // let dateNow = new Date();
+    // let gmtTimeTest = "Sun, 22 Apr 2018 03:20:00";
+    // let slicedDate = gmtTimeTest.slice(0, -4);
+    // var nUTC_diff = dateNow.getTimezoneOffset();
+    // console.log('nUTC', nUTC_diff, dateNow);
+    
+    // let timeToMan = Math.abs(nUTC_diff);
+    // let utc_check = Math.sign(nUTC_diff);
+    // let localTime;
+    // if(utc_check === 1 || utc_check === 0) {
+    //     localTime = moment(slicedDate).subtract(timeToMan, 'minute').format('ddd DD-MMM-YYYY hh:mm A');
+    // }else{
+    //     localTime = moment(slicedDate).add(timeToMan, 'minute').format('ddd DD-MMM-YYYY hh:mm A');
+    // }
+    // console.log(localTime);
+
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
+            if(res.response.message[0].price) { res.response.message[0].price = res.response.message[0].price.toFixed(2); }
             this.setState({
                 loader: false,
                 jobDetails: res.response.message[0],
@@ -260,6 +268,24 @@ class JobDetails extends Component {
             (error) => console.log('error', error),
             //{ enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 },
         );
+
+
+        api.get('cancelReasons').then((reason) => {
+            let reasonsList=[];
+            reason.map((item)=>{
+                if(item.is_active){
+                 item.IsSelected=false;
+                 reasonsList.push(item);
+                }  
+            })
+            this.setState({ reasonList: reasonsList });
+            console.log('reasonsList', reasonsList);
+        }).catch((errReason) => {
+            console.log(errReason);
+        })
+        
+
+
     }
 
     renderMap() {
@@ -495,7 +521,21 @@ class JobDetails extends Component {
         
         console.log(value);
     }
-    
+
+    onReasonSelect(reasonData){
+        let reasonsList=this.state.reasonList;
+        reasonsList.map((item)=>{
+            if(item.id==reasonData.id)
+            {
+                item.IsSelected=true;
+            }
+            else
+            {
+                item.IsSelected=false;
+            }
+        })
+        this.setState({ reasonName: reasonData.name, reasonId: reasonData.id, reasonList:reasonsList });
+    }
 
 
     render() {
@@ -642,7 +682,6 @@ class JobDetails extends Component {
                                 onPress={() => this.setState({ jobCancelModal: false })}
                                 activeOpacity={1}
                             >
-
                                 <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, zIndex: 99999, }} onPress={() => this.setState({ jobCancelModal: false })}>
                                     <Ionicons style={{ color: 'rgba(255,255,255,0.5)', fontSize: 36 }} name='md-close-circle' />
                                 </TouchableOpacity>
@@ -657,22 +696,21 @@ class JobDetails extends Component {
                                     }
                                     {
                                         this.state.otherReason == 0 ? (
+                                            
                                             <View style={{ width: '100%', backgroundColor: '#fff', borderRadius: 10 }}>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason1')}>
-                                                    <Text style={{ color: '#000' }}>Reason1</Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason2')}>
-                                                    <Text style={{ color: '#000' }}>Reason2</Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason3')}>
-                                                    <Text style={{ color: '#000' }}>Reason3</Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.showConfirmDialog('Reason4')}>
-                                                    <Text style={{ color: '#000' }}>Reason4</Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} onPress={() => this.setState({ otherReason: 1 })}>
-                                                    <Text style={{ color: '#000' }}>Others Reason</Text>
-                                                </TouchableOpacity>
+                                                {
+                                                    this.state.reasonList.length > 0 ? 
+                                                    this.state.reasonList.map((reasonData, key) => {
+                                                        return(
+                                                            <TouchableOpacity key={key} style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} 
+                                                                onPress={() => this.showConfirmDialog(reasonData)}
+                                                            >
+                                                                <Text style={{ color: '#000' }}>{reasonData.name}</Text>
+                                                            </TouchableOpacity>
+                                                        ) 
+                                                    })
+                                                    : console.log('outer reason')
+                                                }
                                             </View>
                                         ) : (console.log())
                                     }
