@@ -109,7 +109,7 @@ class JobList extends Component {
     };
 
     onRefresh(){
-        //Alert.alert('pulled');
+       this.getData();
     }
 
 

@@ -31,7 +31,6 @@ const resetAction = NavigationActions.reset({
 class Menu extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state={
       visible:''
     }

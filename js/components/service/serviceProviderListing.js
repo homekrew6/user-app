@@ -40,9 +40,9 @@ class ServiceProviderListing extends Component {
             const data = { "serviceId": 8, "time": time, "day": day, "customerId":this.props.auth.data.id };
             this.setState({ isVisible: true });
             api.post('Workeravailabletimings/getUserFavSVListing', data).then((data) => {
-                if (data.response.type == 'Success') {
+                if (data.response.type == 'success') {
                     this.setState({ isVisible: false });
-                    this.setState({ spList: data.response.message.spList });
+                    this.setState({ spList: data.response.list });
                 }
                 else {
                     this.setState({ isVisible: false });
@@ -207,7 +207,7 @@ class ServiceProviderListing extends Component {
                         <Text>{I18n.t('cancel')}</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>Adc Favourite</Title>
+                        <Title style={styles.appHdr2Txt}>{I18n.t('choose_from_favourite')}</Title>
                     </Body>
                     <Button transparent onPress={() => this.spDone()}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
