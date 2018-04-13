@@ -37,12 +37,12 @@ class ServiceProviderListing extends Component {
             time = time + " am";
             let day = this.props.service.data.serviceTime.split(' ')[0].toLowerCase();
             this.setState({ selectedTime: time });
-            const data = { "serviceId": 8, 'time': time, 'day': day };
+            const data = { "serviceId": 8, "time": time, "day": day, "customerId":this.props.auth.data.id };
             this.setState({ isVisible: true });
             api.post('Workeravailabletimings/getUserFavSVListing', data).then((data) => {
-                if (data.response.type == 'success') {
+                if (data.response.type == 'Success') {
                     this.setState({ isVisible: false });
-                    this.setState({ spList: data.response.list });
+                    this.setState({ spList: data.response.message.spList });
                 }
                 else {
                     this.setState({ isVisible: false });
@@ -194,6 +194,7 @@ class ServiceProviderListing extends Component {
                 })
             )
         }
+  
         return (
             <Container >
                 <FSpinner visible={this.state.isVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
