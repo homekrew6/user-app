@@ -54,7 +54,9 @@ class JobDetails extends Component {
             job_end_time: '',
             jobTrackingStatus: '',
             workerRate: 0,
-            reason: ''
+            reason: '',
+            favValue: false,
+            refreshing: false,
         }
         // const time_interval = this.props.navigation.state.params.jobDetails.service.time_interval;
         // const progressSpeed = (time_interval / 100) * 60000;
@@ -433,7 +435,8 @@ class JobDetails extends Component {
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <CheckBox
-                            onValueChange={() => this.onClickMakeFav()}
+                            onValueChange={(value) => this.onClickMakeFav(value)}
+                            value={this.state.favValue}
                         />
                         <Text style={{ justifyContent: 'center' }} >{I18n.t('mark_worker_fav')}</Text>
                     </View>
@@ -468,9 +471,29 @@ class JobDetails extends Component {
             </View>
         );
     }
-    onClickMakeFav(){
+    onClickMakeFav(value){
+        
+        let customerId = this.props.auth.data.id;
+        let workerId = this.state.jobDetails.workerId;
+        if(this.state.favValue){
+            this.setState({ favValue: false });
+            api.post('favoriteSps/removeSpAsFavourite', {workerId: workerId, customerId: customerId}).then((favRes) =>{
 
+            }).catch((favErr) => {
+                
+            })
+        }else{
+            this.setState({ favValue: true });
+            api.post('favoriteSps/addSpAsFavourite', {workerId: workerId, customerId: customerId}).then((favRes) =>{
+
+            }).catch((favErr) => {
+                
+            })
+        }
+        
+        console.log(value);
     }
+    
 
 
     render() {
@@ -489,7 +512,7 @@ class JobDetails extends Component {
                         </Body>
                         <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
                     </Header>
-                    <Content style={{ backgroundColor: '#ccc' }}>
+                    <Content style={{ backgroundColor: '#ccc' }}  >
 
                         {this.state.topScreenStatus === 'STARTED' || this.state.topScreenStatus === 'CANCELLED' ?
                             this.state.jobDetails.service.banner_image ? (
