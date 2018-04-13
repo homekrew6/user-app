@@ -26,7 +26,7 @@ class Reschedule extends Component {
             jobDetails: this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails: '',
             loader: false,
             reprice: '',
-            currency: 'USD'
+            currency: 'AED'
         }
     }
 

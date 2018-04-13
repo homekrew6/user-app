@@ -23,7 +23,7 @@ class Expect extends Component {
         super(props);
         this.state = {
             serviceDetails: props.service.data,
-            currency: 'USD'
+            currency: 'AED'
         }
     }
     
