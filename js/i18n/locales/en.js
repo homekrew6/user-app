@@ -97,5 +97,11 @@ export default {
   blockTime: 'Block Time',
   canelledJob:'You have cancelled this job.',
   mark_worker_fav: 'Mark worker as favorite?',
-  choose_from_favourite:'Choose from favourite'
+  choose_from_favourite: 'Choose from favourite',
+  jobStatus: 'Job Status',
+  jobRequested: 'Job Requested',
+  krewAssigned: 'Krew Assigned',
+  krewOnTheWay: 'Krew On The Way',
+  jobStarted: 'Job Started',
+  jobCompleted: 'Job Completed',
 };

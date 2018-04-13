@@ -98,5 +98,11 @@ export default {
   blockTime: 'وقت الحظر',
   canelledJob:'لقد قمت بإلغاء هذه الوظيفة',
   mark_worker_fav: 'مارك عامل كمفضل؟',
-  choose_from_favourite: 'اختر من المفضلة'
+  choose_from_favourite: 'اختر من المفضلة',
+  jobStatus: ' حالة الوظيفة',
+  jobRequested: 'الوظيفة المطلوبة',
+  krewAssigned: 'كرو معين',
+  krewOnTheWay: 'كرو على الطريق',
+  jobStarted: 'بدأ العمل',
+  jobCompleted: 'أنجزت المهمة',
 };
