@@ -77,6 +77,10 @@ class JobDetails extends Component {
                         let job_end_time = snapShotVal.endTime ? moment(snapShotVal.endTime).format('LT') : '';
                         this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: job_start_time, job_end_time: job_end_time });
                     }
+                    else if (snapShotVal.status == 'FOLLOWEDUP') {
+                        const jobDetails = this.state.jobDetails;
+                        this.setState({ topScreenStatus: 'FOLLOWEDUP', job_start_time: '', job_end_time: '', jobTrackingStatus: 'Job Completed' });
+                    }
 
                 }
             }
@@ -88,17 +92,26 @@ class JobDetails extends Component {
             if (this.state.jobDetails.id) {
                 if (snapShotVal.jobId == this.state.jobDetails.id.toString()) {
                     if (snapShotVal.status == 'ONMYWAY') {
-                        this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
+                        let jobDetails = this.state.jobDetails;
+                        jobDetails.status = snapShotVal.status;
+                        this.setState({ topScreenStatus: 'ONMYWAY', jobDetails:jobDetails, latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
                     }
                     else if (snapShotVal.status == 'JOBSTARTED') {
                         let job_start_time = moment(snapShotVal.startTime).format('LT');
                         let job_end_time = moment(snapShotVal.endTime).format('LT');
-                        const jobDetails = this.state.jobDetails;
-                        this.setState({ topScreenStatus: 'JOBSTARTED', job_start_time: job_start_time, job_end_time: job_end_time, jobTrackingStatus: 'Job Started' });
+                        let jobDetails = this.state.jobDetails;
+                        jobDetails.status = snapShotVal.status;
+                        this.setState({ topScreenStatus: 'JOBSTARTED', jobDetails: jobDetails, job_start_time: job_start_time, job_end_time: job_end_time, jobTrackingStatus: 'Job Started' });
                     }
                     else if (snapShotVal.status == 'COMPLETED') {
-                        const jobDetails = this.state.jobDetails;
-                        this.setState({ topScreenStatus: 'COMPLETED', job_start_time: '', job_end_time: '', jobTrackingStatus: 'Job Completed' });
+                        let jobDetails = this.state.jobDetails;
+                        jobDetails.status = snapShotVal.status;
+                        this.setState({ topScreenStatus: 'COMPLETED', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Job Completed' });
+                    }
+                    else if (snapShotVal.status == 'FOLLOWEDUP') {
+                        let jobDetails = this.state.jobDetails;
+                        jobDetails.status = snapShotVal.status;
+                        this.setState({ topScreenStatus: 'FOLLOWEDUP', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Job Completed' });
                     }
                 }
             }
@@ -210,6 +223,7 @@ class JobDetails extends Component {
             //     jobDetails: res.response.message[0],
             //     topScreenStatus: 'COMPLETED'
             // })
+
             if (this.state.jobDetails.status == 'STARTED') {
                 this.setState({ jobTrackingStatus: 'Job Requested' });
             }
@@ -221,6 +235,9 @@ class JobDetails extends Component {
             }
             else if (this.state.jobDetails.status == 'ONMYWAY') {
                 this.setState({ jobTrackingStatus: 'Krew On The Way' });
+            }
+            else if (this.state.jobDetails.status == 'FOLLOWEDUP') {
+                this.setState({ jobTrackingStatus: 'Follow Up' });
             }
             else if (this.state.jobDetails.status == 'JOBSTARTED') {
                 const jobDetails = this.state.jobDetails;
@@ -472,7 +489,21 @@ class JobDetails extends Component {
             </View>
         );
     }
-
+    renderFollowUp()
+    {
+        return(
+            <View style={{ flex: 1, flexDirection: 'row', padding: 30 }}>
+                <TouchableOpacity style={{ flex: 2, flexDirection: 'column' }} onPress={() => this.props.navigation.navigate('FollowUp', { jobDetails:this.state.jobDetails})}>
+                    <View style={{ flex: 4 }}>
+                        <Text>{I18n.t('click_to_see_follow_up')}</Text>
+                    </View>
+                </TouchableOpacity>
+                <View style={{ flex: 4 }}>
+                   <Text>Image</Text>
+                </View>
+            </View>
+        );
+    }
     renderTimingTracking() {
         return (
             <View style={{ flex: 1, flexDirection: 'row', padding: 30 }}>
@@ -575,15 +606,15 @@ class JobDetails extends Component {
                                     (
                                     <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win * 0.1), marginTop: -(win * 0.1) }} />
                                     )
-                            : this.state.topScreenStatus === 'ONMYWAY' || this.state.topScreenStatus === 'ACCEPTED' ?
+                            : this.state.topScreenStatus == 'ONMYWAY' || this.state.topScreenStatus == 'ACCEPTED' ?
                                 this.renderMap()
-                                : this.state.topScreenStatus === 'JOBSTARTED' ?
+                                : this.state.topScreenStatus =='JOBSTARTED' ?
                                     this.renderTimingTracking()
-                                    : this.state.topScreenStatus === 'COMPLETED' ?
+                                    : this.state.topScreenStatus == 'COMPLETED' ?
                                         this.renderWorkerRating()
-                                        : this.state.topScreenStatus === 'cancel' ?
-                                            <View></View>
-                                            : console.log()
+                                            : this.state.topScreenStatus == 'FOLLOWEDUP' ?
+                                                this.renderFollowUp()
+                                                :console.log()
                         }
 
 
