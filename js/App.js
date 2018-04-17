@@ -37,6 +37,7 @@ import FollowUp from './components/jobs/followUp';
 import JobTracker from './components/jobs/jobTracker';
 import Reschedule from './components/jobs/reschedule';
 import Chat from './components/jobs/chat';
+import QuoteList from './components/jobs/quoteList';
 
 
 const transitionConfig = () => {
@@ -94,7 +95,8 @@ const AppNavigator = StackNavigator(
         FollowUp: { screen: FollowUp },
         JobTracker: { screen: JobTracker },
         Reschedule: { screen: Reschedule },
-        Chat: { screen: Chat }
+        Chat: { screen: Chat },
+        QuoteList:{screen:QuoteList}
     },
     {
         initialRouteName: "Home",

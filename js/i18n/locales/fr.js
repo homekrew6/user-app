@@ -35,5 +35,13 @@ export default {
   language: 'La langue',
   currency: 'Devise',
   canelledJob: 'Vous avez annulé cet emploi',
-  choose_from_favourite: 'Choisissez parmi les favoris'
+  choose_from_favourite: 'Choisissez parmi les favoris',
+  confirm_time_date: "Confirmer l'heure et la date",
+  quote_follow_up:'CITATION / SUIVI',
+  click_to_see_follow_up: 'Cliquez pour voir les détails de suivi',
+  accept: 'Acceptez',
+  decline: 'Déclin',
+  materials: 'Matériaux',
+  hours: 'Heures',
+  total: 'Total'
 };

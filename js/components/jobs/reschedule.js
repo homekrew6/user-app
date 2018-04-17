@@ -10,7 +10,7 @@ import { Calendar } from 'react-native-calendars';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
 import Modal from "react-native-modal";
-import api from '../../api'
+import api from '../../api';
 
 
 class Reschedule extends Component {
@@ -48,7 +48,7 @@ class Reschedule extends Component {
     }
 
     rescheduleModalfn(){
-        if (this.state.selectedDate == '' && this.state.selectedTime == '') {
+        if (this.state.selectedDate == '' || this.state.selectedTime == '') {
             Alert.alert('Please set a date and time');            
         }
         else {
@@ -292,7 +292,7 @@ class Reschedule extends Component {
                     </View>
                     <View style={{ backgroundColor: '#fff', marginTop: 10, paddingTop: 15, paddingLeft: 5, paddingRight: 5, marginBottom: 10 }}>
                         <TouchableOpacity onPress={() => this.rescheduleModalfn()} style={{ backgroundColor: '#81cdc7', flex: 1, alignItems: 'center', justifyContent: 'center', height: 40, borderRadius: 4}}>
-                            <Text style={{ color: '#fff', fontSize: 14 }}>Confirm Time & Date</Text>
+                            <Text style={{ color: '#fff', fontSize: 14 }}>{I18n.t('confirm_time_date')} </Text>
                         </TouchableOpacity>
                     </View>
                 </Content>
