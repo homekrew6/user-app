@@ -37,6 +37,7 @@ class Confirmation extends Component {
             loader: false,
             continueButtonDesable: false,
             currencyId : 3,
+            minPrice:'0.0'
             //homeValuearray: props.service.data.homeArray,
             // homeValue: 'Home'
         }
@@ -45,6 +46,10 @@ class Confirmation extends Component {
 
 
     componentDidMount() {
+        if (this.props.service.data.min_charge)
+        {
+            this.setState({ minPrice: this.props.service.data.min_charge.toFixed(2)});
+        }
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
                 const value1 = JSON.parse(value);
@@ -378,7 +383,7 @@ class Confirmation extends Component {
                                 </Text>
                             </View>
                             <Text style={{ color: '#1e3768', fontSize: 16 }}>{this.state.currency} {this.props.service.data.price}</Text>
-                            <Text style={{ color: '#747474', fontSize: 12 }}>Min Price {this.state.currency} {(this.props.service.data.min_charge).toFixed(2)}</Text>                            
+                            <Text style={{ color: '#747474', fontSize: 12 }}>Min Price {this.state.currency} {this.state.minPrice}</Text>                            
                         </View>
                     </View>
 
