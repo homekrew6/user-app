@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { logout } from './elements/authActions'
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler, AsyncStorage } from "react-native";
 
@@ -316,7 +316,7 @@ class Menu extends Component {
             </TouchableOpacity>
           </CardItem>
 
-          <CardItem style={styles.menuCarditem}>
+          {/* <CardItem style={styles.menuCarditem}>
             <View style={styles.menuCardView}>
               <Image source={icon4} style={styles.menuCardIcon} />
               <Text style={styles.menuCardTxt}>{I18n.t('my_card')}</Text>
@@ -324,7 +324,16 @@ class Menu extends Component {
                 <Image source={back_arow} style={styles.arw_lft_img} />
               </View>
             </View>
-          </CardItem>
+          </CardItem> */}
+            <CardItem style={styles.menuCarditem}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('QuoteList')}>
+                <Image source={icon4} style={styles.menuCardIcon} />
+                <Text style={styles.menuCardTxt}>{I18n.t('quote_follow_up')}</Text>
+                <View style={styles.arw_lft}>
+                  <Image source={back_arow} style={styles.arw_lft_img} />
+                </View>
+              </TouchableOpacity>
+            </CardItem>
 
           <CardItem style={styles.menuCarditem}>
             <View style={styles.menuCardView}>

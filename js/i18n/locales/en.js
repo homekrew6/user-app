@@ -104,4 +104,12 @@ export default {
   krewOnTheWay: 'Krew On The Way',
   jobStarted: 'Job Started',
   jobCompleted: 'Job Completed',
+  confirm_time_date:'Confirm Time & Date',
+  quote_follow_up:'QUOTE / FOLLOW UP',
+  click_to_see_follow_up:'Click to view Follow Up Details',
+  accept:'Accept',
+  decline:'Decline',
+  materials:'Materials',
+  hours:'Hours',
+  total:'Total'
 };

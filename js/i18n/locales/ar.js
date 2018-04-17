@@ -105,4 +105,12 @@ export default {
   krewOnTheWay: 'كرو على الطريق',
   jobStarted: 'بدأ العمل',
   jobCompleted: 'أنجزت المهمة',
+  confirm_time_date: "تأكيد الوقت والتاريخ",
+  quote_follow_up: 'اقتباس / متابعة',
+  click_to_see_follow_up: 'انقر لعرض متابعة التفاصيل',
+  accept: 'قبول',
+  decline: 'انخفاض',
+  materials: 'المواد',
+  hours: 'ساعات',
+  total: 'مجموع'
 };
