@@ -108,6 +108,7 @@ class FollowUp extends Component {
             api.post('jobFollowUps/acceptFollowUp',toSendData).then((res)=>{
                 Alert.alert(res.response.message);
                 this.setState({ IsVisible: false });
+                this.props.navigation.navigate('JobList');
             }).catch((Err)=>{
                 this.setState({})
             })

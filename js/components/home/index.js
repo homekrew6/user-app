@@ -130,7 +130,6 @@ class Home extends Component {
 
 			// 	}
 			// })
-			debugger;
 			AsyncStorage.getItem("userToken").then((userToken) => {
 				if (userToken) {
 					const userToken1 = JSON.parse(userToken);

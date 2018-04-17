@@ -43,5 +43,6 @@ export default {
   decline: 'Déclin',
   materials: 'Matériaux',
   hours: 'Heures',
-  total: 'Total'
+  total: 'Total',
+  
 };
