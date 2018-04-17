@@ -8,7 +8,7 @@ import { Container, Button, H3, Text, Header, Title, Body, Left, Right } from "n
 import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from "react-native-fcm";
 import styles from "./styles";
 import api from '../../api';
-import GlobalFont from 'react-native-global-font';
+//import GlobalFont from 'react-native-global-font';
 //const launchscreenBg = require("../../../img/launchscreen-bg.png");
 const launchscreenBg = require("../../../img/splash.png");
 const launchscreenLogo = require("../../../img/logo-kitchen-sink.png");
@@ -33,11 +33,11 @@ class Home extends Component {
 			jobId: ''
 		}
 	}
-	componentDidMount()
-	{
-		const fontName = 'Lato';
-		GlobalFont.applyGlobal(fontName);
-	}
+	// componentDidMount()
+	// {
+	// 	const fontName = 'Lato';
+	// 	GlobalFont.applyGlobal(fontName);
+	// }
 	componentWillMount() {
 		FCM.requestPermissions();
 		FCM.getFCMToken().then(token => {

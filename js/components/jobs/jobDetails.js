@@ -678,13 +678,15 @@ class JobDetails extends Component {
                             <Text style={styles.jobItemName}>{I18n.t('location')}</Text>
                             <Text style={styles.jobItemValue}>{this.state.jobDetails.userLocation.name}</Text>
                         </View>
-                        <View style={styles.jobItemWarp}>
-                            <View style={{ width: 20 }}>
-                                <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('jobSummary', {jobDetails: this.state.jobDetails})}>
+                            <View style={styles.jobItemWarp}>
+                                <View style={{ width: 20 }}>
+                                    <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
+                                </View>
+                                <Text style={styles.jobItemName}>{I18n.t('jobSummary')}</Text>
+                                <Text style={styles.jobItemValue}>{this.state.currency} {this.state.jobDetails.price}</Text>
                             </View>
-                            <Text style={styles.jobItemName}>{I18n.t('jobSummary')}</Text>
-                            <Text style={styles.jobItemValue}>{this.state.currency} {this.state.jobDetails.price}</Text>
-                        </View>
+                        </TouchableOpacity>
                         <View style={styles.jobItemWarp}>
                             <View style={{ width: 20 }}>
                                 <Ionicons name="ios-flag-outline" style={styles.jobItemIconIonicons} />

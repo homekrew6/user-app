@@ -19,11 +19,7 @@
             "node_modules/(?!react-native|native-base-shoutem-theme)"
         ]
     },
-    "rnpm": {
-        "assets": [
-            "./assets/fonts/"
-        ]
-    },
+
     "dependencies": {
         "class-autobind": "^0.1.4",
         "color": "~1.0.3",

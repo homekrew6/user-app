@@ -785,10 +785,17 @@ class serviceDetails extends Component {
       });
 
       var price = this.props.service.data.price;
+      var timeInterval = this.props.service.data.time_interval;
       price = Number(price);
       if (data.answers) {
         if (data.answers[0].option_price_impact == "Addition") {
           if (this.props.service.data.value) {
+            if (data.answers[0].option_time_impact == "Addition") {
+              timeInterval = timeInterval - Number(data.answers[0].time_impact);
+            }
+            else {
+              timeInterval = timeInterval / Number(data.answers[0].time_impact);
+            }
             if (value < this.props.service.data.value) {
               price = price - (value + Number(data.answers[0].price_impact));
             }
@@ -803,6 +810,12 @@ class serviceDetails extends Component {
         }
         else {
           if (this.props.service.data.value) {
+            if (data.answers[0].option_time_impact == "Addition") {
+              timeInterval = timeInterval - Number(data.answers[0].time_impact);
+            }
+            else {
+              timeInterval = timeInterval / Number(data.answers[0].time_impact);
+            }
             if (value < this.props.service.data.value) {
               price = price + (value + Number(data.answers[0].price_impact));
             }
@@ -822,7 +835,9 @@ class serviceDetails extends Component {
         price = this.addZeroes(price);
         data.price = price;
         data.value = value;
+        data.time_interval = timeInterval;
         this.props.setServiceDetails(data);
+        console.log('setServiceDetails data', data);
       }
     }
 

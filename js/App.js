@@ -37,6 +37,7 @@ import FollowUp from './components/jobs/followUp';
 import JobTracker from './components/jobs/jobTracker';
 import Reschedule from './components/jobs/reschedule';
 import Chat from './components/jobs/chat';
+import jobSummary from './components/jobs/jobSummary';
 import QuoteList from './components/jobs/quoteList';
 
 
@@ -96,6 +97,7 @@ const AppNavigator = StackNavigator(
         JobTracker: { screen: JobTracker },
         Reschedule: { screen: Reschedule },
         Chat: { screen: Chat },
+        jobSummary: { screen: jobSummary },
         QuoteList:{screen:QuoteList}
     },
     {
