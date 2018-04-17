@@ -328,7 +328,7 @@ class Menu extends Component {
             <CardItem style={styles.menuCarditem}>
               <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('QuoteList')}>
                 <Image source={icon4} style={styles.menuCardIcon} />
-                <Text style={styles.menuCardTxt}>{I18n.t('quote_follow_up')}</Text>
+                <Text style={styles.menuCardTxt}>{I18n.t('quoteOrFollow')}</Text>
                 <View style={styles.arw_lft}>
                   <Image source={back_arow} style={styles.arw_lft_img} />
                 </View>
