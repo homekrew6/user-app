@@ -148,9 +148,7 @@ class ServiceProviderListing extends Component {
 
                             {
                                 data.IsAvailable ? (
-                                    
-
-
+                                
                                         <TouchableOpacity onPress={() => this.selectServiceProvider(data)} style={{ width: 100, paddingTop: 10, paddingBottom: 10, alignItems: 'center' }}>
                                             <View style={{height: 80, width: 80, position: 'relative'}}>
 
