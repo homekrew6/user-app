@@ -85,11 +85,12 @@ class jobSummary extends Component {
             }
 
             api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
+                debugger;
                 let materialList = materialAns.response.message;
                 materialTotalPrice = 0;
                 materialList.map((materialItem) => {
                     if (materialItem.materials) {
-                        materialTotalPrice = materialTotalPrice + materialItem.materials.price;
+                        materialTotalPrice = materialTotalPrice + Number(materialItem.materials.price);
                     }
                 })
                 materialTotalPrice = parseInt(materialTotalPrice).toFixed(2);
@@ -211,7 +212,7 @@ class jobSummary extends Component {
 
                                                 </View>
                                                 <View style={[styles.price]}>
-                                                    <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >{this.state.currency}
+                                                    <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >{this.state.currency} 
                                                         {
                                                             AnsList.price
                                                         }

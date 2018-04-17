@@ -112,5 +112,6 @@ export default {
   decline: 'انخفاض',
   materials: 'المواد',
   hours: 'ساعات',
-  total: 'مجموع'
+  total: 'مجموع',
+  total_bill: 'إجمالي الفاتورة',
 };
