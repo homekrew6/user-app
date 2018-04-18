@@ -107,48 +107,60 @@ class Confirmation extends Component {
                     if (this.props.service.data.serviceLocationid) {
                         if(this.props.service.data.saveDateDB)
                         {
-                            AsyncStorage.getItem("keyQuestionList").then((value) => {
-                                if(value){
-                                api.post('Jobs/insertNewJob',{
-                                    "userLocationId": this.props.service.data.serviceLocationid,
-                                    "price": this.props.service.data.price,
-                                    "postedDate": this.props.service.data.saveDateDB,
-                                    "payment": "Credit Card",
-                                    "faourite_sp": this.props.service.data.favouriteId,
-                                    "promo_code": "AED 50 off",
-                                    "status": "STARTED",
-                                    "customerId": this.props.auth.data.id,
-                                    "currencyId": this.state.currencyId,
-                                    "workerId": 0,
-                                    "zoneId": zoneValue,
-                                    "serviceId": this.props.service.data.id,
-                                    "saveDBTime": this.props.service.data.saveDBTime,
-                                    "saveDbDay": this.props.service.data.saveDbDay,
-                                    "expectedTimeInterval":this.props.service.data.time_interval,
-                                    "questionList": value
-                                }
-                                ).then(responseJson => {
-                                    AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
-                                    AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
-                                    AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
-                                    AsyncStorage.removeItem('fromLogin', (err) => console.log('finished', err));
-                                    AsyncStorage.removeItem('fromConfirmation', (err) => console.log('finished', err));
-                                    Alert.alert("Job Posted Successfully");
-                                    this.setState({
-                                        loader: false,
-                                        continueButtonDesable: true
-                                    });
-                                    this.props.navigation.dispatch(reseteAction);
-                                }).catch(err => {
-                                    console.log(err);
-                                    Alert.alert("Job Post not save");
-                                    this.setState({
-                                        loader: false,
-                                    })
-                                })
+                            const jobPrice = Number(this.props.service.data.price);
+                            if(jobPrice)
+                            {
+                                AsyncStorage.getItem("keyQuestionList").then((value) => {
+                                    if (value) {
+                                        api.post('Jobs/insertNewJob', {
+                                            "userLocationId": this.props.service.data.serviceLocationid,
+                                            "price": this.props.service.data.price,
+                                            "postedDate": this.props.service.data.saveDateDB,
+                                            "payment": "Credit Card",
+                                            "faourite_sp": this.props.service.data.favouriteId,
+                                            "promo_code": "AED 50 off",
+                                            "status": "STARTED",
+                                            "customerId": this.props.auth.data.id,
+                                            "currencyId": this.state.currencyId,
+                                            "workerId": 0,
+                                            "zoneId": zoneValue,
+                                            "serviceId": this.props.service.data.id,
+                                            "saveDBTime": this.props.service.data.saveDBTime,
+                                            "saveDbDay": this.props.service.data.saveDbDay,
+                                            "expectedTimeInterval": this.props.service.data.time_interval,
+                                            "questionList": value
+                                        }
+                                        ).then(responseJson => {
+                                            AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
+                                            AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
+                                            AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
+                                            AsyncStorage.removeItem('fromLogin', (err) => console.log('finished', err));
+                                            AsyncStorage.removeItem('fromConfirmation', (err) => console.log('finished', err));
+                                            Alert.alert("Job Posted Successfully");
+                                            this.setState({
+                                                loader: false,
+                                                continueButtonDesable: true
+                                            });
+                                            this.props.navigation.dispatch(reseteAction);
+                                        }).catch(err => {
+                                            console.log(err);
+                                            Alert.alert("Job Post not save");
+                                            this.setState({
+                                                loader: false,
+                                            })
+                                        })
                                     }
                                 }).catch(res => {
                                 });
+                            }
+                            else
+                            {
+                                this.setState({
+                                    loader: false
+                                });
+                                Alert.alert('Please give proper price to submit the job.'); 
+                            }
+                            
                         
 
                         }else{

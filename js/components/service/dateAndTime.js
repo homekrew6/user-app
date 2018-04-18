@@ -155,7 +155,6 @@ class DateAndTime extends Component {
         })
     }
     setDateAndTime() {
-        debugger;
         let saveDBTime = this.state.setTime.slice(0, -5) + " " + this.state.setTime.slice(5).toLowerCase();
         const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00' + " " + this.state.setTime.slice(5).toLowerCase();
         
