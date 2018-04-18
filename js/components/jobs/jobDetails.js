@@ -10,6 +10,7 @@ import Stars from 'react-native-stars-rating';
 import MapViewDirections from 'react-native-maps-directions';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Communications from 'react-native-communications';
@@ -59,7 +60,7 @@ class JobDetails extends Component {
             refreshing: false,
             reasonList: [],
             reasonName: '',
-            reasonId: '',
+            reasonId: ''
         }
 
         this.state.trackingRef = firebaseApp.database().ref().child('tracking');
@@ -687,6 +688,17 @@ class JobDetails extends Component {
                                 <Text style={styles.jobItemValue}>{this.state.currency} {this.state.jobDetails.price}</Text>
                             </View>
                         </TouchableOpacity>
+                        {
+                            this.state.topScreenStatus=== 'COMPLETED' ?
+                                <View style={styles.jobItemWarp}>
+                                    <View style={{ width: 30, alignItems: 'center' }}>
+                                        <FontAwesome name="money" style={styles.jobItemIcon} />
+                                    </View>
+                                    <Text style={styles.jobItemName}>{I18n.t('total_bill')}</Text>
+                                    <Text style={styles.jobItemValue}>{this.state.currency} {this.state.jobDetails.price}</Text>
+                                </View>
+                                : console.log()
+                        }
                         <View style={styles.jobItemWarp}>
                             <View style={{ width: 20 }}>
                                 <Ionicons name="ios-flag-outline" style={styles.jobItemIconIonicons} />

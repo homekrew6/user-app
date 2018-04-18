@@ -111,5 +111,6 @@ export default {
   decline:'Decline',
   materials:'Materials',
   hours:'Hours',
-  total:'Total'
+  total:'Total',
+  total_bill: 'Total Bill'
 };

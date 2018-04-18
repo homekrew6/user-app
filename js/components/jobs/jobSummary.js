@@ -44,52 +44,56 @@ class jobSummary extends Component {
 
         // console.log(this.props);
         let jodId = this.props.navigation.state.params.jobDetails.id;
-        api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": 117 }).then((resAns) => {
-            let jsonAnswer = JSON.parse(resAns.response.message[0].questionList);
-            let finalList = [];
-            let totalPrice=0;
-            for (let i = 0; i < jsonAnswer.length; i++) {
-                if (jsonAnswer[i].type != 5) {
-                    let price = this.CalculatePrice(jsonAnswer[i].type,
-                        jsonAnswer[i].answers[0].option_price_impact,
-                        jsonAnswer[i].answers[0].price_impact,
-                        jsonAnswer[i].answers[0].time_impact,
-                        jsonAnswer[i].IncrementId,
-                        jsonAnswer[i].Status,
-                        jsonAnswer[i].answers, )
-                        totalPrice=totalPrice+price;
-                        price=price.toFixed(2);
+        api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": jodId }).then((resAns) => {
+            if (resAns.response.message.length && resAns.response.message.length > 0 && resAns.response.message[0].questionList) {
+                let jsonAnswer = JSON.parse(resAns.response.message[0].questionList);
+                let finalList = [];
+                let totalPrice = 0;
+                for (let i = 0; i < jsonAnswer.length; i++) {
+                    if (jsonAnswer[i].type != 5) {
+                        let price = this.CalculatePrice(jsonAnswer[i].type,
+                            jsonAnswer[i].answers[0].option_price_impact,
+                            jsonAnswer[i].answers[0].price_impact,
+                            jsonAnswer[i].answers[0].time_impact,
+                            jsonAnswer[i].IncrementId,
+                            jsonAnswer[i].Status,
+                            jsonAnswer[i].answers)
+                        totalPrice = totalPrice + price;
+                        price = price.toFixed(2);
                         jsonAnswer[i].price = price;
                         jsonAnswer[i].option_price_impact = jsonAnswer[i].answers[0].option_price_impact;
 
-                        if(jsonAnswer[i].type != 3){
+                        if (jsonAnswer[i].type != 3) {
                             jsonAnswer[i].priceImp = jsonAnswer[i].answers[0].price_impact;
                             jsonAnswer[i].priceImp = jsonAnswer[i].priceImp;
                         }
-                        else{
-                            jsonAnswer[i].answers.map((ans1)=>{
-                                if( ans1.selected == true ){
+                        else {
+                            jsonAnswer[i].answers.map((ans1) => {
+                                if (ans1.selected == true) {
                                     jsonAnswer[i].priceImp = ans1.price_impact;
                                     jsonAnswer[i].priceImp = jsonAnswer[i].priceImp;
                                 }
                             })
                         }
                         finalList.push(jsonAnswer[i]);
-                }
+                    }
 
+                }
+                totalPrice = totalPrice.toFixed(2);
+                //console.log('jsonAnswer', jsonAnswer);
+                this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice });
             }
-            totalPrice=totalPrice.toFixed(2);
-            //console.log('jsonAnswer', jsonAnswer);
-            this.setState({ jsonAnswer: jsonAnswer, totalPrice:totalPrice });
-            api.post('jobMaterials/getJobMaterialByJobId', { "jobId": 88 }).then((materialAns) => {
+
+            api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
+                debugger;
                 let materialList = materialAns.response.message;
                 materialTotalPrice = 0;
-                materialList.map((materialItem)=>{
-                    if(materialItem.materials){
-                        materialTotalPrice = materialTotalPrice + materialItem.materials.price;
+                materialList.map((materialItem) => {
+                    if (materialItem.materials) {
+                        materialTotalPrice = materialTotalPrice + Number(materialItem.materials.price);
                     }
                 })
-                materialTotalPrice =parseInt( materialTotalPrice).toFixed(2);
+                materialTotalPrice = parseInt(materialTotalPrice).toFixed(2);
                 this.setState({
                     materialTotalPrice: materialTotalPrice,
                 })
@@ -103,30 +107,39 @@ class jobSummary extends Component {
             });
 
         })
-        
-       
+
+
     }
     CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray) {
         let retPrice;
+        let totalPrice = 0;
         switch (type) {
             case 1:
             case 4:
                 if (impact_type === 'Addition') {
-                    retPrice = Number(price_impact) + Number(impact_no);
+                    //retPrice = Number(price_impact) + Number(impact_no);
+                    impact_no = Number(impact_no);
+                    for (let i = 1; i <= impact_no; i++) {
+                        totalPrice = totalPrice + i + Number(price_impact);
+                    }
                 } else {
-                    retPrice = Number(price_impact) * Number(impact_no);
+                    impact_no = Number(impact_no);
+                    for (let i = 1; i <= impact_no; i++) {
+                        totalPrice = totalPrice + (i * Number(price_impact));
+                    }
+                    //retPrice = Number(price_impact) * Number(impact_no);
                 }
 
                 //this.setState({ totalPrice: this.state.totalPrice + retPrice });
 
-                return retPrice;
+                return totalPrice;
                 break;
             case 2:
                 if (BoolStatus) {
 
                     //this.setState({ totalPrice: this.state.totalPrice + retPrice });
-                    
-                    return retPrice = Number(price_impact);
+                    retPrice = Number(price_impact);
+                    return retPrice;
 
                 } else {
                     return null;
@@ -173,33 +186,33 @@ class jobSummary extends Component {
                                         AnsList.type === 5 ? null :
                                             <View key={key} style={styles.totalBillitem}>
                                                 <View style={styles.imagesWarp} >
-                                                {
-                                                    AnsList.image? (
-                                                        <Image source={{uri: AnsList.image}} style={styles.totalImage} />
-                                                    ): (
-                                                        <Image source={logo_hdr} style={styles.totalImage} />
-                                                    )
+                                                    {
+                                                        AnsList.image ? (
+                                                            <Image source={{ uri: AnsList.image }} style={styles.totalImage} />
+                                                        ) : (
+                                                                <Image source={logo_hdr} style={styles.totalImage} />
+                                                            )
 
-                                                }
+                                                    }
                                                 </View>
                                                 <View style={{ flex: 1 }}>
                                                     <Text style={[styles.text1, { fontSize: 12 }]}>{AnsList.name}</Text>
                                                 </View>
                                                 <View style={{ width: 80 }}>
-                                                {
-                                                    AnsList.type === 1? (
-                                                        <Text style={[styles.text2, { fontSize: 12 }]}>{AnsList.IncrementId}</Text>
-                                                    ):(console.log())
-                                                }
-                                                {
-                                                    AnsList.priceImp ? (
-                                                        <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>{AnsList.option_price_impact == 'Addition'? '+ ': 'x '}{ this.state.currency} { (AnsList.priceImp)}</Text>
-                                                    ):(console.log())
-                                                }
-                                                    
+                                                    {
+                                                        AnsList.type === 1 ? (
+                                                            <Text style={[styles.text2, { fontSize: 12 }]}>{AnsList.IncrementId}</Text>
+                                                        ) : (console.log())
+                                                    }
+                                                    {
+                                                        AnsList.priceImp ? (
+                                                            <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>{AnsList.option_price_impact == 'Addition' ? '+ ' : 'x '}{this.state.currency} {(AnsList.priceImp)}</Text>
+                                                        ) : (console.log())
+                                                    }
+
                                                 </View>
-                                                <View style={[ styles.price ]}>
-                                                    <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >{this.state.currency}
+                                                <View style={[styles.price]}>
+                                                    <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >{this.state.currency} 
                                                         {
                                                             AnsList.price
                                                         }
@@ -218,7 +231,7 @@ class jobSummary extends Component {
                             <View style={{ flex: 1 }}>
                                 <Text style={[styles.text1, { fontSize: 12 }]}>Materials</Text>
                             </View>
-                            <View style={[ styles.price ]}>
+                            <View style={[styles.price]}>
                                 <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >{this.state.currency}
                                     {
                                         (this.state.materialTotalPrice)
@@ -232,7 +245,7 @@ class jobSummary extends Component {
                                 <Image source={totalImg} style={styles.totalImage} />
                             </View>
                             <View>
-                                <Text  style={styles.text1}>Total</Text>
+                                <Text style={styles.text1}>Total</Text>
                             </View>
                             <View style={{ flex: 1 }}>
                                 <Text></Text>

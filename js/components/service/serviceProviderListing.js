@@ -40,6 +40,10 @@ class ServiceProviderListing extends Component {
             const data = { "serviceId": 8, "time": time, "day": day, "customerId":this.props.auth.data.id };
             this.setState({ isVisible: true });
             api.post('Workeravailabletimings/getUserFavSVListing', data).then((data) => {
+                // debugger;
+                // data.response.list.map((itemnew)=>{
+                //     itemnew.IsAvailable = false;
+                // })
                 if (data.response.type == 'success') {
                     this.setState({ isVisible: false });
                     this.setState({ spList: data.response.list });
@@ -62,6 +66,7 @@ class ServiceProviderListing extends Component {
             let day = this.props.service.data.serviceTime.split(' ')[0].toLowerCase();
             const data = { "serviceId": 8, 'time': time, 'day': day };
             api.post('Workeravailabletimings/getUserFavSVListing', data).then((data) => {
+                // debugger;
                 if (data.response.type == 'success') {
                     this.setState({ isVisible: false });
                     this.setState({ spList: data.response.list });
@@ -143,47 +148,45 @@ class ServiceProviderListing extends Component {
 
                             {
                                 data.IsAvailable ? (
-                                    
-
-
+                                
                                         <TouchableOpacity onPress={() => this.selectServiceProvider(data)} style={{ width: 100, paddingTop: 10, paddingBottom: 10, alignItems: 'center' }}>
-                                        <View style={{height: 80, width: 80, position: 'relative'}}>
+                                            <View style={{height: 80, width: 80, position: 'relative'}}>
 
-                                            {/* <Image source={{ uri: data.image || null }} style={styles.catIten_img} /> */}
-                                            {
-                                                data.image ? (
-                                                    <Image source={{uri: data.image}} style={{ height: 80, width: 80, borderRadius: 80, borderColor: 'blue', borderWidth: 2 }} />
-                                                ) : (
-                                                        <Image source={img18} style={{ height: 80, width: 80, borderRadius: 80, borderColor: 'blue', borderWidth: 2 }} />
+                                                {/* <Image source={{ uri: data.image || null }} style={styles.catIten_img} /> */}
+                                                {
+                                                    data.image ? (
+                                                        <Image source={{uri: data.image}} style={{ height: 80, width: 80, borderRadius: 80, borderColor: '#81cdc7', borderWidth: 2 }} />
+                                                    ) : (
+                                                        <Image source={img18} style={{ height: 80, width: 80, borderRadius: 80, borderColor: '#81cdc7', borderWidth: 2 }} />
                                                     )
 
-                                                    
-                                            }
-                                            {
-                                                data.IsSelected ? (
-                                                    <View style={{  backgroundColor: 'rgba(0,0,0, 0.3)', top: 0, left: 0, position: 'absolute', height: 80, width: 80, alignItems: 'center', justifyContent: 'center',  borderRadius: 80, zIndex: 99 }}>
-                                                        <Ionicons name="ios-done-all" style={{ color: 'white', fontSize: 40 }} />
-                                                    </View>
-                                                ) : (<View></View>)
-                                            }
-                                            </View>
+                                                        
+                                                }
+                                                {
+                                                    data.IsSelected ? (
+                                                        <View style={{  backgroundColor: 'rgba(129,205,199, 0.5)', top: 0, left: 0, position: 'absolute', height: 80, width: 80, alignItems: 'center', justifyContent: 'center',  borderRadius: 80, zIndex: 99 }}>
+                                                            <Ionicons name="ios-done-all" style={{ color: '#1e3768', fontSize: 40 }} />
+                                                        </View>
+                                                    ) : (<View></View>)
+                                                }
+                                                </View>
                                             <Text style={styles.catIten_txt}>{data.name || null}</Text>
-                                            
                                         </TouchableOpacity>
                                         
 
                                 ) : (
-                                        <View style={{width: 100, paddingTop: 10, paddingBottom: 10 }}>
-                                            <View style={{ justifyContent: 'space-around', alignContent: 'center', flex:1, flexDirection: 'row'  }}>
+                                        <View style={{width: 100, paddingTop: 10, paddingBottom: 10,  alignItems: 'center' }}>
+                                            <View style={{ height: 80, width: 80, position: 'relative' }}>
                                                 {
                                                     data.image ? (
                                                         <Image source={{ uri: data.image }} style={{ height: 80, width: 80, borderRadius: 50, borderColor: '#ccc', borderWidth: 2 }} />
                                                     ) : (
-                                                            <Image source={img18} style={{ height: 80, width: 80, borderRadius: 50, borderColor: '#ccc', borderWidth: 2 }} />
-                                                        )
+                                                        <Image source={img18} style={{ height: 80, width: 80, borderRadius: 50, borderColor: '#ccc', borderWidth: 2 }} />
+                                                    )
                                                 }
+                                                <View style={{  backgroundColor: 'rgba(204,204,204, 0.7)', top: 0, left: 0, position: 'absolute', height: 80, width: 80, alignItems: 'center', justifyContent: 'center',  borderRadius: 80, zIndex: 99 }}></View>
                                             </View>
-                                            <Text style={[styles.catIten_txt, { textAlign: 'center' }]}>{data.name || null}</Text>
+                                            <Text style={[styles.catIten_txt, { textAlign: 'center', width: '100%' }]}>{data.name || null}</Text>
                                         </View>
                                     )
                             }
@@ -199,10 +202,10 @@ class ServiceProviderListing extends Component {
             <Container >
                 <FSpinner visible={this.state.isVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <StatusBar
-                    backgroundColor="#cbf0ed"
+                    backgroundColor="#81cdc7"
                 />
 
-                <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
+                <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
                     <Button transparent onPress={() => this.props.navigation.goBack()} >
                         <Text>{I18n.t('cancel')}</Text>
                     </Button>
