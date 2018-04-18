@@ -155,18 +155,22 @@ class DateAndTime extends Component {
         })
     }
     setDateAndTime() {
-        
+        debugger;
         let saveDBTime = this.state.setTime.slice(0, -5) + " " + this.state.setTime.slice(5).toLowerCase();
         const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00' + " " + this.state.setTime.slice(5).toLowerCase();
+        
+        let dateDay = moment(this.state.daYSelected).format('ddd, DD MMM YYYY');
+        let dateTime = this.state.setTime.slice(0, -2) + ':00' + " " + this.state.setTime.slice(5).toLowerCase();
+
+        let dateFinal = dateDay + " " + dateTime;
 
         var timeNow = new Date();
         var now = moment(timeNow);
-        var cus_post_time = moment(saveDateDB);
+        var cus_post_time = moment(dateFinal);
         let duration;
         duration = moment.duration(now.diff(cus_post_time)).as('hour');
         checkPosNeg = Math.sign(duration);
         let durPosHour = Math.abs(duration);
-        console.warn(saveDateDB + ", " + timeNow + ", " + duration);
 
         if(checkPosNeg === 1 || checkPosNeg === 0){
             Alert.alert('You cannot select back time');
