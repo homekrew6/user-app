@@ -80,11 +80,10 @@ class incrimentDecriment extends Component {
 
     }
     handleDecrement = () => {
-        
         price=Number(price);
         var price = this.props.service.data.price;
         var timeInterval = this.props.service.data.time_interval;
-        if (Number(this.state.massage) == 0) {
+        if ((Number(this.state.massage) == 0) || (Number(this.state.massage) == 1)) {
 
         }
         else {
