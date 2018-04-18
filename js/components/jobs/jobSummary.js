@@ -192,7 +192,6 @@ class jobSummary extends Component {
                                                         ) : (
                                                                 <Image source={logo_hdr} style={styles.totalImage} />
                                                             )
-
                                                     }
                                                 </View>
                                                 <View style={{ flex: 1 }}>
@@ -212,14 +211,11 @@ class jobSummary extends Component {
 
                                                 </View>
                                                 <View style={[styles.price]}>
-                                                    <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >{this.state.currency} 
-                                                        {
-                                                            AnsList.price
-                                                        }
+                                                    <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >
+                                                    {this.state.currency} {AnsList.price}
                                                     </Text>
                                                 </View>
                                             </View>
-
                                     )
                                 }) : console.log()
                         }
@@ -232,10 +228,8 @@ class jobSummary extends Component {
                                 <Text style={[styles.text1, { fontSize: 12 }]}>Materials</Text>
                             </View>
                             <View style={[styles.price]}>
-                                <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >{this.state.currency}
-                                    {
-                                        (this.state.materialTotalPrice)
-                                    }
+                                <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >
+                                    {this.state.currency} {(this.state.materialTotalPrice) }
                                 </Text>
                             </View>
                         </View>

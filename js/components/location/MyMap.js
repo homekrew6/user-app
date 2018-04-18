@@ -70,7 +70,7 @@ class MyMap extends Component {
     }
 
     onMapDoneClick() {
-        this.setState({ IsSpinnerVisible: true });
+        
         //Add map
         if (this.props.navigation.state.params.screenType === 'add') {
             const customerId = this.props.navigation.state.params.customerId;
@@ -82,39 +82,52 @@ class MyMap extends Component {
                 : this.state.formatted_address;
             const latitude = this.state.region.latitude;
             const longitude = this.state.region.longitude;
-
-
-            api.post('user-locations', {
-                name: name,
-                buildingName: buildingName,
-                villa: villaNo,
-                landmark: landmark,
-                latitude: latitude,
-                longitude: longitude,
-                customerId: customerId
-            }).then(res => {
-                this.setState({ IsSpinnerVisible: false });
-                const data = this.props.auth.data;
-                AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
-                    if (fromConfirmation) {
-                        data.activeScreen = "LocationList";
-                        data.previousScreen = "Confirmation";
-                        this.props.navigateAndSaveCurrentScreen(data);
-                        this.props.navigation.navigate('LocationList');
+            if(name){
+                if(buildingName){
+                    if(villaNo){
+                        this.setState({ IsSpinnerVisible: true });
+                        api.post('user-locations', {
+                            name: name,
+                            buildingName: buildingName,
+                            villa: villaNo,
+                            landmark: landmark,
+                            latitude: latitude,
+                            longitude: longitude,
+                            customerId: customerId
+                        }).then(res => {
+                            this.setState({ IsSpinnerVisible: false });
+                            const data = this.props.auth.data;
+                            AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
+                                if (fromConfirmation) {
+                                    data.activeScreen = "LocationList";
+                                    data.previousScreen = "Confirmation";
+                                    this.props.navigateAndSaveCurrentScreen(data);
+                                    this.props.navigation.navigate('LocationList');
+                                }
+                                else {
+                                    data.activeScreen = "MyLocation";
+                                    data.previousScreen = "Menu";
+                                    this.props.navigateAndSaveCurrentScreen(data);
+                                    this.props.navigation.navigate('MyLocation');
+                                }
+                            })
+                        }).catch((err) => {
+                            console.log(err);
+                            this.setState({ IsSpinnerVisible: false });
+                            Alert.alert("Please try again later");
+                        });
+                    }else{
+                        
                     }
-                    else {
-                        data.activeScreen = "MyLocation";
-                        data.previousScreen = "Menu";
-                        this.props.navigateAndSaveCurrentScreen(data);
-                        this.props.navigation.navigate('MyLocation');
-                    }
-                })
-
-            }).catch((err) => {
-                console.log(err);
-                this.setState({ IsSpinnerVisible: false });
-                Alert.alert("Please try again later");
-            });
+                }else{
+                    Alert.alert('Please add building name');
+                }
+               
+            }else{
+                Alert.alert('Please add name');
+            }
+            
+           
         } else if (this.props.navigation.state.params.screenType === 'edit') {
             //Edit Map
             const customerId1 = this.props.navigation.state.params.customerId;
@@ -127,37 +140,51 @@ class MyMap extends Component {
             const latitude1 = this.state.region.latitude;
             const longitude1 = this.state.region.longitude;
             const locationEditUrl = `user-locations/${id1}`;
-            api.put(locationEditUrl, {
-                name: name1,
-                buildingName: buildingName1,
-                villa: villaNo1,
-                landmark: landmark1,
-                latitude: latitude1,
-                longitude: longitude1,
-                customerId: customerId1
-            }).then(res => {
-                this.setState({ IsSpinnerVisible: false });
-                const data = this.props.auth.data;
-                AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
-                    if (fromConfirmation) {
-                        data.activeScreen = "LocationList";
-                        data.previousScreen = "Confirmation";
-                        this.props.navigateAndSaveCurrentScreen(data);
-                        this.props.navigation.navigate('LocationList');
+            if(name1){
+                if(buildingName1){
+                    if(villaNo1){
+                        this.setState({ IsSpinnerVisible: true });
+                        api.put(locationEditUrl, {
+                            name: name1,
+                            buildingName: buildingName1,
+                            villa: villaNo1,
+                            landmark: landmark1,
+                            latitude: latitude1,
+                            longitude: longitude1,
+                            customerId: customerId1
+                        }).then(res => {
+                            this.setState({ IsSpinnerVisible: false });
+                            const data = this.props.auth.data;
+                            AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
+                                if (fromConfirmation) {
+                                    data.activeScreen = "LocationList";
+                                    data.previousScreen = "Confirmation";
+                                    this.props.navigateAndSaveCurrentScreen(data);
+                                    this.props.navigation.navigate('LocationList');
+                                }
+                                else {
+                                    data.activeScreen = "MyLocation";
+                                    data.previousScreen = "Menu";
+                                    this.props.navigateAndSaveCurrentScreen(data);
+                                    this.props.navigation.navigate('MyLocation');
+                                }
+                            })
+                            //  this.props.navigation.navigate('MyLocation');
+                        }).catch((err) => {
+                            console.log(err);
+                            this.setState({ IsSpinnerVisible: false });
+                            Alert.alert("Please try again later");
+                        });
+                    }else{
+                        Alert.alert('Please add Villa No / Appartment No');
                     }
-                    else {
-                        data.activeScreen = "MyLocation";
-                        data.previousScreen = "Menu";
-                        this.props.navigateAndSaveCurrentScreen(data);
-                        this.props.navigation.navigate('MyLocation');
-                    }
-                })
-                //  this.props.navigation.navigate('MyLocation');
-            }).catch((err) => {
-                console.log(err);
-                this.setState({ IsSpinnerVisible: false });
-                Alert.alert("Please try again later");
-            });
+                }else{
+                    Alert.alert('Please add building name');
+                }
+            }else{
+                Alert.alert('Please add name');
+            }
+
         }
 
     }

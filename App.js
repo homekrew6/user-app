@@ -1,8 +1,10 @@
 import React from "react";
 import App from "./js/App";
 import PropTypes from 'prop-types';
+import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 import api from './js/api/';
+
 export class App1 extends React.Component {
   constructor(props) {
     super(props);
