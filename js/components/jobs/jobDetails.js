@@ -23,6 +23,7 @@ import * as firebase from 'firebase';
 const win = Dimensions.get('window').width;
 const { width } = Dimensions.get('window');
 const height = parseInt(Dimensions.get('window').height / 20);
+const paused = require("../../../img/paused.png");
 const firebaseConfig = {
     apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
     authDomain: "krew-user-app.firebaseapp.com",
@@ -493,14 +494,12 @@ class JobDetails extends Component {
     renderFollowUp()
     {
         return(
-            <View style={{ flex: 1, flexDirection: 'row', padding: 30 }}>
-                <TouchableOpacity style={{ flex: 2, flexDirection: 'column' }} onPress={() => this.props.navigation.navigate('FollowUp', { jobDetails:this.state.jobDetails})}>
-                    <View style={{ flex: 4 }}>
-                        <Text>{I18n.t('click_to_see_follow_up')}</Text>
-                    </View>
+            <View style={{ flex: 1, flexDirection: 'row', padding: 30, alignItems: 'center' }}>
+                <TouchableOpacity style={{ flex: 1 }} onPress={() => this.props.navigation.navigate('FollowUp', { jobDetails:this.state.jobDetails})}>
+                    <Text style={{ textAlign: 'center' }}>{I18n.t('click_to_see_follow_up')}</Text>
                 </TouchableOpacity>
-                <View style={{ flex: 4 }}>
-                   <Text>Image</Text>
+                <View>
+                    <Image source={paused} style={{ height: 100, width: 100 }}/>
                 </View>
             </View>
         );
@@ -574,9 +573,11 @@ class JobDetails extends Component {
         if (this.state.jobDetails) {
             return (
                 <Container style={{ backgroundColor: '#fff' }}>
+
                     <StatusBar
                         backgroundColor="#81cdc7"
                     />
+
                     <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7">
                         <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
                             <Ionicons name="ios-arrow-back" style={styles.headIcon} />
@@ -586,6 +587,8 @@ class JobDetails extends Component {
                         </Body>
                         <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
                     </Header>
+
+
                     <Content style={{ backgroundColor: '#ccc' }}  >
 
                         {this.state.topScreenStatus === 'STARTED' || this.state.topScreenStatus === 'CANCELLED' ?
