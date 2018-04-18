@@ -702,9 +702,9 @@ class JobDetails extends Component {
                             <Text style={styles.jobItemValue}>1234</Text>
                         </View>
                         {this.state.topScreenStatus == 'CANCELLED' ? (
-                            <View style={styles.jobItemWarp}>
+                            <View style={[styles.jobItemWarp, { alignItems: 'center' , justifyContent: 'center'}]}>
 
-                                <Text style={styles.cancelName}>{I18n.t('canelledJob')}</Text>
+                                <Text style={[styles.cancelName, { textAlign: 'center' }]}>{I18n.t('canelledJob')}</Text>
                             </View>
                         ) : (
                                 <View></View>
