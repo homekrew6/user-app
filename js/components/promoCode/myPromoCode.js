@@ -39,7 +39,7 @@ class MyPromoCode extends Component {
                         <Ionicons style={styles.headerIconBack} name='ios-arrow-back' />
                   </Button>
                 <Body style={styles.headerBody}>
-                  <Title style={styles.headerTitle}>My Promo Code</Title>
+                        <Title style={styles.headerTitle}>{I18n.t('myPromoCode')}</Title>
                 </Body>
                     <Button transparent onPress={() => this.addPromoCode()} >
                     <Text>{I18n.t('add')}</Text>
