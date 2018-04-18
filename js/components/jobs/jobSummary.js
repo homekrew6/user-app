@@ -19,8 +19,9 @@ import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
-const carve = require("../../../img/icon17.png");
+const carve = require("../../../img/icon17.png"); 
 const totalImg = require("../../../img/icon/coins.png");
+const timer = require("../../../img/icon/timer.png");
 
 
 class jobSummary extends Component {
@@ -31,7 +32,8 @@ class jobSummary extends Component {
             currency: 'AED',
             totalPrice: 0,
             materialTotalPrice: 0,
-            grndtotal: 0
+            hoursPrice: '50.00',
+            grndtotal: 50,
         };
     }
     componentDidMount() {
@@ -45,6 +47,7 @@ class jobSummary extends Component {
         // console.log(this.props);
         let jodId = this.props.navigation.state.params.jobDetails.id;
         api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": jodId }).then((resAns) => {
+           
             if (resAns.response.message.length && resAns.response.message.length > 0 && resAns.response.message[0].questionList) {
                 let jsonAnswer = JSON.parse(resAns.response.message[0].questionList);
                 let finalList = [];
@@ -58,9 +61,13 @@ class jobSummary extends Component {
                             jsonAnswer[i].IncrementId,
                             jsonAnswer[i].Status,
                             jsonAnswer[i].answers)
-                        totalPrice = totalPrice + price;
-                        price = price.toFixed(2);
-                        jsonAnswer[i].price = price;
+                            if(price)
+                            {
+                                totalPrice = totalPrice + price;
+                                price = price.toFixed(2);
+                                jsonAnswer[i].price = price;
+                            }
+                       
                         jsonAnswer[i].option_price_impact = jsonAnswer[i].answers[0].option_price_impact;
 
                         if (jsonAnswer[i].type != 3) {
@@ -80,12 +87,10 @@ class jobSummary extends Component {
 
                 }
                 totalPrice = totalPrice.toFixed(2);
-                //console.log('jsonAnswer', jsonAnswer);
                 this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice });
             }
 
             api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
-                debugger;
                 let materialList = materialAns.response.message;
                 materialTotalPrice = 0;
                 materialList.map((materialItem) => {
@@ -97,7 +102,7 @@ class jobSummary extends Component {
                 this.setState({
                     materialTotalPrice: materialTotalPrice,
                 })
-                let grndtotal = (parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
+                let grndtotal = (parseInt(this.state.grndtotal) + parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
                 this.setState({
                     grndtotal: grndtotal,
                 })
@@ -230,6 +235,19 @@ class jobSummary extends Component {
                             <View style={[styles.price]}>
                                 <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >
                                     {this.state.currency} {(this.state.materialTotalPrice) }
+                                </Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.totalBillitem}>
+                            <View style={styles.imagesWarp} >
+                                <Image source={timer} style={styles.totalImage} />
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text style={[styles.text1, { fontSize: 12 }]}>{I18n.t('hours')}</Text>
+                            </View>
+                            <View style={[styles.price]}>
+                                <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} > {this.state.currency} {this.state.hoursPrice}
                                 </Text>
                             </View>
                         </View>

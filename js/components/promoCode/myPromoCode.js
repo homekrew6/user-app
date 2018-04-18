@@ -98,17 +98,4 @@ class MyPromoCode extends Component {
     }
 }
 
-MyPromoCode.propTypes = {
-    //auth: PropTypes.object.isRequired
-}
-const mapStateToProps = (state) => {
-    return {
-        //auth: state.auth
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyPromoCode);
+export default MyPromoCode;

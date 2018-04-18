@@ -336,13 +336,13 @@ class Menu extends Component {
             </CardItem>
 
           <CardItem style={styles.menuCarditem}>
-            <View style={styles.menuCardView}>
-              <Image source={icon5} style={styles.menuCardIcon} />
-              <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
-              <View style={styles.arw_lft}>
-                <Image source={back_arow} style={styles.arw_lft_img} />
-              </View>
-            </View>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('MyPromoCode')} >
+                <Image source={icon5} style={styles.menuCardIcon} />
+                <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
+                <View style={styles.arw_lft}>
+                  <Image source={back_arow} style={styles.arw_lft_img} />
+                </View>
+              </TouchableOpacity>
           </CardItem>
 
           <CardItem style={styles.menuCarditem}>

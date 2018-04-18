@@ -112,5 +112,6 @@ export default {
   materials:'Materials',
   hours:'Hours',
   total:'Total',
-  total_bill: 'Total Bill'
+  total_bill: 'Total Bill',
+  myPromoCode: 'My Promo Code'
 };
