@@ -30,7 +30,8 @@ const firebaseConfig = {
     databaseURL: "https://krew-user-app.firebaseio.com",
     storageBucket: "krew-user-app.appspot.com"
 };
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+ const firebaseApp = firebase.initializeApp(firebaseConfig);
+
 import styles from "./styles";
 class JobDetails extends Component {
     constructor(props) {
@@ -252,6 +253,7 @@ class JobDetails extends Component {
             }
             const time_interval = this.state.jobDetails.service.time_interval;
             const progressSpeed = (time_interval / 100) * 60000;
+            this.setState({ workProgressTime: 0.2 });
             const progressInterval = setInterval(() => {
                 this.setState({ workProgressTime: this.state.workProgressTime + 1 });
             }, progressSpeed);
