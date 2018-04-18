@@ -383,7 +383,10 @@ class Confirmation extends Component {
                                 </Text>
                             </View>
                             <Text style={{ color: '#1e3768', fontSize: 16 }}>{this.state.currency} {this.props.service.data.price}</Text>
-                            <Text style={{ color: '#747474', fontSize: 12 }}>Min Price {this.state.currency} {this.state.minPrice}</Text>                            
+                            <Text style={{ color: '#747474', fontSize: 12 }}>Min Price {this.state.currency} {(this.props.service.data.min_charge)}</Text>                            
+
+                         
+
                         </View>
                     </View>
 
