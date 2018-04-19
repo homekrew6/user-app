@@ -597,6 +597,7 @@ class serviceDetails extends Component {
       cover_image: this.props.service.data.cover_image,
       banner_image: this.props.service.data.banner_image
     })
+    
     // AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
     AsyncStorage.getItem('serviceId').then((serviceValue) => {
       console.log('AsyncStorage serviceId', serviceValue);
@@ -787,6 +788,7 @@ class serviceDetails extends Component {
       var price = this.props.service.data.price;
       var timeInterval = this.props.service.data.time_interval;
       price = Number(price);
+
       if (data.answers) {
         if (data.answers[0].option_price_impact == "Addition") {
           if (this.props.service.data.value) {
@@ -796,17 +798,24 @@ class serviceDetails extends Component {
             else {
               timeInterval = timeInterval / Number(data.answers[0].time_impact);
             }
-            if (value < this.props.service.data.value) {
-              price = price - (value + Number(data.answers[0].price_impact));
+
+            let redux_value = Number(this.props.service.data.value);
+            if(value === data.start_range){
+              price = price - (redux_value + Number(data.answers[0].price_impact));
+            }else{
+              if(value < redux_value){
+                  price = (price - redux_value ) + Number(value); 
+              }else if(redux_value <= value){
+                price = (price + Number(value)) - redux_value;
+              }
             }
-            else {
+
+          }
+          else {
+            if(value === data.start_range){ }else{
               price = price + (value + Number(data.answers[0].price_impact));
             }
           }
-          else {
-            price = price + (value + Number(data.answers[0].price_impact));
-          }
-
         }
         else {
           if (this.props.service.data.value) {
@@ -816,25 +825,45 @@ class serviceDetails extends Component {
             else {
               timeInterval = timeInterval / Number(data.answers[0].time_impact);
             }
-            if (value < this.props.service.data.value) {
-              price = price + (value + Number(data.answers[0].price_impact));
+            // if (value < this.props.service.data.value) {
+            //   price = price + (value + Number(data.answers[0].price_impact));
+            // }
+            // else {
+            //   price = price + (value + Number(data.answers[0].price_impact));
+            // }
+
+            let redux_value = Number(this.props.service.data.value);
+            if(value === data.start_range){
+              price = price - (redux_value * Number(data.answers[0].price_impact));
+            }else{
+              if(value < redux_value){
+                  price = (price - (redux_value * Number(data.answers[0].price_impact))) + (value * Number(data.answers[0].price_impact));
+              }else if(redux_value <= value){
+                  price = (price - (redux_value * Number(data.answers[0].price_impact))) + (value * Number(data.answers[0].price_impact));
+              }
             }
-            else {
-              price = price + (value + Number(data.answers[0].price_impact));
-            }
+
           }
           else {
-            price = price + (value * Number(data.answers[0].price_impact));
+            if(value === data.start_range){ }else{
+              price = price + (value * Number(data.answers[0].price_impact));
+            }
+            
           }
 
         }
 
         price = parseFloat(Math.round(price * 100) / 100).toFixed(2);
         price = Number(price);
+        let start_range_data = data.start_range;
         var data = this.props.service.data;
         price = this.addZeroes(price);
         data.price = price;
-        data.value = value;
+        if(value === start_range_data){
+          data.value = ''
+        }else{
+          data.value = value
+        }
         data.time_interval = timeInterval;
         this.props.setServiceDetails(data);
         console.log('setServiceDetails data', data);
@@ -954,6 +983,8 @@ class serviceDetails extends Component {
               minimumTrackTintColor="#81cdc7"
               maximumTrackTintColor="#e1e1e1"
               thumbTintColor="#81cdc7"
+              minimumValue={data.start_range}
+              maximumValue={data.end_range}
               value={data.start_range}
               onValueChange={value => this.sliderChanged(value, data)}
             />

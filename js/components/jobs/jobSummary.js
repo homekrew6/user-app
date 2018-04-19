@@ -32,8 +32,8 @@ class jobSummary extends Component {
             currency: 'AED',
             totalPrice: 0,
             materialTotalPrice: 0,
-            hoursPrice: '50.00',
-            grndtotal: 50,
+            hoursPrice: '0.00',
+            grndtotal: 0,
         };
     }
     componentDidMount() {
@@ -52,6 +52,7 @@ class jobSummary extends Component {
                 let jsonAnswer = JSON.parse(resAns.response.message[0].questionList);
                 let finalList = [];
                 let totalPrice = 0;
+                
                 for (let i = 0; i < jsonAnswer.length; i++) {
                     if (jsonAnswer[i].type != 5) {
                         let price = this.CalculatePrice(jsonAnswer[i].type,
@@ -60,7 +61,8 @@ class jobSummary extends Component {
                             jsonAnswer[i].answers[0].time_impact,
                             jsonAnswer[i].IncrementId,
                             jsonAnswer[i].Status,
-                            jsonAnswer[i].answers)
+                            jsonAnswer[i].answers, jsonAnswer[i].start_range);
+                            debugger;
                             if(price)
                             {
                                 totalPrice = totalPrice + price;
@@ -88,8 +90,9 @@ class jobSummary extends Component {
                 }
                 totalPrice = totalPrice.toFixed(2);
                 this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice });
+                
             }
-
+               
             api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
                 let materialList = materialAns.response.message;
                 materialTotalPrice = 0;
@@ -98,13 +101,27 @@ class jobSummary extends Component {
                         materialTotalPrice = materialTotalPrice + Number(materialItem.materials.price);
                     }
                 })
+                
+                
                 materialTotalPrice = parseInt(materialTotalPrice).toFixed(2);
                 this.setState({
                     materialTotalPrice: materialTotalPrice,
                 })
-                let grndtotal = (parseInt(this.state.grndtotal) + parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
+                let hoursPrice='0.00';
+                let grndtotal;
+                if(materialList.length >0)
+                {
+                 hoursPrice='50.00';
+                 grndtotal =50+ (parseInt(this.state.grndtotal) + parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
+                }
+                else
+                {
+                    grndtotal = (parseInt(this.state.grndtotal) + parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
+                }
+                
                 this.setState({
                     grndtotal: grndtotal,
+                    hoursPrice:hoursPrice
                 })
                 console.log(materialList);
             }).catch(err => {
@@ -115,12 +132,13 @@ class jobSummary extends Component {
 
 
     }
-    CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray) {
+    CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray,start_range) {
         let retPrice;
+        debugger;
         let totalPrice = 0;
         switch (type) {
             case 1:
-            case 4:
+            
                 if (impact_type === 'Addition') {
                     //retPrice = Number(price_impact) + Number(impact_no);
                     impact_no = Number(impact_no);
@@ -138,6 +156,25 @@ class jobSummary extends Component {
                 //this.setState({ totalPrice: this.state.totalPrice + retPrice });
 
                 return totalPrice;
+                break;
+                case 4:
+                if(start_range!=0)
+                {
+                    if (impact_type === 'Addition') {
+                        //retPrice = Number(price_impact) + Number(impact_no);
+                        impact_no = Number(impact_no);
+                        for (let i = 1; i <= impact_no; i++) {
+                            totalPrice = totalPrice + i + Number(price_impact);
+                        }
+                    } else {
+                        impact_no = Number(impact_no);
+                        for (let i = 1; i <= impact_no; i++) {
+                            totalPrice = totalPrice + (start_range * Number(price_impact));
+                        }
+                        //retPrice = Number(price_impact) * Number(impact_no);
+                    }
+                    return totalPrice;
+                }
                 break;
             case 2:
                 if (BoolStatus) {
@@ -210,15 +247,27 @@ class jobSummary extends Component {
                                                     }
                                                     {
                                                         AnsList.priceImp ? (
-                                                            <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>{AnsList.option_price_impact == 'Addition' ? '+ ' : 'x '}{this.state.currency} {(AnsList.priceImp)}</Text>
+                                                            AnsList.price?(
+                                                            <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>
+                                                                {AnsList.option_price_impact == 'Addition' ? '+ ' : 'x '}{this.state.currency} {(AnsList.priceImp)}
+                                                            </Text>
+                                                            ):
+                                                           (
+                                                            <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]}>N/A</Text>
+                                                           ) 
                                                         ) : (console.log())
                                                     }
 
                                                 </View>
                                                 <View style={[styles.price]}>
-                                                    <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >
-                                                    {this.state.currency} {AnsList.price}
-                                                    </Text>
+                                                {
+                                                    AnsList.price?(
+                                                        <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >
+                                                        {this.state.currency} {AnsList.price}
+                                                        </Text> 
+                                                    ):<Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]}>N/A</Text>
+                                                }
+                                                    
                                                 </View>
                                             </View>
                                     )
