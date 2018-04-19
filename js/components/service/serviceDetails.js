@@ -600,6 +600,7 @@ class serviceDetails extends Component {
     })
     
     // AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
+
     AsyncStorage.getItem('serviceId').then((serviceValue) => {
       console.log('AsyncStorage serviceId', serviceValue);
       if (serviceValue && serviceValue === serviceId.toString()) {
@@ -607,10 +608,20 @@ class serviceDetails extends Component {
           if (value) {
             const jsonDump = JSON.parse(value);
             this.setState({ questionList: jsonDump });
+            jsonDump.map((item)=>{
+              if(item.type==4)
+              {
+                if(!item.rangeValue)
+                {
+               item.rangeValue=item.start_range;
+                }
+              }
+            })
             this.calculatePriceOnStart();
             console.log('jsonDump DidMount', jsonDump);
           } else {
             let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
+           debugger;
             api.get(questionServiceUrl).then(responseJson => {
               console.log('questionServiceUrl', responseJson);
               responseJson.map((item)=>{
@@ -638,7 +649,6 @@ class serviceDetails extends Component {
           console.log('switchChange err', res);
         });
       } else {
-
         console.log('AsyncStorage inside else');
         AsyncStorage.setItem('serviceId', serviceId.toString(), (res) => {
           if (serviceValue) {
@@ -671,7 +681,14 @@ class serviceDetails extends Component {
               let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
               api.get(questionServiceUrl).then(responseJson => {
                 AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
-                console.log('questionServiceUrl', responseJson);
+                responseJson.map((item)=>{
+                  if(item.type==4){
+                    if(!item.rangeValue)
+                    {
+                   item.rangeValue=item.start_range;
+                    }
+                  }
+                })
                 this.setState({ questionList: responseJson });
                 const dataStringQuestion = JSON.stringify(responseJson);
                 AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
@@ -687,7 +704,6 @@ class serviceDetails extends Component {
             });
           }
         });
-
       }
     }).catch(err => {
       AsyncStorage.setItem('serviceId', toString(serviceId), (res) => {
