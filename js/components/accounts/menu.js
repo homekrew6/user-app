@@ -9,6 +9,7 @@ import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Lab
 
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
+import api from '../../api';
 
 import { navigateAndSaveCurrentScreen } from './elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
@@ -46,16 +47,23 @@ class Menu extends Component {
   }
 
   logout() {
-    AsyncStorage.clear();
-    AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
-
-    })
-    this.props.logout(res => {
-      if (res) {
-        //this.props.navigation.navigate("Login")
-        this.props.navigation.dispatch(resetAction);
-      } else {
-        this.props.navigation.navigate("Menu");
+    AsyncStorage.getItem("userToken").then((userToken) => {
+      if (userToken) {
+        const userToken1 = JSON.parse(userToken);
+        api.put(`Customers/editCustomer/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: '' }).then((resEdit) => {
+          AsyncStorage.clear();
+          AsyncStorage.setItem("IsSliderShown", "true").then((res) => {})
+          this.props.logout(res => {
+            if (res) {
+              //this.props.navigation.navigate("Login")
+              this.props.navigation.dispatch(resetAction);
+            } else {
+              this.props.navigation.navigate("Menu");
+            }
+          })
+        }).catch((err) => {
+          console.log(err);
+        });
       }
     })
   }

@@ -91,7 +91,6 @@ class jobSummary extends Component {
                 }
                 totalPrice = totalPrice.toFixed(2);
                 this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice });
-                
             }
                
             api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
@@ -222,7 +221,7 @@ class jobSummary extends Component {
                                 this.state.jsonAnswer.map((AnsList, key) => {
                                     // console.log('AnsList', AnsList)
                                     return (
-                                        AnsList.type === 5 ? null :
+                                        AnsList.type === 5 ? null : AnsList.type === 4 && AnsList.start_range == 0 ? null:
                                             <View key={key} style={styles.totalBillitem}>
                                                 <View style={styles.imagesWarp} >
                                                     {
