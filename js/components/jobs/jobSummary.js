@@ -52,7 +52,6 @@ class jobSummary extends Component {
                 let jsonAnswer = JSON.parse(resAns.response.message[0].questionList);
                 let finalList = [];
                 let totalPrice = 0;
-                debugger;
                 for (let i = 0; i < jsonAnswer.length; i++) {
                     if (jsonAnswer[i].type != 5) {
                         let price = this.CalculatePrice(jsonAnswer[i].type,
@@ -98,7 +97,6 @@ class jobSummary extends Component {
             api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
                 let materialList = materialAns.response.message;
                 materialTotalPrice = 0;
-                debugger;
                 materialList.map((materialItem) => {
                     if (materialItem.materials) {
                         materialTotalPrice = materialTotalPrice + Number(materialItem.price);
