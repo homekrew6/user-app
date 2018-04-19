@@ -212,7 +212,6 @@ class DateAndTime extends Component {
                         }
 
                     }).catch((error) => {
-                        console.log(error);
                         this.setState({ IsSpinnerVisible: false });
                     })
                 }

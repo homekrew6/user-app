@@ -14,7 +14,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 class MyPromoCode extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             isModalVisible: false,
         }

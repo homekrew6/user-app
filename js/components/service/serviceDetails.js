@@ -704,7 +704,6 @@ class serviceDetails extends Component {
     // BackHandler.addEventListener('hardwareBackPress', function () {
     //   const { dispatch, navigation, nav } = this.props;
     //   AsyncStorage.getItem("fromLogin").then((storeValue)=>{
-    //     debugger;
     //     if(storeValue)
     //     {
     //       if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Menu') {

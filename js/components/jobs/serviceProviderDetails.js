@@ -36,7 +36,6 @@ class ServiceProviderDetails extends Component {
     }
     pressChat(){
         this.props.navigation.navigate('Chat', { workerDetails: this.state.jobDetails.worker });
-        console.log(this.state.jobDetails.worker.id);
     }
     render() {
         return (

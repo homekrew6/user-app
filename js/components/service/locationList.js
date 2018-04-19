@@ -77,7 +77,6 @@ class LocationList extends Component {
             })
             this.setState({ homeArray: finalArray });
         }).catch((err) => {
-            console.log(err);
         });
     }
     selectActive(data) {

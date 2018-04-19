@@ -196,24 +196,6 @@ class JobDetails extends Component {
 
     }
     componentDidMount() {
-
-  
-    // let dateNow = new Date();
-    // let gmtTimeTest = "Sun, 22 Apr 2018 03:20:00";
-    // let slicedDate = gmtTimeTest.slice(0, -4);
-    // var nUTC_diff = dateNow.getTimezoneOffset();
-    // console.log('nUTC', nUTC_diff, dateNow);
-    
-    // let timeToMan = Math.abs(nUTC_diff);
-    // let utc_check = Math.sign(nUTC_diff);
-    // let localTime;
-    // if(utc_check === 1 || utc_check === 0) {
-    //     localTime = moment(slicedDate).subtract(timeToMan, 'minute').format('ddd DD-MMM-YYYY hh:mm A');
-    // }else{
-    //     localTime = moment(slicedDate).add(timeToMan, 'minute').format('ddd DD-MMM-YYYY hh:mm A');
-    // }
-    // console.log(localTime);
-
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
             if(res.response.message[0].price) { res.response.message[0].price = res.response.message[0].price.toFixed(2); }
             this.setState({
@@ -245,7 +227,6 @@ class JobDetails extends Component {
             }
             else if (this.state.jobDetails.status == 'FOLLOWEDUP') {
                 this.setState({ jobTrackingStatus: 'Follow Up' });
-                debugger;
                 api.post('jobMaterials/getJobMaterialByJobId', { "jobId": this.state.jobDetails.id }).then((materialAns) => {
                     let materialList = materialAns.response.message;
                     materialTotalPrice = 0;
@@ -257,7 +238,7 @@ class JobDetails extends Component {
                     materialTotalPrice = parseFloat(materialTotalPrice).toFixed(2);
                     this.setState({
                         materialTotalPrice: materialTotalPrice,
-                        hoursPrice: 50
+                        hoursPrice: Number(50)
                     })
                     // let grndtotal = (parseInt(this.state.grndtotal) + parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
                     // this.setState({
@@ -717,7 +698,11 @@ class JobDetails extends Component {
                                 </View>
                                 <Text style={styles.jobItemName}>{I18n.t('jobSummary')}</Text>
                                 <Text style={styles.jobItemValue}>
-                                    {this.state.currency} {parseFloat(this.state.jobDetails.price) + parseFloat(this.state.materialTotalPrice) + parseFloat(this.state.hoursPrice)}
+                                    {this.state.currency} {
+                                            parseFloat(this.state.jobDetails.price)
+                                            + parseFloat(this.state.materialTotalPrice)
+                                            + parseFloat(this.state.hoursPrice)
+                                          }
                                 </Text>
                             </View>
                         </TouchableOpacity>
@@ -728,7 +713,9 @@ class JobDetails extends Component {
                                         <FontAwesome name="money" style={styles.jobItemIcon} />
                                     </View>
                                     <Text style={styles.jobItemName}>{I18n.t('total_bill')}</Text>
-                                    <Text style={styles.jobItemValue}>{this.state.currency} {this.state.jobDetails.price}</Text>
+                                    <Text style={styles.jobItemValue}>{this.state.currency}
+                                     {this.state.jobDetails.price}
+                                    </Text>
                                 </View>
                                 : console.log()
                         }

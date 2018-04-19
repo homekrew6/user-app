@@ -41,7 +41,6 @@ class Home extends Component {
 	componentWillMount() {
 		FCM.requestPermissions();
 		FCM.getFCMToken().then(token => {
-			console.log("TOKEN (getFCMToken)", token);
 			// this.props.checkAuth((res) => {
 			// 	if (res) {
 			// 		api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token }).then((resEdit) => {

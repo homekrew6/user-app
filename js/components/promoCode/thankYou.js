@@ -15,7 +15,6 @@ const img19 = require('../../../img/serv.jpg');
 class ThankYou extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             starCount: 2.5,
             sliderData: [

@@ -43,8 +43,6 @@ class Intro extends Component {
 				sliderArray: res.response,
 				slidFlag: true
 			});
-			console.log('hi', res.response);
-
 
 		}).catch((err) => {
 			this.setState({ loader: false })

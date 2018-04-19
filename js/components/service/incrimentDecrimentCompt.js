@@ -101,12 +101,10 @@ class incrimentDecriment extends Component {
                 });
                 const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
                 AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-                console.log('====FirstPage====handleDecrement==='+res)
+                    console.log('====FirstPage====handleDecrement==='+res)
                 });
             }
             }).catch(res => {
-                //AsyncStorage.setItem('StoreData', dataRemoteString);
-                console.log('switchChange err', res);
             });
             
             if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {

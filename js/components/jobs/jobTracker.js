@@ -56,7 +56,6 @@ class JobTracker extends Component {
             else {
                 statusArray = res.response.message;
             }
-            console.log(statusArray);
             statusArray.map((newdata) => {
                 if (newdata.status == 'JOBCOMPLITED') {
                     this.setState({
@@ -71,7 +70,6 @@ class JobTracker extends Component {
                 loader: false,
             })            
         }).catch((error) => {
-            console.log('err', error );
             this.setState({
                 loader: false,
             });

@@ -6,7 +6,6 @@ import { AsyncStorage } from 'react-native';
 
 export function setServiceDetails(data) {
   return function (dispatch) {
-    console.log('setServiceDetails',data);
       dispatch(serviceStateSuccess(data));
   };
 }
