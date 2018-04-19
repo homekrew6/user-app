@@ -111,6 +111,7 @@ class Confirmation extends Component {
                             if(jobPrice)
                             {
                                 AsyncStorage.getItem("keyQuestionList").then((value) => {
+                                    debugger;
                                     if (value) {
                                         api.post('Jobs/insertNewJob', {
                                             "userLocationId": this.props.service.data.serviceLocationid,

@@ -61,6 +61,7 @@ class serviceDetails extends Component {
       currency: 'AED',
       activeRadioArray: [false, false, false],
       IsSpinnerVisible: false,
+      isSlided: false,
       sliderData: [
 
       ]
@@ -612,6 +613,16 @@ class serviceDetails extends Component {
             let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
             api.get(questionServiceUrl).then(responseJson => {
               console.log('questionServiceUrl', responseJson);
+              responseJson.map((item)=>{
+                debugger;
+                if(item.type==4)
+                {
+                  if(!item.rangeValue)
+                  {
+                 item.rangeValue=item.start_range;
+                  }
+                }
+              })
               this.setState({ questionList: responseJson });
               const dataStringQuestion = JSON.stringify(responseJson);
               AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
@@ -636,6 +647,14 @@ class serviceDetails extends Component {
             api.get(questionServiceUrl).then(responseJson => {
               AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
               console.log('questionServiceUrl', responseJson);
+              responseJson.map((item)=>{
+                if(item.type==4){
+                  if(!item.rangeValue)
+                  {
+                 item.rangeValue=item.start_range;
+                  }
+                }
+              })
               this.setState({ questionList: responseJson });
               const dataStringQuestion = JSON.stringify(responseJson);
               AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
@@ -788,10 +807,11 @@ class serviceDetails extends Component {
       var price = this.props.service.data.price;
       var timeInterval = this.props.service.data.time_interval;
       price = Number(price);
-
+      let isSlidedTest;
+      debugger;
       if (data.answers) {
         if (data.answers[0].option_price_impact == "Addition") {
-          if (this.props.service.data.value) {
+          if (data.isSlided === 'true') {
             if (data.answers[0].option_time_impact == "Addition") {
               timeInterval = timeInterval - Number(data.answers[0].time_impact);
             }
@@ -799,26 +819,27 @@ class serviceDetails extends Component {
               timeInterval = timeInterval / Number(data.answers[0].time_impact);
             }
 
-            let redux_value = Number(this.props.service.data.value);
+            let redux_value = Number(data.rangeValue);
             if(value === data.start_range){
               price = price - (redux_value + Number(data.answers[0].price_impact));
+              isSlidedTest = 'false';
             }else{
+              isSlidedTest = 'true';
               if(value < redux_value){
-                  price = (price - redux_value ) + Number(value); 
+                price = (price - redux_value ) + Number(value);
               }else if(redux_value <= value){
                 price = (price + Number(value)) - redux_value;
               }
             }
-
-          }
-          else {
-            if(value === data.start_range){ }else{
+          }else {
+            //if(value === data.start_range){ }else{
               price = price + (value + Number(data.answers[0].price_impact));
-            }
+              isSlidedTest = 'true';
+            //}
           }
         }
         else {
-          if (this.props.service.data.value) {
+          if (data.rangeValue) {
             if (data.answers[0].option_time_impact == "Addition") {
               timeInterval = timeInterval - Number(data.answers[0].time_impact);
             }
@@ -832,7 +853,7 @@ class serviceDetails extends Component {
             //   price = price + (value + Number(data.answers[0].price_impact));
             // }
 
-            let redux_value = Number(this.props.service.data.value);
+            let redux_value = Number(data.rangeValue);
             if(value === data.start_range){
               price = price - (redux_value * Number(data.answers[0].price_impact));
             }else{
@@ -856,17 +877,26 @@ class serviceDetails extends Component {
         price = parseFloat(Math.round(price * 100) / 100).toFixed(2);
         price = Number(price);
         let start_range_data = data.start_range;
-        var data = this.props.service.data;
+        var data1 = this.props.service.data;
         price = this.addZeroes(price);
-        data.price = price;
-        if(value === start_range_data){
-          data.value = ''
-        }else{
-          data.value = value
-        }
-        data.time_interval = timeInterval;
-        this.props.setServiceDetails(data);
-        console.log('setServiceDetails data', data);
+        data1.price = price;
+        
+        data1.questionList.map((item1)=>{
+          if(item1.id==data.id) {
+            item1.isSlided = isSlidedTest;
+            if(value === start_range_data){
+              item1.rangeValue=value;
+            }else{
+              item1.rangeValue=value;
+            }
+          }
+        })
+        data1.time_interval = timeInterval;
+        this.props.setServiceDetails(data1);
+        AsyncStorage.setItem("keyQuestionList", JSON.stringify(data1.questionList)).then((success)=>{
+
+        })
+        console.log('setServiceDetails data', data1);
       }
     }
 
@@ -985,7 +1015,7 @@ class serviceDetails extends Component {
               thumbTintColor="#81cdc7"
               minimumValue={data.start_range}
               maximumValue={data.end_range}
-              value={data.start_range}
+              value={data.rangeValue ? data.rangeValue : 0}
               onValueChange={value => this.sliderChanged(value, data)}
             />
             <Text style={styles.bedroomCount}>{data.name}</Text>
