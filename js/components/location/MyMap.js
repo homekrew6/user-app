@@ -112,7 +112,6 @@ class MyMap extends Component {
                                 }
                             })
                         }).catch((err) => {
-                            console.log(err);
                             this.setState({ IsSpinnerVisible: false });
                             Alert.alert("Please try again later");
                         });
@@ -171,7 +170,6 @@ class MyMap extends Component {
                             })
                             //  this.props.navigation.navigate('MyLocation');
                         }).catch((err) => {
-                            console.log(err);
                             this.setState({ IsSpinnerVisible: false });
                             Alert.alert("Please try again later");
                         });

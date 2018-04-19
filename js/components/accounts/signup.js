@@ -48,7 +48,6 @@ class Signup extends Component {
 
   componentDidMount() {
     FCM.getFCMToken().then(token => {
-      console.log("TOKEN (getFCMToken)", token);
       this.setState({ deviceToken: token });
     });
   }

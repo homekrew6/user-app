@@ -5,7 +5,7 @@ import I18n from '../../i18n/i18n';
 const icon3 = require("../../../img/icon3.png");
 class LocationList extends Component {
   componentDidMount(){
-    console.log('LocationList', this.props);
+
   }
   state = {};
   render() {

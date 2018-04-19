@@ -74,7 +74,6 @@ class Reschedule extends Component {
             }
             
         }).catch((err) => {
-            console.log(err);
             this.setState({
                 loader: false
             })
@@ -95,7 +94,6 @@ class Reschedule extends Component {
             for (let i = 0; i < newTime.length; i++) {
                 newTime[i].selectedTime = true;
                 if (newTime[i].key == d1.getHours()+1) {
-                    console.log(d1.getHours());
                     break;
                 }
             }
@@ -104,10 +102,7 @@ class Reschedule extends Component {
         this.setState({ 
             selectedDate: day.dateString,
             colectionData: newTime
-         })
-
-        // console.log(d1.getHours());
-                
+         })      
     }
     
 
@@ -177,7 +172,6 @@ class Reschedule extends Component {
                 this.props.navigation.navigate('JobList')
             }
         }).catch((err) => {
-            console.log(err);
             this.setState({
                 loader: false,
                 rescheduleModal: false

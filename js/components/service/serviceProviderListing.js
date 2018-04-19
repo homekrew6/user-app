@@ -40,7 +40,6 @@ class ServiceProviderListing extends Component {
             const data = { "serviceId": 8, "time": time, "day": day, "customerId":this.props.auth.data.id };
             this.setState({ isVisible: true });
             api.post('Workeravailabletimings/getUserFavSVListing', data).then((data) => {
-                // debugger;
                 // data.response.list.map((itemnew)=>{
                 //     itemnew.IsAvailable = false;
                 // })
@@ -66,7 +65,6 @@ class ServiceProviderListing extends Component {
             let day = this.props.service.data.serviceTime.split(' ')[0].toLowerCase();
             const data = { "serviceId": 8, 'time': time, 'day': day };
             api.post('Workeravailabletimings/getUserFavSVListing', data).then((data) => {
-                // debugger;
                 if (data.response.type == 'success') {
                     this.setState({ isVisible: false });
                     this.setState({ spList: data.response.list });

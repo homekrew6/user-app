@@ -44,7 +44,6 @@ class jobSummary extends Component {
             }
         });
 
-        // console.log(this.props);
         let jodId = this.props.navigation.state.params.jobDetails.id;
         api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": jodId }).then((resAns) => {
            
@@ -128,7 +127,6 @@ class jobSummary extends Component {
                     grndtotal: grndtotal,
                     hoursPrice:hoursPrice
                 })
-                console.log(materialList);
             }).catch(err => {
                 console.log('err', err);
             });
@@ -185,7 +183,6 @@ class jobSummary extends Component {
                 break;
             case 3:
                 AnsArray.map((ansData) => {
-                    // console.log('ansData', ansData);
                     if (ansData.selected) {
                         retPrice = Number(ansData.price_impact);
                     }
@@ -219,7 +216,6 @@ class jobSummary extends Component {
                         {
                             this.state.jsonAnswer.length > 0 ?
                                 this.state.jsonAnswer.map((AnsList, key) => {
-                                    // console.log('AnsList', AnsList)
                                     return (
                                         AnsList.type === 5 ? null : AnsList.type === 4 && AnsList.start_range == 0 ? null:
                                             <View key={key} style={styles.totalBillitem}>

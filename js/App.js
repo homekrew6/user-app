@@ -130,8 +130,6 @@ const AppNavigator = StackNavigator(
 //             if (state.routes && state.routes.length && state.routes.length > 1) {
 //                 let index = state.routes.length - 1;
 //                 if (state.routes[index].routeName == 'Confirmation') {
-//                     debugger;
-//                     console.log(AppNavigator);
 //                 }
 //             }
 //         }
