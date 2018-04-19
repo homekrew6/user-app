@@ -62,7 +62,9 @@ class JobDetails extends Component {
             refreshing: false,
             reasonList: [],
             reasonName: '',
-            reasonId: ''
+            reasonId: '',
+            materialTotalPrice: 0,
+            hoursPrice: 0
         }
 
         this.state.trackingRef = firebaseApp.database().ref().child('tracking');
@@ -227,6 +229,8 @@ class JobDetails extends Component {
             //     topScreenStatus: 'COMPLETED'
             // })
 
+            console.log('jobDetails', this.state.jobDetails);
+
             if (this.state.jobDetails.status == 'STARTED') {
                 this.setState({ jobTrackingStatus: 'Job Requested' });
             }
@@ -241,6 +245,28 @@ class JobDetails extends Component {
             }
             else if (this.state.jobDetails.status == 'FOLLOWEDUP') {
                 this.setState({ jobTrackingStatus: 'Follow Up' });
+                debugger;
+                api.post('jobMaterials/getJobMaterialByJobId', { "jobId": this.state.jobDetails.id }).then((materialAns) => {
+                    let materialList = materialAns.response.message;
+                    materialTotalPrice = 0;
+                    materialList.map((materialItem) => {
+                        if (materialItem.materials) {
+                            materialTotalPrice = materialTotalPrice + Number(materialItem.materials.price);
+                        }
+                    })
+                    materialTotalPrice = parseFloat(materialTotalPrice).toFixed(2);
+                    this.setState({
+                        materialTotalPrice: materialTotalPrice,
+                        hoursPrice: 50
+                    })
+                    // let grndtotal = (parseInt(this.state.grndtotal) + parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
+                    // this.setState({
+                    //     grndtotal: grndtotal,
+                    // })
+                    console.log(materialList);
+                }).catch((err) => {
+                    console.log(err);
+                })
             }
             else if (this.state.jobDetails.status == 'JOBSTARTED') {
                 const jobDetails = this.state.jobDetails;
@@ -609,9 +635,9 @@ class JobDetails extends Component {
                                     </View>
                                 </ImageBackground>
                             )
-                                    (
+                                (
                                     <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win * 0.1), marginTop: -(win * 0.1) }} />
-                                    )
+                                )
                             : this.state.topScreenStatus == 'ONMYWAY' || this.state.topScreenStatus == 'ACCEPTED' ?
                                 this.renderMap()
                                 : this.state.topScreenStatus =='JOBSTARTED' ?
@@ -690,7 +716,9 @@ class JobDetails extends Component {
                                     <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
                                 </View>
                                 <Text style={styles.jobItemName}>{I18n.t('jobSummary')}</Text>
-                                <Text style={styles.jobItemValue}>{this.state.currency} {this.state.jobDetails.price}</Text>
+                                <Text style={styles.jobItemValue}>
+                                    {this.state.currency} {parseFloat(this.state.jobDetails.price) + parseFloat(this.state.materialTotalPrice) + parseFloat(this.state.hoursPrice)}
+                                </Text>
                             </View>
                         </TouchableOpacity>
                         {
@@ -797,7 +825,6 @@ class JobDetails extends Component {
                                             </View>
                                         ) : (console.log())
                                     }
-
                                     {
                                         (this.state.otherReason == 0 || this.state.otherReason == 1) ? (
                                             <View style={{ width: '100%', flexDirection: 'row', padding: 15 }}>
