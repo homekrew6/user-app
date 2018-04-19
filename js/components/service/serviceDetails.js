@@ -614,7 +614,6 @@ class serviceDetails extends Component {
             api.get(questionServiceUrl).then(responseJson => {
               console.log('questionServiceUrl', responseJson);
               responseJson.map((item)=>{
-                debugger;
                 if(item.type==4)
                 {
                   if(!item.rangeValue)
@@ -808,7 +807,7 @@ class serviceDetails extends Component {
       var timeInterval = this.props.service.data.time_interval;
       price = Number(price);
       let isSlidedTest;
-      debugger;
+
       if (data.answers) {
         if (data.answers[0].option_price_impact == "Addition") {
           if (data.isSlided === 'true') {

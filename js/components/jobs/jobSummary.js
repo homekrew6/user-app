@@ -52,7 +52,6 @@ class jobSummary extends Component {
                 let jsonAnswer = JSON.parse(resAns.response.message[0].questionList);
                 let finalList = [];
                 let totalPrice = 0;
-                debugger;
                 for (let i = 0; i < jsonAnswer.length; i++) {
                     if (jsonAnswer[i].type != 5) {
                         let price = this.CalculatePrice(jsonAnswer[i].type,
