@@ -32,8 +32,8 @@ class jobSummary extends Component {
             currency: 'AED',
             totalPrice: 0,
             materialTotalPrice: 0,
-            hoursPrice: '50.00',
-            grndtotal: 50,
+            hoursPrice: '0.00',
+            grndtotal: 0,
         };
     }
     componentDidMount() {
@@ -52,6 +52,7 @@ class jobSummary extends Component {
                 let jsonAnswer = JSON.parse(resAns.response.message[0].questionList);
                 let finalList = [];
                 let totalPrice = 0;
+                debugger;
                 for (let i = 0; i < jsonAnswer.length; i++) {
                     if (jsonAnswer[i].type != 5) {
                         let price = this.CalculatePrice(jsonAnswer[i].type,
@@ -60,11 +61,14 @@ class jobSummary extends Component {
                             jsonAnswer[i].answers[0].time_impact,
                             jsonAnswer[i].IncrementId,
                             jsonAnswer[i].Status,
-                            jsonAnswer[i].answers)
+                            jsonAnswer[i].answers, 
+                            jsonAnswer[i].start_range,
+                            jsonAnswer[i].rangeValue
+                        );
                             if(price)
                             {
                                 totalPrice = totalPrice + price;
-                                price = price.toFixed(2);
+                                price = parseFloat(price).toFixed(2);
                                 jsonAnswer[i].price = price;
                             }
                        
@@ -88,24 +92,42 @@ class jobSummary extends Component {
                 }
                 totalPrice = totalPrice.toFixed(2);
                 this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice });
-                console.log('jsonAnswer', this.state.jsonAnswer);
             }
-
+               
             api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
                 let materialList = materialAns.response.message;
                 materialTotalPrice = 0;
                 materialList.map((materialItem) => {
                     if (materialItem.materials) {
-                        materialTotalPrice = materialTotalPrice + Number(materialItem.materials.price);
+                        materialTotalPrice = materialTotalPrice + Number(materialItem.price);
                     }
                 })
-                materialTotalPrice = parseInt(materialTotalPrice).toFixed(2);
+                
+                
+                materialTotalPrice = parseFloat(materialTotalPrice).toFixed(2);
                 this.setState({
                     materialTotalPrice: materialTotalPrice,
                 })
-                let grndtotal = (parseInt(this.state.grndtotal) + parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
+                let hoursPrice='0.00';
+                let grndtotal;
+                if(materialList.length >0)
+                {
+                 hoursPrice='50.00';
+                 grndtotal = Number(hoursPrice) + (
+                     parseFloat(this.state.grndtotal) + 
+                     parseFloat(this.state.totalPrice) + 
+                     parseFloat(this.state.materialTotalPrice)
+                );
+                grndtotal = grndtotal.toFixed(2);
+                }
+                else
+                {
+                    grndtotal = (parseFloat(this.state.grndtotal) + parseFloat(this.state.totalPrice) + parseFloat(this.state.materialTotalPrice)).toFixed(2);
+                }
+                
                 this.setState({
                     grndtotal: grndtotal,
+                    hoursPrice:hoursPrice
                 })
                 console.log(materialList);
             }).catch(err => {
@@ -116,12 +138,12 @@ class jobSummary extends Component {
 
 
     }
-    CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray) {
+    CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray,start_range, rangeValue) {
         let retPrice;
         let totalPrice = 0;
         switch (type) {
             case 1:
-            case 4:
+            
                 if (impact_type === 'Addition') {
                     //retPrice = Number(price_impact) + Number(impact_no);
                     impact_no = Number(impact_no);
@@ -140,10 +162,21 @@ class jobSummary extends Component {
 
                 return totalPrice;
                 break;
+            case 4:
+                if(rangeValue)
+                {
+                    if (impact_type === 'Addition') {
+                        impact_no = Number(impact_no);
+                        totalPrice = totalPrice + start_range + Number(price_impact);
+                    } else {
+                        impact_no = Number(impact_no);
+                        totalPrice = totalPrice + (start_range * Number(price_impact));
+                    }
+                    return totalPrice;
+                }
+            break;
             case 2:
                 if (BoolStatus) {
-
-                    //this.setState({ totalPrice: this.state.totalPrice + retPrice });
                     retPrice = Number(price_impact);
                     return retPrice;
 
@@ -211,15 +244,27 @@ class jobSummary extends Component {
                                                     }
                                                     {
                                                         AnsList.priceImp ? (
-                                                            <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>{AnsList.option_price_impact == 'Addition' ? '+ ' : 'x '}{this.state.currency} {(AnsList.priceImp)}</Text>
+                                                            AnsList.price?(
+                                                            <Text style={[styles.text2, { color: '#ccc', fontSize: 12 }]}>
+                                                                {AnsList.option_price_impact == 'Addition' ? '+ ' : 'x '}{this.state.currency} {(AnsList.priceImp)}
+                                                            </Text>
+                                                            ):
+                                                           (
+                                                            <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]}>N/A</Text>
+                                                           ) 
                                                         ) : (console.log())
                                                     }
 
                                                 </View>
                                                 <View style={[styles.price]}>
-                                                    <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >
-                                                    {this.state.currency} {AnsList.price}
-                                                    </Text>
+                                                {
+                                                    AnsList.price?(
+                                                        <Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]} >
+                                                        {this.state.currency} {AnsList.price}
+                                                        </Text> 
+                                                    ):<Text style={[styles.priceText, { color: '#ccc', fontSize: 12 }]}>N/A</Text>
+                                                }
+                                                    
                                                 </View>
                                             </View>
                                     )
