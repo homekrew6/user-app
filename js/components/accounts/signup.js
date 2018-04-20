@@ -86,9 +86,11 @@ class Signup extends Component {
     const email = this.state.email;
     const password = this.state.password;
     const phone = this.state.phone;
+    const deviceToken = this.state.deviceToken;
     api.post('Customers/socialLoginEmailCheck', { 'email': email }).then((resEmail) => {
+      debugger;
       if (resEmail.response.exist == 0) {
-        this.props.signup(name, email, password, phone).then((res) => {
+        this.props.signup(name, email, password, phone, deviceToken).then((res) => {
           if (res.type == 'success') {
             //	Alert.alert('Successfully registered.');
             //	this.props.navigation.navigate('Login');
@@ -429,7 +431,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  signup: (name, email, password, phone) => dispatch(signup(name, email, password, phone)),
+  signup: (name, email, password, phone, deviceToken) => dispatch(signup(name, email, password, phone, deviceToken)),
   login: (email, password) => dispatch(login(email, password)),
   getUserDetail: (id, auth) => dispatch(getUserDetail(id, auth)),
   checkAuth: cb => dispatch(checkAuth(cb)),

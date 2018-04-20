@@ -43,10 +43,10 @@ export function getUserDetail(id, auth) {
   };
 }
 
-export function signup(name, email, password, phone) {
+export function signup(name, email, password, phone, deviceToken) {
   return function (dispatch) {
     dispatch(authStateBusy());
-    return authApi.signup(name, email, password, phone).then((res) => {
+    return authApi.signup(name, email, password, phone, deviceToken).then((res) => {
       res.type = 'success';
       dispatch(authStateSuccess(res));
       return res;
