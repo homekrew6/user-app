@@ -39,6 +39,9 @@ import Reschedule from './components/jobs/reschedule';
 import Chat from './components/jobs/chat';
 import jobSummary from './components/jobs/jobSummary';
 import QuoteList from './components/jobs/quoteList';
+import Support from './components/support/supportList';
+import SupportLiveChatList from './components/support/supportLiveChatList';
+import SupportLiveChat from './components/support/supportLiveChat';
 
 
 const transitionConfig = () => {
@@ -98,7 +101,10 @@ const AppNavigator = StackNavigator(
         Reschedule: { screen: Reschedule },
         Chat: { screen: Chat },
         jobSummary: { screen: jobSummary },
-        QuoteList:{screen:QuoteList}
+        QuoteList: { screen: QuoteList },
+        Support: { screen: Support },
+        SupportLiveChatList: { screen: SupportLiveChatList },
+        SupportLiveChat: { screen: SupportLiveChat }
     },
     {
         initialRouteName: "Home",
