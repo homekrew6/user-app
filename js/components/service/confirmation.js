@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler } from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler, WebView } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -23,7 +23,13 @@ const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
 const carve = require("../../../img/icon17.png");
-
+const paymentUrl = 'https://secure.telr.com/gateway/mobile.xml';
+var parseString = require('react-native-xml2js').parseString;
+var xml2js = require('react-native-xml2js');
+let headers = {
+    'Accept': 'application/xml',
+    'Content-Type': 'application/xml',
+}
 class Confirmation extends Component {
 
     constructor(props) {
@@ -36,19 +42,63 @@ class Confirmation extends Component {
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,
             continueButtonDesable: false,
-            currencyId : 3,
-            minPrice:'0.0'
+            currencyId: 3,
+            minPrice: '0.0',
+            url: 'https://secure.telr.com/gateway/webview_start.html?code=8f6f5da95a445ad995ba561231db'
             //homeValuearray: props.service.data.homeArray,
             // homeValue: 'Home'
         }
 
     }
 
+    startPayment() {
+        
+        var obj = { store: '20217', key: 'JtLPL^pgBVG@q7PZ', device: { type: 'Android', id:'36C0EC49-AA2F-47DC-A4D7-D9927A739F5F'},
+            app: { name: 'Pragati', version: '1.0.0', user:'7070', id:'55555'}, tran:{
+                test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description:'Krew Test Job',
+                currency: 'AED', amount: this.props.service.data.price, language:'en'
+            }, billing:{
+                name:{title:'Miss', first:'Pragati', last:'Chatterjee'}, address:{
+                    line1: 'SIT TOWER', city: 'Dubai', region:'Dubai', country:'AE'
+                },
+                email:'pragati@natitsolved.com'
+            } };
+
+        var builder = new xml2js.Builder({ rootName:'mobile'});
+        var xml = builder.buildObject(obj);
+        const testData = "<?xml version='1.0' encoding='UTF - 8'?>< mobile ><store>20217</store><key>JtLPL^pgBVG@q7PZ</key><device><type>Android</type><id>36C0EC49-AA2F-47DC-A4D7-D9927A739F5F</id></device><app><name>TelrSDK</name><version>1.0.0</version><user>7070</user><id>555555</id></app><tran><test>1</test><type>paypage</type><class>ecom</class><cartid>6767567576546576</cartid><description>TelrDEV Test Mobile API</description><currency>AED</currency><amount>10</amount><language>en</language></tran><billing><name><title>Mrs</title><first>John</first><last>Smith</last></name><address><line1>SIT TOWER</line1><city>Dubai</city><region>Dubai</region><country>AE</country></address><email>stackfortytwo@gmail.com</email></billing></mobile >";
+        const demoData = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<mobile>\n              <store>20217</store>\n              <key>JtLPL^pgBVG@q7PZ</key>\n              <device>\n                             <type>Android</type>\n                             <id>36C0EC49-AA2F-47DC-A4D7-D9927A739F5F</id>\n              </device>\n              <app>\n                             <name>TelrSDK</name>\n                             <version>1.0.0</version>\n                             <user>7070</user>\n                             <id>555555</id>\n              </app>\n              <tran>\n                             <test>1</test>\n                             <type>paypage</type>\n                             <class>ecom</class>\n                             <cartid>testCartId</cartid>\n                             <description>TelrDEV Test Mobile API</description>\n                             <currency>AED</currency>\n                             <amount>10</amount>\n                             <language>en</language>\n              </tran>\n              <billing>\n                             <name>                                                                                   \n                                           <title>Mrs</title>\n                                           <first>John</first>\n                                           <last>Smith</last>\n                             </name>\n                             <address>\n                                           <line1>SIT TOWER</line1>\n                                           <city>Dubai</city>\n                                           <region>Dubai</region>\n                                           <country>AE</country>\n                             </address>\n                             <email>stackfortytwo@gmail.com</email>\n              </billing>\n</mobile>"
+        const selfComponent = this;
+        const testJsonData = { email: "fhhj@dhjahjd.com", password: "dhjgkjg" }
+        fetch(paymentUrl, {
+            method: 'POST',
+            headers: headers,
+            body: xml
+        }).then((res) => {
+            //console.log(res);
+            console.warn("response", res._bodyInit);
+            var xml = "<?xml version='1.0' encoding='UTF - 8'?>< mobile ><webview><start>https://secure.telr.com/gateway/webview_start.html?code=e46f5da95ac55ad990c2aa6cc1f1</start><close>https://secure.telr.com/gateway/webview_close.html</close><abort>https://secure.telr.com/gateway/webview_abort.html</abort><code>e46f5da95ac55ad990c2aa6cc1f1</code></webview><trace>4000/27841/5ad990c2</trace></mobile >"
+            parseString(res._bodyInit, function (err, result) {
+                console.warn("pragati", result.mobile.webview[0].start[0]);
+                selfComponent.props.navigation.navigate('Payment', { url: result.mobile.webview[0].start[0], close: result.mobile.webview[0].close[0], abort: result.mobile.webview[0].abort[0] });
+                //this.setState({ url: result.mobile.webview[0].start[0]});
+            });
+            //console.warn("body", body);
+        }).catch((err) => {
+            console.log(err);
+            console.warn("error krish", err);
+        })
+
+    }
 
     componentDidMount() {
-        if (this.props.service.data.min_charge)
-        {
-            this.setState({ minPrice: this.props.service.data.min_charge.toFixed(2)});
+        // debugger;
+        // var xml = "<?xml version='1.0' encoding='UTF - 8'?>< mobile ><webview><start>https://secure.telr.com/gateway/webview_start.html?code=e46f5da95ac55ad990c2aa6cc1f1</start><close>https://secure.telr.com/gateway/webview_close.html</close><abort>https://secure.telr.com/gateway/webview_abort.html</abort><code>e46f5da95ac55ad990c2aa6cc1f1</code></webview><trace>4000/27841/5ad990c2</trace></mobile >"
+        // parseString(xml, function (err, result) {
+        //     console.dir(result);
+        // });
+        if (this.props.service.data.min_charge) {
+            this.setState({ minPrice: this.props.service.data.min_charge.toFixed(2) });
         }
         AsyncStorage.getItem("currency").then((value) => {
             if (value) {
@@ -79,8 +129,8 @@ class Confirmation extends Component {
         this.setState({
             loader: true,
         });
-        
-        
+
+
         if (!(this.state.dateTime == undefined)) {
             AsyncStorage.getItem("zoneId").then((zoneValue) => {
                 if (zoneValue) {
@@ -105,11 +155,9 @@ class Confirmation extends Component {
                     // console.log('resCons', resCons);
                     console.log(this.props.service.data.serviceLocationid);
                     if (this.props.service.data.serviceLocationid) {
-                        if(this.props.service.data.saveDateDB)
-                        {
+                        if (this.props.service.data.saveDateDB) {
                             const jobPrice = Number(this.props.service.data.price);
-                            if(jobPrice)
-                            {
+                            if (jobPrice) {
                                 AsyncStorage.getItem("keyQuestionList").then((value) => {
                                     if (value) {
                                         api.post('Jobs/insertNewJob', {
@@ -153,23 +201,22 @@ class Confirmation extends Component {
                                 }).catch(res => {
                                 });
                             }
-                            else
-                            {
+                            else {
                                 this.setState({
                                     loader: false
                                 });
-                                Alert.alert('Please give proper price to submit the job.'); 
+                                Alert.alert('Please give proper price to submit the job.');
                             }
-                            
-                        
 
-                        }else{
+
+
+                        } else {
                             this.setState({
                                 loader: false
                             });
-                            Alert.alert('Please add time.'); 
+                            Alert.alert('Please add time.');
                         }
-                        
+
                     }
                     else {
                         this.setState({
@@ -382,6 +429,7 @@ class Confirmation extends Component {
                 </Header>
 
                 <Content style={styles.bgWhite} >
+
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#cbf0ed', paddingBottom: 30, paddingTop: 14 }}>
                         <View style={{ alignItems: "center" }}>
                             <View style={{ borderRadius: 60, height: 60, width: 60, backgroundColor: '#81cdc7', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -395,9 +443,9 @@ class Confirmation extends Component {
                                 </Text>
                             </View>
                             <Text style={{ color: '#1e3768', fontSize: 16 }}>{this.state.currency} {this.props.service.data.price}</Text>
-                            <Text style={{ color: '#747474', fontSize: 12 }}>Min Price {this.state.currency} {(this.props.service.data.min_charge)}</Text>                            
+                            <Text style={{ color: '#747474', fontSize: 12 }}>Min Price {this.state.currency} {(this.props.service.data.min_charge)}</Text>
 
-                         
+
 
                         </View>
                     </View>
@@ -429,7 +477,7 @@ class Confirmation extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <Item style={styles.confirmationItem}>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.startPayment()}>
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='credit-card' style={styles.confirmationViewIcon} />
                             </View>
@@ -438,7 +486,7 @@ class Confirmation extends Component {
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
                             </View>
-                        </Item>
+                        </TouchableOpacity>
 
                         <TouchableOpacity style={styles.confirmationItem} onPress={() => this.goToSpListing()}>
                             <View style={styles.confirmationIconView}>
