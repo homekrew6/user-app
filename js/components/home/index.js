@@ -41,15 +41,7 @@ class Home extends Component {
 	componentWillMount() {
 		FCM.requestPermissions();
 		FCM.getFCMToken().then(token => {
-			// this.props.checkAuth((res) => {
-			// 	if (res) {
-			// 		api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token }).then((resEdit) => {
-			// 		}).catch((err) => {
-			// 		});
-			// 	}
-			// }, (err) => {
-
-			// });
+			console.log('token  ', token);
 			AsyncStorage.getItem("userToken").then((userToken) => {
 				if (userToken) {
 					const userToken1 = JSON.parse(userToken);
@@ -62,6 +54,56 @@ class Home extends Component {
 
 		// This method get all notification from server side.
 		FCM.getInitialNotification().then(notif => {
+			debugger;
+			setTimeout(() => {
+				AsyncStorage.getItem("userToken").then((userToken) => {
+					if (userToken) {
+						const userToken1 = JSON.parse(userToken);
+						this.props.getUserDetail(userToken1.userId, userToken1.id).then(userRes => {
+							if(notif.screenType){
+								if(notif.screenType == 'JobDetails'){
+								api.post('Jobs/getJobDetailsById', {
+									"id": Number(notif.jobId)
+								}).then((resJob)=>{
+									this.props.navigation.dispatch(
+										NavigationActions.reset({
+											index: 1,
+											actions: [
+											NavigationActions.navigate({ routeName: 'Menu' }),
+											NavigationActions.navigate({ routeName: 'JobDetails', params: {
+												jobId: notif.jobId, 
+												jobDetails: resJob.response.message[0]
+											} }),
+											],
+										})
+									);
+								}).catch((err) => {
+									connect.log('err', err);
+								});
+								}else{
+									this.props.navigation.dispatch(resetAction);
+								}
+							}else{
+								this.props.navigation.dispatch(resetAction);
+							}
+
+						}).catch(err => {
+							Alert.alert('Please login');
+							this.props.navigation.navigate("Login")
+						})
+					} else {
+						AsyncStorage.getItem('IsSliderShown').then((res) => {
+							if (res) {
+								this.props.navigation.dispatch(resetActionCategory);
+							}else {
+								this.props.navigation.dispatch(resetActionIntro);
+							}
+						}).catch((err) => {
+							this.props.navigation.dispatch(resetActionIntro);
+						})
+					}
+				})
+			}, 4000);
 			if (notif.screenType && notif.screenType == 'JobDetails') {
 				// this.props.navigation.navigate('JobDetails', { jobDetails: notif.jobId });
 				this.setState({ isPush: true, jobId: notif.jobId });
@@ -69,16 +111,45 @@ class Home extends Component {
 
 		});
 
-		// This method give received notifications to mobile to display.
 
+		// This method give received notifications to mobile to display.
 		this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
+			debugger;
 			console.log("a", notif);
 			if (notif && notif.local_notification) {
-				return;
+				if(notif.screenType){
+					if(notif.screenType == 'JobDetails'){
+						api.post('Jobs/getJobDetailsById', {
+							"id": Number(notif.jobId)
+						}).then((resJob)=>{
+							this.props.navigation.dispatch(
+								NavigationActions.reset({
+									index: 1,
+									actions: [
+									NavigationActions.navigate({ routeName: 'Menu' }),
+									NavigationActions.navigate({ routeName: 'JobDetails', params: {
+										jobId: notif.jobId, 
+										jobDetails: resJob.response.message[0]
+									} }),
+									],
+								})
+							);
+						}).catch((err) => {
+							connect.log('err', err);
+						});
+					}else{
+						this.props.navigation.dispatch(resetAction);
+					}
+				}else{
+					this.props.navigation.dispatch(resetAction);
+				}
+				//return;
 			}
 
 			this.sendRemote(notif);
 		});
+
+
 
 		// this method call when FCM token is update(FCM token update any time so will get updated token from this method)
 		this.refreshUnsubscribe = FCM.on(FCMEvent.Notification, token => {
@@ -93,69 +164,13 @@ class Home extends Component {
 						});
 					}
 				})
-				// this.props.checkAuth((res) => {
-				// 	if (res) {
-				// 		api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { deviceToken: token }).then((resEdit) => {
-				// 		}).catch((err) => {
-				// 		});
-				// 	}
-				// }, (err) => {
 
-				// });
 			});
 		});
-		setTimeout(() => {
-			// this.props.checkAuth(res => {
-
-			// 	if (res) {
-			// 		this.props.getUserDetail(res.userId, res.id).then(userRes => {
-			// 			this.props.navigation.dispatch(resetAction);
-
-			// 		}).catch(err => {
-			// 			Alert.alert('Please login');
-			// 			this.props.navigation.navigate("Login")
-			// 		})
-			// 	} else {
-			// 		AsyncStorage.getItem('IsSliderShown').then((res) => {
-			// 			if (res) {
-			// 				this.props.navigation.dispatch(resetActionCategory);
-			// 			}
-			// 			else {
-			// 				this.props.navigation.dispatch(resetActionIntro);
-			// 			}
-			// 		}).catch((err) => {
-			// 			this.props.navigation.dispatch(resetActionIntro);
-			// 		})
-
-			// 	}
-			// })
-			AsyncStorage.getItem("userToken").then((userToken) => {
-				if (userToken) {
-					const userToken1 = JSON.parse(userToken);
-					this.props.getUserDetail(userToken1.userId, userToken1.id).then(userRes => {
-						this.props.navigation.dispatch(resetAction);
-
-					}).catch(err => {
-						Alert.alert('Please login');
-						this.props.navigation.navigate("Login")
-					})
-				} else {
-					AsyncStorage.getItem('IsSliderShown').then((res) => {
-						if (res) {
-							this.props.navigation.dispatch(resetActionCategory);
-						}
-						else {
-							this.props.navigation.dispatch(resetActionIntro);
-						}
-					}).catch((err) => {
-						this.props.navigation.dispatch(resetActionIntro);
-					})
-
-				}
-			})
-		}, 4000);
+		
 
 	}
+
 	sendRemote(notif) {
 		console.log('notify sent', notif);
 		FCM.presentLocalNotification({
@@ -174,7 +189,8 @@ class Home extends Component {
 			group: "group",
 			icon: "ic_launcher",
 			large_icon: "ic_launcher",
-			data: { screenType: 'cleaner' },
+			screenType: notif.screenType,
+			jobId: notif.jobId
 			//picture: "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg", 
 			// android_actions: JSON.stringify([{
 			//   id: "view",
