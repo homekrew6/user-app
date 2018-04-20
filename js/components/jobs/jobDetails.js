@@ -68,13 +68,14 @@ class JobDetails extends Component {
         }
 
         this.state.trackingRef = firebaseApp.database().ref().child('tracking');
-
         this.state.trackingRef.on('child_added', (snapshot) => {
             const snapShotVal = snapshot.val();
             if (this.state.jobDetails.id) {
                 if (snapShotVal.jobId == this.state.jobDetails.id.toString()) {
                     if (snapShotVal.status == 'ONMYWAY') {
-                        this.setState({ topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng });
+                        let jobDetails = this.state.jobDetails;
+                        jobDetails.status="ONMYWAY";
+                        this.setState({ jobDetails:jobDetails ,topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
                     }
                     else if (snapShotVal.status == 'JOBSTARTED') {
                         const jobDetails = this.state.jobDetails;
@@ -599,7 +600,6 @@ class JobDetails extends Component {
 
 
                     <Content style={{ backgroundColor: '#ccc' }}  >
-
                         {this.state.topScreenStatus === 'STARTED' || this.state.topScreenStatus === 'CANCELLED' ?
                             this.state.jobDetails.service.banner_image ? (
                                 <ImageBackground source={{ uri: this.state.jobDetails.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
