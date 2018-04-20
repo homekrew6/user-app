@@ -12,9 +12,9 @@ class authApi {
 		})
 	}
 
-	static signup(name,email,password,phone){
+	static signup(name,email,password,phone, deviceToken){
 		return new Promise((resolve,reject)=>{
-			api.post('Customers/signup',{name:name,email:email,password:password,phone:phone,is_active:1 }).then(responseJson=>{
+			api.post('Customers/signup',{name:name, email:email, password:password, phone:phone, deviceToken:deviceToken, is_active:1 }).then(responseJson=>{
 				resolve(responseJson)
 			}).catch(err=>{
 				reject(err)

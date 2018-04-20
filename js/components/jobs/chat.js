@@ -240,15 +240,17 @@ class Chat extends Component {
                         backgroundColor="#81cdc7"
                     />
                     <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
+                    
                         <Button transparent style={{ width: 30 }}>
                             <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                         </Button>
                         <Body style={styles.headBody}>
-                            <Title style={{ fontSize: 14 }}>Typically replies in a few minutes</Title>
+                            <Title style={{ fontSize: 14 }}>{I18n.t('typicallyRepliesInAFewMinutes')}</Title>
                         </Body>
                         <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
                             <EvilIcons name="close" style={styles.headIcon} />
                         </Button>
+                        
                     </Header>
                     <View style={{ flex: 1 }}>
                         <View style={{ backgroundColor: '#cccccc', padding: 15 }}>

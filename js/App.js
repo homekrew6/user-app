@@ -40,6 +40,10 @@ import Chat from './components/jobs/chat';
 import jobSummary from './components/jobs/jobSummary';
 import QuoteList from './components/jobs/quoteList';
 import Payment from './components/payment/payment';
+import Support from './components/support/supportList';
+import SupportLiveChatList from './components/support/supportLiveChatList';
+import SupportLiveChat from './components/support/supportLiveChat';
+
 
 const transitionConfig = () => {
     return {
@@ -99,7 +103,11 @@ const AppNavigator = StackNavigator(
         Chat: { screen: Chat },
         jobSummary: { screen: jobSummary },
         QuoteList:{screen:QuoteList},
-        Payment: { screen: Payment}
+        Payment: { screen: Payment},
+        QuoteList: { screen: QuoteList },
+        Support: { screen: Support },
+        SupportLiveChatList: { screen: SupportLiveChatList },
+        SupportLiveChat: { screen: SupportLiveChat }
     },
     {
         initialRouteName: "Home",
