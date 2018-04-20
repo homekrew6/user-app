@@ -39,7 +39,7 @@ import Reschedule from './components/jobs/reschedule';
 import Chat from './components/jobs/chat';
 import jobSummary from './components/jobs/jobSummary';
 import QuoteList from './components/jobs/quoteList';
-
+import Payment from './components/payment/payment';
 
 const transitionConfig = () => {
     return {
@@ -98,7 +98,8 @@ const AppNavigator = StackNavigator(
         Reschedule: { screen: Reschedule },
         Chat: { screen: Chat },
         jobSummary: { screen: jobSummary },
-        QuoteList:{screen:QuoteList}
+        QuoteList:{screen:QuoteList},
+        Payment: { screen: Payment}
     },
     {
         initialRouteName: "Home",
