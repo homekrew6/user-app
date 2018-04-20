@@ -113,5 +113,7 @@ export default {
   hours:'Hours',
   total:'Total',
   total_bill: 'Total Bill',
-  myPromoCode: 'My Promo Code'
+  myPromoCode: 'My Promo Code',
+  callUs: 'Call Us', 
+  typicallyRepliesInAFewMinutes: 'Typically replies in a few minutes'
 };
