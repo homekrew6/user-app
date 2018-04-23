@@ -52,41 +52,55 @@ class Confirmation extends Component {
     }
 
     startPayment() {
-        
-        var obj = { store: '20217', key: 'JtLPL^pgBVG@q7PZ', device: { type: 'Android', id:'36C0EC49-AA2F-47DC-A4D7-D9927A739F5F'},
-            app: { name: 'Pragati', version: '1.0.0', user:'7070', id:'55555'}, tran:{
-                test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description:'Krew Test Job',
-                currency: 'AED', amount: this.props.service.data.price, language:'en'
-            }, billing:{
-                name:{title:'Miss', first:'Pragati', last:'Chatterjee'}, address:{
-                    line1: 'SIT TOWER', city: 'Dubai', region:'Dubai', country:'AE'
+        this.setState({
+            loader: true
+        });
+        var obj = {
+            store: '20217', key: 'JtLPL^pgBVG@q7PZ', device: { type: 'Android', id: '36C0EC49-AA2F-47DC-A4D7-D9927A739F5F' },
+            app: { name: 'Pragati', version: '1.0.0', user: '7070', id: '55555' }, tran: {
+                test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description: 'Krew Test Job',
+                currency: 'AED', amount: this.props.service.data.price, language: 'en'
+            }, billing: {
+                name: { title: 'Miss', first: 'Pragati', last: 'Chatterjee' }, address: {
+                    line1: 'SIT TOWER', city: 'Dubai', region: 'Dubai', country: 'AE'
                 },
-                email:'pragati@natitsolved.com'
-            } };
+                email: 'pragati@natitsolved.com'
+            }
+        };
 
-        var builder = new xml2js.Builder({ rootName:'mobile'});
+        var builder = new xml2js.Builder({ rootName: 'mobile' });
         var xml = builder.buildObject(obj);
-        const testData = "<?xml version='1.0' encoding='UTF - 8'?>< mobile ><store>20217</store><key>JtLPL^pgBVG@q7PZ</key><device><type>Android</type><id>36C0EC49-AA2F-47DC-A4D7-D9927A739F5F</id></device><app><name>TelrSDK</name><version>1.0.0</version><user>7070</user><id>555555</id></app><tran><test>1</test><type>paypage</type><class>ecom</class><cartid>6767567576546576</cartid><description>TelrDEV Test Mobile API</description><currency>AED</currency><amount>10</amount><language>en</language></tran><billing><name><title>Mrs</title><first>John</first><last>Smith</last></name><address><line1>SIT TOWER</line1><city>Dubai</city><region>Dubai</region><country>AE</country></address><email>stackfortytwo@gmail.com</email></billing></mobile >";
-        const demoData = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<mobile>\n              <store>20217</store>\n              <key>JtLPL^pgBVG@q7PZ</key>\n              <device>\n                             <type>Android</type>\n                             <id>36C0EC49-AA2F-47DC-A4D7-D9927A739F5F</id>\n              </device>\n              <app>\n                             <name>TelrSDK</name>\n                             <version>1.0.0</version>\n                             <user>7070</user>\n                             <id>555555</id>\n              </app>\n              <tran>\n                             <test>1</test>\n                             <type>paypage</type>\n                             <class>ecom</class>\n                             <cartid>testCartId</cartid>\n                             <description>TelrDEV Test Mobile API</description>\n                             <currency>AED</currency>\n                             <amount>10</amount>\n                             <language>en</language>\n              </tran>\n              <billing>\n                             <name>                                                                                   \n                                           <title>Mrs</title>\n                                           <first>John</first>\n                                           <last>Smith</last>\n                             </name>\n                             <address>\n                                           <line1>SIT TOWER</line1>\n                                           <city>Dubai</city>\n                                           <region>Dubai</region>\n                                           <country>AE</country>\n                             </address>\n                             <email>stackfortytwo@gmail.com</email>\n              </billing>\n</mobile>"
+
         const selfComponent = this;
-        const testJsonData = { email: "fhhj@dhjahjd.com", password: "dhjgkjg" }
         fetch(paymentUrl, {
             method: 'POST',
             headers: headers,
             body: xml
         }).then((res) => {
-            //console.log(res);
-            console.warn("response", res._bodyInit);
-            var xml = "<?xml version='1.0' encoding='UTF - 8'?>< mobile ><webview><start>https://secure.telr.com/gateway/webview_start.html?code=e46f5da95ac55ad990c2aa6cc1f1</start><close>https://secure.telr.com/gateway/webview_close.html</close><abort>https://secure.telr.com/gateway/webview_abort.html</abort><code>e46f5da95ac55ad990c2aa6cc1f1</code></webview><trace>4000/27841/5ad990c2</trace></mobile >"
+
             parseString(res._bodyInit, function (err, result) {
-                console.warn("pragati", result.mobile.webview[0].start[0]);
-                selfComponent.props.navigation.navigate('Payment', { url: result.mobile.webview[0].start[0], close: result.mobile.webview[0].close[0], abort: result.mobile.webview[0].abort[0] });
-                //this.setState({ url: result.mobile.webview[0].start[0]});
+                if (err) {
+                    this.setState({
+                        loader: false
+                    });
+                    Alert.alert('Please try again later.');
+                }
+                else {
+                    selfComponent.setState({
+                        loader: false
+                    });
+                    console.warn("pragati", result.mobile.webview[0].start[0]);
+                    selfComponent.props.navigation.navigate('Payment', { amount: selfComponent.props.service.data.price, customerId: selfComponent.props.auth.data.id,url: result.mobile.webview[0].start[0], close: result.mobile.webview[0].close[0], abort: result.mobile.webview[0].abort[0], code: result.mobile.webview[0].code[0] });
+                }
+
+
             });
-            //console.warn("body", body);
         }).catch((err) => {
-            console.log(err);
-            console.warn("error krish", err);
+            this.setState({
+                loader: false
+            });
+            console.warn("error", err);
+            Alert.alert('Please try again later.');
         })
 
     }
