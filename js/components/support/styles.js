@@ -55,8 +55,8 @@ export default {
 
     // modal
     modalWarp: { flex: 1, justifyContent: 'center', display: 'flex', width: '100%' },
-    modalWhiteWarp: { backgroundColor: 'white', borderRadius: 10, overflow: 'hidden' },
-    textWarp: { flex: 1 },
+    modalWhiteWarp: { backgroundColor: 'white', borderRadius: 10 },
+    textWarp: { width: '100%' },
     numberWarp: { textAlign: 'center', color: '#000', fontSize: 24 },
     buttonWarp: { flexDirection: 'row', borderTopColor: '#ccc', borderTopWidth: 1 },
     buttonItem: { flex: 1, alignItems: 'center', justifyContent: 'center', height: 40 },

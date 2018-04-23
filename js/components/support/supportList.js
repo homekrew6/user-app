@@ -1,11 +1,15 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput  } from "react-native";
+import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert  } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button  } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import I18n from '../../i18n/i18n';
-import styles from "./styles";
+import FSpinner from 'react-native-loading-spinner-overlay';
+import Communications from 'react-native-communications';
 import Modal from "react-native-modal";
+import I18n from '../../i18n/i18n';
+import api from '../../api/index';
+import styles from "./styles";
+
 
 
 class Support extends Component {
@@ -14,11 +18,14 @@ class Support extends Component {
         this.state = {
             supportList: [],
             isModalVisible: false,
-            findText: ''
+            findText: '',
+            PhoneNumber: '',
+            loader: false
         }
     }
 
     componentDidMount(){
+
         let newsupportList = [
             { name: 'Live Chat', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
             { name: 'Service Requester', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
@@ -29,6 +36,22 @@ class Support extends Component {
             { name: 'Service Provider', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
         ]
         this.setState({ supportList: newsupportList });
+
+        this.setState({ loader: true });
+
+        api.get('Settings').then((res) => {
+            let PhoneNumber;
+            PhoneNumber = res[0].phone;
+            console.log(res);
+            this.setState({
+                PhoneNumber: PhoneNumber,
+                loader: false,
+            });
+        }).catch((error) => {
+            console.log(error);
+            this.setState({ loader: false });
+        })
+
     }
 
     faqFunction(key){
@@ -46,16 +69,23 @@ class Support extends Component {
     }
 
     callModal() {
-        this.setState({ isModalVisible: !this.state.isModalVisible })
+        if (this.state.PhoneNumber){
+            this.setState({ isModalVisible: !this.state.isModalVisible });            
+        }
+        else{
+            Alert.alert('Phone no is not available');
+        }
     }
 
     render() {
         return (
             <Container >
+
                 
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
+                <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />                
 
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={styles.buttonIconWarp}>
@@ -133,13 +163,13 @@ class Support extends Component {
 
                         <View style={styles.modalWhiteWarp}>
                             <View style={styles.textWarp}>
-                                <Text style={styles.numberWarp}>0551234567</Text>
+                                <Text style={[styles.numberWarp, { paddingTop: 10, paddingBottom: 10 }]}>{this.state.PhoneNumber}</Text>
                             </View>
                             <View style={styles.buttonWarp}>
                                 <TouchableOpacity onPress={() => this.setState({ isModalVisible: false })} style={styles.buttonItem}>
                                     <Text style={styles.buttonItemText}>{I18n.t('cancel')}</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.addMaterial()} style={[styles.buttonItem, styles.buttonItem2]}>
+                                <TouchableOpacity onPress={() => Communications.phonecall(this.state.PhoneNumber, true)} style={[styles.buttonItem, styles.buttonItem2]}>
                                     <Text style={styles.buttonItemText}>{I18n.t('call')}</Text>
                                 </TouchableOpacity>
                             </View>
