@@ -222,8 +222,6 @@ class JobList extends Component {
                             </View>
                         ) : (<View style={{ alignItems: 'center', padding: 10 }}><Text>No Data Found</Text></View>)
 
-
-
                     }
 
                 </Content>

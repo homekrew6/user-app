@@ -75,7 +75,15 @@ class Menu extends Component {
     data.activeScreen = screen;
     data.previousScreen = "Menu";
     this.props.navigateAndSaveCurrentScreen(data);
-    this.props.navigation.navigate(screen);
+    if(screen=="NotificationList")
+    {
+      this.props.navigation.navigate(screen, {customarId:this.props.auth.data.id});
+    }
+    else
+    {
+      this.props.navigation.navigate(screen);
+    }
+    
   }
 
   componentWillMount() {
@@ -104,13 +112,18 @@ class Menu extends Component {
         //   this.props.navigation.navigate('Menu');
         // }
 
+
         switch (this.props.auth.data.activeScreen) {
           case "EditProfile":
             saveData.activeScreen = "Menu";
             saveData.previousScreen = "";
             this.props.navigateAndSaveCurrentScreen(saveData);
             break;
-
+            case "NotificationList":
+            saveData.activeScreen = "Menu";
+            saveData.previousScreen = "";
+            this.props.navigateAndSaveCurrentScreen(saveData);
+            break;
           case "Category":
             // saveData.activeScreen = "Menu";
             // saveData.previousScreen = "";
@@ -293,9 +306,9 @@ class Menu extends Component {
         <Card>
 
           <CardItem style={styles.menuCarditem}>
-              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('NotificationList',{ customarId : this.props.auth.data.id })}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('NotificationList')}>
               <Image source={icon1} style={styles.menuCardIcon} />
-              <Text style={styles.menuCardTxt}>Notification</Text>
+              <Text style={styles.menuCardTxt}>{I18n.t('notification')}</Text>
               {
                 this.state.notificatonCount != 0 ? (  
                   <View style={styles.artNt}>

@@ -44,5 +44,9 @@ export default {
   materials: 'Matériaux',
   hours: 'Heures',
   total: 'Total',
-  
+  clearAll: 'Tout effacer',
+  notification: 'Notification',
+  new: 'NOUVEAU',
+  earlier: 'PLUS TÔT',
+  nodatafound : 'Aucune donnée disponible',
 };

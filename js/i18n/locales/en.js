@@ -115,5 +115,10 @@ export default {
   total_bill: 'Total Bill',
   myPromoCode: 'My Promo Code',
   callUs: 'Call Us', 
-  typicallyRepliesInAFewMinutes: 'Typically replies in a few minutes'
+  typicallyRepliesInAFewMinutes: 'Typically replies in a few minutes',
+  clearAll: 'Clear All',
+  notification: 'Notification',
+  new: 'NEW',
+  earlier: 'EARLIER',
+  nodatafound : 'No data found' 
 };

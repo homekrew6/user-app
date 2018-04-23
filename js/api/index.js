@@ -95,6 +95,26 @@ class api {
     }).catch(error=>error)
     })
   }
+
+  static delete(endpoint) {
+    return new Promise((resolve, reject) => {
+      fetch(config.base_api + endpoint, {
+        method: 'DELETE',
+        headers: headers
+      }).then(response => {
+        if (response.status === 200) {
+          resolve(response.json());
+        } else {
+          if (response.status === 204) {
+            resolve();
+          } else {
+            reject({ "err": "401 found" })
+          }
+        }
+      }).catch(error => error)
+    })
+    
+  }
 }
 
 export default api
