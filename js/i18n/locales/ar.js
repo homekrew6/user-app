@@ -116,6 +116,10 @@ export default {
   total_bill: 'إجمالي الفاتورة',
   myPromoCode: 'الرمز الترويجي الخاص بي',
   callUs: 'اتصل بنا',
-  typicallyRepliesInAFewMinutes: 'عادة ما ترد في بضع دقائق'
-  
+  typicallyRepliesInAFewMinutes: 'عادة ما ترد في بضع دقائق',
+  clearAll: 'امسح الكل',
+  notification: 'إعلام',
+  new: 'الجديد',
+  earlier: 'سابقا',
+  nodatafound : 'لاتوجد بيانات',
 };

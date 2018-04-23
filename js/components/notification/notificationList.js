@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput } from "react-native";
-import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, List, ListItem, ListView } from "native-base";
+import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert, ListView } from "react-native";
+import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, List, ListItem, Icon } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import I18n from '../../i18n/i18n';
+import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from "./styles";
 import api from '../../api/index';
 
@@ -16,38 +17,140 @@ const icon3 = require('../../../img/chatIcon2.png');
 class NotificationList extends Component {
     constructor(props) {
         super(props);
+        this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.state = {
             NotificationListRead: [],
-            NotificationListUnread: []
+            NotificationListUnread: [],
+            loader: false
         }
     }
 
     componentDidMount() {
-        // let customerId = this.props.navigation.state.params.customerId;
-        let notiDataread = [], notiDataunread = [], notiData;
+        this.notificationListData()
+        
+    }
 
-        api.post('Notifications/getNotificationListByIdForCustomer', { "customerId": 19 }).then((res) => {
+    notificationListData(){
+        let customarId = this.props.navigation.state.params.customarId? this.props.navigation.state.params.customarId : '';
+        console.log(customarId);
+        if(customarId){
+        let notiDataread = [], notiDataunread = [], notiData;
+        this.setState({
+            loader: true,
+        })
+        api.post('Notifications/getNotificationListByIdForCustomer', { "customerId":  customarId }).then((res) => {
             notiData = res.response.message;
             notiData.map((item) => {
                 let i = item
                 item.IsRead ? notiDataread.push(i) : notiDataunread.push(i)
                 // console.log(item);
-                notiDataread.push(i);
             })
             this.setState({
                 NotificationListRead: notiDataread,
-                NotificationListUnread: notiDataunread
+                NotificationListUnread: notiDataunread,
+                loader: false
             })
-            console.log(notiDataunread);
+            console.log('notiData', res);
         }).catch((err) => {
             console.log(err);
+            this.setState({
+                loader: false
+            })
         });
     }
+    else{
+        Alert.alert('Please login');
+    }
+    }
+
+    deleteNotification(data){
+        this.setState({
+            loader: true
+        })
+        console.log(data.id);
+        api.delete( 'Notifications/'+ data.id  ).then((res) => {
+            this.setState({
+                loader: false
+            })
+            this.notificationListData()
+          
+        }).catch((err) => {
+            console.log(err);
+            this.setState({
+                loader: false
+            })
+        });
+    }
+
+    clearAll(){
+        this.setState({
+            loader: true
+        })
+        let customarId = this.props.navigation.state.params.customarId? this.props.navigation.state.params.customarId : '';        
+        api.post( 'Notifications/clearAllNotificationByCustomerId', { "customerId":  customarId }  ).then((res) => {
+            this.setState({
+                loader: false
+            })
+            this.notificationListData()
+        }).catch((err) => {
+            console.log(err);
+            this.setState({
+                loader: false
+            })
+        });
+    }
+
+    gotoDetails(data){
+        let jobDetails = {};
+        jobDetails.id = data.jobId;
+        if(!data.IsRead){
+            this.setState({
+                loader: true
+            })
+            api.post( 'Notifications/updateCustomerUnReadNot', { "id":  data.id }  ).then((res) => {
+                this.setState({
+                    loader: false
+                })
+                this.notificationListData();                
+            }).catch((err) => {
+                console.log(err);
+                this.setState({
+                    loader: false
+                })
+            });                              
+        }
+        if(data.notificationType == "NewJob"){
+            this.props.navigation.navigate('JobDetails', { jobDetails: jobDetails });            
+        }
+
+    }
+
+    // getLocalTimeFormat(gmtTime) {
+    //     gmtTime = new Date(gmtTime);
+    //     // return gmtTime;
+    //     if (gmtTime) {
+    //         let dateNow = new Date();
+    //         var nUTC_diff = dateNow.getTimezoneOffset();
+    //         let slicedDate = gmtTime.slice(0, -4);
+    //         let timeToMan = Math.abs(nUTC_diff);
+    //         let utc_check = Math.sign(nUTC_diff);
+    //         let localTime;
+    //         if (utc_check === 1 || utc_check === 0) {
+    //             localTime = moment(slicedDate).subtract(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+    //         } else {
+    //             localTime = moment(slicedDate).add(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
+    //         }
+    //         return localTime;
+    //     } else {
+    //         return null;
+    //     }
+
+    // }
 
     render() {
         return (
             <Container >
-
+					<FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{color: '#FFF'}} />                
                 <StatusBar
                     backgroundColor="#81cdc7"
                 />
@@ -57,74 +160,101 @@ class NotificationList extends Component {
                         <Ionicons style={styles.headerIconClose} name='ios-arrow-back-outline' />
                     </Button>
                     <Body style={styles.headerBody}>
-                        <Title style={styles.headerTitle}>Notification</Title>
+                        <Title style={styles.headerTitle}>{I18n.t('notification')}</Title>
                     </Body>
-                    <Button transparent style={{ width: 70 }} >
-                        <Text style={{ color: '#fff' }}>Clear All</Text>
+                    <Button transparent style={{ width: 70 }} onPress={()=>this.clearAll()}>
+                        <Text style={{ color: '#fff' }}>{I18n.t('clearAll')}</Text>
                     </Button>
                 </Header>
 
                 <Content>
                     {
-                        this.state.NotificationListUnread ?
-                            <View style={{ marginTop: 10, paddingLeft: 15 }}>
-                                <Text>NEW</Text>
-                            </View> : null
+                        this.state.NotificationListUnread.length ?
+                        <View style={styles.listHeadingWarp}>
+                            <Text>{I18n.t('new')}</Text>
+                        </View> : null
                     }
+
                     {
-                        this.state.NotificationListUnread ?
-                            this.state.NotificationListUnread.map((data) => {
-                                return (
-                                    <View style={{ backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', padding: 10, marginTop: 10 }}>
-                                        <View style={{ borderRightWidth: 1, borderRightColor: '#ccc', width: 55, marginRight: 10 }}>
-                                            <Image source={require('../../../img/icon/notificationIcon1.png')} style={{ height: 45, width: 45 }} />
-                                        </View>
-                                        <View style={{ flex: 1 }}>
-                                            <Text>{data.title}</Text>
-                                            <Text numberOfLines={1} style={{ color: '#000', fontSize: 12 }}>{data.notificationDate}</Text>
-                                            <Text style={{ fontSize: 12 }}>Home</Text>
-                                        </View>
-                                        <View>
-                                            <Text>{data.notificationType}</Text>
-                                        </View>
-                                    </View>
-
-                                    
-
-                                )
-                            })
+                        this.state.NotificationListUnread.length ?
+                            <List
+                                dataSource={this.ds.cloneWithRows(this.state.NotificationListUnread)}
+                                disableRightSwipe={true}
+                                renderRow={data =>
+                                <ListItem style={styles.listWarp}>
+                                    <TouchableOpacity style={styles.listWarpInner} onPress={()=> this.gotoDetails(data)}>
+                                         <View style={styles.listImageWarp}>
+                                             <Image source={require('../../../img/icon/notificationIcon1.png')} style={styles.listImage} />
+                                         </View>
+                                         <View style={styles.listTextWarp}>
+                                             <Text>{data.title}</Text>
+                                             <Text numberOfLines={1} style={styles.listTextsecend}>{data.notificationDate}</Text>                                             
+                                             {/* <Text style={styles.listTextthird}>Home</Text> */}
+                                         </View>
+                                         <View>
+                                             <Text>{data.notificationType}</Text>
+                                         </View>
+                                     </TouchableOpacity>
+                                </ListItem>}
+                                renderLeftHiddenRow={data =>
+                                <View></View>}
+                                renderRightHiddenRow={(data, secId, rowId, rowMap) =>
+                                    <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
+                                        <TouchableOpacity onPress={() => this.deleteNotification(data)} style={ styles.deleteWarpInner }>
+                                            <Icon active name="trash" style={styles.deleteWarpText}/>
+                                        </TouchableOpacity>
+                                    </View>}
+                                leftOpenValue={75}
+                                rightOpenValue={-75}
+                            />
                             : null
                     }
 
-                    
-
                     {
-                        this.state.NotificationListUnread ?
-                            <View style={{ marginTop: 10, paddingLeft: 15 }}>
-                                <Text>EARLIER</Text>
+                        this.state.NotificationListRead.length ?
+                            <View style={styles.listHeadingWarp}>
+                                <Text>{I18n.t('earlier')}</Text>
                             </View> : null
                     }
 
                     {
-                        this.state.NotificationListUnread ?
-                            this.state.NotificationListUnread.map((data) => {
-                                return (
-                                    <View style={{ backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', padding: 10, marginTop: 10 }}>
-                                        <View style={{ borderRightWidth: 1, borderRightColor: '#ccc', width: 55, marginRight: 10 }}>
-                                            <Image source={require('../../../img/icon/notificationIcon1.png')} style={{ height: 45, width: 45 }} />
-                                        </View>
-                                        <View style={{ flex: 1 }}>
-                                            <Text>{data.title}</Text>
-                                            <Text numberOfLines={1} style={{ color: '#000', fontSize: 12 }}>{data.notificationDate}</Text>
-                                            <Text style={{ fontSize: 12 }}>Home</Text>
-                                        </View>
-                                        <View>
-                                            <Text>{data.notificationType}</Text>
-                                        </View>
+                        this.state.NotificationListRead.length ?
+
+                        <List
+                            dataSource={this.ds.cloneWithRows(this.state.NotificationListRead)}
+                            disableRightSwipe={true}
+                            renderRow={data =>
+                            <ListItem style={styles.listWarp}>
+                                <TouchableOpacity style={styles.listWarpInner} onPress={()=> this.gotoDetails(data)} >
+                                    <View style={styles.listImageWarp}>
+                                        <Image source={require('../../../img/icon/notificationIcon1.png')} style={styles.listImage} />
                                     </View>
-                                )
-                            })
-                            : null
+                                    <View style={styles.listTextWarp}>
+                                        <Text>{data.title}</Text>
+                                        {/* <Text numberOfLines={1} style={styles.listTextsecend}>{this.getLocalTimeFormat(data.notificationDate)}</Text> */}
+                                        <Text numberOfLines={1} style={data.listTextsecend}>{data.notificationDate}</Text>
+                                        {/* <Text style={styles.listTextthird}>Home</Text> */}
+                                    </View>
+                                    <View>
+                                        <Text>{data.notificationType}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </ListItem>}
+                            renderLeftHiddenRow={data =>
+                                <View></View>}
+                            renderRightHiddenRow={(data, secId, rowId, rowMap) =>
+                            <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
+                                <TouchableOpacity onPress={() => this.deleteNotification(data)} style={ styles.deleteWarpInner }>
+                                    <Icon active name="trash" style={styles.deleteWarpText}/>
+                                </TouchableOpacity>
+                            </View>}
+                            leftOpenValue={75}
+                            rightOpenValue={-75}
+                        />: null
+                    }
+
+                    {
+                        !(this.state.NotificationListRead.length  && this.state.NotificationListUnread.length)? null: <View style={styles.noDataFound}><Text> {I18n.t('nodatafound')} </Text></View>
                     }
 
                 </Content>
@@ -132,5 +262,7 @@ class NotificationList extends Component {
         );
     }
 }
+
+
 
 export default NotificationList;
