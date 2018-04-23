@@ -43,6 +43,7 @@ import Payment from './components/payment/payment';
 import Support from './components/support/supportList';
 import SupportLiveChatList from './components/support/supportLiveChatList';
 import SupportLiveChat from './components/support/supportLiveChat';
+import NotificationList from './components/notification/notificationList';
 
 
 const transitionConfig = () => {
@@ -107,7 +108,8 @@ const AppNavigator = StackNavigator(
         QuoteList: { screen: QuoteList },
         Support: { screen: Support },
         SupportLiveChatList: { screen: SupportLiveChatList },
-        SupportLiveChat: { screen: SupportLiveChat }
+        SupportLiveChat: { screen: SupportLiveChat },
+        NotificationList: { screen: NotificationList }
     },
     {
         initialRouteName: "Home",

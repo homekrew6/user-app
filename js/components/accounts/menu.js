@@ -33,7 +33,8 @@ class Menu extends Component {
   constructor(props) {
     super(props);
     this.state={
-      visible:''
+      visible:'',
+      notificatonCount: 0,
     }
     AsyncStorage.getItem("language").then((value)=>{
       if(value)
@@ -229,6 +230,15 @@ class Menu extends Component {
 
       return true;
     }.bind(this));
+
+    api.post('Notifications/getUnreadCustomerNot', { "customerId": this.props.auth.data.id }).then((res) => {
+      this.setState({ 
+        notificatonCount: res.response.message,
+       })
+    }).catch((err) => {
+      console.log(err);
+    });
+
   }
 
   render() {
@@ -282,18 +292,23 @@ class Menu extends Component {
 
         <Card>
 
-          {/* <CardItem style={styles.menuCarditem}>
-            <View style={styles.menuCardView}>
+          <CardItem style={styles.menuCarditem}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('NotificationList',{ customarId : this.props.auth.data.id })}>
               <Image source={icon1} style={styles.menuCardIcon} />
-              <Text style={styles.menuCardTxt}>Google Plus</Text>
-              <View style={styles.artNt}>
-                <Text style={styles.artNtTxt}>4</Text>
-              </View>
+              <Text style={styles.menuCardTxt}>Notification</Text>
+              {
+                this.state.notificatonCount != 0 ? (  
+                  <View style={styles.artNt}>
+                    <Text style={styles.artNtTxt}>{this.state.notificatonCount}</Text>
+                  </View>
+                ):null
+
+              }
               <View style={styles.arw_lft}>
                 <Image source={back_arow} style={styles.arw_lft_img} />
               </View>
-            </View>
-          </CardItem> */}
+            </TouchableOpacity>
+          </CardItem>
 
           <CardItem style={styles.menuCarditem}>
             <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('JobList')}>
