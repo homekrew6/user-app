@@ -79,6 +79,10 @@ class Menu extends Component {
     {
       this.props.navigation.navigate(screen, {customarId:this.props.auth.data.id});
     }
+    if (screen =='MyPromoCode')
+    {
+      this.props.navigation.navigate("MyPromoCode", {id:this.props.auth.data.id});
+    }
     else
     {
       this.props.navigation.navigate(screen);

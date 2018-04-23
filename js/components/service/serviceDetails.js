@@ -621,7 +621,6 @@ class serviceDetails extends Component {
             console.log('jsonDump DidMount', jsonDump);
           } else {
             let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
-           debugger;
             api.get(questionServiceUrl).then(responseJson => {
               console.log('questionServiceUrl', responseJson);
               responseJson.map((item)=>{
