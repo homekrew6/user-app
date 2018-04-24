@@ -34,7 +34,6 @@ class MyPromoCode extends Component {
 
     getMonthValue(month)
     {
-        debugger;
         let value;
         switch (month) {
             case 0:
@@ -151,7 +150,6 @@ class MyPromoCode extends Component {
                     </View>
                 </View>
             );
-
         });
        
         return (
