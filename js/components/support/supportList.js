@@ -20,24 +20,36 @@ class Support extends Component {
             isModalVisible: false,
             findText: '',
             PhoneNumber: '',
-            loader: false
+            loader: false,
+            allSupportList:[]
         }
     }
 
     componentDidMount(){
-
-        let newsupportList = [
-            { name: 'Live Chat', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
-            { name: 'Service Requester', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
-            { name: 'About KREW', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
-            { name: 'Account', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
-            { name: 'Cancellation', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
-            { name: 'Contact KREW', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
-            { name: 'Service Provider', is_active: false, quotation: 'How do I make a booking?', description: "You can make a booking through the HomeKREW app, or on the web. we will collect a few personal details(like your name and phone number), and your payment information(because anything else is so old school After that, we will send a confirmation email, and if you have not already, you can download the app to access location tracking, tipping, and more! " },
-        ]
-        this.setState({ supportList: newsupportList });
-
+        let newsupportList = [];
         this.setState({ loader: true });
+        api.get('Faqs').then((res) => {
+            let listResponce = res;
+            // console.log(res);
+            listResponce.map((item)=>{
+                let i = item;
+                i.is_active_item = false;
+                if (item.is_active){
+                    newsupportList.push(i);
+                }
+
+            })
+            this.setState({
+                supportList: newsupportList,
+                loader: false,
+                allSupportList:newsupportList
+            });
+        }).catch((error) => {
+            console.log(error);
+            this.setState({ loader: false });
+        })
+
+        
 
         api.get('Settings').then((res) => {
             let PhoneNumber;
@@ -51,19 +63,18 @@ class Support extends Component {
             console.log(error);
             this.setState({ loader: false });
         })
-
     }
 
     faqFunction(key){
         let newsupportList = this.state.supportList;
-        if (newsupportList[key].is_active == true){
-            newsupportList[key].is_active = false;            
+        if (newsupportList[key].is_active_item == true){
+            newsupportList[key].is_active_item = false;            
         }
         else{
             newsupportList.map((item1) => {
-                item1.is_active = false;
+                item1.is_active_item = false;
             })
-            newsupportList[key].is_active = true;                        
+            newsupportList[key].is_active_item = true;                        
         }
         this.setState({ supportList: newsupportList });                    
     }
@@ -75,6 +86,25 @@ class Support extends Component {
         else{
             Alert.alert('Phone no is not available');
         }
+    }
+
+
+    supportSearch(text){
+        if(text)
+        {
+            const regex = new RegExp(`${text.trim()}`, 'i');
+
+            let items = this.state.allSupportList.filter(
+
+                item => item.title.search(regex) >= 0 || item.question.search(regex) >= 0);
+            this.setState({ supportList:items});
+        }
+        else
+        {
+            const allSupportList=this.state.allSupportList;
+            this.setState({supportList:allSupportList});
+        }
+        
     }
 
     render() {
@@ -101,37 +131,37 @@ class Support extends Component {
                     <TextInput
                         underlineColorAndroid={'white'}
                         style={styles.afterHeaderSearchInput}
-                        placeholder='Search'
+                    placeholder='Search'
                         value={this.state.query}
-                        onChangeText={text => this.setState({ findText: text })} />
+                    onChangeText={text => this.supportSearch(text)} />
                 </View>
 
                 <Content>
-                        <View style={[styles.bgWhite,{ marginBottom: 20 }]}>
+                    <View style={[this.state.supportList.length ? styles.bgWhite: '',{ marginBottom: 20 }]}>
                             {
                                 this.state.supportList.length ? this.state.supportList.map((item, key)=>{
                                     return(
                                         <View style={styles.chatListWarp} key={key}>
                                             <TouchableOpacity style={styles.chatListTouchWarp} onPress={()=> this.faqFunction(key)}>
                                                 <View style={styles.chatListTextWarp}>
-                                                    <Text style={styles.chatListTextName}>{item.name}</Text>
-                                                    <Text style={styles.chatListTextQuestion}>{item.quotation}</Text>
+                                                    <Text style={styles.chatListTextName}>{item.title}</Text>
+                                                    <Text style={styles.chatListTextQuestion}>{item.question}</Text>
                                                 </View>
                                                 <View>
                                                     {
-                                                        item.is_active ? <Ionicons name='ios-arrow-down-outline' style={styles.chatListTextIcon} /> : <Ionicons name='ios-arrow-forward-outline' style={styles.chatListTextIcon} />
+                                                        item.is_active_item ? <Ionicons name='ios-arrow-down-outline' style={styles.chatListTextIcon} /> : <Ionicons name='ios-arrow-forward-outline' style={styles.chatListTextIcon} />
                                                     }
                                                     
                                                 </View>
                                             </TouchableOpacity>
                                             {
-                                                item.is_active ? <View style={{ paddingBottom: 15 }}>
-                                                    <Text style={styles.chatListTime}>{item.description}</Text>
+                                                item.is_active_item ? <View style={{ paddingBottom: 15 }}>
+                                                    <Text style={styles.chatListTime}>{item.answer}</Text>
                                                 </View>: null
                                             }
                                         </View>
                                     )
-                                }): null
+                            }) : <View style={styles.noDataFound}><Text> {I18n.t('nodatafound')} </Text></View>
                             }
                         </View>
                 </Content>

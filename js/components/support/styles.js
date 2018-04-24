@@ -92,5 +92,7 @@ export default {
     chatCameraIcon: { fontSize: 24, color: '#fff' },
     chatMiddleInputWarp: { flex: 1, overflow: 'hidden' },
     chatMiddleInput: { backgroundColor: '#fff', borderRadius: 40, paddingLeft: 10, paddingRight: 10, height: 36 },
-    sendIcon: { fontSize: 24, color: '#fff' }
+    sendIcon: { fontSize: 24, color: '#fff' },
+    noDataFound: { alignItems: 'center', justifyContent: 'center', marginTop: 15 },
+    
 };
