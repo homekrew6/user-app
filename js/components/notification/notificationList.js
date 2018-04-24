@@ -187,7 +187,8 @@ class NotificationList extends Component {
                                 renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                                     <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
                                         <TouchableOpacity onPress={() => this.deleteNotification(data)} style={ styles.deleteWarpInner }>
-                                            <Icon active name="trash" style={styles.deleteWarpText}/>
+                                            <EvilIcons name="close" style={styles.deleteWarpIcon} />
+                                            <Text style={styles.deleteWarpText}>DELETE</Text>
                                         </TouchableOpacity>
                                     </View>}
                                 leftOpenValue={75}
@@ -231,7 +232,8 @@ class NotificationList extends Component {
                             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                             <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
                                 <TouchableOpacity onPress={() => this.deleteNotification(data)} style={ styles.deleteWarpInner }>
-                                    <Icon active name="trash" style={styles.deleteWarpText}/>
+                                    <EvilIcons name="close" style={styles.deleteWarpIcon} />
+                                    <Text style={styles.deleteWarpText}>DELETE</Text>
                                 </TouchableOpacity>
                             </View>}
                             leftOpenValue={75}
@@ -240,7 +242,7 @@ class NotificationList extends Component {
                     }
 
                     {
-                        !(this.state.NotificationListRead.length == 0 && this.state.NotificationListUnread.length == 0) ? null : <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 15 }}><Text> {I18n.t('nodatafound')} </Text></View>
+                        !(this.state.NotificationListRead.length == 0 && this.state.NotificationListUnread.length == 0) ? null : <View style={ styles.noDataFound }><Text> {I18n.t('nodatafound')} </Text></View>
                     }
 
                 </Content>
