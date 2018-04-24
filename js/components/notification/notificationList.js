@@ -11,6 +11,7 @@ import I18n from '../../i18n/i18n';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from "./styles";
 import api from '../../api/index';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 const icon1 = require('../../../img/chatIcon3.png');
 const icon2 = require('../../../img/chatIcon1.png');
