@@ -35,14 +35,17 @@ class Payment extends Component {
             transCode: '',
             amount: '',
             customerId: '',
-            IsData: false
+            IsData: false,
+            jobDetails:''
         };
     }
     componentDidMount() {
+        debugger;
         if (this.props.navigation.state.params.url && this.props.navigation.state.params.close) {
             this.setState({
                 url: this.props.navigation.state.params.url, close: this.props.navigation.state.params.close, transCode: this.props.navigation.state.params.code,
-                customerId: this.props.navigation.state.params.customerId, amount: this.props.navigation.state.params.amount
+                customerId: this.props.navigation.state.params.customerId, amount: this.props.navigation.state.params.amount,
+                jobDetails: this.props.navigation.state.params.jobDetails
             });
         }
 
@@ -85,7 +88,8 @@ class Payment extends Component {
                             };
                             api.post('payments', toInsertData).then((successfull) => {
                                 Alert.alert('Payment successfull.');
-                                selfComponent.props.navigation.navigate('Confirmation');
+                                debugger;
+                                selfComponent.props.navigation.navigate('JobDetails', {jobDetails:selfComponent.state.jobDetails, IsPaymentDone:true});
                             }).catch((paymentError) => {
                                 Alert.alert('Please try again later.');
                             });

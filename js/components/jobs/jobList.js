@@ -72,6 +72,9 @@ class JobList extends Component {
                 else if (item.status == "COMPLETED") {
                     item.status = "JOB COMPLETED";
                 }
+                else if (item.status == "PAYPENDING") {
+                    item.status = "PAYMENT PENDING";
+                }
             });
             var finalList = res.response.message;
             var services = {};
@@ -163,6 +166,7 @@ class JobList extends Component {
                             <MenuItem onPress={() => this.jobType('FOLLOWEDUP')}>FOLLOWED UP</MenuItem>
                             <MenuItem onPress={() => this.jobType('CANCELLED')}>CANCELLED</MenuItem>
                             <MenuItem onPress={() => this.jobType('COMPLETED')}>JOB COMPLETED</MenuItem>
+                            <MenuItem onPress={() => this.jobType('PAYPENDING')}>Payment Pending</MenuItem>
                         </Menu>
                     </View>
 

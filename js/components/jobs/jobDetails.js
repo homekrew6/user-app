@@ -18,6 +18,8 @@ import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 import Modal from "react-native-modal";
+
+
 //import firebaseApp from '../../../App';
 import * as firebase from 'firebase';
 const win = Dimensions.get('window').width;
@@ -31,7 +33,13 @@ const firebaseConfig = {
     storageBucket: "krew-user-app.appspot.com"
 };
  const firebaseApp = firebase.initializeApp(firebaseConfig);
-
+const paymentUrl = 'https://secure.telr.com/gateway/mobile.xml';
+var parseString = require('react-native-xml2js').parseString;
+var xml2js = require('react-native-xml2js');
+let headers = {
+    'Accept': 'application/xml',
+    'Content-Type': 'application/xml',
+}
 import styles from "./styles";
 class JobDetails extends Component {
     constructor(props) {
@@ -64,7 +72,8 @@ class JobDetails extends Component {
             reasonName: '',
             reasonId: '',
             materialTotalPrice: 0,
-            hoursPrice: 0
+            hoursPrice: 0,
+            spinner: false
         }
 
         this.state.trackingRef = firebaseApp.database().ref().child('tracking');
@@ -86,6 +95,11 @@ class JobDetails extends Component {
                     else if (snapShotVal.status == 'FOLLOWEDUP') {
                         const jobDetails = this.state.jobDetails;
                         this.setState({ topScreenStatus: 'FOLLOWEDUP', job_start_time: '', job_end_time: '', jobTrackingStatus: 'Job Completed' });
+                    }
+                    else if (snapShotVal.status == 'PAYPENDING') {
+                        const jobDetails = this.state.jobDetails;
+                        this.setState({ topScreenStatus: 'PAYPENDING', job_start_time: '', job_end_time: '', jobTrackingStatus: 'Payment Pending' });
+                        Alert.alert('Please continue with the payment to complite the Job');
                     }
 
                 }
@@ -118,6 +132,12 @@ class JobDetails extends Component {
                         let jobDetails = this.state.jobDetails;
                         jobDetails.status = snapShotVal.status;
                         this.setState({ topScreenStatus: 'FOLLOWEDUP', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Job Completed' });
+                    }
+                    else if (snapShotVal.status == 'PAYPENDING') {
+                        let jobDetails = this.state.jobDetails;
+                        jobDetails.status = snapShotVal.status;
+                        this.setState({ topScreenStatus: 'PAYPENDING', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Payment Pending' });
+                        Alert.alert('Please continue with the payment to complite the Job');
                     }
                 }
             }
@@ -196,7 +216,47 @@ class JobDetails extends Component {
         }
 
     }
+    onCompleteFirebaseCall(snapshot) {
+        if (snapshot && snapshot.val()) {
+            const key = Object.keys(snapshot.val())[0];
+            const ref = firebase.database().ref().child('tracking').child(key);
+            console.warn(key);
+            debugger;
+            const data = {
+                "jobId": `${this.props.navigation.state.params.jobDetails.id}`,
+                "customerId": `${this.props.auth.data.id}`,
+                "workerId": `${this.props.navigation.state.params.jobDetails.customerId}`,
+                "lat": snapshot.val()[key].lat,
+                "lng": snapshot.val()[key].lng,
+                "status": "COMPLETED",
+            }
+            ref.update(data).then((thenRes) => {
+                //complete job DB update
+               debugger;
+                let price = this.props.navigation.state.params.jobDetails.price;
+                const jobId = this.props.navigation.state.params.jobDetails.id;
+                const customerId = this.props.navigation.state.params.jobDetails.customerId;
+                api.post('Jobs/completeJob', {
+                    "id": jobId, "status": "COMPLETED", "customerId": customerId, "workerId": this.state.jobDetails.workerId,
+                    price: price
+                }).then(responseJson => {
+                    api.post('Jobs/getJobDetailsById', {
+                        "id": this.props.navigation.state.params.jobDetails.id,
+                        "workerId": this.state.jobDetails.workerId
+                    }).then((response) => {
+                        this.setState({ jobDetails: response.response.message[0], spinner: false, jobTrackingStatus: 'Job Completed' });
+                    }).catch((err) => {
+
+                    })
+                }).catch(err => {
+
+                })
+                //end complete job DB update //
+            })
+        }
+    }
     componentDidMount() {
+        debugger
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
             if(res.response.message[0].price) { res.response.message[0].price = res.response.message[0].price.toFixed(2); }
             this.setState({
@@ -211,65 +271,92 @@ class JobDetails extends Component {
             //     jobDetails: res.response.message[0],
             //     topScreenStatus: 'COMPLETED'
             // })
-
-            console.log('jobDetails', this.state.jobDetails);
-
-            if (this.state.jobDetails.status == 'STARTED') {
-                this.setState({ jobTrackingStatus: 'Job Requested' });
-            }
-            else if (this.state.jobDetails.status == 'CANCELLED') {
-                this.setState({ jobTrackingStatus: 'Job Cancelled' });
-            }
-            else if (this.state.jobDetails.status == 'ACCEPTED') {
-                this.setState({ jobTrackingStatus: 'Krew Assigned' });
-            }
-            else if (this.state.jobDetails.status == 'ONMYWAY') {
-                this.setState({ jobTrackingStatus: 'Krew On The Way' });
-            }
-            else if (this.state.jobDetails.status == 'FOLLOWEDUP') {
-                this.setState({ jobTrackingStatus: 'Follow Up' });
-                api.post('jobMaterials/getJobMaterialByJobId', { "jobId": this.state.jobDetails.id }).then((materialAns) => {
-                    let materialList = materialAns.response.message;
-                    materialTotalPrice = 0;
-                    materialList.map((materialItem) => {
-                        if (materialItem.materials) {
-                            materialTotalPrice = materialTotalPrice + Number(materialItem.materials.price);
+            if (this.props.navigation.state.params.IsPaymentDone != undefined && this.props.navigation.state.params.IsPaymentDone==true)
+            {
+                debugger;
+                this.setState({ spinner: true });
+                //update firebase on complete job
+                let jobIdTr = `${this.props.navigation.state.params.jobDetails.id}`;
+                let refCompleteFirebase = firebase.database().ref().child('tracking');
+                refCompleteFirebase.orderByChild('jobId').equalTo(jobIdTr).once('value').then((snapshot) => {
+                    this.onCompleteFirebaseCall(snapshot);
+                    setTimeout(() => {
+                        if (this.state.loader === true) {
+                            this.onCompleteFirebaseCall(snapshot);
+                            setTimeout(() => {
+                                refCompleteFirebase.off();
+                                Alert.alert('Internal Error Please Try Again');
+                                this.setState({ loader: false });
+                            }, 5000);
                         }
+                    }, 5000);
+                })
+            }
+            else
+            {
+                console.log('jobDetails', this.state.jobDetails);
+
+                if (this.state.jobDetails.status == 'STARTED') {
+                    this.setState({ jobTrackingStatus: 'Job Requested' });
+                }
+                else if (this.state.jobDetails.status == 'CANCELLED') {
+                    this.setState({ jobTrackingStatus: 'Job Cancelled' });
+                }
+                else if (this.state.jobDetails.status == 'ACCEPTED') {
+                    this.setState({ jobTrackingStatus: 'Krew Assigned' });
+                }
+                else if (this.state.jobDetails.status == 'ONMYWAY') {
+                    this.setState({ jobTrackingStatus: 'Krew On The Way' });
+                }
+                else if (this.state.jobDetails.status == 'PAYPENDING') {
+                    this.setState({ jobTrackingStatus: 'Payment Pending' });
+                }
+                else if (this.state.jobDetails.status == 'FOLLOWEDUP') {
+                    this.setState({ jobTrackingStatus: 'Follow Up' });
+                    api.post('jobMaterials/getJobMaterialByJobId', { "jobId": this.state.jobDetails.id }).then((materialAns) => {
+                        let materialList = materialAns.response.message;
+                        materialTotalPrice = 0;
+                        materialList.map((materialItem) => {
+                            if (materialItem.materials) {
+                                materialTotalPrice = materialTotalPrice + Number(materialItem.materials.price);
+                            }
+                        })
+                        materialTotalPrice = parseFloat(materialTotalPrice).toFixed(2);
+                        this.setState({
+                            materialTotalPrice: materialTotalPrice,
+                            hoursPrice: Number(50)
+                        })
+                        // let grndtotal = (parseInt(this.state.grndtotal) + parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
+                        // this.setState({
+                        //     grndtotal: grndtotal,
+                        // })
+                        console.log(materialList);
+                    }).catch((err) => {
+                        console.log(err);
                     })
-                    materialTotalPrice = parseFloat(materialTotalPrice).toFixed(2);
+                }
+                else if (this.state.jobDetails.status == 'JOBSTARTED') {
+                    const jobDetails = this.state.jobDetails;
+                    let job_start_time = moment(jobDetails.jobStartTime).format('LT');
+                    let job_end_time = moment(jobDetails.jobEndTime).format('LT');
+                    this.setState({ jobTrackingStatus: 'Job Started', job_start_time: job_start_time, job_end_time: job_end_time });
+                }
+                else if (this.state.jobDetails.status == 'COMPLETED') {
+                    this.setState({ jobTrackingStatus: 'Job Completed' });
+                }
+                const time_interval = this.state.jobDetails.service.time_interval;
+                const progressSpeed = (time_interval / 100) * 60000;
+                this.setState({ workProgressTime: 0.2 });
+                const progressInterval = setInterval(() => {
+                    this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                }, progressSpeed);
+                if (this.state.jobDetails.status == "STARTED" || this.state.jobDetails.status == "ACCEPTED") {
                     this.setState({
-                        materialTotalPrice: materialTotalPrice,
-                        hoursPrice: Number(50)
+                        cancelJobButton: true
                     })
-                    // let grndtotal = (parseInt(this.state.grndtotal) + parseInt(this.state.totalPrice) + parseInt(this.state.materialTotalPrice)).toFixed(2);
-                    // this.setState({
-                    //     grndtotal: grndtotal,
-                    // })
-                    console.log(materialList);
-                }).catch((err) => {
-                    console.log(err);
-                })
+                }
             }
-            else if (this.state.jobDetails.status == 'JOBSTARTED') {
-                const jobDetails = this.state.jobDetails;
-                let job_start_time = moment(jobDetails.jobStartTime).format('LT');
-                let job_end_time = moment(jobDetails.jobEndTime).format('LT');
-                this.setState({ jobTrackingStatus: 'Job Started', job_start_time: job_start_time, job_end_time: job_end_time });
-            }
-            else if (this.state.jobDetails.status == 'COMPLETED') {
-                this.setState({ jobTrackingStatus: 'Job Completed' });
-            }
-            const time_interval = this.state.jobDetails.service.time_interval;
-            const progressSpeed = (time_interval / 100) * 60000;
-            this.setState({ workProgressTime: 0.2 });
-            const progressInterval = setInterval(() => {
-                this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-            }, progressSpeed);
-            if (this.state.jobDetails.status == "STARTED" || this.state.jobDetails.status == "ACCEPTED") {
-                this.setState({
-                    cancelJobButton: true
-                })
-            }
+            
         }).catch(err => {
             console.log(err);
             //reject(err)
@@ -578,6 +665,63 @@ class JobDetails extends Component {
         this.setState({ reasonName: reasonData.name, reasonId: reasonData.id, reasonList:reasonsList });
     }
 
+    startPayment() {
+        
+        this.setState({
+            spinner: true
+        });
+        var obj = {
+            store: '20217', key: 'JtLPL^pgBVG@q7PZ', device: { type: 'Android', id: '36C0EC49-AA2F-47DC-A4D7-D9927A739F5F' },
+            app: { name: 'Pragati', version: '1.0.0', user: '7070', id: '55555' }, tran: {
+                test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description: 'Krew Test Job',
+                currency: 'AED', amount: this.state.jobDetails.price, language: 'en'
+            }, billing: {
+                name: { title: 'Miss', first: 'Pragati', last: 'Chatterjee' }, address: {
+                    line1: 'SIT TOWER', city: 'Dubai', region: 'Dubai', country: 'AE'
+                },
+                email: 'pragati@natitsolved.com'
+            }
+        };
+
+        var builder = new xml2js.Builder({ rootName: 'mobile' });
+        var xml = builder.buildObject(obj);
+
+        const selfComponent = this;
+        fetch(paymentUrl, {
+            method: 'POST',
+            headers: headers,
+            body: xml
+        }).then((res) => {
+debugger;
+            parseString(res._bodyInit, function (err, result) {
+                if (err) {
+                    this.setState({
+                        spinner: false
+                    });
+                    Alert.alert('Please try again later.');
+                }
+                else {
+
+                    selfComponent.setState({
+                        spinner: false
+                    });
+                    debugger;
+                    console.warn("pragati", result.mobile.webview[0].start[0]);
+                    selfComponent.props.navigation.navigate('Payment', { jobDetails:selfComponent.state.jobDetails,amount: selfComponent.state.jobDetails.price, customerId: selfComponent.props.auth.data.id, url: result.mobile.webview[0].start[0], close: result.mobile.webview[0].close[0], abort: result.mobile.webview[0].abort[0], code: result.mobile.webview[0].code[0] });
+                }
+
+
+            });
+        }).catch((err) => {
+            this.setState({
+                loader: false
+            });
+            console.warn("error", err);
+            Alert.alert('Please try again later.');
+        })
+
+    }
+
 
     render() {
         if (this.state.jobDetails) {
@@ -587,6 +731,8 @@ class JobDetails extends Component {
                     <StatusBar
                         backgroundColor="#81cdc7"
                     />
+
+                    <FSpinner visible={this.state.spinner} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
 
                     <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7">
                         <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
@@ -600,7 +746,7 @@ class JobDetails extends Component {
 
 
                     <Content style={{ backgroundColor: '#ccc' }}  >
-                        {this.state.topScreenStatus === 'STARTED' || this.state.topScreenStatus === 'CANCELLED' ?
+                        {this.state.topScreenStatus === 'STARTED' || this.state.topScreenStatus === 'CANCELLED' || this.state.topScreenStatus === 'PAYPENDING' ?
                             this.state.jobDetails.service.banner_image ? (
                                 <ImageBackground source={{ uri: this.state.jobDetails.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                     <View style={{ alignItems: 'center' }}>
@@ -726,13 +872,19 @@ class JobDetails extends Component {
                             <Text style={styles.jobItemName}>{I18n.t('quoteOrFollow')}</Text>
                             <Text style={styles.jobItemValue}>Yes</Text>
                         </View>
-                        <View style={styles.jobItemWarp}>
-                            <View style={{ width: 20 }}>
-                                <MaterialIcons name="payment" style={styles.jobItemIcon} />
-                            </View>
-                            <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
-                            <Text style={styles.jobItemValue}>1234</Text>
-                        </View>
+                        
+                        {
+                            this.state.topScreenStatus == 'PAYPENDING' ? (
+                                <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.startPayment() }>
+                                    <View style={{ width: 20 }}>
+                                        <MaterialIcons name="payment" style={styles.jobItemIcon} />
+                                    </View>
+                                    <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
+                                    <Text style={styles.jobItemValue}>123456</Text>
+                                </TouchableOpacity>
+                            ) : null
+                        }
+
                         {this.state.topScreenStatus == 'CANCELLED' ? (
                             <View style={[styles.jobItemWarp, { alignItems: 'center' , justifyContent: 'center'}]}>
 
