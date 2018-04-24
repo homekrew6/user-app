@@ -75,10 +75,7 @@ class Menu extends Component {
     data.activeScreen = screen;
     data.previousScreen = "Menu";
     this.props.navigateAndSaveCurrentScreen(data);
-    if(screen=="NotificationList")
-    {
-      this.props.navigation.navigate(screen, {customarId:this.props.auth.data.id});
-    }
+    
     if (screen =='MyPromoCode')
     {
       this.props.navigation.navigate("MyPromoCode", {id:this.props.auth.data.id});
@@ -110,13 +107,6 @@ class Menu extends Component {
       }
       else {
         let saveData = this.props.auth.data;
-        // if (this.props.auth.data.previousScreen)
-        //   this.props.navigation.navigate(this.props.auth.data.previousScreen);
-        // else {
-        //   this.props.navigation.navigate('Menu');
-        // }
-
-
         switch (this.props.auth.data.activeScreen) {
           case "EditProfile":
             saveData.activeScreen = "Menu";
