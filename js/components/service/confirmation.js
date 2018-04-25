@@ -15,6 +15,8 @@ import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
+import { setServiceDetails } from './elements/serviceActions';
+
 const reseteAction = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'Menu' })],
@@ -54,7 +56,6 @@ class Confirmation extends Component {
     
 
      startPayment() {
-        debugger;
         this.setState({
             loader: true
         });
@@ -109,6 +110,7 @@ class Confirmation extends Component {
     }
 
     componentDidMount() {
+        
         // debugger;
         // var xml = "<?xml version='1.0' encoding='UTF - 8'?>< mobile ><webview><start>https://secure.telr.com/gateway/webview_start.html?code=e46f5da95ac55ad990c2aa6cc1f1</start><close>https://secure.telr.com/gateway/webview_close.html</close><abort>https://secure.telr.com/gateway/webview_abort.html</abort><code>e46f5da95ac55ad990c2aa6cc1f1</code></webview><trace>4000/27841/5ad990c2</trace></mobile >"
         // parseString(xml, function (err, result) {
@@ -428,6 +430,26 @@ class Confirmation extends Component {
 
     }
 
+    cleanPromo(){
+
+        this.setState({ loader: true })
+
+        api.post('promoLogs/removePromo', { promotionsId: this.props.service.data.promotionsId, customerId: this.props.auth.data.id}).then((res) => {
+            let response = res.response;
+            if (response.type == "Success") {
+                let serviceData = this.props.service.data;
+                serviceData.price = parseFloat(response.price).toFixed(2);
+                serviceData.promo = '';
+                serviceData.promotionsId = '';
+                this.props.setServiceDetails(serviceData);
+            }
+            this.setState({ loader: false })
+        }).catch((err) => {
+            console.log(err);
+            this.setState({ loader: false })
+        });
+    }
+
     render() {
         return (
             <Container >
@@ -516,16 +538,25 @@ class Confirmation extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <Item style={styles.confirmationItem}>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate("MyPromoCode", { id: this.props.auth.data.id, price: this.props.service.data.price })} disabled={ this.props.service.data.promo? true:false }>
                             <View style={styles.confirmationIconView}>
                                 <Entypo name='scissors' style={styles.confirmationViewIcon} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>{I18n.t('promo_code')}</Text>
-                            <Text style={styles.confirmationDateTime}>{this.state.currency} 50 off</Text>
-                            <View style={styles.confirmationArwNxt}>
-                                <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
-                            </View>
-                        </Item>
+                            {
+                                this.props.service.data.promo ? <Text style={styles.confirmationDateTime}>{this.state.currency} {this.props.service.data.promo}</Text>: null
+                                
+                            }
+                            {
+                                this.props.service.data.promotionsId ? <TouchableOpacity style={styles.confirmationArwNxt}>
+                                    <Ico name="close" style={[styles.confirmationArwNxtIcn, { color: 'red' }]} onPress={() => this.cleanPromo()}/>
+                                </TouchableOpacity> : <View style={styles.confirmationArwNxt}>
+                                    <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
+                                </View>
+
+                            }
+                            
+                        </TouchableOpacity>
 
                     </View>
                     <View style={styles.confirmationhd}>
@@ -567,6 +598,10 @@ class Confirmation extends Component {
     }
 }
 
+Confirmation.propTypes = {
+    auth: PropTypes.object.isRequired,
+    service: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = (state) => {
     return {
@@ -576,6 +611,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
+    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data)),
+    setServiceDetails: (data) => dispatch(setServiceDetails(data))
+    
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Confirmation);

@@ -256,7 +256,6 @@ class JobDetails extends Component {
         }
     }
     componentDidMount() {
-        debugger
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
             if(res.response.message[0].price) { res.response.message[0].price = res.response.message[0].price.toFixed(2); }
             this.setState({
@@ -273,7 +272,6 @@ class JobDetails extends Component {
             // })
             if (this.props.navigation.state.params.IsPaymentDone != undefined && this.props.navigation.state.params.IsPaymentDone==true)
             {
-                debugger;
                 this.setState({ spinner: true });
                 //update firebase on complete job
                 let jobIdTr = `${this.props.navigation.state.params.jobDetails.id}`;
