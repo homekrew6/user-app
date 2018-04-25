@@ -54,7 +54,7 @@ class Confirmation extends Component {
     
 
      startPayment() {
-        debugger;
+ 
         this.setState({
             loader: true
         });
