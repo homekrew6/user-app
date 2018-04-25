@@ -40,7 +40,7 @@ class Payment extends Component {
         };
     }
     componentDidMount() {
-        debugger;
+      
         if (this.props.navigation.state.params.url && this.props.navigation.state.params.close) {
             this.setState({
                 url: this.props.navigation.state.params.url, close: this.props.navigation.state.params.close, transCode: this.props.navigation.state.params.code,
@@ -88,7 +88,7 @@ class Payment extends Component {
                             };
                             api.post('payments', toInsertData).then((successfull) => {
                                 Alert.alert('Payment successfull.');
-                                debugger;
+                                
                                 selfComponent.props.navigation.navigate('JobDetails', {jobDetails:selfComponent.state.jobDetails, IsPaymentDone:true});
                             }).catch((paymentError) => {
                                 Alert.alert('Please try again later.');
