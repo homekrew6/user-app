@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Input, Text, Body, Title } from "native-base";
 import FSpinner from 'react-native-loading-spinner-overlay';
@@ -10,6 +10,8 @@ import styles from "./styles";
 import Modal from "react-native-modal";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import api from '../../api';
+import { setServiceDetails } from '../service/elements/serviceActions';
+
 
 class MyPromoCode extends Component {
     constructor(props) {
@@ -18,7 +20,8 @@ class MyPromoCode extends Component {
             isModalVisible: false,
             IsLoaderVisible: false,
             promoCode: '',
-            promoCodeList: []
+            promoCodeList: [],
+            price: this.props.service.data.price ? this.props.service.data.price : '',
         }
 
     }
@@ -27,9 +30,7 @@ class MyPromoCode extends Component {
         // debugger;
         // console.log(this.state.promoCode);
         // console.log(this.props.navigation.state.params.id);
-        this.setState({
-            isModalVisible: !this.state.isModalVisible,
-        })
+        this.setState({ isModalVisible: !this.state.isModalVisible })
     }
 
     getMonthValue(month)
@@ -96,6 +97,7 @@ class MyPromoCode extends Component {
                         const fullYear = newDate.getFullYear();
                         const month = this.getMonthValue(newDate.getMonth());
                         item.addedDate = month + " " + day + " " + fullYear;
+                        item.seleted= false;
                     }
                 });
                 this.setState({ IsLoaderVisible: false, promoCodeList: res });
@@ -108,6 +110,63 @@ class MyPromoCode extends Component {
             Alert.alert('Please login.');
         }
     }
+    promoCodeSelect(item){
+        let promoCodeList = this.state.promoCodeList;
+            promoCodeList.map((data)=> {
+                data.seleted = false;
+                if ( item.id == data.id ){
+                    data.seleted = true;
+                }
+                this.setState({
+                    promoCodeList: promoCodeList,
+                })
+            })
+
+        let calculatePromoPriceOpject = {
+            serviceId: this.props.service.data.id,
+            price: this.state.price, 
+            customerId: item.customerId,
+            IsFirstOrderOnly: item.promotions.IsFirstOrderOnly, 
+            id: item.id, 
+            max_discount_amount: item.promotions.max_discount_amount, 
+            NoOfUsed: item.promotions.NoOfUsed, 
+            min_order_amount: item.promotions.min_order_amount,                                                 
+            promotionsId: item.promotions.id,
+            amount:item.promotions.amount,
+            start_date: item.promotions.start_date,
+            end_date: item.promotions.end_date,                                         
+            noOfUses: item.promotions.noOfUses,                                        
+            jobEstimatedHours: item.promotions.jobEstimatedHours,
+            time_interval: this.props.service.data.time_interval,
+            min_charge: this.props.service.data.min_charge,                                      
+        }
+        this.setState({ IsLoaderVisible: true });
+
+        api.post('Jobs/calculatePromoPrice', calculatePromoPriceOpject ).then((res) => {
+            // debugger;
+            let response = res.response;  
+            console.log(response);
+            if (response.message){
+                Alert.alert(response.message);                
+            }else{
+                Alert.alert('Please try other');
+            }
+            if (response.IsPromoApplied){
+                let serviceData = this.props.service.data;
+                serviceData.price =parseFloat(response.price).toFixed(2);
+                serviceData.promo = item.promotions.promo_code; 
+                serviceData.promotionsId = item.promotions.id;               
+                this.props.setServiceDetails(serviceData);
+                this.props.navigation.navigate('Confirmation');
+            }
+            this.setState({ IsLoaderVisible: false });            
+        }).catch((err) => {
+            console.log(err);
+            this.setState({ IsLoaderVisible: false });            
+        });
+
+    }
+    
 
     addUserPromo() {
         if (this.props.navigation.state.params.id) {
@@ -140,7 +199,7 @@ class MyPromoCode extends Component {
     render() {
         let promoCodeList = this.state.promoCodeList.map((item, key) => {
             return (
-                <View style={styles.itemWarp}>
+                <TouchableOpacity style={[styles.itemWarp, item.seleted ? { backgroundColor : '#ccc' }: { backgroundColor: '#fff' } ]} onPress={() => this.promoCodeSelect(item)} key={ key }>
                     <View style={styles.flex1}>
                         <Text style={styles.headPromoCode}>{item.promotions.promo_code}</Text>
                         <Text style={styles.headPromoCodeButtom}>AED50 is your first cleaning services</Text>
@@ -148,7 +207,7 @@ class MyPromoCode extends Component {
                     <View>
                         <Text style={styles.promoDate}>{item.addedDate}</Text>
                     </View>
-                </View>
+                </TouchableOpacity>
             );
         });
        
@@ -170,24 +229,6 @@ class MyPromoCode extends Component {
                 </Header>
                 <Content>
                     <FSpinner visible={this.state.IsLoaderVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
-                    {/* <View style={styles.itemWarp}>
-                        <View style={styles.flex1}>
-                            <Text style={styles.headPromoCode}>AED50 OFF</Text>
-                            <Text style={styles.headPromoCodeButtom}>AED50 is your first cleaning services</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.promoDate}>Nov 20, 2017</Text>
-                        </View>
-                    </View>
-                    <View style={styles.itemWarp}>
-                        <View style={styles.flex1}>
-                            <Text style={styles.headPromoCode}>AED50 OFF</Text>
-                            <Text style={styles.headPromoCodeButtom}>AED50 is your first cleaning services</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.promoDate}>Nov 20, 2017</Text>
-                        </View>
-                    </View> */}
 
                     {promoCodeList}
 
@@ -222,4 +263,18 @@ class MyPromoCode extends Component {
     }
 }
 
-export default MyPromoCode;
+// export default Categories;
+MyPromoCode.propTypes = {
+    auth: PropTypes.object.isRequired,
+    service: PropTypes.object.isRequired,
+};
+const mapStateToProps = state => ({
+    auth: state.auth,
+    service: state.service
+});
+
+const mapDispatchToProps = dispatch => ({
+    setServiceDetails: (data) => dispatch(setServiceDetails(data))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyPromoCode);
