@@ -221,7 +221,6 @@ class JobDetails extends Component {
             const key = Object.keys(snapshot.val())[0];
             const ref = firebase.database().ref().child('tracking').child(key);
             console.warn(key);
-            debugger;
             const data = {
                 "jobId": `${this.props.navigation.state.params.jobDetails.id}`,
                 "customerId": `${this.props.auth.data.id}`,
@@ -232,7 +231,6 @@ class JobDetails extends Component {
             }
             ref.update(data).then((thenRes) => {
                 //complete job DB update
-               debugger;
                 let price = this.props.navigation.state.params.jobDetails.price;
                 const jobId = this.props.navigation.state.params.jobDetails.id;
                 const customerId = this.props.navigation.state.params.jobDetails.customerId;
@@ -255,7 +253,7 @@ class JobDetails extends Component {
             })
         }
     }
-    componentDidMount() {
+    componentDidMount() {       
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
             if(res.response.message[0].price) { res.response.message[0].price = res.response.message[0].price.toFixed(2); }
             this.setState({
@@ -272,6 +270,7 @@ class JobDetails extends Component {
             // })
             if (this.props.navigation.state.params.IsPaymentDone != undefined && this.props.navigation.state.params.IsPaymentDone==true)
             {
+                
                 this.setState({ spinner: true });
                 //update firebase on complete job
                 let jobIdTr = `${this.props.navigation.state.params.jobDetails.id}`;
@@ -690,7 +689,7 @@ class JobDetails extends Component {
             headers: headers,
             body: xml
         }).then((res) => {
-debugger;
+
             parseString(res._bodyInit, function (err, result) {
                 if (err) {
                     this.setState({
@@ -703,7 +702,7 @@ debugger;
                     selfComponent.setState({
                         spinner: false
                     });
-                    debugger;
+                    
                     console.warn("pragati", result.mobile.webview[0].start[0]);
                     selfComponent.props.navigation.navigate('Payment', { jobDetails:selfComponent.state.jobDetails,amount: selfComponent.state.jobDetails.price, customerId: selfComponent.props.auth.data.id, url: result.mobile.webview[0].start[0], close: result.mobile.webview[0].close[0], abort: result.mobile.webview[0].abort[0], code: result.mobile.webview[0].code[0] });
                 }
