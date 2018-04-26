@@ -13,12 +13,12 @@ import styles from './styles';
 import I18n from '../../i18n/i18n';
 import config from '../../config';
 import * as firebase from 'firebase';
- const firebaseConfig = {
-            apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
-            authDomain: "krew-user-app.firebaseapp.com",
-            databaseURL: "https://krew-user-app.firebaseio.com",
-            storageBucket: "krew-user-app.appspot.com"
-        };
+const firebaseConfig = {
+    apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
+    authDomain: "krew-user-app.firebaseapp.com",
+    databaseURL: "https://krew-user-app.firebaseio.com",
+    storageBucket: "krew-user-app.appspot.com"
+};
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 import { RNS3 } from 'react-native-aws3';
@@ -33,26 +33,24 @@ class Chat extends Component {
         super(props);
         this.state = {
             chatRef: '',
-            customerId: this.props.auth.data.id ? this.props.auth.data.id: '',
+            customerId: this.props.auth.data.id ? this.props.auth.data.id : '',
             workerId: this.props.navigation.state.params.workerDetails.id ? this.props.navigation.state.params.workerDetails.id : '',
-            message:'',
-            chatRoomId:'',
+            message: '',
+            chatRoomId: '',
             typeMessage: '',
-            chatRoomId:'',
-            chatList:[],
+            chatList: [],
             visible: false
         }
         if (!firebase.apps.length) {
             firebase.initializeApp({});
         }
-        else
-        {
+        else {
             this.state.chatRef = firebase.apps[0].database().ref().child('messages');
         }
 
         this.state.chatRef.on('child_added', (snapshot) => {
             const snapShotVal = snapshot.val();
-            if ( snapShotVal.chatRoomId == this.state.chatRoomId ){
+            if (snapShotVal.chatRoomId == this.state.chatRoomId) {
                 let chatList = this.state.chatList;
                 const item = snapShotVal;
                 chatList.push(item);
@@ -62,10 +60,9 @@ class Chat extends Component {
                 this.refs.ScrollViewStart.scrollToEnd(true);
             }, 400);
 
-        })  
+        })
     }
-    componentDidMount()
-    {
+    componentDidMount() {
 
         setTimeout(() => {
             this.refs.ScrollViewStart.scrollToEnd();
@@ -73,32 +70,30 @@ class Chat extends Component {
 
         console.log(this.props.auth.data)
         if (this.state.customerId && this.state.workerId) {
-            const chatRoomId=this.state.customerId+"_"+this.state.workerId;
-            this.setState({ chatRoomId: chatRoomId});
+            const chatRoomId = this.state.customerId + "_" + this.state.workerId;
+            this.setState({ chatRoomId: chatRoomId });
 
         }
         let chatRoomId = this.state.customerId + '_' + this.state.workerId;
-        this.state.chatRef.orderByChild('chatRoomId').equalTo(chatRoomId).once('value').then((snapshot) => {           
+        this.state.chatRef.orderByChild('chatRoomId').equalTo(chatRoomId).once('value').then((snapshot) => {
             console.log(snapshot);
-            if(snapshot.val())
-            {
-                var listMesage=[];
-                for(let key in  snapshot.val())
-                {
-                    listMesage.push(snapshot.val()[key]) ;  
+            if (snapshot.val()) {
+                var listMesage = [];
+                for (let key in snapshot.val()) {
+                    listMesage.push(snapshot.val()[key]);
                 }
-                this.setState({ chatList:listMesage});
+                this.setState({ chatList: listMesage });
                 console.log(this.state.chatList);
             }
-        }).catch((Err)=>{
+        }).catch((Err) => {
             console.log(Err);
         })
     }
     sendMessage() {
-        if (this.state.typeMessage){
+        if (this.state.typeMessage) {
             this.state.chatRef.push({ "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "Message": this.state.typeMessage });
         }
-        else{
+        else {
             Alert.alert("Please type your message to send.")
         }
     }
@@ -159,7 +154,7 @@ class Chat extends Component {
 
 
                 if (response.status == 201) {
-                
+
                     this.state.chatRef.push({ "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "MessageImage": response.body.postResponse.location });
                     this.setState({
                         visible: false
@@ -199,7 +194,7 @@ class Chat extends Component {
             const options = config.s3;
 
             RNS3.put(file, config.s3).then((response) => {
-                console.log("myImageCapture");                
+                console.log("myImageCapture");
                 console.log(response);
                 if (response.status !== 201) {
                     this.setState({ visible: false });
@@ -214,8 +209,8 @@ class Chat extends Component {
                     // chatList.push(item);
                     this.setState({
                         visible: false
-                    });  
-                                     
+                    });
+
                 }
             }).catch((err) => {
                 console.log(err);
@@ -225,74 +220,74 @@ class Chat extends Component {
 
 
 
-            
+
         }).catch((err) => {
             this.setState({ visible: false });
         });
     }
 
     render() {
-        return(
+        return (
 
-                <Container >
+            <Container >
                 <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
-                    <StatusBar
-                        backgroundColor="#81cdc7"
-                    />
-                    <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
-                    
-                        <Button transparent style={{ width: 30 }}>
-                            <Ionicons name="ios-arrow-back" style={styles.headIcon} />
-                        </Button>
-                        <Body style={styles.headBody}>
-                            <Title style={{ fontSize: 14 }}>{I18n.t('typicallyRepliesInAFewMinutes')}</Title>
-                        </Body>
-                        <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
-                            <EvilIcons name="close" style={styles.headIcon} />
-                        </Button>
-                        
-                    </Header>
-                    <View style={{ flex: 1 }}>
-                        <View style={{ backgroundColor: '#cccccc', padding: 15 }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <View style={{ marginBottom: 10 }}>
-                                    {
-                                        this.props.navigation.state.params.workerDetails.image ? (
-                                            <Image source={{ uri: this.props.navigation.state.params.workerDetails.image }} style={{ height: 50, width: 50, borderRadius: 70 }} />
-                                        ) : (<Image source={require('../../../img/atul.png')} style={{ height: 50, width: 50, borderRadius: 70 }} />)
-                                    }
+                <StatusBar
+                    backgroundColor="#81cdc7"
+                />
+                <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
 
-                                </View>
-                                <View style={{ marginLeft: 10 }}>
-                                    <Text>{this.props.navigation.state.params.workerDetails.name}</Text>
-                                    <Text style={{ fontSize: 12 }}>Active in the last 15m</Text>
-                                </View>
+                    <Button transparent style={{ width: 30 }}>
+                        <Ionicons name="ios-arrow-back" style={styles.headIcon} />
+                    </Button>
+                    <Body style={styles.headBody}>
+                        <Title style={{ fontSize: 14 }}>{I18n.t('typicallyRepliesInAFewMinutes')}</Title>
+                    </Body>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                        <EvilIcons name="close" style={styles.headIcon} />
+                    </Button>
+
+                </Header>
+                <View style={{ flex: 1 }}>
+                    <View style={{ backgroundColor: '#cccccc', padding: 15 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ marginBottom: 10 }}>
+                                {
+                                    this.props.navigation.state.params.workerDetails.image ? (
+                                        <Image source={{ uri: this.props.navigation.state.params.workerDetails.image }} style={{ height: 50, width: 50, borderRadius: 70 }} />
+                                    ) : (<Image source={require('../../../img/atul.png')} style={{ height: 50, width: 50, borderRadius: 70 }} />)
+                                }
+
                             </View>
-                            <View>
-                                <Text style={{ fontSize: 12, textAlign: 'center', width: '100%' }}>
-                                    Hi! Need help with a booking or have some feedback about the app?
-        Let me know! I'm here to help.
-                        </Text>
+                            <View style={{ marginLeft: 10 }}>
+                                <Text>{this.props.navigation.state.params.workerDetails.name}</Text>
+                                <Text style={{ fontSize: 12 }}>Active in the last 15m</Text>
                             </View>
                         </View>
+                        <View>
+                            <Text style={{ fontSize: 12, textAlign: 'center', width: '100%' }}>
+                                Hi! Need help with a booking or have some feedback about the app?
+    Let me know! I'm here to help.
+                        </Text>
+                        </View>
+                    </View>
 
 
 
-                        <ScrollView 
+                    <ScrollView
                         ref='ScrollViewStart'
                         style={{ padding: 10, flex: 1 }}
-                        >
+                    >
 
-                            {
-                                this.state.chatList.map((data, key) => (
-                                    data.IsCustomerSender ? (
-                                    <View style={{ flexDirection: 'row', marginBottom: 15 }} key={ key }>
+                        {
+                            this.state.chatList.map((data, key) => (
+                                data.IsCustomerSender ? (
+                                    <View style={{ flexDirection: 'row', marginBottom: 15 }} key={key}>
                                         <View style={{ flex: 1, marginBottom: 10, overflow: 'visible', position: 'relative', alignItems: 'flex-end' }}>
-                                            <View style={{  maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
+                                            <View style={{ maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
                                                 {
                                                     data.Message ? (
                                                         <Text style={{ fontSize: 14 }}> {data.Message} </Text>
-                                                    ) : (<Image source={{ uri: data.MessageImage }} style={{ height: 100, width: 100, borderRadius:4 }} />)
+                                                    ) : (<Image source={{ uri: data.MessageImage }} style={{ height: 100, width: 100, borderRadius: 4 }} />)
                                                 }
                                             </View>
                                             <Image source={require('../../../img/icon/chats2.png')} style={{ height: 12, width: 12, position: 'absolute', right: -3, bottom: -4, zIndex: 999 }} />
@@ -301,61 +296,61 @@ class Chat extends Component {
                                             {
                                                 this.props.auth.data.image ? (
                                                     <Image source={{ uri: this.props.auth.data.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />
-                                                ) : (<Image source={require('../../../img/atul.png')} style={{ height: 30, width: 30, borderRadius: 70 }}  />)
+                                                ) : (<Image source={require('../../../img/atul.png')} style={{ height: 30, width: 30, borderRadius: 70 }} />)
                                             }
                                         </TouchableOpacity>
                                     </View>
-                                    ):(
-                                        <View style={{ flexDirection: 'row', marginBottom: 15 }} key={ key }>
+                                ) : (
+                                        <View style={{ flexDirection: 'row', marginBottom: 15 }} key={key}>
                                             <View style={{ marginRight: 15, justifyContent: 'flex-end' }}>
-                                            {
-                                                this.props.auth.data.image ? (
-                                                    <Image source={{ uri: this.props.auth.data.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />
-                                                ) : (<Image source={require('../../../img/atul.png')} style={{ height: 30, width: 30, borderRadius: 70 }} />)
-                                            }
-                                        </View>
-                                        <View style={{ flex: 1, marginBottom: 15, overflow: 'visible', position: 'relative' }}>
-                                            <View style={{ width: '100%', maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
+                                                {
+                                                    this.props.auth.data.image ? (
+                                                        <Image source={{ uri: this.props.auth.data.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />
+                                                    ) : (<Image source={require('../../../img/atul.png')} style={{ height: 30, width: 30, borderRadius: 70 }} />)
+                                                }
+                                            </View>
+                                            <View style={{ flex: 1, marginBottom: 15, overflow: 'visible', position: 'relative' }}>
+                                                <View style={{ width: '100%', maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
                                                     {
                                                         data.Message ? (
                                                             <Text style={{ fontSize: 14 }}> {data.Message} </Text>
                                                         ) : (<Image source={{ uri: data.MessageImage }} style={{ height: 100, width: 100, borderRadius: 4 }} />)
                                                     }
+                                                </View>
+                                                <Image source={require('../../../img/icon/chats.png')} style={{ height: 12, width: 12, position: 'absolute', left: -4, bottom: -4, zIndex: 999 }} />
                                             </View>
-                                            <Image source={require('../../../img/icon/chats.png')} style={{ height: 12, width: 12, position: 'absolute', left: -4, bottom: -4, zIndex: 999 }} />
                                         </View>
-                                    </View>
-                                        
+
                                     )
-                                ))
+                            ))
 
-                            }
+                        }
 
-                        </ScrollView>
-                    </View>
-                    <Footer>
-                        <FooterTab>
-                            <View style={{ backgroundColor: '#ccc', flexDirection: 'row', flex: 1, alignItems: 'center', backgroundColor: '#81cdc7' }}>
+                    </ScrollView>
+                </View>
+                <Footer>
+                    <FooterTab>
+                        <View style={{ backgroundColor: '#ccc', flexDirection: 'row', flex: 1, alignItems: 'center', backgroundColor: '#81cdc7' }}>
                             <TouchableOpacity style={{ paddingLeft: 10, paddingRight: 10 }} onPress={() => this.uploadPhoto()}>
-                                    <Entypo name="camera" style={{ fontSize: 24, color: '#fff' }} />
-                                </TouchableOpacity>
-                                <View style={{ flex: 1, overflow: 'hidden' }}>
-                                    <TextInput
-                                        underlineColorAndroid='transparent'
-                                        style={{ backgroundColor: '#fff', borderRadius: 40, paddingLeft: 10, paddingRight: 10, height: 36 }}
-                                        onChangeText={(text) => this.setState({ typeMessage: text })}
-                                        value={this.state.typeMessage}
-                                    />
-                                </View>
-                                <TouchableOpacity onPress={() => this.sendMessage()} style={{ paddingLeft: 10, paddingRight: 10 }}>
-                                    <Ionicons name="md-send" style={{ fontSize: 24, color: '#fff' }} />
-                                </TouchableOpacity>
+                                <Entypo name="camera" style={{ fontSize: 24, color: '#fff' }} />
+                            </TouchableOpacity>
+                            <View style={{ flex: 1, overflow: 'hidden' }}>
+                                <TextInput
+                                    underlineColorAndroid='transparent'
+                                    style={{ backgroundColor: '#fff', borderRadius: 40, paddingLeft: 10, paddingRight: 10, height: 36 }}
+                                    onChangeText={(text) => this.setState({ typeMessage: text })}
+                                    value={this.state.typeMessage}
+                                />
                             </View>
-                        </FooterTab>
-                    </Footer>
-                </Container>
-            );
-        
+                            <TouchableOpacity onPress={() => this.sendMessage()} style={{ paddingLeft: 10, paddingRight: 10 }}>
+                                <Ionicons name="md-send" style={{ fontSize: 24, color: '#fff' }} />
+                            </TouchableOpacity>
+                        </View>
+                    </FooterTab>
+                </Footer>
+            </Container>
+        );
+
     }
 }
 

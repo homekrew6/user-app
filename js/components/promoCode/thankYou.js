@@ -8,7 +8,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Stars from 'react-native-stars-rating';
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
-
+import api from '../../api';
+const reseteAction = NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Menu' })],
+});
 const img19 = require('../../../img/serv.jpg');
 
 
@@ -46,7 +50,8 @@ class ThankYou extends Component {
                     'src': img19,
                     'key': 7
                 }
-            ]
+            ],
+            serviceList:''
         };
     }
 
@@ -56,8 +61,55 @@ class ThankYou extends Component {
         });
     }
 
-    
 
+    componentDidMount()
+    {
+        api.get('Zones/getParentZone').then((res) => {
+            //console.log(res);
+            if (res.zone.length > 0) {
+                api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
+                    if (resService.response.length > 0) {
+                        api.get('WorkerSkills').then((workerSkillsList) => {
+                            let checkServiceIdsList = [];
+                            workerSkillsList.map((item) => {
+                                checkServiceIdsList.push(item.serviceId);
+                            });
+                            let zoneServiceIdCheck = [];
+                            resService.response.map((data, key) => {
+                                if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
+                                    if (checkServiceIdsList.includes(data.service.id)) {
+                                        zoneServiceIdCheck.push(data)
+                                    }
+
+                                }
+                            });
+                            this.setState({ serviceList: zoneServiceIdCheck });
+                        }).catch((err1) => {
+                            let zoneServiceIdCheck = [];
+                            resService.response.map((data, key) => {
+                                if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
+                                    zoneServiceIdCheck.push(data)
+                                }
+                            })
+                            this.setState({ serviceList: zoneServiceIdCheck });
+                        })
+                    }
+                }).catch((err) => {
+                    //console.log(err);
+                    this.setState({ visible: false });
+                });
+
+            }
+        }).catch((err) => {
+            this.setState({ visible: false });
+        });
+    }
+
+    
+    goToMenu()
+    {
+        this.props.navigation.dispatch(reseteAction);
+    }
 
     render() {
         return (
@@ -66,11 +118,11 @@ class ThankYou extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" >
-                    <Button transparent onPress={() => this.props.navigation.goBack()}>
+                    <Button transparent onPress={() => this.goToMenu()}>
                         <Ionicons style={styles.headerIconClose} name='ios-close' />
                     </Button>
                     <Body style={styles.headerBody}>
-                        <Title style={styles.headerTitle}>Thank You</Title>
+                        <Title style={styles.headerTitle}>{I18n.t('thank_you')}</Title>
                     </Body>
                     <Button transparent />
                 </Header>
@@ -112,10 +164,10 @@ class ThankYou extends Component {
                         <CardItem style={{ flexDirection: 'column' }}>
                             <Text style={styles.rateHeader}>{I18n.t('our_service')}</Text>
                             <FlatList
-                                data={this.state.sliderData}
+                                data={this.state.serviceList}
                                 renderItem={({ item }) =>
                                     <View>
-                                        <Image key={item.key} source={item.src} style={styles.slideImage}></Image>
+                                        <Image key={item.key} source={{ uri: item.service.banner_image}} style={styles.slideImage}></Image>
                                     </View>
                                 }
                                 horizontal={true}

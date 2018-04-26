@@ -17,9 +17,13 @@ import api from '../../api/index';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import { setServiceDetails } from './elements/serviceActions';
 
+// const reseteAction = NavigationActions.reset({
+//     index: 0,
+//     actions: [NavigationActions.navigate({ routeName: 'Menu' })],
+// });
 const reseteAction = NavigationActions.reset({
     index: 0,
-    actions: [NavigationActions.navigate({ routeName: 'Menu' })],
+    actions: [NavigationActions.navigate({ routeName: 'ThankYou' })],
 });
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;

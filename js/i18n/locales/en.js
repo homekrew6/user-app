@@ -126,5 +126,6 @@ export default {
   you_are_all_set:'You are all set',
   thanks_for_awesome:'Thanks For Being Awesome',
   see_on_next:'See you on next purchase',
-  our_service:'Our Sevice'
+  our_service:'Our Sevice',
+  thank_you:'Thank You'
 };
