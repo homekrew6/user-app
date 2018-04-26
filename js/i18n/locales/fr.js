@@ -91,5 +91,6 @@ export default {
   you_are_all_set:'Vous êtes prêt',
   thanks_for_awesome:"Merci d'être génial",
   see_on_next:'Rendez-vous sur le prochain achat',
-  our_service:'Notre service'
+  our_service:'Notre service',
+  thank_you:'Je vous remercie'
 };

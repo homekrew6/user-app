@@ -124,5 +124,6 @@ export default {
   you_are_all_set:'أنت كل مجموعة',
   thanks_for_awesome:'شكرا لكوني رائع',
   see_on_next:'أراك على شراء المقبل',
-  our_service:'خدمتنا'
+  our_service:'خدمتنا',
+  thank_you:'شكرا'
 };

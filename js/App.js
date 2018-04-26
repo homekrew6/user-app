@@ -106,7 +106,6 @@ const AppNavigator = StackNavigator(
         jobSummary: { screen: jobSummary },
         QuoteList:{screen:QuoteList},
         Payment: { screen: Payment},
-        QuoteList: { screen: QuoteList },
         Support: { screen: Support },
         SupportLiveChatList: { screen: SupportLiveChatList },
         SupportLiveChat: { screen: SupportLiveChat },
