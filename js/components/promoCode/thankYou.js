@@ -78,9 +78,9 @@ class ThankYou extends Component {
                     <Card style={styles.tCard}>
                         <CardItem style={{alignItems: 'center'}}>
                                 <View style={styles.thanksInformation}>
-                                <Text style={styles.thanksText1}>You're all set</Text>
-                                <Text style={styles.thanksText2}>Thanks for being awesome.</Text>
-                                <Text style={styles.thanksText2}>See you on your next purchase.</Text>
+                                <Text style={styles.thanksText1}>{I18n.t('you_are_all_set')}</Text>
+                                <Text style={styles.thanksText2}>{I18n.t('thanks_for_awesome')}</Text>
+                                <Text style={styles.thanksText2}>{I18n.t('see_on_next')}</Text>
                                 <View style={styles.thanksText3}><Text style={{ backgroundColor: '#81cdc7', borderRadius: 10, fontSize: 12, paddingLeft: 8, paddingRight: 8, paddingTop: 2, paddingBottom: 2 }}>ORDER #: 123456</Text></View>
                                 <Text style={[styles.thanksText2, {marginBottom: 15}]}>Cheack your mail for more details.</Text>
 
@@ -110,7 +110,7 @@ class ThankYou extends Component {
                         </CardItem>
 
                         <CardItem style={{ flexDirection: 'column' }}>
-                            <Text style={styles.rateHeader}>Our Service</Text>
+                            <Text style={styles.rateHeader}>{I18n.t('our_service')}</Text>
                             <FlatList
                                 data={this.state.sliderData}
                                 renderItem={({ item }) =>
