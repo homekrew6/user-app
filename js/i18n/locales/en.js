@@ -127,5 +127,6 @@ export default {
   thanks_for_awesome:'Thanks For Being Awesome',
   see_on_next:'See you on next purchase',
   our_service:'Our Sevice',
-  thank_you:'Thank You'
+  thank_you:'Thank You',
+  promoPrice: 'Promo Price'
 };

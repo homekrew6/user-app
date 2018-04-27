@@ -11,7 +11,7 @@ import styles from './styles';
 import { setServiceDetails } from './elements/serviceActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
-import api from '../../api/index'
+import api from '../../api/index';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const carve = require("../../../img/atul_bk.png");
@@ -43,9 +43,9 @@ class ServiceProviderListing extends Component {
                 // data.response.list.map((itemnew)=>{
                 //     itemnew.IsAvailable = false;
                 // })
-                if (data.response.type == 'success') {
+                if (data.response.type == 'Success') {
                     this.setState({ isVisible: false });
-                    this.setState({ spList: data.response.list });
+                    this.setState({ spList: data.response.message.spList  });
                 }
                 else {
                     this.setState({ isVisible: false });
@@ -65,9 +65,9 @@ class ServiceProviderListing extends Component {
             let day = this.props.service.data.serviceTime.split(' ')[0].toLowerCase();
             const data = { "serviceId": 8, 'time': time, 'day': day };
             api.post('Workeravailabletimings/getUserFavSVListing', data).then((data) => {
-                if (data.response.type == 'success') {
+                if (data.response.type == 'Success') {
                     this.setState({ isVisible: false });
-                    this.setState({ spList: data.response.list });
+                    this.setState({ spList: data.response.message.spList });
                 }
                 else {
                     this.setState({ isVisible: false });
