@@ -113,7 +113,45 @@ class Menu extends Component {
             saveData.previousScreen = "";
             this.props.navigateAndSaveCurrentScreen(saveData);
             break;
-            case "NotificationList":
+
+          case "MyPromoCode":
+            saveData.activeScreen = "Menu";
+            saveData.previousScreen = "";
+            this.props.navigateAndSaveCurrentScreen(saveData);
+            break;
+
+          case "Support":
+            saveData.activeScreen = "Menu";
+            saveData.previousScreen = "";
+            this.props.navigateAndSaveCurrentScreen(saveData);
+            break;
+
+          case "Settings":
+            saveData.activeScreen = "Menu";
+            saveData.previousScreen = "";
+            this.props.navigateAndSaveCurrentScreen(saveData);
+            break;
+
+          
+          case "LanguageList":
+            saveData.activeScreen = "Settings";
+            saveData.previousScreen = "Menu";
+            this.props.navigateAndSaveCurrentScreen(saveData);
+            break;
+
+          case "LanguageList":
+            saveData.activeScreen = "CurrencyList";
+            saveData.previousScreen = "Menu";
+            this.props.navigateAndSaveCurrentScreen(saveData);
+            break;
+
+          case "JobList":
+            saveData.activeScreen = "Menu";
+            saveData.previousScreen = "";
+            this.props.navigateAndSaveCurrentScreen(saveData);
+            break;
+
+          case "NotificationList":
             saveData.activeScreen = "Menu";
             saveData.previousScreen = "";
             this.props.navigateAndSaveCurrentScreen(saveData);
