@@ -92,5 +92,6 @@ export default {
   thanks_for_awesome:"Merci d'être génial",
   see_on_next:'Rendez-vous sur le prochain achat',
   our_service:'Notre service',
-  thank_you:'Je vous remercie'
+  thank_you:'Je vous remercie',
+  promoPrice:'Prix ​​promotionnel'
 };

@@ -152,10 +152,15 @@ class MyPromoCode extends Component {
                 Alert.alert('Please try other');
             }
             if (response.IsPromoApplied){
+                debugger;
                 let serviceData = this.props.service.data;
                 serviceData.price =parseFloat(response.price).toFixed(2);
                 serviceData.promo = item.promotions.promo_code; 
-                serviceData.promotionsId = item.promotions.id;               
+                serviceData.promotionsId = item.promotions.id;
+                if (response.promoPrice)
+                {
+                    serviceData.promoPrice = response.promoPrice;
+                }               
                 this.props.setServiceDetails(serviceData);
                 this.props.navigation.navigate('Confirmation');
             }

@@ -125,5 +125,6 @@ export default {
   thanks_for_awesome:'شكرا لكوني رائع',
   see_on_next:'أراك على شراء المقبل',
   our_service:'خدمتنا',
-  thank_you:'شكرا'
+  thank_you:'شكرا',
+  promoPrice: 'سعر العرض'
 };
