@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { NavigationActions } from "react-navigation";
 import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler, WebView } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,7 +10,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { NavigationActions } from 'react-navigation';
 import { Container, Header, Button, Content, Card, CardItem, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
@@ -88,10 +88,35 @@ class Payment extends Component {
                             };
                             api.post('payments', toInsertData).then((successfull) => {
                                 Alert.alert('Payment successfull.');
-                                
-                                selfComponent.props.navigation.navigate('JobDetails', {jobDetails:selfComponent.state.jobDetails, IsPaymentDone:true});
+                                selfComponent.props.navigation.dispatch( 
+                                    NavigationActions.reset({
+                                        index: 2,
+                                        actions: [
+                                          NavigationActions.navigate({ routeName: 'Menu' }),
+                                          NavigationActions.navigate({ routeName: 'JobList' }),
+                                          NavigationActions.navigate({ routeName: 'JobDetails', 
+                                            params:  {jobDetails:selfComponent.state.jobDetails, IsPaymentDone:true} 
+                                            }),
+                                        ],
+                                    })
+                                  );
+                                // selfComponent.props.navigation.navigate('JobDetails', 
+                                // );
                             }).catch((paymentError) => {
                                 Alert.alert('Please try again later.');
+                                selfComponent.props.navigation.dispatch( 
+                                    NavigationActions.reset({
+                                        index: 2,
+                                        actions: [
+                                          NavigationActions.navigate({ routeName: 'Menu' }),
+                                          NavigationActions.navigate({ routeName: 'JobList' }),
+                                          NavigationActions.navigate({ routeName: 'JobDetails', 
+                                            params:  {jobDetails:selfComponent.state.jobDetails, IsPaymentDone:false} 
+                                            }),
+                                        ],
+                                    })
+                                  );
+                                
                             });
                         }
                     });

@@ -98,7 +98,15 @@ class Confirmation extends Component {
                         loader: false
                     });
                     console.warn("pragati", result.mobile.webview[0].start[0]);
-                    selfComponent.props.navigation.navigate('Payment', { amount: selfComponent.props.service.data.price, customerId: selfComponent.props.auth.data.id,url: result.mobile.webview[0].start[0], close: result.mobile.webview[0].close[0], abort: result.mobile.webview[0].abort[0], code: result.mobile.webview[0].code[0] });
+                    selfComponent.props.navigation.navigate('Payment', 
+                    { 
+                        amount: selfComponent.props.service.data.price, 
+                        customerId: selfComponent.props.auth.data.id,
+                        url: result.mobile.webview[0].start[0], 
+                        close: result.mobile.webview[0].close[0], 
+                        abort: result.mobile.webview[0].abort[0], 
+                        code: result.mobile.webview[0].code[0] 
+                    });
                 }
 
 
@@ -347,7 +355,7 @@ class Confirmation extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.startPayment()}>
+                        {/* <TouchableOpacity style={styles.confirmationItem} onPress={() => this.startPayment()}>
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='credit-card' style={styles.confirmationViewIcon} />
                             </View>
@@ -356,7 +364,7 @@ class Confirmation extends Component {
                             <View style={styles.confirmationArwNxt}>
                                 <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         <TouchableOpacity style={styles.confirmationItem} onPress={() => this.goToSpListing()}>
                             <View style={styles.confirmationIconView}>
