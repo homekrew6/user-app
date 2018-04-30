@@ -5,6 +5,7 @@ import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, List
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { NavigationActions } from "react-navigation";
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -78,10 +79,6 @@ class ServiceProviderListing extends Component {
                 Alert.alert(data.response.message);
             })
         }
-
-
-
-
     }
 
     selectServiceProvider(data) {
@@ -117,19 +114,43 @@ class ServiceProviderListing extends Component {
             this.props.setServiceDetails(data);
             
             const data1 = this.props.auth.data;
-            data1.activeScreen = 'Confirmation';
-            data1.previousScreen = "ServiceDetails";
-            this.props.navigateAndSaveCurrentScreen(data1);
-            this.props.navigation.navigate('Confirmation');
+            // data1.activeScreen = 'Confirmation';
+            // data1.previousScreen = "ServiceDetails";
+            // this.props.navigateAndSaveCurrentScreen(data1);
+            // this.props.navigation.navigate('Confirmation');
            // this.props.navigation.navigate('Confirmation');
+            this.props.navigation.dispatch( 
+                NavigationActions.reset({
+                    index: 3,
+                    actions: [
+                    NavigationActions.navigate({ routeName: 'Menu' }),
+                    NavigationActions.navigate({ routeName: 'Category' }),
+                    NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                    NavigationActions.navigate({ routeName: 'Confirmation' }),
+                    ],
+                })
+            );
         }
         else
         {
             const data1 = this.props.auth.data;
-            data1.activeScreen = 'Confirmation';
-            data1.previousScreen = "ServiceDetails";
-            this.props.navigateAndSaveCurrentScreen(data1);
-            this.props.navigation.navigate('Confirmation');
+            // data1.activeScreen = 'Confirmation';
+            // data1.previousScreen = "ServiceDetails";
+            // this.props.navigateAndSaveCurrentScreen(data1);
+            // this.props.navigation.navigate('Confirmation');
+
+            this.props.navigation.dispatch( 
+                NavigationActions.reset({
+                    index: 3,
+                    actions: [
+                    NavigationActions.navigate({ routeName: 'Menu' }),
+                    NavigationActions.navigate({ routeName: 'Category' }),
+                    NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                    NavigationActions.navigate({ routeName: 'Confirmation' }),
+                    ],
+                })
+            );
+            
             //this.props.navigation.navigate('Confirmation');
         }
        

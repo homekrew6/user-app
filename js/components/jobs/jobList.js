@@ -88,13 +88,15 @@ class JobList extends Component {
             }
             finalServiceList = [];
             for (let key in finalList) {
-                let data = { "serviceName": finalList[key].color[0].service.name.toUpperCase(), jobList: [] };
-                for (let i = 0; i < finalList[key].color.length; i++) {
-                    data.jobList.push(finalList[key].color[i]);
+                if(finalList[key].color[0].service ){
+                    let data = { "serviceName": finalList[key].color[0].service.name.toUpperCase(), jobList: [] };
+                    for (let i = 0; i < finalList[key].color.length; i++) {
+                        data.jobList.push(finalList[key].color[i]);
+                    }
+                    finalServiceList.push(data);
                 }
-                finalServiceList.push(data);
             }
-
+            console.log('final lsit', finalServiceList);
             this.setState({ jobList: finalServiceList });
             this.setState({ visible: false });
 
@@ -199,14 +201,14 @@ class JobList extends Component {
                                                             </View>
                                                             <View style={styles.listWarpTextWarp}>
                                                                 <View style={styles.flexDirectionRow}>
-                                                                    <Text>{item.service.name}</Text>
+                                                                    <Text>{ item.service.name ? item.service.name : ''}</Text>
                                                                 </View>
                                                                 <View style={styles.flexDirectionRow}>
                                                                     <Text style={[styles.fontWeight700, { fontSize: 14 }]}> {this.getLocalTimeFormat(item.postedDate)} </Text>
                                                                     
                                                                 </View>
                                                                 <View style={styles.flexDirectionRow}>
-                                                                    <Text>{item.userLocation.name}</Text>
+                                                                    <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
                                                                 </View>
                                                             </View>
                                                             <View>

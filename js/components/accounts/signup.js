@@ -88,7 +88,6 @@ class Signup extends Component {
     const phone = this.state.phone;
     const deviceToken = this.state.deviceToken;
     api.post('Customers/socialLoginEmailCheck', { 'email': email }).then((resEmail) => {
-      debugger;
       if (resEmail.response.exist == 0) {
         this.props.signup(name, email, password, phone, deviceToken).then((res) => {
           if (res.type == 'success') {

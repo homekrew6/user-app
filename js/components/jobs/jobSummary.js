@@ -14,7 +14,6 @@ import { Container, Header, Button, Content, Card, CardItem, Item, Frame, Input,
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';
-import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;

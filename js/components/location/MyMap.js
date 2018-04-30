@@ -7,7 +7,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import I18n from '../../i18n/i18n';
 import api from '../../api';
 import { connect } from 'react-redux';
-import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
+import { NavigationActions } from "react-navigation";
 const win = Dimensions.get('window').width;
 
 class MyMap extends Component {
@@ -97,18 +97,32 @@ class MyMap extends Component {
                         }).then(res => {
                             this.setState({ IsSpinnerVisible: false });
                             const data = this.props.auth.data;
+
                             AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
                                 if (fromConfirmation) {
-                                    data.activeScreen = "LocationList";
-                                    data.previousScreen = "Confirmation";
-                                    this.props.navigateAndSaveCurrentScreen(data);
-                                    this.props.navigation.navigate('LocationList');
+                                    this.props.navigation.dispatch( 
+                                        NavigationActions.reset({
+                                            index: 4,
+                                            actions: [
+                                              NavigationActions.navigate({ routeName: 'Menu' }),
+                                              NavigationActions.navigate({ routeName: 'Category' }),
+                                              NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                                              NavigationActions.navigate({ routeName: 'Confirmation' }),
+                                              NavigationActions.navigate({ routeName: 'LocationList' }),
+                                            ],
+                                        })
+                                    );
                                 }
                                 else {
-                                    data.activeScreen = "MyLocation";
-                                    data.previousScreen = "Menu";
-                                    this.props.navigateAndSaveCurrentScreen(data);
-                                    this.props.navigation.navigate('MyLocation');
+                                    this.props.navigation.dispatch(
+                                        NavigationActions.reset({
+                                            index: 1,
+                                            actions: [
+                                            NavigationActions.navigate({ routeName: 'Menu' }),
+                                            NavigationActions.navigate({ routeName: 'MyLocation' }),
+                                            ],
+                                        })
+                                    );
                                 }
                             })
                         }).catch((err) => {
@@ -156,16 +170,30 @@ class MyMap extends Component {
                             const data = this.props.auth.data;
                             AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
                                 if (fromConfirmation) {
-                                    data.activeScreen = "LocationList";
-                                    data.previousScreen = "Confirmation";
-                                    this.props.navigateAndSaveCurrentScreen(data);
-                                    this.props.navigation.navigate('LocationList');
+                                    this.props.navigation.dispatch( 
+                                        NavigationActions.reset({
+                                            index: 4,
+                                            actions: [
+                                              NavigationActions.navigate({ routeName: 'Menu' }),
+                                              NavigationActions.navigate({ routeName: 'Category' }),
+                                              NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                                              NavigationActions.navigate({ routeName: 'Confirmation' }),
+                                              NavigationActions.navigate({ routeName: 'LocationList' }),
+                                            ],
+                                        })
+                                    );
                                 }
                                 else {
-                                    data.activeScreen = "MyLocation";
-                                    data.previousScreen = "Menu";
-                                    this.props.navigateAndSaveCurrentScreen(data);
-                                    this.props.navigation.navigate('MyLocation');
+                                    this.props.navigation.dispatch(
+                                        NavigationActions.reset({
+                                            index: 1,
+                                            actions: [
+                                            NavigationActions.navigate({ routeName: 'Menu' }),
+                                            NavigationActions.navigate({ routeName: 'MyLocation' }),
+                                            ],
+                                        })
+                                    );
+
                                 }
                             })
                             //  this.props.navigation.navigate('MyLocation');
@@ -191,22 +219,12 @@ class MyMap extends Component {
         const data = this.props.auth.data;
         AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
             if (fromConfirmation) {
-                data.activeScreen = "LocationList";
-                data.previousScreen = "Confirmation";
-                this.props.navigateAndSaveCurrentScreen(data);
                 this.props.navigation.navigate('LocationList');
             }
             else {
-                data.activeScreen = "MyLocation";
-                data.previousScreen = "Menu";
-                this.props.navigateAndSaveCurrentScreen(data);
                 this.props.navigation.navigate('MyLocation');
             }
         })
-        // data.activeScreen = "MyLocation";
-        // data.previousScreen = "Menu";
-        // this.props.navigateAndSaveCurrentScreen(data);
-        // this.props.navigation.navigate('MyLocation');
     }
 
     render() {
@@ -423,8 +441,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-const mapDispatchToProps = dispatch => ({
-    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyMap);
+export default connect(mapStateToProps, {})(MyMap);

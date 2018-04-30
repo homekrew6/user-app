@@ -29,7 +29,7 @@ class Payment extends Component {
         };
     }
     componentDidMount() {
-        debugger;
+    
        if(this.props.navigation.state.params.url && this.props.navigation.state.params.close)
        {
            this.setState({ url: this.props.navigation.state.params.url, close: this.props.navigation.state.params.close});

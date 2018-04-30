@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ImageBackground, AsyncStorage } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, BackHandler, TouchableOpacity, List, ListItem, ImageBackground, AsyncStorage } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -42,6 +42,34 @@ class Categories extends Component {
       locationArray: []
     };
   }
+
+  activateBackAlert(){
+  
+    if(this.props.currentRoute === 'Category' ){
+      if(this.props.prevRoute === '' ){
+        BackHandler.addEventListener('hardwareBackPress', function () {
+          console.log('hardwareBackPress', this.props);
+          debugger;
+          if(this.props.currentRoute === 'Category' || this.props.currentRoute === 'Login'){
+              Alert.alert(
+                  'Confirm',
+                  'Are you sure to exit the app?',
+                  [
+                      { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                      { text: 'OK', onPress: () => BackHandler.exitApp() },
+                  ],
+                  { cancelable: false }
+              );
+              return true;
+          }else{
+              this.props.navigation.goBack(null);
+              return true;
+          }
+        }.bind(this));
+      }
+    }
+  }
+
 
   componentWillMount() {
 
@@ -172,7 +200,7 @@ class Categories extends Component {
     this.props.navigation.navigate('ServiceDetails');
   }
   render() {
-
+    this.activateBackAlert();
     let serviceListing;
     let serviceType;
 
@@ -319,11 +347,16 @@ class Categories extends Component {
 Categories.propTypes = {
   auth: PropTypes.object.isRequired,
 };
-const mapStateToProps = state => ({
-  auth: state.auth,
-  service: state.service
-});
 
+const mapStateToProps = (state) => {
+  console.log('mapStateToProps cate', state);
+  return {
+    auth: state.auth,
+    service: state.service,
+    currentRoute: state.RouterOwn.currentRoute,
+    prevRoute: state.RouterOwn.prevRoute
+  }
+}
 const mapDispatchToProps = dispatch => ({
   setServiceDetails: (data) => dispatch(setServiceDetails(data)),
   navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))

@@ -54,7 +54,7 @@ class Home extends Component {
 
 		// This method get all notification from server side.
 		FCM.getInitialNotification().then(notif => {
-			debugger;
+		
 			setTimeout(() => {
 				AsyncStorage.getItem("userToken").then((userToken) => {
 					if (userToken) {
@@ -114,7 +114,7 @@ class Home extends Component {
 
 		// This method give received notifications to mobile to display.
 		this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
-			debugger;
+			
 			console.log("a", notif);
 			if (notif && notif.local_notification) {
 				if(notif.screenType){
