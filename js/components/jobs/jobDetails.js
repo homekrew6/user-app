@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
+import { NavigationActions } from "react-navigation";
 import moment from 'moment';
 import { Image, View, CheckBox, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput } from "react-native";
 import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Frame, Input, Label, Text } from "native-base";
@@ -254,6 +255,7 @@ class JobDetails extends Component {
         }
     }
     componentDidMount() {       
+        debugger;
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
             if(res.response.message[0].price) { res.response.message[0].price = parseFloat(res.response.message[0].price).toFixed(2); }
             this.setState({
@@ -719,6 +721,17 @@ class JobDetails extends Component {
 
     }
 
+    goBackJobDetails(){
+        this.props.navigation.dispatch( 
+            NavigationActions.reset({
+                index: 1,
+                actions: [
+                  NavigationActions.navigate({ routeName: 'Menu' }),
+                  NavigationActions.navigate({ routeName: 'JobList' }),
+                ],
+            })
+        );
+    }
 
     render() {
         if (this.state.jobDetails) {
@@ -732,7 +745,7 @@ class JobDetails extends Component {
                     <FSpinner visible={this.state.spinner} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
 
                     <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7">
-                        <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
+                        <Button transparent onPress={() => this.goBackJobDetails()} style={{ width: 30 }} >
                             <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                         </Button>
                         <Body style={styles.headBody}>
