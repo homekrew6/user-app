@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { NavigationActions } from "react-navigation";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert, ListView } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, List, ListItem, Icon } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,6 +11,7 @@ import I18n from '../../i18n/i18n';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from "./styles";
 import api from '../../api/index';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 const icon1 = require('../../../img/chatIcon3.png');
 const icon2 = require('../../../img/chatIcon1.png');
@@ -31,14 +35,13 @@ class NotificationList extends Component {
     }
 
     notificationListData(){
-        let customarId = this.props.navigation.state.params.customarId? this.props.navigation.state.params.customarId : '';
-        console.log(customarId);
-        if(customarId){
+        let customerId = this.props.auth.data.id ? this.props.auth.data.id : '';
+        if(customerId){
         let notiDataread = [], notiDataunread = [], notiData;
         this.setState({
             loader: true,
         })
-        api.post('Notifications/getNotificationListByIdForCustomer', { "customerId":  customarId }).then((res) => {
+        api.post('Notifications/getNotificationListByIdForCustomer', { "customerId":  customerId }).then((res) => {
             notiData = res.response.message;
             notiData.map((item) => {
                 let i = item
@@ -86,8 +89,8 @@ class NotificationList extends Component {
         this.setState({
             loader: true
         })
-        let customarId = this.props.navigation.state.params.customarId? this.props.navigation.state.params.customarId : '';        
-        api.post( 'Notifications/clearAllNotificationByCustomerId', { "customerId":  customarId }  ).then((res) => {
+        let customerId = this.props.auth.data.id ? this.props.auth.data.id : '';        
+        api.post( 'Notifications/clearAllNotificationByCustomerId', { "customerId":  customerId }  ).then((res) => {
             this.setState({
                 loader: false
             })
@@ -103,6 +106,7 @@ class NotificationList extends Component {
     gotoDetails(data){
         let jobDetails = {};
         jobDetails.id = data.jobId;
+
         if(!data.IsRead){
             this.setState({
                 loader: true
@@ -119,33 +123,16 @@ class NotificationList extends Component {
                 })
             });                              
         }
-        if(data.notificationType == "NewJob"){
-            this.props.navigation.navigate('JobDetails', { jobDetails: jobDetails });            
+
+        if (data.notificationType == "NewPromo") {
+            this.props.navigation.navigate('MyPromoCode', { id: this.props.auth.data.id });
+        } else if (data.notificationType == "Welcome") {
+            this.props.navigation.navigate('Menu');
+        } else{
+            this.props.navigation.navigate('JobDetails', { jobDetails: jobDetails });
         }
 
     }
-
-    // getLocalTimeFormat(gmtTime) {
-    //     gmtTime = new Date(gmtTime);
-    //     // return gmtTime;
-    //     if (gmtTime) {
-    //         let dateNow = new Date();
-    //         var nUTC_diff = dateNow.getTimezoneOffset();
-    //         let slicedDate = gmtTime.slice(0, -4);
-    //         let timeToMan = Math.abs(nUTC_diff);
-    //         let utc_check = Math.sign(nUTC_diff);
-    //         let localTime;
-    //         if (utc_check === 1 || utc_check === 0) {
-    //             localTime = moment(slicedDate).subtract(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
-    //         } else {
-    //             localTime = moment(slicedDate).add(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
-    //         }
-    //         return localTime;
-    //     } else {
-    //         return null;
-    //     }
-
-    // }
 
     render() {
         return (
@@ -201,7 +188,8 @@ class NotificationList extends Component {
                                 renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                                     <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
                                         <TouchableOpacity onPress={() => this.deleteNotification(data)} style={ styles.deleteWarpInner }>
-                                            <Icon active name="trash" style={styles.deleteWarpText}/>
+                                            <EvilIcons name="close" style={styles.deleteWarpIcon} />
+                                            <Text style={styles.deleteWarpText}>DELETE</Text>
                                         </TouchableOpacity>
                                     </View>}
                                 leftOpenValue={75}
@@ -245,7 +233,8 @@ class NotificationList extends Component {
                             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
                             <View onPress={() => this.deleteNotification(data)} style={styles.deleteWarp}>
                                 <TouchableOpacity onPress={() => this.deleteNotification(data)} style={ styles.deleteWarpInner }>
-                                    <Icon active name="trash" style={styles.deleteWarpText}/>
+                                    <EvilIcons name="close" style={styles.deleteWarpIcon} />
+                                    <Text style={styles.deleteWarpText}>DELETE</Text>
                                 </TouchableOpacity>
                             </View>}
                             leftOpenValue={75}
@@ -254,7 +243,7 @@ class NotificationList extends Component {
                     }
 
                     {
-                        !(this.state.NotificationListRead.length  && this.state.NotificationListUnread.length)? null: <View style={styles.noDataFound}><Text> {I18n.t('nodatafound')} </Text></View>
+                        !(this.state.NotificationListRead.length == 0 && this.state.NotificationListUnread.length == 0) ? null : <View style={ styles.noDataFound }><Text> {I18n.t('nodatafound')} </Text></View>
                     }
 
                 </Content>
@@ -263,6 +252,15 @@ class NotificationList extends Component {
     }
 }
 
+NotificationList.propTypes = {
+    auth: PropTypes.object.isRequired
+}
+const mapStateToProps = (state) => {
+    return {
+        auth: state.auth
+    }
+}
 
 
-export default NotificationList;
+// export default NotificationList;
+export default connect(mapStateToProps)(NotificationList);

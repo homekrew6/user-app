@@ -28,6 +28,13 @@ export function navigateAndSaveCurrentScreen(data)
     dispatch(authStateSuccess(data));
   };
 }
+
+export function priceUpdate(data) {
+  return function (dispatch) {
+    dispatch(authStateSuccess(data));
+  };
+}
+
 export function getUserDetail(id, auth) {
   return function (dispatch) {
     dispatch(authStateBusy());

@@ -7,6 +7,7 @@ import { checkAuth, getUserDetail } from '../accounts/elements/authActions'
 import { Container, Button, H3, Text, Header, Title, Body, Left, Right } from "native-base";
 import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from "react-native-fcm";
 import styles from "./styles";
+import I18n from '../../i18n/i18n';
 import api from '../../api';
 //import GlobalFont from 'react-native-global-font';
 //const launchscreenBg = require("../../../img/launchscreen-bg.png");
@@ -54,7 +55,6 @@ class Home extends Component {
 
 		// This method get all notification from server side.
 		FCM.getInitialNotification().then(notif => {
-		
 			setTimeout(() => {
 				AsyncStorage.getItem("userToken").then((userToken) => {
 					if (userToken) {
@@ -114,7 +114,6 @@ class Home extends Component {
 
 		// This method give received notifications to mobile to display.
 		this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
-			
 			console.log("a", notif);
 			if (notif && notif.local_notification) {
 				if(notif.screenType){
@@ -224,7 +223,7 @@ class Home extends Component {
 						<View style={{ marginTop: 8 }} />
 					</View>
 					<View style={styles.btmView}>
-						<Text style={styles.btmText}>Copyright © 2018 homekrew. All Rights Reserved.</Text>
+						<Text style={styles.btmText}>{I18n.t('copyright')} © 2018 homekrew. {I18n.t('all_rights_reserved')}.</Text>
 					</View>
 
 				</ImageBackground>
