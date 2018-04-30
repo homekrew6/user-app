@@ -87,7 +87,7 @@ export default {
     person2TextWarp: { width: '100%', maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' },
     person2Arrow: { height: 12, width: 12, position: 'absolute', left: -4, bottom: -4, zIndex: 999 },
 
-    chatfooterWarp:{ backgroundColor: '#ccc', flexDirection: 'row', flex: 1, alignItems: 'center', backgroundColor: '#81cdc7' },
+    chatfooterWarp:{ backgroundColor: '#fff', flexDirection: 'row', flex: 1, alignItems: 'center', backgroundColor: '#81cdc7' },
     chatIcon: { paddingLeft: 10, paddingRight: 10 },
     chatCameraIcon: { fontSize: 24, color: '#fff' },
     chatMiddleInputWarp: { flex: 1, overflow: 'hidden' },

@@ -17,15 +17,22 @@ class ForgotPassword extends Component {
         super(props);
 				this.state = {
 	        email: '',
-					visible: false
+			visible: false
 	      }
     }
 
 		pressSend(){
-	    if(!this.state.email){
+	    if(!this.state.email.trim()){
 	      Alert.alert('Please enter email');
 	      return false;
-	    }
+		}
+		
+		let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		if (!regEmail.test(this.state.email)) {
+			Alert.alert('Please enter a valid email');
+			return false;
+		}
+
 			this.setState({visible:true});
 			api.post('Customers/emailChecking',{email:this.state.email}).then(res=>{
 				api.post('Customers/reset',{email:this.state.email}).then(resReset=>{

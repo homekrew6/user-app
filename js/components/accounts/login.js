@@ -132,13 +132,18 @@ class Login extends Component {
 	    if (!this.state.email) {
 	      Alert.alert('Please enter email');
 	      return false;
-	    }
+      }
+      let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (!regEmail.test(this.state.email)) {
+        Alert.alert('Please enter a valid email');
+        return false;
+      }
 	    if (!this.state.password) {
 	      Alert.alert('Please enter password');
 	      return false;
-	    }
-	    const email = this.state.email;
-    const password = this.state.password;
+      }
+	    const email = this.state.email.trim();
+      const password = this.state.password.trim();
     api.post('Customers/approveChecking', { email: this.state.email }).then((resEdit) => {
       if (resEdit.response.is_active) {
         this.props.login(email, password).then((res1) => {

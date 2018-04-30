@@ -17,26 +17,33 @@ class ResetPassword extends Component {
         super(props);
 				this.state = {
 					otp:'',
-	        password: '',
+	       			password: '',
 					visible: false
 	      }
     }
 
 		pressSend(){
-	    if(!this.state.otp){
+	    if(!this.state.otp.trem){
 	      Alert.alert('Please enter otp');
 	      return false;
-	    }
-			if(!this.state.password){
+		}
+		
+		if(!this.state.password){
 	      Alert.alert('Please enter password');
 	      return false;
-	    }
+		}
+
+		let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		if (!regEmail.test(this.state.email)) {
+			Alert.alert('Please enter a valid email');
+			return false;
+		}
 			this.setState({visible:true});
 			api.post('Customers/otpChecking',{otp:this.state.otp}).then(res=>{
 
 				api.post('Customers/reset-password?access_token='+res.response.access_token,{newPassword:this.state.password}).then(resReset=>{
 					this.setState({visible:false});
-					Alert.alert('Password changed successfully')
+					Alert.alert('Password changed successfully');
 	        this.props.navigation.navigate("Login");
 	      }).catch((errReset) => {
 					this.setState({visible:false});
@@ -118,9 +125,9 @@ class ResetPassword extends Component {
 							</Item>
 						</View>
 					</View>
-					<TouchableOpacity transparent style={{ flex:1, flexDirection:'row', height:70, marginTop:2, backgroundColor: 'red', paddingLeft: 15, paddingRight: 15 }} onPress={() => this.pressSend()} >
+					<TouchableOpacity transparent style={{ flex:1, flexDirection:'row', height:70, marginTop:2, paddingLeft: 20, paddingRight: 20 }} onPress={() => this.pressSend()} >
 						<ImageBackground source={buttonImage} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%',height:55}} >
-							<Text style={{color:'#fff',fontSize:20,marginTop:-10,height:30}}>{I18n.t('save_password')}</Text>
+							<Text style={{color:'#fff',fontSize:18,marginTop:-10,height:30}}>{I18n.t('save_password')}</Text>
 						</ImageBackground>
 					</TouchableOpacity>
 
