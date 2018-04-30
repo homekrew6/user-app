@@ -174,7 +174,7 @@ class Categories extends Component {
   }
   onValueChange(value) {
     AsyncStorage.setItem("zoneId", value.toString()).then((res) => {
-
+        
     });
     //console.log(value);
     this.setState({
@@ -184,10 +184,35 @@ class Categories extends Component {
     api.post('serviceZones/getZoneRelatedService', { zone: value }).then((res) => {
       console.log(res.response);
       if (res.response.length > 0) {
-        this.setState({ selectedZoneDetails: res.response[0].zone, serviceList: res.response })
-        //console.log(this.state.selectedZoneDetails)
-        //console.log(this.state.serviceList)
-        this.setState({ visible: false })
+        this.setState({ selectedZoneDetails: res.response[0].zone, serviceList: res.response });
+        api.get('WorkerSkills').then((workerSkillsList) => {
+          let checkServiceIdsList = [];
+          workerSkillsList.map((item) => {
+            checkServiceIdsList.push(item.serviceId);
+          });
+          let zoneServiceIdCheck = [];
+          resService.response.map((data, key) => {
+            if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
+              if (checkServiceIdsList.includes(data.service.id)) {
+                zoneServiceIdCheck.push(data)
+              }
+
+            }
+          })
+          this.setState({ serviceList: zoneServiceIdCheck });
+          this.setState({ visible: false });
+        }).catch((err1) => {
+          let zoneServiceIdCheck = [];
+          resService.response.map((data, key) => {
+            if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
+              zoneServiceIdCheck.push(data)
+            }
+          })
+          this.setState({ serviceList: zoneServiceIdCheck });
+          this.setState({ visible: false });
+          this.setState({ visible: false });
+        })
+        this.setState({ visible: false });
       }
     }).catch((err) => {
       //console.log(err);

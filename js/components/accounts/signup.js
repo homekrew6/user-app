@@ -54,12 +54,19 @@ class Signup extends Component {
 
   pressSignup() {
     // return false;
-    if (!this.state.name) {
+    if (!this.state.name.trim()) {
       Alert.alert('Please enter name');
       return false;
     }
-    if (!this.state.email) {
+    if (!this.state.email.trim()) {
       Alert.alert('Please enter email');
+      return false;
+    }
+    let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!regEmail.test(this.state.email)) {
+      Alert.alert('Please enter a valid email');
+      return false;
+      Alert.alert('Please enter a valid email');
       return false;
     }
     if (!this.state.password) {
@@ -71,7 +78,7 @@ class Signup extends Component {
       Alert.alert('Password must have one capital letter and min six characters');
       return false;
     }
-    if (!this.state.phone) {
+    if (!this.state.phone.trim()) {
       Alert.alert('Please enter phone');
       return false;
     }
