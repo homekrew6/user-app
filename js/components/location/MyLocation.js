@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StatusBar, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StatusBar, TouchableOpacity, Image, ScrollView, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Button, Content, Body, Item, Frame, Input, Label } from 'native-base';
 import LocationList from './LocationList';
-import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import api from '../../api';
 import I18n from '../../i18n/i18n';
 
@@ -20,23 +19,18 @@ class MyLocation extends Component {
         }).catch((err) => {
             console.log(err);
         });
-        // const data = this.props.auth.data;
-        // data.activeScreen = "MyLocation";
-        // data.previousScreen = "Menu";
-        // this.props.navigateAndSaveCurrentScreen(data);
+        AsyncStorage.removeItem('fromConfirmation', (err) => console.log('finished', err));
     }
     goToMyMap() {
         const data = this.props.auth.data;
         data.activeScreen = "MyMap";
         data.previousScreen = "MyLocation";
-        this.props.navigateAndSaveCurrentScreen(data);
         this.props.navigation.navigate('MyMap', { screenType: 'add', customerId: this.props.auth.data.id });
     }
     goBack() {
         const data = this.props.auth.data;
         data.activeScreen = "Menu";
         data.previousScreen = "";
-        this.props.navigateAndSaveCurrentScreen(data);
         this.props.navigation.navigate('Menu');
     }
 
@@ -131,8 +125,5 @@ const mapStateToProps = state => ({
     service: state.service,
 });
 
-const mapDispatchToProps = dispatch => ({
-    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyLocation);
+export default connect(mapStateToProps, {})(MyLocation);

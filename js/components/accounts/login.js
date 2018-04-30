@@ -11,7 +11,6 @@ import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text } from 'native-base';
 
-import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -154,10 +153,18 @@ class Login extends Component {
                       if (value) {
                         AsyncStorage.setItem("fromLogin", "true").then((resT) => {
                           const data = this.props.auth.data;
-                          data.activeScreen = "Confirmation";
-                          data.previousScreen = "ServiceDetails";
-                          this.props.navigateAndSaveCurrentScreen(data);
-                          this.props.navigation.dispatch(resetAction1);
+                          //this.props.navigation.dispatch(resetAction1);
+                          this.props.navigation.dispatch( 
+                            NavigationActions.reset({
+                                index: 3,
+                                actions: [
+                                  NavigationActions.navigate({ routeName: 'Menu' }),
+                                  NavigationActions.navigate({ routeName: 'Category' }),
+                                  NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                                  NavigationActions.navigate({ routeName: 'Confirmation' }),
+                                ],
+                            })
+                          );
                           //this.props.navigation.navigate('Confirmation');
                         })
 
@@ -343,8 +350,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   login: (email, password) => dispatch(login(email, password)),
   getUserDetail: (id, auth) => dispatch(getUserDetail(id, auth)),
-  checkAuth: cb => dispatch(checkAuth(cb)),
-  navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
+  checkAuth: cb => dispatch(checkAuth(cb))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

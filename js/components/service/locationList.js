@@ -9,8 +9,8 @@ import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Te
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api';
+import { NavigationActions } from "react-navigation";
 import { setServiceDetails } from './elements/serviceActions';
-import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
@@ -108,10 +108,17 @@ class LocationList extends Component {
 
     navigate() {
         const data = this.props.auth.data;
-        data.activeScreen = 'Confirmation';
-        data.previousScreen = "ServiceDetails";
-        this.props.navigateAndSaveCurrentScreen(data);
-        this.props.navigation.navigate('Confirmation');
+        this.props.navigation.dispatch( 
+            NavigationActions.reset({
+                index: 3,
+                actions: [
+                  NavigationActions.navigate({ routeName: 'Menu' }),
+                  NavigationActions.navigate({ routeName: 'Category' }),
+                  NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                  NavigationActions.navigate({ routeName: 'Confirmation' }),
+                ],
+            })
+          );
     }
     locationDone() {
         let loc;
@@ -136,9 +143,6 @@ class LocationList extends Component {
     }
     goToMyMap() {
         const data = this.props.auth.data;
-        data.activeScreen = "MyMap";
-        data.previousScreen = "LocationList";
-        this.props.navigateAndSaveCurrentScreen(data);
         AsyncStorage.setItem("fromConfirmation", "true").then((res) => {
             this.props.navigation.navigate('MyMap', { screenType: 'add', customerId: this.props.auth.data.id });
         })
@@ -217,8 +221,7 @@ const mapStateToProps = state => ({
     service: state.service,
 });
 const mapDispatchToProps = dispatch => ({
-    setServiceDetails: (data) => dispatch(setServiceDetails(data)),
-    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
+    setServiceDetails: (data) => dispatch(setServiceDetails(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocationList);

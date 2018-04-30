@@ -84,197 +84,187 @@ class Menu extends Component {
     {
       this.props.navigation.navigate(screen);
     }
-    
   }
+
+  componentDidMount() {
+     BackHandler.addEventListener('hardwareBackPress', function () {
+        console.log('hardwareBackPress', this.props);
+        if(this.props.currentRoute === 'Menu'){
+            Alert.alert(
+                'Confirm',
+                'Are you sure to exit the app?',
+                [
+                    { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                    { text: 'OK', onPress: () => BackHandler.exitApp() },
+                ],
+                { cancelable: false }
+            );
+            return true;
+        }else{
+            this.props.navigation.goBack(null);
+            return true;
+        }
+        
+    }.bind(this));
+}
 
   componentWillMount() {
     const data = this.props.auth.data;
-    data.activeScreen = "Menu";
-    this.props.navigateAndSaveCurrentScreen(data);
-    BackHandler.addEventListener('hardwareBackPress', function () {
+    // data.activeScreen = "Menu";
+    // this.props.navigateAndSaveCurrentScreen(data);
+    // BackHandler.addEventListener('hardwareBackPress', function () {
 
-      const { dispatch, navigation, nav } = this.props;
-      if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Menu') {
-        Alert.alert(
-          'Confirm',
-          'Are you sure to exit the app?',
-          [
-            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-            { text: 'OK', onPress: () => BackHandler.exitApp() },
-          ],
-          { cancelable: false }
-        )
-      }
-      else {
-        let saveData = this.props.auth.data;
-        switch (this.props.auth.data.activeScreen) {
-          case "EditProfile":
-            saveData.activeScreen = "Menu";
-            saveData.previousScreen = "";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
+    //   const { dispatch, navigation, nav } = this.props;
+    //   if (this.props.auth.data.activeScreen && this.props.auth.data.activeScreen == 'Menu') {
+    //     Alert.alert(
+    //       'Confirm',
+    //       'Are you sure to exit the app?',
+    //       [
+    //         { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+    //         { text: 'OK', onPress: () => BackHandler.exitApp() },
+    //       ],
+    //       { cancelable: false }
+    //     )
+    //   }
+    //   else {
+    //     let saveData = this.props.auth.data;
+    //     // if (this.props.auth.data.previousScreen)
+    //     //   this.props.navigation.navigate(this.props.auth.data.previousScreen);
+    //     // else {
+    //     //   this.props.navigation.navigate('Menu');
+    //     // }
 
-          case "MyPromoCode":
-            saveData.activeScreen = "Menu";
-            saveData.previousScreen = "";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
 
-          case "Support":
-            saveData.activeScreen = "Menu";
-            saveData.previousScreen = "";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-
-          case "Settings":
-            saveData.activeScreen = "Menu";
-            saveData.previousScreen = "";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-
-          
-          case "LanguageList":
-            saveData.activeScreen = "Settings";
-            saveData.previousScreen = "Menu";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-
-          case "LanguageList":
-            saveData.activeScreen = "CurrencyList";
-            saveData.previousScreen = "Menu";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-
-          case "JobList":
-            saveData.activeScreen = "Menu";
-            saveData.previousScreen = "";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-
-          case "NotificationList":
-            saveData.activeScreen = "Menu";
-            saveData.previousScreen = "";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-          case "Category":
-            // saveData.activeScreen = "Menu";
-            // saveData.previousScreen = "";
-            // this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-          case "MyLocation":
-            // saveData.activeScreen = "Menu";
-            // saveData.previousScreen = "";
-            // this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-            case "MyMap":
-            // saveData.activeScreen = "MyLocation";
-            // saveData.previousScreen = "Menu";
-            // this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-          case "ServiceDetails":
-            //saveData.activeScreen = "Category";
-            //saveData.previousScreen = "Menu";
-            //this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-          case "Confirmation":
-             saveData.activeScreen = "Confirmation";
-             saveData.previousScreen = "Category";
-             this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-          case "DateAndTime":
-            saveData.activeScreen = "Confirmation";
-            saveData.previousScreen = "ServiceDetails";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-          case "ServiceProviderListing":
-            saveData.activeScreen = "Confirmation";
-            saveData.previousScreen = "ServiceDetails";
-            this.props.navigateAndSaveCurrentScreen(saveData);
-          break;
-          case "LocationList":
-            // saveData.activeScreen = "Confirmation";
-            // saveData.previousScreen = "ServiceDetails";
-            // this.props.navigateAndSaveCurrentScreen(saveData);
-            break;
-          default:
-            break;
-        }
-        if (this.props.auth.data.activeScreen == 'Confirmation' ) {
-          saveData.activeScreen = "ServiceDetails";
-          saveData.previousScreen = "Category";
-          this.props.navigateAndSaveCurrentScreen(saveData);
-          // this.props.navigation.dispatch({
-          //   routeName: 'ServiceDetails'
-          // });
-          // Alert.alert(
-          //   'Confirm',
-          //   'Your data will be lost',
-          //   [
-          //     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-          //     { text: 'OK', onPress: () => this.props.navigation.navigate('ServiceDetails') },
-          //   ],
-          //   { cancelable: false }
-          // )
-          this.props.navigation.navigate('ServiceDetails');
-          //this.props.navigation.dispatch(NavigationActions.back({ routeName:'ServiceDetails'}));
-          return true;
-        }else if(this.props.auth.data.activeScreen === 'ServiceDetails'){
-          saveData.activeScreen = "Category";
-          saveData.previousScreen = "Menu";
-          this.props.navigateAndSaveCurrentScreen(saveData);
-          this.props.navigation.navigate('Category')
-        }else if(this.props.auth.data.activeScreen === 'Category'){
-          saveData.activeScreen = "Menu";
-          saveData.previousScreen = "";
-          this.props.navigateAndSaveCurrentScreen(saveData);
-          this.props.navigation.navigate('Menu')
-        }
-        else if(this.props.auth.data.activeScreen==='MyLocation')
-        {
-          saveData.activeScreen = "Menu";
-          saveData.previousScreen = "";
-          this.props.navigateAndSaveCurrentScreen(saveData);
-          this.props.navigation.navigate(saveData.activeScreen);
-        }
-        else if(this.props.auth.data.activeScreen==='LocationList')
-        {
-          saveData.activeScreen = "Confirmation";
-          saveData.previousScreen = "ServiceDetails";
-          this.props.navigateAndSaveCurrentScreen(saveData);
-          this.props.navigation.navigate(saveData.activeScreen);
-        }
-        else if(this.props.auth.data.activeScreen==='MyMap')
-        {
-          AsyncStorage.getItem("fromConfirmation").then((value)=>{
-            if(value)
-            {
-              saveData.activeScreen = "LocationList";
-              saveData.previousScreen = "Menu";
-              this.props.navigateAndSaveCurrentScreen(saveData);
-              this.props.navigation.navigate(saveData.activeScreen);
-            }
-            else
-            {
-              saveData.activeScreen = "MyLocation";
-              saveData.previousScreen = "Menu";
-              this.props.navigateAndSaveCurrentScreen(saveData);
-              this.props.navigation.navigate(saveData.activeScreen);
-            }
-          })
+    //     switch (this.props.auth.data.activeScreen) {
+    //       case "EditProfile":
+    //         saveData.activeScreen = "Menu";
+    //         saveData.previousScreen = "";
+    //         this.props.navigateAndSaveCurrentScreen(saveData);
+    //         break;
+    //         case "NotificationList":
+    //         saveData.activeScreen = "Menu";
+    //         saveData.previousScreen = "";
+    //         this.props.navigateAndSaveCurrentScreen(saveData);
+    //         break;
+    //       case "Category":
+    //         // saveData.activeScreen = "Menu";
+    //         // saveData.previousScreen = "";
+    //         // this.props.navigateAndSaveCurrentScreen(saveData);
+    //         break;
+    //       case "MyLocation":
+    //         // saveData.activeScreen = "Menu";
+    //         // saveData.previousScreen = "";
+    //         // this.props.navigateAndSaveCurrentScreen(saveData);
+    //         break;
+    //         case "MyMap":
+    //         // saveData.activeScreen = "MyLocation";
+    //         // saveData.previousScreen = "Menu";
+    //         // this.props.navigateAndSaveCurrentScreen(saveData);
+    //         break;
+    //       case "ServiceDetails":
+    //         //saveData.activeScreen = "Category";
+    //         //saveData.previousScreen = "Menu";
+    //         //this.props.navigateAndSaveCurrentScreen(saveData);
+    //         break;
+    //       case "Confirmation":
+    //          saveData.activeScreen = "Confirmation";
+    //          saveData.previousScreen = "Category";
+    //          this.props.navigateAndSaveCurrentScreen(saveData);
+    //         break;
+    //       case "DateAndTime":
+    //         saveData.activeScreen = "Confirmation";
+    //         saveData.previousScreen = "ServiceDetails";
+    //         this.props.navigateAndSaveCurrentScreen(saveData);
+    //         break;
+    //       case "ServiceProviderListing":
+    //         saveData.activeScreen = "Confirmation";
+    //         saveData.previousScreen = "ServiceDetails";
+    //         this.props.navigateAndSaveCurrentScreen(saveData);
+    //       break;
+    //       case "LocationList":
+    //         // saveData.activeScreen = "Confirmation";
+    //         // saveData.previousScreen = "ServiceDetails";
+    //         // this.props.navigateAndSaveCurrentScreen(saveData);
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //     if (this.props.auth.data.activeScreen == 'Confirmation' ) {
+    //       saveData.activeScreen = "ServiceDetails";
+    //       saveData.previousScreen = "Category";
+    //       this.props.navigateAndSaveCurrentScreen(saveData);
+    //       // this.props.navigation.dispatch({
+    //       //   routeName: 'ServiceDetails'
+    //       // });
+    //       // Alert.alert(
+    //       //   'Confirm',
+    //       //   'Your data will be lost',
+    //       //   [
+    //       //     { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+    //       //     { text: 'OK', onPress: () => this.props.navigation.navigate('ServiceDetails') },
+    //       //   ],
+    //       //   { cancelable: false }
+    //       // )
+    //       this.props.navigation.navigate('ServiceDetails');
+    //       //this.props.navigation.dispatch(NavigationActions.back({ routeName:'ServiceDetails'}));
+    //       return true;
+    //     }else if(this.props.auth.data.activeScreen === 'ServiceDetails'){
+    //       saveData.activeScreen = "Category";
+    //       saveData.previousScreen = "Menu";
+    //       this.props.navigateAndSaveCurrentScreen(saveData);
+    //       this.props.navigation.navigate('Category')
+    //     }else if(this.props.auth.data.activeScreen === 'Category'){
+    //       saveData.activeScreen = "Menu";
+    //       saveData.previousScreen = "";
+    //       this.props.navigateAndSaveCurrentScreen(saveData);
+    //       this.props.navigation.navigate('Menu')
+    //     }
+    //     else if(this.props.auth.data.activeScreen==='MyLocation')
+    //     {
+    //       saveData.activeScreen = "Menu";
+    //       saveData.previousScreen = "";
+    //       this.props.navigateAndSaveCurrentScreen(saveData);
+    //       this.props.navigation.navigate(saveData.activeScreen);
+    //     }
+    //     else if(this.props.auth.data.activeScreen==='LocationList')
+    //     {
+    //       saveData.activeScreen = "Confirmation";
+    //       saveData.previousScreen = "ServiceDetails";
+    //       this.props.navigateAndSaveCurrentScreen(saveData);
+    //       this.props.navigation.navigate(saveData.activeScreen);
+    //     }
+    //     else if(this.props.auth.data.activeScreen==='MyMap')
+    //     {
+    //       AsyncStorage.getItem("fromConfirmation").then((value)=>{
+    //         if(value)
+    //         {
+    //           saveData.activeScreen = "LocationList";
+    //           saveData.previousScreen = "Menu";
+    //           this.props.navigateAndSaveCurrentScreen(saveData);
+    //           this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //         else
+    //         {
+    //           saveData.activeScreen = "MyLocation";
+    //           saveData.previousScreen = "Menu";
+    //           this.props.navigateAndSaveCurrentScreen(saveData);
+    //           this.props.navigation.navigate(saveData.activeScreen);
+    //         }
+    //       })
          
-        }
+    //     }
         
-        else {
-          this.props.navigation.goBack(null);
-          return true;
-        }
+    //     else {
+    //       this.props.navigation.goBack(null);
+    //       return true;
+    //     }
 
-      }
+    //   }
 
 
 
-      return true;
-    }.bind(this));
+    //   return true;
+    // }.bind(this));
 
     api.post('Notifications/getUnreadCustomerNot', { "customerId": this.props.auth.data.id }).then((res) => {
       this.setState({ 
@@ -458,7 +448,9 @@ Menu.propTypes = {
 }
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    currentRoute: state.RouterOwn.currentRoute,
+    prevRoute: state.RouterOwn.prevRoute
   }
 }
 

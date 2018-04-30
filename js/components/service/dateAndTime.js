@@ -12,7 +12,7 @@ import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
-
+import { NavigationActions } from "react-navigation";
 
 
 const deviceHeight = Dimensions.get('window').height;
@@ -142,7 +142,19 @@ class DateAndTime extends Component {
         data.activeScreen = 'Confirmation';
         data.previousScreen = "ServiceDetails";
         this.props.navigateAndSaveCurrentScreen(data);
-        this.props.navigation.navigate('Confirmation');
+        //this.props.navigation.navigate('Confirmation');
+
+        this.props.navigation.dispatch(
+            NavigationActions.reset({
+                index: 3,
+                actions: [
+                NavigationActions.navigate({ routeName: 'Menu' }),
+                NavigationActions.navigate({ routeName: 'Category' }),
+                NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                NavigationActions.navigate({ routeName: 'Confirmation' }),
+                ],
+            })
+        );
     }
     componentDidMount() {
         api.get("Settings").then((res) => {
@@ -186,7 +198,6 @@ class DateAndTime extends Component {
                     saveDBTime = saveDBTime
                 }
                 let saveDbDay = this.state.setWeek;
-
                 //const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00';
 
                 if (this.state.satDate == '') {

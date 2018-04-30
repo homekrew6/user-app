@@ -11,6 +11,7 @@ import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
+import { NavigationActions } from "react-navigation";
 import { getAllLanguagesList } from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -103,16 +104,40 @@ class LanguageList extends Component {
             const data = { langId: loc.id, language: loc.name, Code:loc.Code };
             AsyncStorage.setItem("language", JSON.stringify(data)).then((res) => {
                 this.setState({ visible: false });
-                this.props.navigation.navigate('Settings');
+                this.props.navigation.dispatch(
+                    NavigationActions.reset({
+                        index: 1,
+                        actions: [
+                        NavigationActions.navigate({ routeName: 'Menu' }),
+                        NavigationActions.navigate({ routeName: 'Settings' }),
+                        ],
+                    })
+                );
             }).catch((err) => {
                 this.setState({ visible: false });
-                this.props.navigation.navigate('Settings');
+                this.props.navigation.dispatch(
+                    NavigationActions.reset({
+                        index: 1,
+                        actions: [
+                        NavigationActions.navigate({ routeName: 'Menu' }),
+                        NavigationActions.navigate({ routeName: 'Settings' }),
+                        ],
+                    })
+                );
             })
 
         }
         else {
             this.setState({ visible: false });
-            this.props.navigation.navigate('Settings');
+            this.props.navigation.dispatch(
+                NavigationActions.reset({
+                    index: 1,
+                    actions: [
+                    NavigationActions.navigate({ routeName: 'Menu' }),
+                    NavigationActions.navigate({ routeName: 'Settings' }),
+                    ],
+                })
+            );
             //Alert.alert('Please select a location first.');
         }
 
