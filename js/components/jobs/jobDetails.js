@@ -255,7 +255,6 @@ class JobDetails extends Component {
         }
     }
     componentDidMount() {       
-        debugger;
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
             if(res.response.message[0].price) { res.response.message[0].price = parseFloat(res.response.message[0].price).toFixed(2); }
             this.setState({

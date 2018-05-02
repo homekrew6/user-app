@@ -152,7 +152,6 @@ class MyPromoCode extends Component {
                 Alert.alert('Please try other');
             }
             if (response.IsPromoApplied){
-                debugger;
                 let serviceData = this.props.service.data;
                 serviceData.price =parseFloat(response.price).toFixed(2);
                 serviceData.promo = item.promotions.promo_code; 

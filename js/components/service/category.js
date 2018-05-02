@@ -49,7 +49,6 @@ class Categories extends Component {
       if(this.props.prevRoute === '' ){
         BackHandler.addEventListener('hardwareBackPress', function () {
           console.log('hardwareBackPress', this.props);
-          debugger;
           if(this.props.currentRoute === 'Category' || this.props.currentRoute === 'Login'){
               Alert.alert(
                   'Confirm',

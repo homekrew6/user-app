@@ -126,5 +126,6 @@ export default {
   see_on_next:'أراك على شراء المقبل',
   our_service:'خدمتنا',
   thank_you:'شكرا',
-  promoPrice: 'سعر العرض'
+  promoPrice: 'سعر العرض',
+  minimum_price:'سعر الحد الأدنى'
 };
