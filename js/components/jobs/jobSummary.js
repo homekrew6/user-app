@@ -33,6 +33,7 @@ class jobSummary extends Component {
             materialTotalPrice: 0,
             hoursPrice: '0.00',
             grndtotal: 0,
+            min_charge:''
         };
     }
     componentDidMount() {
@@ -97,7 +98,12 @@ class jobSummary extends Component {
                 {
                     totalPrice = totalPrice.toFixed(2);
                 }
-                this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice });
+                let minCharge="0.0";
+                if (this.props.navigation.state.params.jobDetails.service && this.props.navigation.state.params.jobDetails.service.min_charge)
+                {
+                    minCharge = parseFloat(this.props.navigation.state.params.jobDetails.service.min_charge).toFixed(2);
+                }
+                this.setState({ jsonAnswer: jsonAnswer, totalPrice: totalPrice, min_charge: minCharge });
             }
                
             api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
@@ -168,7 +174,7 @@ class jobSummary extends Component {
                 return totalPrice;
                 break;
             case 4:
-                if(isSlided !='false')
+                if (isSlided && isSlided != 'false')
                 {
                     if (impact_type === 'Addition') {
                         impact_no = Number(impact_no);
@@ -322,13 +328,28 @@ class jobSummary extends Component {
                                 <Image source={totalImg} style={styles.totalImage} />
                             </View>
                             <View>
-                                <Text style={styles.text1}>Total</Text>
+                                <Text style={styles.text1}>{I18n.t('total')}</Text>
                             </View>
                             <View style={{ flex: 1 }}>
                                 <Text></Text>
                             </View>
                             <View style={styles.price}>
                                 <Text style={styles.priceText}>{this.state.currency} {this.state.grndtotal}</Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.totalBillitem}>
+                            <View style={styles.imagesWarp} >
+                                <Image source={totalImg} style={styles.totalImage} />
+                            </View>
+                            <View>
+                                <Text style={styles.text1}>{I18n.t('minimum_price')}</Text>
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text></Text>
+                            </View>
+                            <View style={styles.price}>
+                                <Text style={styles.priceText}>{this.state.currency} {this.state.min_charge}</Text>
                             </View>
                         </View>
                     </View>

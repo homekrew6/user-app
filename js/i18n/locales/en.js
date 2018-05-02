@@ -128,5 +128,6 @@ export default {
   see_on_next:'See you on next purchase',
   our_service:'Our Sevice',
   thank_you:'Thank You',
-  promoPrice: 'Promo Price'
+  promoPrice: 'Promo Price',
+  minimum_price:'Minimum Price'
 };
