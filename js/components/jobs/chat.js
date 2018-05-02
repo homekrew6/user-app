@@ -283,7 +283,7 @@ class Chat extends Component {
                                 data.IsCustomerSender ? (
                                     <View style={{ flexDirection: 'row', marginBottom: 15 }} key={key}>
                                         <View style={{ flex: 1, marginBottom: 10, overflow: 'visible', position: 'relative', alignItems: 'flex-end' }}>
-                                            <View style={{ maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
+                                            <View style={{ maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#fff', position: 'relative', overflow: 'visible' }}>
                                                 {
                                                     data.Message ? (
                                                         <Text style={{ fontSize: 14 }}> {data.Message} </Text>
@@ -310,7 +310,7 @@ class Chat extends Component {
                                                 }
                                             </View>
                                             <View style={{ flex: 1, marginBottom: 15, overflow: 'visible', position: 'relative' }}>
-                                                <View style={{ width: '100%', maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' }}>
+                                                <View style={{ width: '100%', maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#fff', position: 'relative', overflow: 'visible' }}>
                                                     {
                                                         data.Message ? (
                                                             <Text style={{ fontSize: 14 }}> {data.Message} </Text>

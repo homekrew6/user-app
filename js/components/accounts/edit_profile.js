@@ -80,6 +80,7 @@ class EditProfile extends Component {
           // this.props.setProfilePic(response.body.postResponse.location);
           this.setState({ image: response.body.postResponse.location });
           this.setState({ visible: false });
+          Alert.alert('', 'Press save button to save the image.');
         }
       }).catch((err) => {
         this.setState({ visible: false });
@@ -126,6 +127,7 @@ class EditProfile extends Component {
                   this.setState({ cameraUploaded: true });
                   this.setState({ image: response.body.postResponse.location })
                   this.setState({ visible: false });
+                  Alert.alert('','Press save button to save the image.');
               }
           }).catch((err) => {
               this.setState({ visible: false });

@@ -90,7 +90,6 @@ class ServiceProviderDetails extends Component {
                     
 
                     <View style={{ backgroundColor: '#fff', marginTop: 8 }}>
-
                         <View style={{ paddingBottom: 0, marginBottom: 0, alignItems: 'center', paddingTop: 15, paddingBottom: 15 }}>
                             {
                                 this.state.jobDetails && this.state.jobDetails.worker ? (
@@ -103,7 +102,7 @@ class ServiceProviderDetails extends Component {
                         </View>
 
                         <View style={{padding: 8 }}>
-                            <View style={{ padding: 10, borderTopWidth: 1, borderTopColor: '#ccc', flex: 1 }}>
+                            <View style={{ padding: 10, flex: 1 }}>
                                 <Text style={{ fontSize: 14 }}>{I18n.t('name')}</Text>
                                 {
                                     this.state.jobDetails && this.state.jobDetails.worker ? (
@@ -117,7 +116,7 @@ class ServiceProviderDetails extends Component {
                                 }
                                 
                             </View>
-                            <View style={{ padding: 10, borderTopWidth: 1, borderTopColor: '#ccc', flex: 1, borderBottomWidth: 1, borderBottomColor: '#ccc', }} >
+                            <View style={{ padding: 10, borderTopWidth: 1, borderTopColor: '#ccc', flex: 1 }} >
                                 <Text style={{ fontSize: 14, }}>
                                     {I18n.t('skills').toUpperCase()}
                                 </Text>
@@ -132,7 +131,7 @@ class ServiceProviderDetails extends Component {
                             <Text style={{ color: '#fff', fontSize: 14 }}>{I18n.t('liveChat')}</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.call()}>
+                        <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1e3768' }} onPress={() => this.call()}>
                             <Text style={{ color: '#fff', fontSize: 14 }}>{I18n.t('callMe')}</Text>
                         </TouchableOpacity>
                     </FooterTab>

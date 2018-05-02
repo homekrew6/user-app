@@ -255,7 +255,6 @@ class JobDetails extends Component {
         }
     }
     componentDidMount() {       
-        debugger;
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
             if(res.response.message[0].price) { res.response.message[0].price = parseFloat(res.response.message[0].price).toFixed(2); }
             this.setState({
@@ -820,10 +819,13 @@ class JobDetails extends Component {
                                             />
 
                                         </View>
-                                        <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })} >
-                                            <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
-                                            <Text style={{ fontSize: 12 }}>{I18n.t('chat')}/{I18n.t('call')}</Text>
-                                        </TouchableOpacity>
+                                        {
+                                            !(this.state.jobDetails.status === 'STARTED')?
+                                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })} >
+                                                <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
+                                                <Text style={{ fontSize: 12 }}>{I18n.t('chat')}/{I18n.t('call')}</Text>
+                                            </TouchableOpacity> : null
+                                        }
                                     </View>
                                 </View>
                             ) : (

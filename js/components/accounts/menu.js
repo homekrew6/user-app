@@ -286,13 +286,13 @@ class Menu extends Component {
         <Content>
 
         <Header style={{ backgroundColor: '#fff' }}>
-          <Button transparent />
+          {/* <Button transparent /> */}
           <Body style={styles.appHdrtitleWarp}>
             <Image source={logo_hdr} style={{ height: 18, width: 110 }} />
           </Body>
-          <Button transparent >
+          {/* <Button transparent >
             <Icon name='search' style={{ color: '#81cdc7' }} />
-          </Button>
+          </Button> */}
         </Header>
 
 
