@@ -64,7 +64,7 @@ export default {
     buttonItem2: { borderLeftWidth: 1, borderLeftColor: '#ccc' },
 
     //liveChat
-    chatterHeaderWarp: { backgroundColor: '#cccccc', padding: 15 },
+    chatterHeaderWarp: { backgroundColor: '#ccc', padding: 15 },
     chatterHeaderWarpInner: { flexDirection: 'row', alignItems: 'center' },
     chatterHeaderImageWarp: { marginBottom: 10 },
     chatterHeaderImage: { height: 50, width: 50, borderRadius: 70 },
@@ -76,15 +76,15 @@ export default {
     scrollChat: { padding: 10, flex: 1 },
     chatWarp:{ flexDirection: 'row', marginBottom: 15 },
     person1Warp: { flex: 1, marginBottom: 10, overflow: 'visible', position: 'relative', alignItems: 'flex-end' },
-    person1TextWarp: { maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' },
+    person1TextWarp: { maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#fff', position: 'relative', overflow: 'visible' },
     personText: { fontSize: 14 },
     person1Arrow: { height: 12, width: 12, position: 'absolute', right: -3, bottom: -4, zIndex: 999 },
     person1ImageWarp: { marginLeft: 15, justifyContent: 'flex-end' },
     person1Image: { height: 30, width: 30, borderRadius: 70 },
     person2ImageWarp: { marginRight: 15, justifyContent: 'flex-end' },
     person2Image: { height: 30, width: 30, borderRadius: 70 },
-    person2Warp: { flex: 1, marginBottom: 15, overflow: 'visible', position: 'relative' },
-    person2TextWarp: { width: '100%', maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#ccc', position: 'relative', overflow: 'visible' },
+    person2Warp: { flex: 1, marginBottom: 15, flexDirection: 'row' },
+    person2TextWarp: { maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#fff' },
     person2Arrow: { height: 12, width: 12, position: 'absolute', left: -4, bottom: -4, zIndex: 999 },
 
     chatfooterWarp:{ backgroundColor: '#fff', flexDirection: 'row', flex: 1, alignItems: 'center', backgroundColor: '#81cdc7' },

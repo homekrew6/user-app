@@ -819,10 +819,13 @@ class JobDetails extends Component {
                                             />
 
                                         </View>
-                                        <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })} >
-                                            <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
-                                            <Text style={{ fontSize: 12 }}>{I18n.t('chat')}/{I18n.t('call')}</Text>
-                                        </TouchableOpacity>
+                                        {
+                                            !(this.state.jobDetails.status === 'STARTED')?
+                                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })} >
+                                                <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
+                                                <Text style={{ fontSize: 12 }}>{I18n.t('chat')}/{I18n.t('call')}</Text>
+                                            </TouchableOpacity> : null
+                                        }
                                     </View>
                                 </View>
                             ) : (

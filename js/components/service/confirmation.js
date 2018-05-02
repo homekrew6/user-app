@@ -184,6 +184,8 @@ class Confirmation extends Component {
                     //     "saveDbDay": this.props.service.data.saveDbDay
                     // };
                     // console.log('resCons', resCons);
+
+                    
                     console.log(this.props.service.data.serviceLocationid);
                     if (this.props.service.data.serviceLocationid) {
                         if (this.props.service.data.saveDateDB) {
@@ -191,9 +193,19 @@ class Confirmation extends Component {
                             if (jobPrice) {
                                 AsyncStorage.getItem("keyQuestionList").then((value) => {
                                     if (value) {
+                                        let price = Number(this.props.service.data.price);
+                                        let minPrice=Number(this.state.minPrice);
+                                        if(price>minPrice)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            price=minPrice;
+                                        }
                                         api.post('Jobs/insertNewJob', {
                                             "userLocationId": this.props.service.data.serviceLocationid,
-                                            "price": this.props.service.data.price,
+                                            "price": price,
                                             "postedDate": this.props.service.data.saveDateDB,
                                             "payment": "Credit Card",
                                             "faourite_sp": this.props.service.data.favouriteId,
@@ -297,13 +309,13 @@ class Confirmation extends Component {
                     backgroundColor="#cbf0ed"
                 />
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
                         <Ionicons name="ios-arrow-back-outline" style={styles.hd_lft_icon} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>Confirmation</Title>
                     </Body>
-                    <Button transparent />
+                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled/>
                 </Header>
 
                 <Content style={styles.bgWhite} >

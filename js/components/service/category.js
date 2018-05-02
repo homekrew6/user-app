@@ -248,7 +248,7 @@ class Categories extends Component {
         this.state.serviceList.map((data, key) => {
           if (!data.service) return;
           return (
-            <View key={data.id} style={styles.catIten}>
+            <View key={data.id} style={[styles.catIten]} >
               <View style={styles.catIten_img_view}>
                 {
                   this.props.auth.data && this.state.locationArray.length > 0 ? (
@@ -285,18 +285,27 @@ class Categories extends Component {
         <Content style={styles.bgWhite} >
           <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
           <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow >
-            <Button transparent >
-              <SimpleLineIcons name="grid" style={styles.hd_lft_icon} />
-            </Button>
+
+            {
+              this.props.auth.data.id?
+              <Button transparent style={{ width: 30 }} onPress={()=> this.props.navigation.navigate('Menu')}>
+                <SimpleLineIcons name="grid" style={[styles.hd_lft_icon, { fontSize: 14, color: '#fff' }]} />
+              </Button>: null
+            }
+
             <Body style={{ alignItems: 'center' }}>
               <Image source={logo_hdr} style={styles.logo_hdr_img} />
             </Body>
-            <Button transparent >
+            {
+              this.props.auth.data.id ? <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled />: null
+            }
+            
+            {/* <Button transparent >
               <Ionicons name="ios-notifications-outline" style={styles.hd_rt_icon} />
             </Button>
             <Button transparent >
               <Ionicons name="ios-search-outline" style={styles.hd_rt_icon} />
-            </Button>
+            </Button> */}
           </Header>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={{ flex: 1, flexDirection: 'row' }}>

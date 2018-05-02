@@ -32,7 +32,7 @@ export default {
   book_now:'Book Now',
   home:'Home',
   office:'Office',
-  browse_by_categories: 'Browse By Categories',
+  browse_by_categories: 'Browse by Categories',
   cancel: 'Cancel',
   done:'Done',
   edit: 'Edit',

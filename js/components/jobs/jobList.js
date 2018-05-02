@@ -135,7 +135,7 @@ class JobList extends Component {
     render() {
         let jobListNow;
         jobListNow = (
-            <Text>hi</Text>
+            <Text></Text>
         )
         return (
 
@@ -215,8 +215,8 @@ class JobList extends Component {
                                                                     <Text>{item.userLocation ? item.userLocation.name : ''}</Text>
                                                                 </View>
                                                             </View>
-                                                            <View>
-                                                                <Text style={styles.listWarpPriceDown}>{item.status}</Text>
+                                                            <View style={{ maxWidth: 70, alignItems: 'center', justifyContent: 'center' }}>
+                                                                <Text style={[styles.listWarpPriceDown, {textAlign: 'center'} ]}>{item.status}</Text>
                                                             </View>
                                                         </TouchableOpacity>
                                                     </ListItem>
