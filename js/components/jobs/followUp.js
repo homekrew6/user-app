@@ -9,6 +9,9 @@ import styles from './styles';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getAllCurrencyList } from '../accounts/elements/authActions';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
@@ -22,12 +25,15 @@ class FollowUp extends Component {
             materialsList: [],
             followUpDetails: '',
             totolePrice: '0.0',
-            materialTotalPrice:'0.0'
+            materialTotalPrice:'0.0',
+            currencyList:[]
         }
     }
 
     componentDidMount() {
+
         this.setState({ IsVisible: true });
+     
         const jobId = this.props.navigation.state.params.jobDetails ? this.props.navigation.state.params.jobDetails.id : '';
         api.post("jobMaterials/getJobMaterialByJobId", { "jobId": jobId }).then((addedList) => {
             if (addedList.type != "Error") {
@@ -69,13 +75,40 @@ class FollowUp extends Component {
             }
         }).catch((err) => {
             this.setState({ loader: false });
-        })
-        AsyncStorage.getItem("currency").then((value) => {
-            if (value) {
-                const value1 = JSON.parse(value);
-                this.setState({ currency: value1.language })
-            }
-        })
+        });
+        api.get('Currencies').then((res)=>{
+            let finalList = [];
+            res.map((item) => {
+                if (item.is_active) {
+                    finalList.push(item);
+                }
+            });
+            this.setState({ currencyList: finalList });
+            AsyncStorage.getItem("currency").then((value) => {
+                if (value) {
+                    // const value1 = JSON.parse(value);
+                    // this.setState({ currency: value1.language })
+                    if (this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId) {
+                        this.state.currencyList.map((item) => {
+                            if (item.id == this.props.navigation.state.params.jobDetails.currencyId) {
+                                this.setState({ currency: item.name });
+                            }
+                        })
+                    }
+                }
+                else
+                {
+                    if (this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId) {
+                        this.state.currencyList.map((item) => {
+                            if (item.id == this.props.navigation.state.params.jobDetails.currencyId) {
+                                this.setState({ currency: item.name });
+                            }
+                        })
+                    }
+                }
+            });
+        });
+       
     }
 
     getLocalTimeFormat(gmtTime) {
@@ -128,6 +161,7 @@ class FollowUp extends Component {
             api.post('jobFollowUps/declineFollowUp', toSendData).then((res) => {
                 Alert.alert(res.response.message);
                 this.setState({ IsVisible: false });
+                this.props.navigation.navigate('JobList');
             }).catch((Err) => {
                 this.setState({})
             })
@@ -245,5 +279,15 @@ class FollowUp extends Component {
         );
     }
 }
+// FollowUp.propTypes = {
+//     auth: PropTypes.object.isRequired
+// };
+// const mapStateToProps = state => ({
+//     auth: state.auth
+// });
+// const mapDispatchToProps = dispatch => ({
+//     getAllCurrencyList: () => dispatch(getAllCurrencyList())
+// });
 
+// export default connect(mapStateToProps, mapDispatchToProps)(FollowUp);
 export default FollowUp;

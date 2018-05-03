@@ -137,4 +137,6 @@ export default {
   cancelled_list: 'ألغيت',
   job_completed_list: 'أنجزت المهمة',
   payment_pending_list: 'انتظار الدفع',
+  confirmation:"التأكيد",
+  what_to_expect: "ماذا تتوقع"
 };

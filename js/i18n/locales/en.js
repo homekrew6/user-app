@@ -139,4 +139,6 @@ export default {
   cancelled_list: 'CANCELLED',
   job_completed_list: 'JOB COMPLETED',
   payment_pending_list: 'PAYMENT PENDING',
+  confirmation:"Confirmation",
+  what_to_expect:"What To Expect"
 };

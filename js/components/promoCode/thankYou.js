@@ -133,7 +133,7 @@ class ThankYou extends Component {
                                 <Text style={styles.thanksText1}>{I18n.t('you_are_all_set')}</Text>
                                 <Text style={styles.thanksText2}>{I18n.t('thanks_for_awesome')}</Text>
                                 <Text style={styles.thanksText2}>{I18n.t('see_on_next')}</Text>
-                                <View style={styles.thanksText3}><Text style={{ backgroundColor: '#81cdc7', borderRadius: 10, fontSize: 12, paddingLeft: 8, paddingRight: 8, paddingTop: 2, paddingBottom: 2 }}>ORDER #: 123456</Text></View>
+                                <View style={styles.thanksText3}><Text style={{ backgroundColor: '#81cdc7', borderRadius: 10, fontSize: 12, paddingLeft: 8, paddingRight: 8, paddingTop: 2, paddingBottom: 2 }}>ORDER #: {this.props.navigation.state.params.orderId?this.props.navigation.state.params.orderId:''}</Text></View>
                                 <Text style={[styles.thanksText2, {marginBottom: 15}]}>Cheack your mail for more details.</Text>
 
                                 <View style={styles.thanksBottomWarp}>

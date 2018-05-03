@@ -33,7 +33,7 @@ const firebaseConfig = {
     databaseURL: "https://krew-user-app.firebaseio.com",
     storageBucket: "krew-user-app.appspot.com"
 };
- const firebaseApp = firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 const paymentUrl = 'https://secure.telr.com/gateway/mobile.xml';
 var parseString = require('react-native-xml2js').parseString;
 var xml2js = require('react-native-xml2js');
@@ -74,7 +74,8 @@ class JobDetails extends Component {
             reasonId: '',
             materialTotalPrice: 0,
             hoursPrice: 0,
-            spinner: false
+            spinner: false,
+            currencyList:[]
         }
 
         this.state.trackingRef = firebaseApp.database().ref().child('tracking');
@@ -84,8 +85,8 @@ class JobDetails extends Component {
                 if (snapShotVal.jobId == this.state.jobDetails.id.toString()) {
                     if (snapShotVal.status == 'ONMYWAY') {
                         let jobDetails = this.state.jobDetails;
-                        jobDetails.status="ONMYWAY";
-                        this.setState({ jobDetails:jobDetails ,topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
+                        jobDetails.status = "ONMYWAY";
+                        this.setState({ jobDetails: jobDetails, topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
                     }
                     else if (snapShotVal.status == 'JOBSTARTED') {
                         const jobDetails = this.state.jobDetails;
@@ -115,7 +116,7 @@ class JobDetails extends Component {
                     if (snapShotVal.status == 'ONMYWAY') {
                         let jobDetails = this.state.jobDetails;
                         jobDetails.status = snapShotVal.status;
-                        this.setState({ topScreenStatus: 'ONMYWAY', jobDetails:jobDetails, latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
+                        this.setState({ topScreenStatus: 'ONMYWAY', jobDetails: jobDetails, latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
                     }
                     else if (snapShotVal.status == 'JOBSTARTED') {
                         let job_start_time = moment(snapShotVal.startTime).format('LT');
@@ -159,9 +160,9 @@ class JobDetails extends Component {
         let timeToMan = Math.abs(nUTC_diff);
         let utc_check = Math.sign(nUTC_diff);
         let localTime;
-        if(utc_check === 1 || utc_check === 0) {
+        if (utc_check === 1 || utc_check === 0) {
             localTime = moment(slicedDate).subtract(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
-        }else{
+        } else {
             localTime = moment(slicedDate).add(timeToMan, 'minutes').format('ddd DD-MMM-YYYY hh:mm A');
         }
         return localTime;
@@ -254,24 +255,59 @@ class JobDetails extends Component {
             })
         }
     }
-    componentDidMount() {       
+    componentDidMount() {
         api.post('Jobs/getJobDetailsById', { id: this.props.navigation.state.params.jobDetails.id }).then((res) => {
-            if(res.response.message[0].price) { res.response.message[0].price = parseFloat(res.response.message[0].price).toFixed(2); }
+            if (res.response.message[0].price) { res.response.message[0].price = parseFloat(res.response.message[0].price).toFixed(2); }
             this.setState({
                 loader: false,
                 jobDetails: res.response.message[0],
                 topScreenStatus: res.response.message[0].status,
                 favValue: res.response.message[0].IsFavouriteWorker
             });
-            
+
             // this.setState({
             //     loader: false,
             //     jobDetails: res.response.message[0],
             //     topScreenStatus: 'COMPLETED'
             // })
-            if (this.props.navigation.state.params.IsPaymentDone != undefined && this.props.navigation.state.params.IsPaymentDone==true)
-            {
-                
+            api.get('Currencies').then((res) => {
+                let finalList = [];
+                res.map((item) => {
+                    if (item.is_active) {
+                        finalList.push(item);
+                    }
+                });
+                this.setState({ currencyList:finalList});
+                AsyncStorage.getItem("currency").then((value) => {
+                    // if (value) {
+                    //     const value1 = JSON.parse(value);
+                    //     this.setState({ currency: value1.language })
+                    // }
+                    if(value)
+                    {
+                        if (this.state.jobDetails && this.state.jobDetails.currencyId) {
+                            this.state.currencyList.map((item) => {
+                                if (item.id == this.state.jobDetails.currencyId) {
+                                    this.setState({ currency: item.name })
+                                }
+                            })
+                        }
+                    }
+                    else
+                    {
+                        if (this.state.jobDetails && this.state.jobDetails.currencyId) {
+                            this.state.currencyList.map((item) => {
+                                if (item.id == this.state.jobDetails.currencyId) {
+                                    this.setState({ currency: item.name })
+                                }
+                            })
+                        }
+                    }
+                   
+                });
+            })
+            if (this.props.navigation.state.params.IsPaymentDone != undefined && this.props.navigation.state.params.IsPaymentDone == true) {
+
                 this.setState({ spinner: true });
                 //update firebase on complete job
                 let jobIdTr = `${this.props.navigation.state.params.jobDetails.id}`;
@@ -290,8 +326,7 @@ class JobDetails extends Component {
                     }, 5000);
                 })
             }
-            else
-            {
+            else {
                 console.log('jobDetails', this.state.jobDetails);
 
                 if (this.state.jobDetails.status == 'STARTED') {
@@ -354,7 +389,7 @@ class JobDetails extends Component {
                     })
                 }
             }
-            
+
         }).catch(err => {
             console.log(err);
             //reject(err)
@@ -362,12 +397,7 @@ class JobDetails extends Component {
                 loader: false,
             })
         })
-        AsyncStorage.getItem("currency").then((value) => {
-            if (value) {
-                const value1 = JSON.parse(value);
-                this.setState({ currency: value1.language })
-            }
-        });
+
 
         console.log('componentDidMount', this.props);
         navigator.geolocation.getCurrentPosition((position) => {
@@ -385,19 +415,19 @@ class JobDetails extends Component {
 
 
         api.get('cancelReasons').then((reason) => {
-            let reasonsList=[];
-            reason.map((item)=>{
-                if(item.is_active){
-                 item.IsSelected=false;
-                 reasonsList.push(item);
-                }  
+            let reasonsList = [];
+            reason.map((item) => {
+                if (item.is_active) {
+                    item.IsSelected = false;
+                    reasonsList.push(item);
+                }
             })
             this.setState({ reasonList: reasonsList });
             console.log('reasonsList', reasonsList);
         }).catch((errReason) => {
             console.log(errReason);
         })
-        
+
 
 
     }
@@ -487,14 +517,14 @@ class JobDetails extends Component {
                             //worker location
                             <Marker
                                 coordinate={{ latitude: region.latitude, longitude: region.longitude }}
-                                title={this.state.jobDetails.userLocation.name}
+                                title={this.state.jobDetails.userLocation ? this.state.jobDetails.userLocation.name : ''}
                             />
                             :
                             this.state.waypointEnd.latitude !== '' ?
                                 //customer location
                                 <Marker
                                     coordinate={this.state.waypointEnd}
-                                    title={this.state.jobDetails.userLocation.name}
+                                    title={this.state.jobDetails.userLocation ? this.state.jobDetails.userLocation.name : ''}
                                 />
                                 : console.log('waypointEnd', this.state.waypointEnd)
                     }
@@ -502,7 +532,7 @@ class JobDetails extends Component {
                         this.state.markerStatus === false ?
                             <Marker
                                 coordinate={{ latitude: region.latitude, longitude: region.longitude }}
-                                title={this.state.jobDetails.userLocation.name}
+                                title={this.state.jobDetails.userLocation ? this.state.jobDetails.userLocation.name : ''}
                             />
                             : console.log()
                     }
@@ -586,15 +616,14 @@ class JobDetails extends Component {
             </View>
         );
     }
-    renderFollowUp()
-    {
-        return(
+    renderFollowUp() {
+        return (
             <View style={{ flex: 1, flexDirection: 'row', padding: 30, alignItems: 'center' }}>
-                <TouchableOpacity style={{ flex: 1 }} onPress={() => this.props.navigation.navigate('FollowUp', { jobDetails:this.state.jobDetails})}>
+                <TouchableOpacity style={{ flex: 1 }} onPress={() => this.props.navigation.navigate('FollowUp', { jobDetails: this.state.jobDetails })}>
                     <Text style={{ textAlign: 'center' }}>{I18n.t('click_to_see_follow_up')}</Text>
                 </TouchableOpacity>
                 <View>
-                    <Image source={paused} style={{ height: 100, width: 100 }}/>
+                    <Image source={paused} style={{ height: 100, width: 100 }} />
                 </View>
             </View>
         );
@@ -625,46 +654,44 @@ class JobDetails extends Component {
             </View>
         );
     }
-    onClickMakeFav(value){
-        
+    onClickMakeFav(value) {
+
         let customerId = this.props.auth.data.id;
         let workerId = this.state.jobDetails.workerId;
-        if(this.state.favValue){
+        if (this.state.favValue) {
             this.setState({ favValue: false });
-            api.post('favoriteSps/removeSpAsFavourite', {workerId: workerId, customerId: customerId}).then((favRes) =>{
+            api.post('favoriteSps/removeSpAsFavourite', { workerId: workerId, customerId: customerId }).then((favRes) => {
 
             }).catch((favErr) => {
-                
+
             })
-        }else{
+        } else {
             this.setState({ favValue: true });
-            api.post('favoriteSps/addSpAsFavourite', {workerId: workerId, customerId: customerId}).then((favRes) =>{
+            api.post('favoriteSps/addSpAsFavourite', { workerId: workerId, customerId: customerId }).then((favRes) => {
 
             }).catch((favErr) => {
-                
+
             })
         }
-        
+
         console.log(value);
     }
 
-    onReasonSelect(reasonData){
-        let reasonsList=this.state.reasonList;
-        reasonsList.map((item)=>{
-            if(item.id==reasonData.id)
-            {
-                item.IsSelected=true;
+    onReasonSelect(reasonData) {
+        let reasonsList = this.state.reasonList;
+        reasonsList.map((item) => {
+            if (item.id == reasonData.id) {
+                item.IsSelected = true;
             }
-            else
-            {
-                item.IsSelected=false;
+            else {
+                item.IsSelected = false;
             }
         })
-        this.setState({ reasonName: reasonData.name, reasonId: reasonData.id, reasonList:reasonsList });
+        this.setState({ reasonName: reasonData.name, reasonId: reasonData.id, reasonList: reasonsList });
     }
 
     startPayment() {
-        
+
         this.setState({
             spinner: true
         });
@@ -703,9 +730,9 @@ class JobDetails extends Component {
                     selfComponent.setState({
                         spinner: false
                     });
-                    
+
                     console.warn("pragati", result.mobile.webview[0].start[0]);
-                    selfComponent.props.navigation.navigate('Payment', { jobDetails:selfComponent.state.jobDetails,amount: selfComponent.state.jobDetails.price, customerId: selfComponent.props.auth.data.id, url: result.mobile.webview[0].start[0], close: result.mobile.webview[0].close[0], abort: result.mobile.webview[0].abort[0], code: result.mobile.webview[0].code[0] });
+                    selfComponent.props.navigation.navigate('Payment', { jobDetails: selfComponent.state.jobDetails, amount: selfComponent.state.jobDetails.price, customerId: selfComponent.props.auth.data.id, url: result.mobile.webview[0].start[0], close: result.mobile.webview[0].close[0], abort: result.mobile.webview[0].abort[0], code: result.mobile.webview[0].code[0] });
                 }
 
 
@@ -720,13 +747,13 @@ class JobDetails extends Component {
 
     }
 
-    goBackJobDetails(){
-        this.props.navigation.dispatch( 
+    goBackJobDetails() {
+        this.props.navigation.dispatch(
             NavigationActions.reset({
                 index: 1,
                 actions: [
-                  NavigationActions.navigate({ routeName: 'Menu' }),
-                  NavigationActions.navigate({ routeName: 'JobList' }),
+                    NavigationActions.navigate({ routeName: 'Menu' }),
+                    NavigationActions.navigate({ routeName: 'JobList' }),
                 ],
             })
         );
@@ -759,30 +786,30 @@ class JobDetails extends Component {
                             this.state.jobDetails.service.banner_image ? (
                                 <ImageBackground source={{ uri: this.state.jobDetails.service.cover_image }} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                     <View style={{ alignItems: 'center' }}>
-                                        <Text style={{ fontWeight: '700', fontSize: 18 }}>{this.state.jobDetails.service.name}</Text>
+                                        <Text style={{ fontWeight: '700', fontSize: 18 }}>{this.state.jobDetails.service ? this.state.jobDetails.service.name : ''}</Text>
                                         <Text>{this.state.currency} {this.state.jobDetails.price}</Text>
                                     </View>
                                 </ImageBackground>
                             ) : (
                                 <ImageBackground source={require('../../../img/bg-6.png')} style={{ alignItems: 'center', justifyContent: 'flex-start', width: win, height: (win * 0.62), paddingTop: 25 }}>
                                     <View style={{ alignItems: 'center' }}>
-                                        <Text style={{ fontWeight: '700', fontSize: 18 }}>{this.state.jobDetails.service.name}</Text>
+                                        <Text style={{ fontWeight: '700', fontSize: 18 }}>{this.state.jobDetails.service ? this.state.jobDetails.service.name : ''}</Text>
                                         <Text>{this.state.currency} {this.state.jobDetails.price}</Text>
                                     </View>
                                 </ImageBackground>
                             )
-                                (
+                                    (
                                     <Image source={require('../../../img/icon17.png')} style={{ width: win, height: (win * 0.1), marginTop: -(win * 0.1) }} />
-                                )
+                                    )
                             : this.state.topScreenStatus == 'ONMYWAY' || this.state.topScreenStatus == 'ACCEPTED' ?
                                 this.renderMap()
-                                : this.state.topScreenStatus =='JOBSTARTED' ?
+                                : this.state.topScreenStatus == 'JOBSTARTED' ?
                                     this.renderTimingTracking()
                                     : this.state.topScreenStatus == 'COMPLETED' ?
                                         this.renderWorkerRating()
-                                            : this.state.topScreenStatus == 'FOLLOWEDUP' ?
-                                                this.renderFollowUp()
-                                                :console.log()
+                                        : this.state.topScreenStatus == 'FOLLOWEDUP' ?
+                                            this.renderFollowUp()
+                                            : console.log()
                         }
 
 
@@ -820,11 +847,11 @@ class JobDetails extends Component {
 
                                         </View>
                                         {
-                                            !(this.state.jobDetails.status === 'STARTED')?
-                                            <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })} >
-                                                <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
-                                                <Text style={{ fontSize: 12 }}>{I18n.t('chat')}/{I18n.t('call')}</Text>
-                                            </TouchableOpacity> : null
+                                            !(this.state.jobDetails.status === 'STARTED') ?
+                                                <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })} >
+                                                    <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
+                                                    <Text style={{ fontSize: 12 }}>{I18n.t('chat')}/{I18n.t('call')}</Text>
+                                                </TouchableOpacity> : null
                                         }
                                     </View>
                                 </View>
@@ -847,9 +874,9 @@ class JobDetails extends Component {
                                 <MaterialIcons name="location-on" style={styles.jobItemIcon} />
                             </View>
                             <Text style={styles.jobItemName}>{I18n.t('location')}</Text>
-                            <Text style={styles.jobItemValue}>{this.state.jobDetails.userLocation.name}</Text>
+                            <Text style={styles.jobItemValue}>{this.state.jobDetails.userLocation ? this.state.jobDetails.userLocation.name : ''}</Text>
                         </View>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('jobSummary', {jobDetails: this.state.jobDetails})}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('jobSummary', { jobDetails: this.state.jobDetails })}>
                             <View style={styles.jobItemWarp}>
                                 <View style={{ width: 20 }}>
                                     <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
@@ -857,22 +884,22 @@ class JobDetails extends Component {
                                 <Text style={styles.jobItemName}>{I18n.t('jobSummary')}</Text>
                                 <Text style={styles.jobItemValue}>
                                     {this.state.currency} {
-                                            parseFloat(this.state.jobDetails.price)
-                                            + parseFloat(this.state.materialTotalPrice)
-                                            + parseFloat(this.state.hoursPrice)
-                                          }
+                                        parseFloat(this.state.jobDetails.price)
+                                        + parseFloat(this.state.materialTotalPrice)
+                                        + parseFloat(this.state.hoursPrice)
+                                    }
                                 </Text>
                             </View>
                         </TouchableOpacity>
                         {
-                            this.state.topScreenStatus=== 'COMPLETED' ?
+                            this.state.topScreenStatus === 'COMPLETED' ?
                                 <View style={styles.jobItemWarp}>
                                     <View style={{ width: 30, alignItems: 'center' }}>
                                         <FontAwesome name="money" style={styles.jobItemIcon} />
                                     </View>
                                     <Text style={styles.jobItemName}>{I18n.t('total_bill')}</Text>
                                     <Text style={styles.jobItemValue}>{this.state.currency}
-                                     {this.state.jobDetails.price}
+                                        {this.state.jobDetails.price}
                                     </Text>
                                 </View>
                                 : console.log()
@@ -884,10 +911,10 @@ class JobDetails extends Component {
                             <Text style={styles.jobItemName}>{I18n.t('quoteOrFollow')}</Text>
                             <Text style={styles.jobItemValue}>Yes</Text>
                         </View>
-                        
+
                         {
                             this.state.topScreenStatus == 'PAYPENDING' ? (
-                                <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.startPayment() }>
+                                <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.startPayment()}>
                                     <View style={{ width: 20 }}>
                                         <MaterialIcons name="payment" style={styles.jobItemIcon} />
                                     </View>
@@ -898,7 +925,7 @@ class JobDetails extends Component {
                         }
 
                         {this.state.topScreenStatus == 'CANCELLED' ? (
-                            <View style={[styles.jobItemWarp, { alignItems: 'center' , justifyContent: 'center'}]}>
+                            <View style={[styles.jobItemWarp, { alignItems: 'center', justifyContent: 'center' }]}>
 
                                 <Text style={[styles.cancelName, { textAlign: 'center' }]}>{I18n.t('canelledJob')}</Text>
                             </View>
@@ -919,26 +946,26 @@ class JobDetails extends Component {
 
                                     {
                                         (this.state.otherReason == 0 || this.state.otherReason == 1) ? (
-                                            <Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> What went wrong? </Text>) : (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> 
-                                                Please rate us in the App Store 
+                                            <Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}> What went wrong? </Text>) : (<Text style={{ width: '100%', textAlign: 'center', color: '#fff', fontSize: 25, marginBottom: 15 }}>
+                                                Please rate us in the App Store
                                             </Text>)
                                     }
                                     {
                                         this.state.otherReason == 0 ? (
-                                            
+
                                             <View style={{ width: '100%', backgroundColor: '#fff', borderRadius: 10 }}>
                                                 {
-                                                    this.state.reasonList.length > 0 ? 
-                                                    this.state.reasonList.map((reasonData, key) => {
-                                                        return(
-                                                            <TouchableOpacity key={key} style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }} 
-                                                                onPress={() => this.showConfirmDialog(reasonData)}
-                                                            >
-                                                                <Text style={{ color: '#000' }}>{reasonData.name}</Text>
-                                                            </TouchableOpacity>
-                                                        ) 
-                                                    })
-                                                    : console.log('outer reason')
+                                                    this.state.reasonList.length > 0 ?
+                                                        this.state.reasonList.map((reasonData, key) => {
+                                                            return (
+                                                                <TouchableOpacity key={key} style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}
+                                                                    onPress={() => this.showConfirmDialog(reasonData)}
+                                                                >
+                                                                    <Text style={{ color: '#000' }}>{reasonData.name}</Text>
+                                                                </TouchableOpacity>
+                                                            )
+                                                        })
+                                                        : console.log('outer reason')
                                                 }
                                             </View>
                                         ) : (console.log())

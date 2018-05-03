@@ -57,7 +57,11 @@ class Chat extends Component {
                 this.setState({ typeMessage: '', chatList: chatList });
             }
             setTimeout(() => {
-                this.refs.ScrollViewStart.scrollToEnd(true);
+                if (this.refs && this.refs.ScrollViewStart)
+                {
+                    this.refs.ScrollViewStart.scrollToEnd(true);
+                }
+                
             }, 400);
 
         })
@@ -65,6 +69,7 @@ class Chat extends Component {
     componentDidMount() {
 
         setTimeout(() => {
+            if(this.refs && this.refs.ScrollViewStart)
             this.refs.ScrollViewStart.scrollToEnd();
         }, 50);
 
@@ -304,8 +309,8 @@ class Chat extends Component {
                                         <View style={{ flexDirection: 'row', marginBottom: 15 }} key={key}>
                                             <View style={{ marginRight: 15, justifyContent: 'flex-end' }}>
                                                 {
-                                                    this.props.auth.data.image ? (
-                                                        <Image source={{ uri: this.props.auth.data.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />
+                                                    this.props.navigation.state.params.workerDetails.image? (
+                                                        <Image source={{ uri: this.props.navigation.state.params.workerDetails.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />
                                                     ) : (<Image source={require('../../../img/atul.png')} style={{ height: 30, width: 30, borderRadius: 70 }} />)
                                                 }
                                             </View>
