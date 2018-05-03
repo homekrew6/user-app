@@ -130,6 +130,15 @@ export default {
   thank_you:'Thank You',
   promoPrice: 'Promo Price',
   minimum_price:'Minimum Price',
+  all_list: 'ALL',
+  job_accepted_list: 'JOB ACCEPTED',
+  job_posted_list: 'JOB POSTED',
+  krew_on_way_list: 'KREW ON WAY',
+  job_started_list: 'JOB STARTED',
+  followed_up_list: 'FOLLOWED UP',
+  cancelled_list: 'CANCELLED',
+  job_completed_list: 'JOB COMPLETED',
+  payment_pending_list: 'PAYMENT PENDING',
   confirmation:"Confirmation",
   what_to_expect:"What To Expect"
 };

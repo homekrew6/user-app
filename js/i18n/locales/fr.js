@@ -95,6 +95,15 @@ export default {
   thank_you:'Je vous remercie',
   promoPrice:'Prix ​​promotionnel',
   minimum_price:'Prix ​​minimum',
+  all_list: 'TOUT',
+  job_accepted_list: 'EMPLOI ACCEPTÉ',
+  job_posted_list: 'EMPLOI',
+  krew_on_way_list: 'KREW ON WAY',
+  job_started_list: 'JOB COMMENCÉ',
+  followed_up_list: 'SUIVI',
+  cancelled_list: 'ANNULÉ',
+  job_completed_list: 'TRAVAIL COMPLÉTÉ',
+  payment_pending_list: 'PAIEMENT EN ATTENTE',
   username_or_email:"NOM D'UTILISATEUR OU EMAIL",
   login:"S'IDENTIFIER",
   or:"OU",
@@ -117,6 +126,4 @@ export default {
   confirmation: "Confirmation",
   what_to_expect: "Quoi attendre",
   serviceDetails:"Détails du service"
-
-
 };

@@ -128,6 +128,15 @@ export default {
   thank_you:'شكرا',
   promoPrice: 'سعر العرض',
   minimum_price:'سعر الحد الأدنى',
+  all_list: 'الكل',
+  job_accepted_list: 'قبول العمل',
+  job_posted_list: 'وظيفة نشر',
+  krew_on_way_list: 'KREW على الطريق',
+  job_started_list: 'بدأت JOB',
+  followed_up_list: 'تمت المتابعة',
+  cancelled_list: 'ألغيت',
+  job_completed_list: 'أنجزت المهمة',
+  payment_pending_list: 'انتظار الدفع',
   confirmation:"التأكيد",
   what_to_expect: "ماذا تتوقع"
 };
