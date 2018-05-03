@@ -79,7 +79,7 @@ class Expect extends Component {
                             <Ionicons name="ios-arrow-back-outline" style={styles.hd_lft_icon} />
                         </Button>
                         <Body style={{ alignItems: 'center' }}>
-                            <Title style={styles.appHdr2Txt}>What To Expect</Title>
+                            <Title style={styles.appHdr2Txt}>{I18n.t('what_to_expect')}</Title>
                         </Body>
                         <Button transparent />
                     </Header>

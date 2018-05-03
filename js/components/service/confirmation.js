@@ -21,10 +21,10 @@ import { setServiceDetails } from './elements/serviceActions';
 //     index: 0,
 //     actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 // });
-const reseteAction = NavigationActions.reset({
-    index: 0,
-    actions: [NavigationActions.navigate({ routeName: 'ThankYou' })],
-});
+// const reseteAction = NavigationActions.reset({
+//     index: 0,
+//     actions: [NavigationActions.navigate({ routeName: 'ThankYou' })],
+// });
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
@@ -57,9 +57,9 @@ class Confirmation extends Component {
 
     }
 
-    
 
-     startPayment() {
+
+    startPayment() {
         this.setState({
             loader: true
         });
@@ -98,15 +98,15 @@ class Confirmation extends Component {
                         loader: false
                     });
                     console.warn("pragati", result.mobile.webview[0].start[0]);
-                    selfComponent.props.navigation.navigate('Payment', 
-                    { 
-                        amount: selfComponent.props.service.data.price, 
-                        customerId: selfComponent.props.auth.data.id,
-                        url: result.mobile.webview[0].start[0], 
-                        close: result.mobile.webview[0].close[0], 
-                        abort: result.mobile.webview[0].abort[0], 
-                        code: result.mobile.webview[0].code[0] 
-                    });
+                    selfComponent.props.navigation.navigate('Payment',
+                        {
+                            amount: selfComponent.props.service.data.price,
+                            customerId: selfComponent.props.auth.data.id,
+                            url: result.mobile.webview[0].start[0],
+                            close: result.mobile.webview[0].close[0],
+                            abort: result.mobile.webview[0].abort[0],
+                            code: result.mobile.webview[0].code[0]
+                        });
                 }
 
 
@@ -122,7 +122,7 @@ class Confirmation extends Component {
     }
 
     componentDidMount() {
-        
+
         // debugger;
         // var xml = "<?xml version='1.0' encoding='UTF - 8'?>< mobile ><webview><start>https://secure.telr.com/gateway/webview_start.html?code=e46f5da95ac55ad990c2aa6cc1f1</start><close>https://secure.telr.com/gateway/webview_close.html</close><abort>https://secure.telr.com/gateway/webview_abort.html</abort><code>e46f5da95ac55ad990c2aa6cc1f1</code></webview><trace>4000/27841/5ad990c2</trace></mobile >"
         // parseString(xml, function (err, result) {
@@ -185,7 +185,7 @@ class Confirmation extends Component {
                     // };
                     // console.log('resCons', resCons);
 
-                    
+
                     console.log(this.props.service.data.serviceLocationid);
                     if (this.props.service.data.serviceLocationid) {
                         if (this.props.service.data.saveDateDB) {
@@ -194,14 +194,12 @@ class Confirmation extends Component {
                                 AsyncStorage.getItem("keyQuestionList").then((value) => {
                                     if (value) {
                                         let price = Number(this.props.service.data.price);
-                                        let minPrice=Number(this.state.minPrice);
-                                        if(price>minPrice)
-                                        {
+                                        let minPrice = Number(this.state.minPrice);
+                                        if (price > minPrice) {
 
                                         }
-                                        else
-                                        {
-                                            price=minPrice;
+                                        else {
+                                            price = minPrice;
                                         }
                                         api.post('Jobs/insertNewJob', {
                                             "userLocationId": this.props.service.data.serviceLocationid,
@@ -220,7 +218,7 @@ class Confirmation extends Component {
                                             "saveDbDay": this.props.service.data.saveDbDay,
                                             "expectedTimeInterval": this.props.service.data.time_interval,
                                             "questionList": value,
-                                            "promoPrice": this.props.service.data.promoPrice ? this.props.service.data.promoPrice:''
+                                            "promoPrice": this.props.service.data.promoPrice ? this.props.service.data.promoPrice : ''
                                         }
                                         ).then(responseJson => {
                                             AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
@@ -232,6 +230,10 @@ class Confirmation extends Component {
                                             this.setState({
                                                 loader: false,
                                                 continueButtonDesable: true
+                                            });
+                                            const reseteAction = NavigationActions.reset({
+                                                index: 0,
+                                                actions: [NavigationActions.navigate({ routeName: 'ThankYou', params: { orderId: responseJson.response.message}})],
                                             });
                                             this.props.navigation.dispatch(reseteAction);
                                         }).catch(err => {
@@ -313,9 +315,9 @@ class Confirmation extends Component {
                         <Ionicons name="ios-arrow-back-outline" style={styles.hd_lft_icon} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>Confirmation</Title>
+                        <Title style={styles.appHdr2Txt}>{I18n.t('confirmation')}</Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled/>
+                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled />
                 </Header>
 
                 <Content style={styles.bgWhite} >
@@ -389,24 +391,24 @@ class Confirmation extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate("MyPromoCode", { id: this.props.auth.data.id, price: this.props.service.data.price })} disabled={ this.props.service.data.promo? true:false }>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate("MyPromoCode", { id: this.props.auth.data.id, price: this.props.service.data.price })} disabled={this.props.service.data.promo ? true : false}>
                             <View style={styles.confirmationIconView}>
                                 <Entypo name='scissors' style={styles.confirmationViewIcon} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>{I18n.t('promo_code')}</Text>
                             {
-                                this.props.service.data.promo ? <Text style={styles.confirmationDateTime}>{this.state.currency} {this.props.service.data.promo}</Text>: null
-                                
+                                this.props.service.data.promo ? <Text style={styles.confirmationDateTime}>{this.state.currency} {this.props.service.data.promo}</Text> : null
+
                             }
                             {
                                 this.props.service.data.promotionsId ? <TouchableOpacity style={styles.confirmationArwNxt}>
-                                    <Ico name="close" style={[styles.confirmationArwNxtIcn, { color: 'red' }]} onPress={() => this.cleanPromo()}/>
+                                    <Ico name="close" style={[styles.confirmationArwNxtIcn, { color: 'red' }]} onPress={() => this.cleanPromo()} />
                                 </TouchableOpacity> : <View style={styles.confirmationArwNxt}>
-                                    <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
-                                </View>
+                                        <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
+                                    </View>
 
                             }
-                            
+
                         </TouchableOpacity>
 
                     </View>
@@ -464,6 +466,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
     navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data)),
     setServiceDetails: (data) => dispatch(setServiceDetails(data))
-    
+
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Confirmation);

@@ -94,5 +94,29 @@ export default {
   our_service:'Notre service',
   thank_you:'Je vous remercie',
   promoPrice:'Prix ​​promotionnel',
-  minimum_price:'Prix ​​minimum'
+  minimum_price:'Prix ​​minimum',
+  username_or_email:"NOM D'UTILISATEUR OU EMAIL",
+  login:"S'IDENTIFIER",
+  or:"OU",
+  not_a_register_member:"Pas un membre enregistré?",
+  already_registered:"Déjà enregistré?",
+  email:"EMAIL",
+  email_address:"ADRESSE E-MAIL",
+  send_otp:"Envoyer Otp",
+  reset_password:"réinitialiser le mot de passe",
+  reset_password_text1:"Veuillez entrer l'adresse e-mail de votre compte, vous recevrez",
+  reset_password_text2:"un e-mail contenant un code à 4 chiffres pour vérification.",
+  reset_password_text3:"Veuillez entrer le code à 4 chiffres et votre nouveau mot de passe",
+  reset_password_text4:"activez votre compte.",
+  four_digit_code:"CODE 4 CHIFFRES",
+  jobDetails:"Détails du poste",
+  jobList:"Liste d'emplois",
+  serviceProvider:"Fournisseur de services",
+  myPromoCode: 'Mon code promo',
+  browse_by_categories: 'Parcourir par catégories',
+  confirmation: "Confirmation",
+  what_to_expect: "Quoi attendre",
+  serviceDetails:"Détails du service"
+
+
 };

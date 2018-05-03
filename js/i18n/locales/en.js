@@ -129,5 +129,7 @@ export default {
   our_service:'Our Sevice',
   thank_you:'Thank You',
   promoPrice: 'Promo Price',
-  minimum_price:'Minimum Price'
+  minimum_price:'Minimum Price',
+  confirmation:"Confirmation",
+  what_to_expect:"What To Expect"
 };

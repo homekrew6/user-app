@@ -33,16 +33,51 @@ class jobSummary extends Component {
             materialTotalPrice: 0,
             hoursPrice: '0.00',
             grndtotal: 0,
-            min_charge:''
+            min_charge:'',
+            currencyList:[]
         };
     }
     componentDidMount() {
-        AsyncStorage.getItem("currency").then((value) => {
-            if (value) {
-                const value1 = JSON.parse(value);
-                this.setState({ currency: value1.language })
-            }
-        });
+        api.get('Currencies').then((res)=>{
+            let finalList=[];
+            res.map((item)=>{
+                if (item.is_active)
+                {
+                    finalList.push(item);
+                }
+            });
+            this.setState({ currencyList:finalList});
+            AsyncStorage.getItem("currency").then((value) => {
+                if (value) {
+                    const value1 = JSON.parse(value);
+                    if (this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId)
+                    {
+                        this.state.currencyList.map((item)=>{
+                            if (item.id == this.props.navigation.state.params.jobDetails.currencyId)
+                            {
+                                this.setState({ currency:item.name})
+                            }
+                        })
+                    }
+                    //this.setState({ currency: value1.language })
+                }
+                else
+                {
+                    if (this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId) {
+                        this.state.currencyList.map((item) => {
+                            if (item.id == this.props.navigation.state.params.jobDetails.currencyId) {
+                                this.setState({ currency: item.name })
+                            }
+                        })
+                    }
+                }
+            });
+           
+        }).catch((Err)=>{
+            console.log(Err);
+           
+        })
+       
 
         let jodId = this.props.navigation.state.params.jobDetails.id;
         api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": jodId }).then((resAns) => {
