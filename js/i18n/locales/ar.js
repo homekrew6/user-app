@@ -127,5 +127,7 @@ export default {
   our_service:'خدمتنا',
   thank_you:'شكرا',
   promoPrice: 'سعر العرض',
-  minimum_price:'سعر الحد الأدنى'
+  minimum_price:'سعر الحد الأدنى',
+  confirmation:"التأكيد",
+  what_to_expect: "ماذا تتوقع"
 };
