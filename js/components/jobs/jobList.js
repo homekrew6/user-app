@@ -160,18 +160,17 @@ class JobList extends Component {
                                 </Button>
                             }
                         >
-                            <MenuItem onPress={() => this.jobType('ALL')}>ALL</MenuItem>
-                            <MenuItem onPress={() => this.jobType('ACCEPTED')}>JOB ACCEPTED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('STARTED')}>JOB POSTED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('ONMYWAY')}>KREW ON WAY</MenuItem>
-                            <MenuItem onPress={() => this.jobType('JOBSTARTED')}>JOB STARTED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('FOLLOWEDUP')}>FOLLOWED UP</MenuItem>
-                            <MenuItem onPress={() => this.jobType('CANCELLED')}>CANCELLED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('COMPLETED')}>JOB COMPLETED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('PAYPENDING')}>PAYMENT PENDING</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ALL')}>{I18n.t('all_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ACCEPTED')}>{I18n.t('job_accepted_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('STARTED')}>{I18n.t('job_posted_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ONMYWAY')}>{I18n.t('krew_on_way_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('JOBSTARTED')}>{I18n.t('job_started_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('FOLLOWEDUP')}>{I18n.t('followed_up_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('CANCELLED')}>{I18n.t('cancelled_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('COMPLETED')}>{I18n.t('job_completed_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('PAYPENDING')}>{I18n.t('payment_pending_list')}</MenuItem>
                         </Menu>
                     </View>
-
                 </Header>
                 <Content  
                     refreshControl={
