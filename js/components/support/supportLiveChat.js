@@ -57,7 +57,7 @@ class SupportLiveChat extends Component {
             }
         }
         else {
-            Alert.alert("Please type a message to send.");
+            Alert.alert(I18n.t('please_type_message_to_send'));
         }
     }
     componentDidMount() {

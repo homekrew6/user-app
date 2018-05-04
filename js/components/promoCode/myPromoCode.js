@@ -103,11 +103,11 @@ class MyPromoCode extends Component {
                 this.setState({ IsLoaderVisible: false, promoCodeList: res });
             }).catch((err) => {
                 this.setState({ IsLoaderVisible: false });
-                Alert.alert('Please try again later.');
+                Alert.alert(I18n.t('please_try_again_later'));
             });
         }
         else {
-            Alert.alert('Please login.');
+            Alert.alert(I18n.t("please_login"));
         }
     }
     promoCodeSelect(item){
@@ -149,7 +149,7 @@ class MyPromoCode extends Component {
             if (response.message){
                 Alert.alert(response.message);                
             }else{
-                Alert.alert('Please try other');
+                Alert.alert(I18n.t('please_try_again_later'));
             }
             if (response.IsPromoApplied){
                 let serviceData = this.props.service.data;
@@ -178,13 +178,11 @@ class MyPromoCode extends Component {
                 this.setState({ IsLoaderVisible: true });
                 const data = { promoCode: this.state.promoCode, customerId: this.props.navigation.state.params.id, addedDate:new Date() };
                 api.post('userPromoCodes/addUserPromo', data).then((res) => {
-                    debugger;
                     if (res.response.type == "Error") {
                         this.setState({ IsLoaderVisible: false, isModalVisible: false });
                         Alert.alert(res.response.message);
                     }
                     else {
-                        debugger;
                         this.setState({ IsLoaderVisible: false, isModalVisible: false });
                         this.GetPromoCodeList();
                     }
@@ -192,11 +190,11 @@ class MyPromoCode extends Component {
 
             }
             else {
-                Alert.alert("Please add the promo code.");
+                Alert.alert(I18n.t("please_add_promo_code"));
             }
         }
         else {
-            Alert.alert('Please login.');
+            Alert.alert(I18n.t('please_login'));
         }
 
     }

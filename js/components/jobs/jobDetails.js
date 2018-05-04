@@ -101,7 +101,7 @@ class JobDetails extends Component {
                     else if (snapShotVal.status == 'PAYPENDING') {
                         const jobDetails = this.state.jobDetails;
                         this.setState({ topScreenStatus: 'PAYPENDING', job_start_time: '', job_end_time: '', jobTrackingStatus: 'Payment Pending' });
-                        Alert.alert('Please continue with the payment to complite the Job');
+                        Alert.alert(I18n.t("continue_with_the_payment"));
                     }
 
                 }
@@ -139,7 +139,7 @@ class JobDetails extends Component {
                         let jobDetails = this.state.jobDetails;
                         jobDetails.status = snapShotVal.status;
                         this.setState({ topScreenStatus: 'PAYPENDING', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Payment Pending' });
-                        Alert.alert('Please continue with the payment to complite the Job');
+                        Alert.alert(I18n.t("continue_with_the_payment"));
                     }
                 }
             }
@@ -200,7 +200,7 @@ class JobDetails extends Component {
                     this.props.navigation.navigate('JobList');
                 }
                 else {
-                    Alert.alert('Please try again later.');
+                    Alert.alert(I18n.t('please_try_again_later'));
                 }
             })
         }
@@ -212,7 +212,7 @@ class JobDetails extends Component {
                     this.props.navigation.navigate('JobList');
                 }
                 else {
-                    Alert.alert('Please try again later.');
+                    Alert.alert(I18n.t('please_try_again_later'));
                 }
             })
         }
@@ -319,7 +319,7 @@ class JobDetails extends Component {
                             this.onCompleteFirebaseCall(snapshot);
                             setTimeout(() => {
                                 refCompleteFirebase.off();
-                                Alert.alert('Internal Error Please Try Again');
+                                Alert.alert(I18n.t('please_try_again_later'));
                                 this.setState({ loader: false });
                             }, 5000);
                         }
@@ -723,7 +723,7 @@ class JobDetails extends Component {
                     this.setState({
                         spinner: false
                     });
-                    Alert.alert('Please try again later.');
+                    Alert.alert(I18n.t('please_try_again_later'));
                 }
                 else {
 
@@ -741,8 +741,7 @@ class JobDetails extends Component {
             this.setState({
                 loader: false
             });
-            console.warn("error", err);
-            Alert.alert('Please try again later.');
+            Alert.alert(I18n.t('please_try_again_later'));
         })
 
     }

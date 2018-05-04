@@ -84,7 +84,7 @@ class Support extends Component {
             this.setState({ isModalVisible: !this.state.isModalVisible });            
         }
         else{
-            Alert.alert('Phone no is not available');
+            Alert.alert(I18n.t('phone_no_not_available'));
         }
     }
 

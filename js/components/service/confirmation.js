@@ -214,7 +214,7 @@ class Confirmation extends Component {
                                             AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
                                             AsyncStorage.removeItem('fromLogin', (err) => console.log('finished', err));
                                             AsyncStorage.removeItem('fromConfirmation', (err) => console.log('finished', err));
-                                            Alert.alert("Job Posted Successfully");
+                                            Alert.alert(I18n.t("job_posted_successfully"));
                                             this.setState({
                                                 loader: false,
                                                 continueButtonDesable: true
@@ -226,7 +226,7 @@ class Confirmation extends Component {
                                             this.props.navigation.dispatch(reseteAction);
                                         }).catch(err => {
                                             console.log(err);
-                                            Alert.alert("Job Post not save");
+                                            Alert.alert(I18n.t("please_try_again_later"));
                                             this.setState({
                                                 loader: false,
                                             })
@@ -239,7 +239,7 @@ class Confirmation extends Component {
                                 this.setState({
                                     loader: false
                                 });
-                                Alert.alert('Please give proper price to submit the job.');
+                                Alert.alert(I18n.t("please_give_proper_price"));
                             }
 
 

@@ -47,7 +47,7 @@ class Reschedule extends Component {
 
     rescheduleModalfn(){
         if (this.state.selectedDate == '' || this.state.selectedTime == '') {
-            Alert.alert('Please set a date and time');            
+            Alert.alert(I18n.t("select_date_and_time"));            
         }
         else {
             let saveDateDB = this.state.selectedDate + " " + this.state.selectedTime.slice(0, -2) + ':00' + " " + this.state.selectedTime.slice(5).toLowerCase();
@@ -174,7 +174,7 @@ class Reschedule extends Component {
                 loader: false,
                 rescheduleModal: false
             });
-            Alert.alert('Please try again later')
+            Alert.alert(I18n.t('please_try_again_later'));
 
         }) 
        

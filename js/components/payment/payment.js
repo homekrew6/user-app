@@ -74,7 +74,7 @@ class Payment extends Component {
                     console.warn("responseFromComplete", res);
                     parseString(res._bodyInit, function (err, result) {
                         if (err) {
-                            Alert.alert('Please try again later.');
+                            Alert.alert(I18n.t('please_try_again_later'));
                         }
                         else {
 
@@ -87,7 +87,7 @@ class Payment extends Component {
                                 "transactionCode": result.mobile.auth[0].code[0]
                             };
                             api.post('payments', toInsertData).then((successfull) => {
-                                Alert.alert('Payment successfull.');
+                                Alert.alert(I18n.t("payment_successfull"));
                                 selfComponent.props.navigation.dispatch( 
                                     NavigationActions.reset({
                                         index: 2,
@@ -103,7 +103,7 @@ class Payment extends Component {
                                 // selfComponent.props.navigation.navigate('JobDetails', 
                                 // );
                             }).catch((paymentError) => {
-                                Alert.alert('Please try again later.');
+                                Alert.alert(I18n.t('please_try_again_later'));
                                 selfComponent.props.navigation.dispatch( 
                                     NavigationActions.reset({
                                         index: 2,
@@ -125,7 +125,7 @@ class Payment extends Component {
                 }).catch((err) => {
                     console.log(err);
                     console.warn("error in completing Payment", err);
-                    Alert.alert('Please try again later.');
+                    Alert.alert(I18n.t('please_try_again_later'));
                 });
             }
 

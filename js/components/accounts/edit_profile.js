@@ -78,7 +78,7 @@ class EditProfile extends Component {
           // this.props.setProfilePic(response.body.postResponse.location);
           this.setState({ image: response.body.postResponse.location });
           this.setState({ visible: false });
-          Alert.alert('', 'Press save button to save the image.');
+          Alert.alert('', I18n.t('press_save_to_image'));
         }
       }).catch((err) => {
         this.setState({ visible: false });
@@ -125,7 +125,7 @@ class EditProfile extends Component {
                   this.setState({ cameraUploaded: true });
                   this.setState({ image: response.body.postResponse.location })
                   this.setState({ visible: false });
-                  Alert.alert('','Press save button to save the image.');
+                Alert.alert('', I18n.t('press_save_to_image'));
               }
           }).catch((err) => {
               this.setState({ visible: false });
@@ -138,15 +138,15 @@ class EditProfile extends Component {
 
   pressSave() {
     if (!this.state.email) {
-	      Alert.alert('Please enter email');
+      Alert.alert(I18n.t('enter_email'));
 	      return false;
 	    }
     if (!this.state.name) {
-	      Alert.alert('Please enter name');
+      Alert.alert(I18n.t('enter_name'));
 	      return false;
 	    }
     if (!this.state.phone) {
-	      Alert.alert('Please enter phone');
+      Alert.alert(I18n.t('enter_phone'));
 	      return false;
 	    }
     this.setState({ visible: true });
@@ -156,14 +156,14 @@ class EditProfile extends Component {
           this.props.getUserDetail(res.userId, res.id).then((userRes) => {
   						// this.props.navigation.navigate("Menu");
             this.setState({ visible: false });
-            Alert.alert('Sucessfully saved');
+            Alert.alert(I18n.t('successfully_saved'));
   					}).catch((err) => {
             this.setState({ visible: false });
-  						Alert.alert('Data not saved, please try again');
+              Alert.alert('', I18n.t('please_try_again_later'));
   			    });
         }).catch((err) => {
           this.setState({ visible: false });
-    				Alert.alert('Data not saved, please try again.');
+          Alert.alert('', I18n.t('please_try_again_later'));
     			});
   			} else {
         this.setState({ visible: false });
