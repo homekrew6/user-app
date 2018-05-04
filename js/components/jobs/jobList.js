@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Image, View, RefreshControl, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, ListView, Picker } from "react-native";
-import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text, List, ListItem } from "native-base";
+import { Image, View, RefreshControl, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, ListView, Picker, Text } from "react-native";
+import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, List, ListItem } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -144,11 +144,11 @@ class JobList extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
-                <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7">
+                <Header style={[styles.headerWarp, { alignItems: 'center' }]} noShadow androidStatusBarColor="#81cdc7">
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
-                    <Body style={styles.headBody}>
+                    <Body style={[styles.headBody]}>
                         <Title>{I18n.t('jobList')}</Title>
                     </Body>
                     <View>

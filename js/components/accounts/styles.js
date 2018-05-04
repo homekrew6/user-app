@@ -55,7 +55,6 @@ export default {
   menuCardTxt:{
     flex: 1, 
     flexDirection: 'row', 
-    color: '#606060',
     paddingLeft: 10
   },
   appHdr:{

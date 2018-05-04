@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { NavigationActions } from "react-navigation";
 import moment from 'moment';
-import { Image, View, CheckBox, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput } from "react-native";
-import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Frame, Input, Label, Text } from "native-base";
+import { Image, View, CheckBox, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput, Text } from "react-native";
+import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Frame, Input, Label } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import Stars from 'react-native-stars-rating';
@@ -575,7 +575,7 @@ class JobDetails extends Component {
                             Please rate our KREW and your over all experience with us
                         </Text>
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <CheckBox
                             onValueChange={(value) => this.onClickMakeFav(value)}
                             value={this.state.favValue}

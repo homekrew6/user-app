@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-crop-picker';
 import config from '../../config';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from "react-native-modal";

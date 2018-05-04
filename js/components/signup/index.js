@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar,Dimensions } from "react-native";
+import { Image, View, StatusBar, Dimensions, Text } from "react-native";
 
-import { Container,Text } from "native-base";
+import { Container } from "native-base";
 import styles from "./styles";
 
 const deviceHeight = Dimensions.get('window').height;

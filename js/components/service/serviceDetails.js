@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList, BackHandler } from 'react-native';
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList, BackHandler, Text } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -13,7 +13,7 @@ import IncrimentDecriment from './incrimentDecrimentCompt';
 import Slider from 'react-native-slider';
 import { getQuestionListByServiceId } from './elements/serviceActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker, Switch, Footer, FooterTab, ActionSheet } from 'native-base';
+import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Body, Title, Picker, Switch, Footer, FooterTab, ActionSheet } from 'native-base';
 import I18n from '../../i18n/i18n';
 import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';

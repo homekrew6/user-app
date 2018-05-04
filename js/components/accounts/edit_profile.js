@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkAuth, getUserDetail } from './elements/authActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-crop-picker';
 import config from '../../config';
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
 
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -192,13 +192,13 @@ class EditProfile extends Component {
         <Content>
           <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
           <Header style={styles.appHdr2} noShadow>
-            <Button transparent onPress={() => this.props.navigation.goBack()}>
+            <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
               <Icon name="chevron-left" style={{ fontSize: 18, color: '#71beb8' }} />
             </Button>
             <Body style={styles.appHdrtitleWarp}>
               <Text style={{ color: '#1e3768' }}>{I18n.t('edit_my_profile')}</Text>
             </Body>
-            <Button transparent />
+            <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled />
           </Header>
 
           <View style={styles.editPflHdr}>
@@ -226,7 +226,7 @@ class EditProfile extends Component {
                       this.fileUploadType(buttonIndex);
                     },
                   )}
-              ><Text>{I18n.t('change_photo')}</Text></Button>
+              ><Text style={{ color: '#fff' }}>{I18n.t('change_photo')}</Text></Button>
             </View>
           </View>
 

@@ -162,16 +162,16 @@ class NotificationList extends Component {
                     backgroundColor="#81cdc7"
                 />
 
-                <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
+                <Header style={[styles.headerMain, { alignItems: 'center' }]} androidStatusBarColor="#81cdc7" noShadow>
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 70, justifyContent: 'flex-start' }}>
                         <Ionicons style={styles.headerIconClose} name='ios-arrow-back-outline' />
                     </Button>
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>{I18n.t('notification')}</Title>
                     </Body>
-                    <Button transparent style={{ width: 70 }} onPress={()=>this.clearAll()}>
-                        <Text style={{ color: '#fff' }}>{I18n.t('clearAll')}</Text>
-                    </Button>
+                    <TouchableOpacity transparent style={{ width: 70 }} onPress={()=>this.clearAll()}>
+                        <Text style={{ color: '#fff', alignSelf: 'center' }}>{I18n.t('clearAll')}</Text>
+                    </TouchableOpacity>
                 </Header>
 
                 <Content>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, BackHandler, TouchableOpacity, List, ListItem, ImageBackground, AsyncStorage } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, BackHandler, TouchableOpacity, List, ListItem, ImageBackground, AsyncStorage, Text } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -10,7 +10,7 @@ import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api';
 import { setServiceDetails } from './elements/serviceActions';
 import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker } from 'native-base';
+import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Body, Title, Picker } from 'native-base';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import Modal from "react-native-modal";

@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList } from "react-native";
-import { Container, Header, Button, Content, Text, CardItem, Card, Body, Title } from "native-base";
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, Text } from "react-native";
+import { Container, Header, Button, Content, CardItem, Card, Body, Title } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Stars from 'react-native-stars-rating';
 import I18n from '../../i18n/i18n';

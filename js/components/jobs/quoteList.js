@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, FlatList, ScrollView } from 'react-native';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, FlatList, ScrollView, Text } from 'react-native';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
