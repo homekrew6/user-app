@@ -129,29 +129,29 @@ class MyMap extends Component {
                                     })
                                 }).catch((err) => {
                                     this.setState({ IsSpinnerVisible: false });
-                                    Alert.alert("Please try again later");
+                                    Alert.alert(I18n.t('please_try_again_later'));
                                 });
                             }
                             else {
                                 this.setState({ IsSpinnerVisible: false });
-                                Alert.alert("Please give a valid location.");
+                                Alert.alert(I18n.t('give_valid_location'));
                             }
 
                         }
                         else {
                             this.setState({ IsSpinnerVisible: false });
-                            Alert.alert("Please give a valid location.");
+                            Alert.alert(I18n.t('give_valid_location'));
                         }
 
                     } else {
 
                     }
                 } else {
-                    Alert.alert('Please add building name');
+                    Alert.alert(I18n.t("add_building_name"));
                 }
 
             } else {
-                Alert.alert('Please add name');
+                Alert.alert(I18n.t("enter_name"));
             }
 
 
@@ -213,16 +213,16 @@ class MyMap extends Component {
                             //  this.props.navigation.navigate('MyLocation');
                         }).catch((err) => {
                             this.setState({ IsSpinnerVisible: false });
-                            Alert.alert("Please try again later");
+                            Alert.alert(I18n.t('please_try_again_later'));
                         });
                     } else {
-                        Alert.alert('Please add Villa No / Appartment No');
+                        Alert.alert(I18n.t("add_villa_name"));
                     }
                 } else {
-                    Alert.alert('Please add building name');
+                    Alert.alert(I18n.t("add_building_name"));
                 }
             } else {
-                Alert.alert('Please add name');
+                Alert.alert(I18n.t("enter_name"));
             }
 
         }

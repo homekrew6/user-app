@@ -37,7 +37,7 @@ class QuoteList extends Component {
             this.setState({ loader: false, quoteFollowUpList: finalList });
         }).catch((err) => {
             this.setState({ loader: false });
-            Alert.alert('Please try again later.');
+            Alert.alert(I18n.t('please_try_again_later'));
         });
     }
 

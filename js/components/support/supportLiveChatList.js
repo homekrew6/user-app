@@ -48,21 +48,21 @@ class SupportLiveChatList extends Component {
 
                     }).catch((err1) => {
                         this.setState({ IsVisible: false });
-                        Alert.alert('Please login.');
+                        Alert.alert(I18n.t('please_login'));
                     });
                 }).catch((err2) => {
                     this.setState({ IsVisible: false });
-                    Alert.alert('Please login.');
+                    Alert.alert(I18n.t('please_login'));
                 });
 
             }
             else {
                 this.setState({ IsVisible: false });
-                Alert.alert('Please login.');
+                Alert.alert(I18n.t('please_login'));
             }
         }).catch((err) => {
             this.setState({ IsVisible: false });
-            Alert.alert('Please login.');
+            Alert.alert(I18n.t('please_login'));
         });
     }
     render() {

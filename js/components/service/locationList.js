@@ -137,7 +137,7 @@ class LocationList extends Component {
             this.navigate();
         }
         else {
-            Alert.alert('Please select a location first.');
+            Alert.alert(I18n.t('select_location_first'));
         }
 
     }
