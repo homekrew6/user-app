@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert  } from "react-native";
+import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert ,Dimensions } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button  } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -9,7 +9,7 @@ import Modal from "react-native-modal";
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 import styles from "./styles";
-
+import HTML from 'react-native-render-html';
 
 
 class Support extends Component {
@@ -156,7 +156,8 @@ class Support extends Component {
                                             </TouchableOpacity>
                                             {
                                                 item.is_active_item ? <View style={{ paddingBottom: 15 }}>
-                                                    <Text style={styles.chatListTime}>{item.answer}</Text>
+                                                    {/* <Text style={styles.chatListTime}>{item.answer}</Text> */}
+                                                    <HTML html={item.answer} style={styles.chatListTime} imagesMaxWidth={Dimensions.get('window').width} />
                                                 </View>: null
                                             }
                                         </View>

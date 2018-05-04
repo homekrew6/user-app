@@ -95,7 +95,7 @@ class NotificationList extends Component {
             this.setState({
                 loader: false
             })
-            this.notificationListData()
+            this.props.navigation.navigate('NotificationList');
           
         }).catch((err) => {
             console.log(err);
@@ -104,7 +104,6 @@ class NotificationList extends Component {
             })
         });
     }
-
     clearAll(){
         this.setState({
             loader: true
