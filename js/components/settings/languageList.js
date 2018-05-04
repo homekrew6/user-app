@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {View, StatusBar, Alert, TouchableOpacity,AsyncStorage,Text } from "react-native";
-import { Container, Header, Button, Content, Item, Body, Title} from "native-base";
+import { View, StatusBar, Alert, TouchableOpacity, AsyncStorage, Text } from "react-native";
+import { Container, Header, Button, Content, Item, Body, Title } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { NavigationActions } from "react-navigation";
 import { getAllLanguagesList } from '../accounts/elements/authActions';
 import Entypo from 'react-native-vector-icons/Entypo';
+import api from '../../api/index';
 class LanguageList extends Component {
     constructor(props) {
         super(props);
@@ -94,30 +95,43 @@ class LanguageList extends Component {
             }
         })
         if (loc) {
-            const data = { langId: loc.id, language: loc.name, Code:loc.Code };
-            AsyncStorage.setItem("language", JSON.stringify(data)).then((res) => {
-                this.setState({ visible: false });
-                this.props.navigation.dispatch(
-                    NavigationActions.reset({
-                        index: 1,
-                        actions: [
-                        NavigationActions.navigate({ routeName: 'Menu' }),
-                        NavigationActions.navigate({ routeName: 'Settings' }),
-                        ],
+            const data = { langId: loc.id, language: loc.name, Code: loc.Code };
+            AsyncStorage.getItem("userToken").then((userToken) => {
+                if (userToken) {
+                    const response = JSON.parse(userToken);
+                    api.put(`Customers/editCustomer/${this.props.auth.data.id}?access_token=${response.id}`, { language: data.Code, languageId: data.langId, languageName:data.language }).then((success) => {
+                        AsyncStorage.setItem("language", JSON.stringify(data)).then((res) => {
+                            this.setState({ visible: false });
+                            this.props.navigation.dispatch(
+                                NavigationActions.reset({
+                                    index: 1,
+                                    actions: [
+                                        NavigationActions.navigate({ routeName: 'Menu' }),
+                                        NavigationActions.navigate({ routeName: 'Settings' }),
+                                    ],
+                                })
+                            );
+                        }).catch((err) => {
+                            this.setState({ visible: false });
+                            this.props.navigation.dispatch(
+                                NavigationActions.reset({
+                                    index: 1,
+                                    actions: [
+                                        NavigationActions.navigate({ routeName: 'Menu' }),
+                                        NavigationActions.navigate({ routeName: 'Settings' }),
+                                    ],
+                                })
+                            );
+                        })
+                    }).catch((err) => {
+                        this.setState({ visible: false });
+                        Alert.alert(I18n.t("please_try_again_later"));
                     })
-                );
-            }).catch((err) => {
-                this.setState({ visible: false });
-                this.props.navigation.dispatch(
-                    NavigationActions.reset({
-                        index: 1,
-                        actions: [
-                        NavigationActions.navigate({ routeName: 'Menu' }),
-                        NavigationActions.navigate({ routeName: 'Settings' }),
-                        ],
-                    })
-                );
+                }
+
             })
+
+
 
         }
         else {
@@ -126,8 +140,8 @@ class LanguageList extends Component {
                 NavigationActions.reset({
                     index: 1,
                     actions: [
-                    NavigationActions.navigate({ routeName: 'Menu' }),
-                    NavigationActions.navigate({ routeName: 'Settings' }),
+                        NavigationActions.navigate({ routeName: 'Menu' }),
+                        NavigationActions.navigate({ routeName: 'Settings' }),
                     ],
                 })
             );
@@ -160,11 +174,11 @@ class LanguageList extends Component {
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 80 }}>
                         <Text>{I18n.t('cancel')}</Text>
-                    </Button>                                        
+                    </Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>{I18n.t('my_language')}</Title>
                     </Body>
-                    <Button transparent onPress={() => this.languageDone()} style={{width: 80}}><Text>{I18n.t('done')}</Text></Button>
+                    <Button transparent onPress={() => this.languageDone()} style={{ width: 80 }}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >

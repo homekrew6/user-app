@@ -161,5 +161,11 @@ export default {
   please_add_promo_code:"Please add the promo code.",
   job_posted_successfully:"Job Posted Successfully",
   please_give_proper_price:"Please give proper price to submit the job.",
-  please_add_time:"Please add time."
+  please_add_time:"Please add time.",
+  please_add_location:"Please add a location",
+  please_enter_date_and_time:"Please Enter a Date And Time",
+  please_enter_date_for_sp:"Please select date and time to see the service providers available.",
+  you_cannot_set_back:"You cannot select back time",
+  please_set_date:"Please set a Date",
+  please_set_time:"Please set a Time"
 };

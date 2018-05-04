@@ -32,7 +32,7 @@ class ServiceProviderListing extends Component {
             time = time + " am";
             let day = this.props.service.data.serviceTime.split(' ')[0].toLowerCase();
             this.setState({ selectedTime: time });
-            const data = { "serviceId": 8, "time": time, "day": day, "customerId":this.props.auth.data.id };
+            const data = { "serviceId": 8, "time": time, "day": day, "customerId": this.props.auth.data.id, "language": this.props.auth.data.language ? this.props.auth.data.language:"en"};
             this.setState({ isVisible: true });
             api.post('Workeravailabletimings/getUserFavSVListing', data).then((data) => {
                 // data.response.list.map((itemnew)=>{
