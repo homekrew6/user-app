@@ -25,7 +25,6 @@ const carveImage = require('../../../img/bg-6.png');
 const logo22 = require('../../../img/logo22.png');
 const img17 = require('../../../img/icon17.png');
 const img18 = require('../../../img/img22.png');
-const img22 = require('../../../img/swiper-2.png');
 const krew_logo = require('../../../img/krew.png');
 
 const resetAction = NavigationActions.reset({
