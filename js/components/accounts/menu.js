@@ -3,9 +3,9 @@ import { NavigationActions } from "react-navigation";
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logout } from './elements/authActions'
-import { Image, View, StatusBar, Alert, TouchableOpacity, BackHandler, AsyncStorage } from "react-native";
+import { Image, View, StatusBar, Alert, TouchableOpacity, BackHandler, AsyncStorage,Text } from "react-native";
 
-import { Container, Header, Button, Content, Item, Icon, Input, Label, Text, CardItem,  Card, Body} from "native-base";
+import { Container, Header, Button, Content, Item, Icon, Input, Label, CardItem,  Card, Body} from "native-base";
 
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
@@ -26,6 +26,11 @@ const resetAction = NavigationActions.reset({
   index: 0,
   actions: [NavigationActions.navigate({ routeName: 'Login' })],
 });
+
+
+
+
+
 class Menu extends Component {
   constructor(props) {
     super(props);

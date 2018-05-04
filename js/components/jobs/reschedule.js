@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage, ScrollView } from 'react-native';
-import { Container, Header, Button, Content, Text, Body, Title } from 'native-base';
+import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage, ScrollView ,Text} from 'react-native';
+import { Container, Header, Button, Content, Body, Title } from 'native-base';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';

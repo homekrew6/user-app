@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Alert, TouchableOpacity } from 'react-native';
+import { Image, View, StatusBar, Alert, TouchableOpacity,Text } from 'react-native';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Footer, FooterTab, Container, Header, Button, Content, Item, Text,Body, Title} from 'native-base';
+import { Footer, FooterTab, Container, Header, Button, Content, Item,Body, Title} from 'native-base';
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from "react-native-modal";

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar,Alert, AsyncStorage} from 'react-native';
-import { Container, Header, Button, Content, Item, Text, CardItem, Card,  Body, Title} from 'native-base';
+import { Image, View, StatusBar,Alert, AsyncStorage,Text} from 'react-native';
+import { Container, Header, Button, Content, Item, CardItem, Card,  Body, Title} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import styles from './styles';

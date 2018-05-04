@@ -1,22 +1,7 @@
 import React, { Component } from "react";
-import { Image, ImageBackground } from "react-native";
+import { Image, ImageBackground, Text } from "react-native";
 
-import {
-	Content,
-	Text,
-	List,
-	ListItem,
-	Icon,
-	Container,
-	Left,
-	Right,
-	Badge,
-	Button,
-	View,
-	StyleProvider,
-	getTheme,
-	variables,
-} from "native-base";
+import { Content, List, ListItem, Icon, Container, Left, Right, Badge, Button, View, StyleProvider, getTheme, variables, } from "native-base";
 
 import styles from "./style";
 

@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-// import PropTypes from 'prop-types';
-// import {connect} from 'react-redux';
-//import {login} from './elements/authActions';
-import { Image, View, StatusBar, Alert, TouchableOpacity, ImageBackground  } from "react-native";
+
+import { Image, View, StatusBar, Alert, TouchableOpacity, ImageBackground,Text  } from "react-native";
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content,Left,Body,Title, Item,Icon, Input, Text } from "native-base";
+import { Container, Header, Button, Content,Left,Body,Title, Item,Icon, Input } from "native-base";
 import api from '../../api';
+
 import I18n from '../../i18n/i18n';
 //import styles from "./styles";
 const lockImage = require("../../../img/lock.png");

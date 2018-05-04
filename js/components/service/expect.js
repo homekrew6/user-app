@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage } from "react-native";
+import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage,Text } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import { Container, Header, Button, Content, Text, Body, Title} from "native-base";
+import { Container, Header, Button, Content, Body, Title} from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import HTMLView from 'react-native-htmlview';

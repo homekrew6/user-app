@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+
 import { connect } from 'react-redux';
 // import PropTypes from 'prop-types';
-import { Image, View, StatusBar,Alert, TouchableOpacity, AsyncStorage, TextInput, ScrollView } from 'react-native';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Item, Text, Right, Left, Body, Title, ActionSheet } from 'native-base';
+import { Image, View, StatusBar,Alert, TouchableOpacity, AsyncStorage, TextInput, ScrollView,Text } from 'react-native';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Item, Right, Left, Body, Title, ActionSheet } from 'native-base';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';

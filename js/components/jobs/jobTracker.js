@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Alert } from 'react-native';
-import { Container, Header, Button, Content, Item,  Text,Body, Title } from 'native-base';
+import { Image, View, StatusBar, Alert,Text } from 'react-native';
+import { Container, Header, Button, Content, Item,Body, Title } from 'native-base';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';

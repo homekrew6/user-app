@@ -7,6 +7,7 @@ import { Root } from "native-base";
 import { StackNavigator, NavigationActions } from "react-navigation";
 import { connect } from 'react-redux';
 import { ChangeRoute } from './actions/routerAction';
+import { setCustomText, setCustomTextInput } from 'react-native-global-props';
 
 import Home from "./components/home/index"
 import Intro from "./components/intro";
@@ -46,6 +47,23 @@ import SupportLiveChatList from './components/support/supportLiveChatList';
 import SupportLiveChat from './components/support/supportLiveChat';
 import NotificationList from './components/notification/notificationList';
 
+
+const customTextProps = {
+    style: {
+        color: '#1e3768',
+        fontFamily: 'Lato-Regular'
+    }
+}
+
+const customTextInputProps = {
+    style: {
+        color: '#1e3768',
+        fontFamily: 'Lato-Regular'
+    }
+}
+
+setCustomText(customTextProps);
+setCustomTextInput(customTextInputProps);
 
 
 const transitionConfig = () => {
@@ -146,8 +164,6 @@ const AppNavigator = StackNavigator(
 //             }
 //         }
 //     }
-
-
 //     return defaultStackGetStateForAction(action, state);
 // };
 class App extends Component{

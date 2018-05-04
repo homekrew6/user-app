@@ -3,13 +3,13 @@ import { NavigationActions } from 'react-navigation';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login, getUserDetail, checkAuth } from './elements/authActions';
-import { Image, View, StatusBar, Alert, TouchableOpacity, ImageBackground, AsyncStorage } from 'react-native';
+import { Image, View, StatusBar, Alert, TouchableOpacity, ImageBackground, AsyncStorage,Text } from 'react-native';
 import { FBLogin, FBLoginManager } from 'react-native-facebook-login';
 import {GoogleSignin} from 'react-native-google-signin';
 import FCM, { FCMEvent } from "react-native-fcm";
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content, Item, Input, Label, Text } from 'native-base';
+import { Container, Header, Button, Content, Item, Input, Label } from 'native-base';
 
 import I18n from '../../i18n/i18n';
 import styles from './styles';

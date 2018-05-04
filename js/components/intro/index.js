@@ -198,7 +198,7 @@ class Intro extends Component {
 					paddingLeft: 10, paddingRight: 10, paddingTop: 10,
 					paddingBottom: 10
 				}}>
-						<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Category')} ><Text>{I18n.t('book_now')}</Text></Button>
+						<Button full style={{ backgroundColor: '#81cdc7', marginTop: 0 }} onPress={() => this.props.navigation.navigate('Category')} ><Text style={{ color: '#fff' }}>{I18n.t('book_now')}</Text></Button>
 				</View>
 
 				</Container>

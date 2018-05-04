@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Alert} from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Alert,Text} from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Container, Header, Button, Content, Item,   Text, Body, Title } from "native-base";
+import { Container, Header, Button, Content, Item, Body, Title } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';

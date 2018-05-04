@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Alert, TouchableOpacity, List} from "react-native";
+import { Image, View, StatusBar, Alert, TouchableOpacity, List,Text} from "react-native";
 import { NavigationActions } from "react-navigation";
-import { Container, Header, Button, Content, Text, Body, Title } from "native-base";
+import { Container, Header, Button, Content, Body, Title } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import { setServiceDetails } from './elements/serviceActions';
