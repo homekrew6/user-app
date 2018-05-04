@@ -125,5 +125,6 @@ export default {
   browse_by_categories: 'Parcourir par catégories',
   confirmation: "Confirmation",
   what_to_expect: "Quoi attendre",
-  serviceDetails:"Détails du service"
+  serviceDetails:"Détails du service",
+  my_language: "Ma langue"
 };

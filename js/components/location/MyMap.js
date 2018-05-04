@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, StatusBar, TouchableOpacity, ScrollView, Dimensions, TextInput, Alert, AsyncStorage } from 'react-native';
-import { Container, Header, Button, Content, Body, Item, Frame, Input, Label, Form } from 'native-base';
+import { View, Text, StatusBar, TouchableOpacity, Dimensions, TextInput, Alert, AsyncStorage } from 'react-native';
+import { Container, Header, Button, Content, Body, Item,Input, Label, Form } from 'native-base';
 import MapView, { Marker } from 'react-native-maps';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';

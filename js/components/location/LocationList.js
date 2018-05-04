@@ -48,7 +48,7 @@ class LocationList extends Component {
               {
                 this.state.deleteOption ?
                   <TouchableOpacity onPress={() => this.confirmDelete()}>
-                    <Ico name="delete-forever" size={28} />
+                  <Ico name="close" size={28} style={{color:'red'}}/>
                   </TouchableOpacity>
                 : null
               }

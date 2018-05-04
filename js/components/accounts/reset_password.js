@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
+// import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import {login} from './elements/authActions'
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground } from "react-native";
 import FSpinner from 'react-native-loading-spinner-overlay';
@@ -137,9 +137,9 @@ class ResetPassword extends Component {
 	}
 }
 
-ResetPassword.propTypes = {
-	auth : PropTypes.object.isRequired
-}
+// ResetPassword.propTypes = {
+// 	auth : PropTypes.object.isRequired
+// }
 const mapStateToProps = (state)=>{
 	return {
 		auth:state.auth

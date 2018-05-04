@@ -1,16 +1,14 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler, WebView } from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Alert, TouchableOpacity } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { NavigationActions } from 'react-navigation';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
+import { Container, Header, Button, Content, Text, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';
@@ -25,17 +23,7 @@ import { setServiceDetails } from './elements/serviceActions';
 //     index: 0,
 //     actions: [NavigationActions.navigate({ routeName: 'ThankYou' })],
 // });
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-const logo_hdr = require("../../../img/logo2.png");
 const carve = require("../../../img/icon17.png");
-const paymentUrl = 'https://secure.telr.com/gateway/mobile.xml';
-var parseString = require('react-native-xml2js').parseString;
-var xml2js = require('react-native-xml2js');
-let headers = {
-    'Accept': 'application/xml',
-    'Content-Type': 'application/xml',
-}
 class Confirmation extends Component {
 
     constructor(props) {
@@ -59,67 +47,67 @@ class Confirmation extends Component {
 
 
 
-    startPayment() {
-        this.setState({
-            loader: true
-        });
-        var obj = {
-            store: '20217', key: 'JtLPL^pgBVG@q7PZ', device: { type: 'Android', id: '36C0EC49-AA2F-47DC-A4D7-D9927A739F5F' },
-            app: { name: 'Pragati', version: '1.0.0', user: '7070', id: '55555' }, tran: {
-                test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description: 'Krew Test Job',
-                currency: 'AED', amount: this.props.service.data.price, language: 'en'
-            }, billing: {
-                name: { title: 'Miss', first: 'Pragati', last: 'Chatterjee' }, address: {
-                    line1: 'SIT TOWER', city: 'Dubai', region: 'Dubai', country: 'AE'
-                },
-                email: 'pragati@natitsolved.com'
-            }
-        };
+    // startPayment() {
+    //     this.setState({
+    //         loader: true
+    //     });
+    //     var obj = {
+    //         store: '20217', key: 'JtLPL^pgBVG@q7PZ', device: { type: 'Android', id: '36C0EC49-AA2F-47DC-A4D7-D9927A739F5F' },
+    //         app: { name: 'Pragati', version: '1.0.0', user: '7070', id: '55555' }, tran: {
+    //             test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description: 'Krew Test Job',
+    //             currency: 'AED', amount: this.props.service.data.price, language: 'en'
+    //         }, billing: {
+    //             name: { title: 'Miss', first: 'Pragati', last: 'Chatterjee' }, address: {
+    //                 line1: 'SIT TOWER', city: 'Dubai', region: 'Dubai', country: 'AE'
+    //             },
+    //             email: 'pragati@natitsolved.com'
+    //         }
+    //     };
 
-        var builder = new xml2js.Builder({ rootName: 'mobile' });
-        var xml = builder.buildObject(obj);
+    //     var builder = new xml2js.Builder({ rootName: 'mobile' });
+    //     var xml = builder.buildObject(obj);
 
-        const selfComponent = this;
-        fetch(paymentUrl, {
-            method: 'POST',
-            headers: headers,
-            body: xml
-        }).then((res) => {
+    //     const selfComponent = this;
+    //     fetch(paymentUrl, {
+    //         method: 'POST',
+    //         headers: headers,
+    //         body: xml
+    //     }).then((res) => {
 
-            parseString(res._bodyInit, function (err, result) {
-                if (err) {
-                    this.setState({
-                        loader: false
-                    });
-                    Alert.alert('Please try again later.');
-                }
-                else {
-                    selfComponent.setState({
-                        loader: false
-                    });
-                    console.warn("pragati", result.mobile.webview[0].start[0]);
-                    selfComponent.props.navigation.navigate('Payment',
-                        {
-                            amount: selfComponent.props.service.data.price,
-                            customerId: selfComponent.props.auth.data.id,
-                            url: result.mobile.webview[0].start[0],
-                            close: result.mobile.webview[0].close[0],
-                            abort: result.mobile.webview[0].abort[0],
-                            code: result.mobile.webview[0].code[0]
-                        });
-                }
+    //         parseString(res._bodyInit, function (err, result) {
+    //             if (err) {
+    //                 this.setState({
+    //                     loader: false
+    //                 });
+    //                 Alert.alert('Please try again later.');
+    //             }
+    //             else {
+    //                 selfComponent.setState({
+    //                     loader: false
+    //                 });
+    //                 console.warn("pragati", result.mobile.webview[0].start[0]);
+    //                 selfComponent.props.navigation.navigate('Payment',
+    //                     {
+    //                         amount: selfComponent.props.service.data.price,
+    //                         customerId: selfComponent.props.auth.data.id,
+    //                         url: result.mobile.webview[0].start[0],
+    //                         close: result.mobile.webview[0].close[0],
+    //                         abort: result.mobile.webview[0].abort[0],
+    //                         code: result.mobile.webview[0].code[0]
+    //                     });
+    //             }
 
 
-            });
-        }).catch((err) => {
-            this.setState({
-                loader: false
-            });
-            console.warn("error", err);
-            Alert.alert('Please try again later.');
-        })
+    //         });
+    //     }).catch((err) => {
+    //         this.setState({
+    //             loader: false
+    //         });
+    //         console.warn("error", err);
+    //         Alert.alert('Please try again later.');
+    //     })
 
-    }
+    // }
 
     componentDidMount() {
 
@@ -284,10 +272,10 @@ class Confirmation extends Component {
 
     }
     navigate(screen) {
-        const data = this.props.auth.data;
-        data.activeScreen = screen;
-        data.previousScreen = "Confirmation";
-        this.props.navigateAndSaveCurrentScreen(data);
+        // const data = this.props.auth.data;
+        // data.activeScreen = screen;
+        // data.previousScreen = "Confirmation";
+        // this.props.navigateAndSaveCurrentScreen(data);
         this.props.navigation.navigate(screen);
     }
 
@@ -451,10 +439,10 @@ class Confirmation extends Component {
     }
 }
 
-Confirmation.propTypes = {
-    auth: PropTypes.object.isRequired,
-    service: PropTypes.object.isRequired,
-};
+// Confirmation.propTypes = {
+//     auth: PropTypes.object.isRequired,
+//     service: PropTypes.object.isRequired,
+// };
 
 const mapStateToProps = (state) => {
     return {
@@ -464,7 +452,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data)),
     setServiceDetails: (data) => dispatch(setServiceDetails(data))
 
 });

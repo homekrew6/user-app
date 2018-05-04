@@ -1,20 +1,14 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, ImageBackground } from "react-native";
-import Ico from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { Image, View, StatusBar, Alert, TouchableOpacity, List} from "react-native";
 import { NavigationActions } from "react-navigation";
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
+import { Container, Header, Button, Content, Text, Body, Title } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import { setServiceDetails } from './elements/serviceActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import api from '../../api/index';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 const carve = require("../../../img/atul_bk.png");
 const img18 = require('../../../img/no-image-available.png');
 class ServiceProviderListing extends Component {
@@ -255,17 +249,16 @@ class ServiceProviderListing extends Component {
 }
 
 // export default Expect;
-ServiceProviderListing.propTypes = {
-    auth: PropTypes.object.isRequired,
-    service: PropTypes.object.isRequired
-};
+// ServiceProviderListing.propTypes = {
+//     auth: PropTypes.object.isRequired,
+//     service: PropTypes.object.isRequired
+// };
 const mapStateToProps = state => ({
     auth: state.auth,
     service: state.service,
 });
 const mapDispatchToProps = dispatch => ({
     setServiceDetails: (data) => dispatch(setServiceDetails(data)),
-    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServiceProviderListing);

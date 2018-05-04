@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, TextInput, ScrollView } from 'react-native';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
+import { connect } from 'react-redux';
+// import PropTypes from 'prop-types';
+import { Image, View, StatusBar,Alert, TouchableOpacity, AsyncStorage, TextInput, ScrollView } from 'react-native';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Item, Text, Right, Left, Body, Title, ActionSheet } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -19,8 +19,6 @@ const firebaseConfig = {
     databaseURL: "https://krew-user-app.firebaseio.com",
     storageBucket: "krew-user-app.appspot.com"
 };
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 import { RNS3 } from 'react-native-aws3';
 var BUTTONS = [
     { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
@@ -360,9 +358,9 @@ class Chat extends Component {
 }
 
 
-Chat.propTypes = {
-    auth: PropTypes.object.isRequired,
-};
+// Chat.propTypes = {
+//     auth: PropTypes.object.isRequired,
+// };
 
 const mapStateToProps = (state) => {
     return {

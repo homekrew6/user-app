@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { NavigationActions } from "react-navigation";
 import moment from 'moment';
 import { Image, View, CheckBox, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput } from "react-native";
-import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Frame, Input, Label, Text } from "native-base";
+import { Container, Header, Button, Content, Body, Title, Item, Text } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import Stars from 'react-native-stars-rating';

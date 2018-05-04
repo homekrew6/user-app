@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Input, Text, Body, Title } from "native-base";
@@ -270,10 +270,10 @@ class MyPromoCode extends Component {
 }
 
 // export default Categories;
-MyPromoCode.propTypes = {
-    auth: PropTypes.object.isRequired,
-    service: PropTypes.object.isRequired,
-};
+// MyPromoCode.propTypes = {
+//     auth: PropTypes.object.isRequired,
+//     service: PropTypes.object.isRequired,
+// };
 const mapStateToProps = state => ({
     auth: state.auth,
     service: state.service

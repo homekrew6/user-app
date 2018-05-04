@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, Text, TouchableOpacity, AsyncStorage } from "react-native";
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -167,9 +167,9 @@ class incrimentDecriment extends Component {
 
 // export default incrimentDecriment;
 
-incrimentDecriment.propTypes = {
-    auth: PropTypes.object.isRequired,
-};
+// incrimentDecriment.propTypes = {
+//     auth: PropTypes.object.isRequired,
+// };
 const mapStateToProps = state => ({
     auth: state.auth,
     service: state.service,

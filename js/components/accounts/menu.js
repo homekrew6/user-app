@@ -1,19 +1,16 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logout } from './elements/authActions'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, BackHandler, AsyncStorage } from "react-native";
+import { Image, View, StatusBar, Alert, TouchableOpacity, BackHandler, AsyncStorage } from "react-native";
 
-import { Container, Header, Button, Content, Form, Item, Icon, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title } from "native-base";
+import { Container, Header, Button, Content, Item, Icon, Input, Label, Text, CardItem,  Card, Body} from "native-base";
 
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import api from '../../api';
 
-import { navigateAndSaveCurrentScreen } from './elements/authActions';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 const profileImage = require("../../../img/atul.png");
 const icon1 = require("../../../img/icon1.png");
 const icon2 = require("../../../img/icon2.png");
@@ -70,21 +67,21 @@ class Menu extends Component {
   }
 
 
-  navigate(screen) {
-    const data = this.props.auth.data;
-    data.activeScreen = screen;
-    data.previousScreen = "Menu";
-    this.props.navigateAndSaveCurrentScreen(data);
+  // navigate(screen) {
+  //   const data = this.props.auth.data;
+  //   data.activeScreen = screen;
+  //   data.previousScreen = "Menu";
+  //   this.props.navigateAndSaveCurrentScreen(data);
     
-    if (screen =='MyPromoCode')
-    {
-      this.props.navigation.navigate("MyPromoCode", {id:this.props.auth.data.id});
-    }
-    else
-    {
-      this.props.navigation.navigate(screen);
-    }
-  }
+  //   if (screen =='MyPromoCode')
+  //   {
+  //     this.props.navigation.navigate("MyPromoCode", {id:this.props.auth.data.id});
+  //   }
+  //   else
+  //   {
+  //     this.props.navigation.navigate(screen);
+  //   }
+  // }
 
   componentDidMount() {
      BackHandler.addEventListener('hardwareBackPress', function () {
@@ -309,7 +306,7 @@ class Menu extends Component {
               }
 
               <View>
-                <TouchableOpacity onPress={() => this.navigate('EditProfile')}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('EditProfile')}>
                   <Text style={styles.pname}>{this.props.auth.data.name}</Text>
                   <Text style={styles.pemail}>{this.props.auth.data.email}</Text>
                   <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
@@ -328,7 +325,7 @@ class Menu extends Component {
         <Card>
 
           <CardItem style={styles.menuCarditem}>
-              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('NotificationList')}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('NotificationList')}>
               <Image source={icon1} style={styles.menuCardIcon} />
               <Text style={styles.menuCardTxt}>{I18n.t('notification')}</Text>
               {
@@ -346,7 +343,7 @@ class Menu extends Component {
           </CardItem>
 
           <CardItem style={styles.menuCarditem}>
-            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('JobList')}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('JobList')}>
               <Image source={icon2} style={styles.menuCardIcon} />
               <Text style={styles.menuCardTxt}>{I18n.t('my_jobs')}</Text>
               <View style={styles.arw_lft}>
@@ -355,7 +352,7 @@ class Menu extends Component {
             </TouchableOpacity>
           </CardItem>
           <CardItem style={styles.menuCarditem}>
-            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('Category')}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('Category')}>
               <Image source={icon2} style={styles.menuCardIcon} />
               <Text style={styles.menuCardTxt}>{I18n.t('post_new_job')}</Text>
               <View style={styles.arw_lft}>
@@ -365,7 +362,7 @@ class Menu extends Component {
           </CardItem>
 
           <CardItem style={styles.menuCarditem}>
-            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('MyLocation')}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('MyLocation')}>
               <Image source={icon3} style={styles.menuCardIcon} />
               <Text style={styles.menuCardTxt}>{I18n.t('my_location')}</Text>
               <View style={styles.arw_lft}>
@@ -384,7 +381,7 @@ class Menu extends Component {
             </View>
           </CardItem> */}
             <CardItem style={styles.menuCarditem}>
-              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('QuoteList')}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('QuoteList')}>
                 <Image source={icon4} style={styles.menuCardIcon} />
                 <Text style={styles.menuCardTxt}>{I18n.t('quoteOrFollow')}</Text>
                 <View style={styles.arw_lft}>
@@ -394,7 +391,7 @@ class Menu extends Component {
             </CardItem>
 
           <CardItem style={styles.menuCarditem}>
-              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('MyPromoCode')} >
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('MyPromoCode', {id:this.props.auth.data.id})} >
                 <Image source={icon5} style={styles.menuCardIcon} />
                 <Text style={styles.menuCardTxt}>{I18n.t('my_promo_code')}</Text>
                 <View style={styles.arw_lft}>
@@ -404,7 +401,7 @@ class Menu extends Component {
           </CardItem>
 
           <CardItem style={styles.menuCarditem}>
-              <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('Support')}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('Support')}>
               <Image source={icon6} style={styles.menuCardIcon} />
               <Text style={styles.menuCardTxt}>{I18n.t('support')}</Text>
               <View style={styles.arw_lftgit}>
@@ -414,7 +411,7 @@ class Menu extends Component {
           </CardItem>
 
           <CardItem style={styles.menuCarditem}>
-            <TouchableOpacity style={styles.menuCardView} onPress={() => this.navigate('Settings')}>
+              <TouchableOpacity style={styles.menuCardView} onPress={() => this.props.navigation.navigate('Settings')}>
               <Image source={icon7} style={styles.menuCardIcon} />
               <Text style={styles.menuCardTxt}>{I18n.t('settings')}</Text>
               <View style={styles.arw_lft}>
@@ -443,9 +440,9 @@ class Menu extends Component {
   }
 }
 
-Menu.propTypes = {
-  auth: PropTypes.object.isRequired
-}
+// Menu.propTypes = {
+//   auth: PropTypes.object.isRequired
+// }
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
@@ -456,8 +453,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout: (cb) => dispatch(logout(cb)),
-    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
+    logout: (cb) => dispatch(logout(cb))
   }
 }
 

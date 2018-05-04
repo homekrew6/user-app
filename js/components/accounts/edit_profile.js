@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkAuth, getUserDetail } from './elements/authActions';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from 'react-native';
@@ -9,12 +9,10 @@ import ImagePicker from 'react-native-image-crop-picker';
 import config from '../../config';
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content,  Input,  Text,    Body,  ActionSheet } from 'native-base';
 
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-
-const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const profileImage = require('../../../img/atul.png');
 const carveImage = require('../../../img/bg-1.png');
@@ -275,9 +273,9 @@ class EditProfile extends Component {
   }
 }
 
-EditProfile.propTypes = {
-  auth: PropTypes.object.isRequired,
-};
+// EditProfile.propTypes = {
+//   auth: PropTypes.object.isRequired,
+// };
 const mapStateToProps = state => ({
   auth: state.auth,
 });

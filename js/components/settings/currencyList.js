@@ -1,20 +1,13 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, AsyncStorage } from "react-native";
-import Ico from 'react-native-vector-icons/MaterialIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
+import {  View, StatusBar,Alert, TouchableOpacity,  AsyncStorage } from "react-native";
+import { Container, Header, Button, Content, Item,Label, Text, Body, Title} from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
-import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { NavigationActions } from "react-navigation";
 import { getAllCurrencyList } from '../accounts/elements/authActions';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 
 class CurrencyList extends Component {
     constructor(props) {
@@ -182,9 +175,9 @@ class CurrencyList extends Component {
 }
 
 // export default Expect;
-CurrencyList.propTypes = {
-    auth: PropTypes.object.isRequired
-};
+// CurrencyList.propTypes = {
+//     auth: PropTypes.object.isRequired
+// };
 const mapStateToProps = state => ({
     auth: state.auth
 });

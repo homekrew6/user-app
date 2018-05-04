@@ -2,12 +2,11 @@ import React, { Component } from "react";
 import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, ScrollView, Alert, Keyboard } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, ActionSheet } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import I18n from '../../i18n/i18n';
 import styles from "./styles";
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import * as firebase from 'firebase';
 import config from '../../config';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -390,9 +389,9 @@ class SupportLiveChat extends Component {
         );
     }
 }
-SupportLiveChat.propTypes = {
-    auth: PropTypes.object.isRequired,
-};
+// SupportLiveChat.propTypes = {
+//     auth: PropTypes.object.isRequired,
+// };
 const mapStateToProps = state => ({
     auth: state.auth,
 });

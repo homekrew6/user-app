@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, FlatList, ScrollView } from 'react-native';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Image, View, StatusBar,Alert, AsyncStorage} from 'react-native';
+import { Container, Header, Button, Content, Item, Text, CardItem, Card,  Body, Title} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Calendar } from 'react-native-calendars';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
 import api from '../../api';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 const buttonImage = require('../../../img/bg-button.png');
 class QuoteList extends Component {
@@ -102,9 +98,9 @@ class QuoteList extends Component {
         )
     }
 }
-QuoteList.propTypes = {
-    auth: PropTypes.object.isRequired
-}
+// QuoteList.propTypes = {
+//     auth: PropTypes.object.isRequired
+// }
 const mapStateToProps = (state) => {
     return {
         auth: state.auth

@@ -1,20 +1,14 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, AsyncStorage } from "react-native";
-import Ico from 'react-native-vector-icons/MaterialIcons';
+import { Image, View, StatusBar, Alert, TouchableOpacity, AsyncStorage } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Footer, FooterTab } from "native-base";
+import { Container, Header, Button, Content, Text, Body, Title} from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import HTMLView from 'react-native-htmlview';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-const logo_hdr = require("../../../img/logo2.png");
 const carve = require("../../../img/icon17.png");
 const bed = require("../../../img/bed.png");
 
@@ -157,11 +151,10 @@ class Expect extends Component {
 }
 
 // export default Expect;
-Expect.propTypes = {
-    auth: PropTypes.object.isRequired,
-};
+// Expect.propTypes = {
+//     auth: PropTypes.object.isRequired,
+// };
 const mapStateToProps = state => ({
-    auth: state.auth,
     service: state.service,
 });
 
