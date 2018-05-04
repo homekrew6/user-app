@@ -77,7 +77,7 @@ class NotificationList extends Component {
     }
     else{
             Alert.alert(I18n.t("please_login"));
-    }
+        }
     }
 
     deleteNotification(data){
@@ -167,7 +167,10 @@ class NotificationList extends Component {
                     </TouchableOpacity>
                 </Header>
 
-                <Content>
+                {
+                    !(this.state.NotificationListRead.length == 0 && this.state.NotificationListUnread.length == 0) ? 
+
+                <Content style={{ flex: 1}}>
                     {
                         this.state.NotificationListUnread.length ?
                         <View style={styles.listHeadingWarp}>
@@ -256,11 +259,9 @@ class NotificationList extends Component {
                         />: null
                     }
 
-                    {
-                        !(this.state.NotificationListRead.length == 0 && this.state.NotificationListUnread.length == 0) ? null : <View style={ styles.noDataFound }><Text> {I18n.t('nodatafound')} </Text></View>
-                    }
-
                 </Content>
+                 : <View style={[styles.noDataFound, { flex: 1, alignItems: 'center', justifyContent: 'center' }]}><Text> {I18n.t('nodatafound')} </Text></View>
+                }
             </Container>
         );
     }

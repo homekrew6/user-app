@@ -135,11 +135,12 @@ class Support extends Component {
                         value={this.state.query}
                     onChangeText={text => this.supportSearch(text)} />
                 </View>
-
+                {
+                    this.state.supportList.length ?
                 <Content>
                     <View style={[this.state.supportList.length ? styles.bgWhite: '',{ marginBottom: 20 }]}>
-                            {
-                                this.state.supportList.length ? this.state.supportList.map((item, key)=>{
+                    {
+                             this.state.supportList.map((item, key)=>{
                                     return(
                                         <View style={styles.chatListWarp} key={key}>
                                             <TouchableOpacity style={styles.chatListTouchWarp} onPress={()=> this.faqFunction(key)}>
@@ -162,11 +163,12 @@ class Support extends Component {
                                             }
                                         </View>
                                     )
-                            }) : <View style={styles.noDataFound}><Text> {I18n.t('nodatafound')} </Text></View>
+                            }) 
                             }
                         </View>
                 </Content>
-
+                : <View style={[styles.noDataFound, { alignItems: 'center', justifyContent: 'center', flex: 1 }]}><Text> {I18n.t('nodatafound')} </Text></View>
+                }
                 <Footer style={styles.footerWarp}>
                     <FooterTab>
                         <TouchableOpacity style={[styles.footerTabStyle, { backgroundColor: '#81cdc7' }]} onPress={() => this.props.navigation.navigate('SupportLiveChatList')}>

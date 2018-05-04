@@ -30,7 +30,7 @@ export default {
   catIten_img_view: {
     borderRadius: 100,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#81cdc7',
     height: 80,
     width: 80,
     alignItems: 'center',

@@ -170,6 +170,8 @@ class JobList extends Component {
                         </Menu>
                     </View>
                 </Header>
+                {
+                    this.state.jobList.length ? (
                 <Content  
                     refreshControl={
                     <RefreshControl
@@ -177,8 +179,7 @@ class JobList extends Component {
                         onRefresh={this.onRefresh.bind(this)}
                     />}
                 >
-                    {
-                        this.state.jobList.length ? (
+                     
                             <View>
                                 {this.state.jobList.map((dataQ, key) => {
                                     return (
@@ -223,12 +224,13 @@ class JobList extends Component {
                                     )
                                 })}
                             </View>
-                        ) : (<View style={{ alignItems: 'center', padding: 10 }}><Text>No Data Found</Text></View>)
+                         
 
-                    }
-
-                </Content>
-
+                    
+                    
+                        </Content>)
+                        : (<View style={{ alignItems: 'center', padding: 10, flex: 1, alignItems: 'center', justifyContent: 'center' }}><Text> {I18n.t('nodatafound')} </Text></View>)
+                }
             </Container>
         );
     }
