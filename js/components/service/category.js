@@ -1,29 +1,19 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, BackHandler, TouchableOpacity, List, ListItem, ImageBackground, AsyncStorage } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, BackHandler, TouchableOpacity, ImageBackground, AsyncStorage } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api';
 import { setServiceDetails } from './elements/serviceActions';
-import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker } from 'native-base';
+import { Container, Header, Button, Content,Item, Label, Text, Body, Picker } from 'native-base';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import Modal from "react-native-modal";
-const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require('../../../img/logo2.png');
 const carveImage = require('../../../img/bg-5.png');
-const img11 = require('../../../img/icon11.png');
-const img12 = require('../../../img/icon12.png');
-const img13 = require('../../../img/icon13.png');
-const img14 = require('../../../img/icon14.png');
-const img15 = require('../../../img/icon15.png');
-const img16 = require('../../../img/icon16.png');
 const img17 = require('../../../img/icon17.png');
 
 class Categories extends Component {
@@ -152,10 +142,10 @@ class Categories extends Component {
   closeModal(data1) {
     this.setState({ IsModalVisible: false });
     this.setState({ visible: true });
-    const data = this.props.auth.data;
-    data.activeScreen = "ServiceDetails";
-    data.previousScreen = "Category";
-    this.props.navigateAndSaveCurrentScreen(data);
+    // const data = this.props.auth.data;
+    // data.activeScreen = "ServiceDetails";
+    // data.previousScreen = "Category";
+    // this.props.navigateAndSaveCurrentScreen(data);
     let data2 = this.props.service.data;
     let serviceLocationid = data1.id;
     // data.serviceLocation = this.state.homeArray;
@@ -377,9 +367,9 @@ class Categories extends Component {
 }
 
 // export default Categories;
-Categories.propTypes = {
+{/* Categories.propTypes = {
   auth: PropTypes.object.isRequired,
-};
+}; */}
 
 const mapStateToProps = (state) => {
   console.log('mapStateToProps cate', state);
@@ -391,8 +381,7 @@ const mapStateToProps = (state) => {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  setServiceDetails: (data) => dispatch(setServiceDetails(data)),
-  navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
+  setServiceDetails: (data) => dispatch(setServiceDetails(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);

@@ -138,5 +138,6 @@ export default {
   job_completed_list: 'أنجزت المهمة',
   payment_pending_list: 'انتظار الدفع',
   confirmation:"التأكيد",
-  what_to_expect: "ماذا تتوقع"
+  what_to_expect: "ماذا تتوقع",
+  my_language: "لغتي"
 };

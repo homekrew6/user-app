@@ -140,5 +140,6 @@ export default {
   job_completed_list: 'JOB COMPLETED',
   payment_pending_list: 'PAYMENT PENDING',
   confirmation:"Confirmation",
-  what_to_expect:"What To Expect"
+  what_to_expect:"What To Expect",
+  my_language:"My Language"
 };

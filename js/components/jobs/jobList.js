@@ -1,17 +1,15 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Image, View, RefreshControl, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, ListView, Picker } from "react-native";
-import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, Text, List, ListItem } from "native-base";
+import { Image, View, RefreshControl, StatusBar, Alert, TouchableOpacity, ListView} from "react-native";
+import { Container, Header, Button, Content, Left, Right, Body, Title, Item, Text, List, ListItem } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
-const win = Dimensions.get('window').width;
 const imageIcon1 = require('../../../img/icon/home.png');
 import styles from "./styles";
 class JobList extends Component {

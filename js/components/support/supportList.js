@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, Alert ,Dimensions } from "react-native";
+import {View, StatusBar, TouchableOpacity, Text, TextInput, Alert ,Dimensions } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button  } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

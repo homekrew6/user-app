@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList } from "react-native";
+// import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import { Image, View, StatusBar, Alert, TouchableOpacity, FlatList } from "react-native";
 import { Container, Header, Button, Content, Text, CardItem, Card, Body, Title } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Stars from 'react-native-stars-rating';
@@ -181,9 +181,9 @@ class ThankYou extends Component {
     }
 }
 
-ThankYou.propTypes = {
-    //auth: PropTypes.object.isRequired
-}
+// ThankYou.propTypes = {
+//     //auth: PropTypes.object.isRequired
+// }
 const mapStateToProps = (state) => {
     return {
         //auth: state.auth

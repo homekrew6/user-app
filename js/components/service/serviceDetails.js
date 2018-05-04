@@ -1,39 +1,30 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, FlatList, BackHandler } from 'react-native';
-import Ico from 'react-native-vector-icons/MaterialIcons';
+import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import IncrimentDecriment from './incrimentDecrimentCompt';
 import Slider from 'react-native-slider';
 import { getQuestionListByServiceId } from './elements/serviceActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, Body, Title, Picker, Switch, Footer, FooterTab, ActionSheet } from 'native-base';
+import { Container, Header, Button, Content,Item,Text, Body, Title, Switch, Footer, FooterTab, ActionSheet } from 'native-base';
 import I18n from '../../i18n/i18n';
 import ImagePicker from 'react-native-image-crop-picker';
 import styles from './styles';
 import { setServiceDetails } from './elements/serviceActions';
-import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import { RNS3 } from 'react-native-aws3';
 import config from '../../config';
 import api from '../../api';
 import { NavigationActions } from 'react-navigation';
 
-const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
-const logo_hdr = require('../../../img/logo2.png');
 const carveImage = require('../../../img/bg-6.png');
 const logo22 = require('../../../img/logo22.png');
 const img17 = require('../../../img/icon17.png');
 const img18 = require('../../../img/img22.png');
-const img19 = require('../../../img/swiper-2.png');
-const img20 = require('../../../img/swiper-2.png');
-const img21 = require('../../../img/swiper-2.png');
 const img22 = require('../../../img/swiper-2.png');
 const krew_logo = require('../../../img/krew.png');
 
@@ -920,10 +911,10 @@ class serviceDetails extends Component {
   goToConfirmation() {
     if (this.props.auth.data) {
       this.setState({ IsSpinnerVisible: true });
-      const data = this.props.auth.data;
-      data.activeScreen = "Confirmation";
-      data.previousScreen = "ServiceDetails";
-      this.props.navigateAndSaveCurrentScreen(data);
+      // const data = this.props.auth.data;
+      // data.activeScreen = "Confirmation";
+      // data.previousScreen = "ServiceDetails";
+      // this.props.navigateAndSaveCurrentScreen(data);
       this.setState({ IsSpinnerVisible: false });
       this.props.navigation.navigate('Confirmation');
 
@@ -1223,9 +1214,9 @@ class serviceDetails extends Component {
 }
 
 // export default serviceDetails;
-serviceDetails.propTypes = {
-  auth: PropTypes.object.isRequired,
-};
+// serviceDetails.propTypes = {
+//   auth: PropTypes.object.isRequired,
+// };
 const mapStateToProps = state => ({
   auth: state.auth,
   service: state.service,
@@ -1233,7 +1224,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getQuestionListByServiceId: (data) => dispatch(getQuestionListByServiceId(data)),
   setServiceDetails: (data) => dispatch(setServiceDetails(data)),
-  navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(serviceDetails);

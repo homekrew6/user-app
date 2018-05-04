@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Image, View, StatusBar, Alert, TouchableOpacity } from 'react-native';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import ImagePicker from 'react-native-image-crop-picker';
-import config from '../../config';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
+import { Footer, FooterTab, Container, Header, Button, Content, Item, Text,Body, Title} from 'native-base';
 import styles from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from "react-native-modal";
 import Communications from 'react-native-communications';
 import I18n from '../../i18n/i18n';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-const profileImage = require('../../../img/atul.png');
-const carveImage = require('../../../img/bg-1.png');
 
 
 class ServiceProviderDetails extends Component {

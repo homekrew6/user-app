@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { signup, login, getUserDetail, checkAuth, navigateAndSaveCurrentScreen } from './elements/authActions';
-import { Image, View, ScrollView, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage } from 'react-native';
+import { signup, login, getUserDetail, checkAuth } from './elements/authActions';
+import { Image, View, ScrollView, StatusBar, Alert, TouchableOpacity, ImageBackground, AsyncStorage } from 'react-native';
 import FCM, { FCMEvent, NotificationType } from "react-native-fcm";
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Text, CheckBox } from 'native-base';
+import { Container, Header, Button, Content, Item, Input, Label, Text, CheckBox } from 'native-base';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
 import { FBLogin, FBLoginManager } from 'react-native-facebook-login';
@@ -15,8 +15,6 @@ import api from '../../api';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PopoverTooltip from 'react-native-popover-tooltip';
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 const launchscreenBg = require('../../../img/bg-login.png');
 const launchscreenLogo = require('../../../img/logo.png');
 const buttonImage = require('../../../img/bg-button.png');
@@ -113,10 +111,21 @@ class Signup extends Component {
                           if (value) {
                             AsyncStorage.setItem("fromLogin", "true").then((resT) => {
                               const data = this.props.auth.data;
-                              data.activeScreen = "Confirmation";
-                              data.previousScreen = "ServiceDetails";
-                              this.props.navigateAndSaveCurrentScreen(data);
-                              this.props.navigation.dispatch(resetAction1);
+                              // data.activeScreen = "Confirmation";
+                              // data.previousScreen = "ServiceDetails";
+                              // this.props.navigateAndSaveCurrentScreen(data);
+                              // this.props.navigation.dispatch(resetAction1);
+                              this.props.navigation.dispatch(
+                                NavigationActions.reset({
+                                  index: 3,
+                                  actions: [
+                                    NavigationActions.navigate({ routeName: 'Menu' }),
+                                    NavigationActions.navigate({ routeName: 'Category' }),
+                                    NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                                    NavigationActions.navigate({ routeName: 'Confirmation' }),
+                                  ],
+                                })
+                              );
                               //this.props.navigation.navigate('Confirmation');
                             })
 
@@ -429,9 +438,9 @@ class Signup extends Component {
   }
 }
 
-Signup.propTypes = {
-  auth: PropTypes.object.isRequired,
-};
+// Signup.propTypes = {
+//   auth: PropTypes.object.isRequired,
+// };
 const mapStateToProps = (state) => ({
   auth: state.auth
 });
@@ -440,8 +449,7 @@ const mapDispatchToProps = (dispatch) => ({
   signup: (name, email, password, phone, deviceToken) => dispatch(signup(name, email, password, phone, deviceToken)),
   login: (email, password) => dispatch(login(email, password)),
   getUserDetail: (id, auth) => dispatch(getUserDetail(id, auth)),
-  checkAuth: cb => dispatch(checkAuth(cb)),
-  navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data))
+  checkAuth: cb => dispatch(checkAuth(cb))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);
