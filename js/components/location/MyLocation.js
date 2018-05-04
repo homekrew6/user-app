@@ -6,8 +6,8 @@ import LocationList from './LocationList';
 import api from '../../api';
 import I18n from '../../i18n/i18n';
 
-const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } } };
-const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } } };
+// const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } } };
+// const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } } };
 
 class MyLocation extends Component {
     state = { locationData: '' };

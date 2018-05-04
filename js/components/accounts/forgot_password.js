@@ -1,15 +1,12 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {login} from './elements/authActions'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, Text  } from "react-native";
+
+import { Image, View, StatusBar, Alert, TouchableOpacity, ImageBackground,Text  } from "react-native";
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content, Form,Left,Right,Body,Title, Item,Icon,Frame, Input, Label } from "native-base";
-import api from '../../api'
+import { Container, Header, Button, Content,Left,Body,Title, Item,Icon, Input } from "native-base";
+import api from '../../api';
+
 import I18n from '../../i18n/i18n';
-import styles from "./styles";
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+//import styles from "./styles";
 const lockImage = require("../../../img/lock.png");
 const buttonImage = require("../../../img/bg-button.png");
 class ForgotPassword extends Component {
@@ -127,7 +124,7 @@ class ForgotPassword extends Component {
 	}
 }
 
-ForgotPassword.propTypes = {
+{/* ForgotPassword.propTypes = {
 	auth : PropTypes.object.isRequired
 }
 const mapStateToProps = (state)=>{
@@ -143,3 +140,6 @@ const mapDispatchToProps = (dispatch)=>{
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(ForgotPassword);
+ */}
+
+ export default ForgotPassword;

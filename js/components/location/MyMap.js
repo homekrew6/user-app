@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, StatusBar, TouchableOpacity, ScrollView, Dimensions, TextInput, Alert, AsyncStorage } from 'react-native';
-import { Container, Header, Button, Content, Body, Item, Frame, Input, Label, Form } from 'native-base';
+import { View, Text, StatusBar, TouchableOpacity, Dimensions, TextInput, Alert, AsyncStorage } from 'react-native';
+import { Container, Header, Button, Content, Body, Item,Input, Label, Form } from 'native-base';
 import MapView, { Marker } from 'react-native-maps';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -26,6 +26,7 @@ class MyMap extends Component {
         formatted_address: '',
         IsSpinnerVisible: false,
         locationChange: false,
+        IsValidLocation: false
 
     }
     componentDidMount() {
@@ -48,12 +49,12 @@ class MyMap extends Component {
     }
     //called user move maps
     onRegionChange = (region) => {
-        this.setState({ region: region });
+        this.setState({ region: region});
     }
     //called when user select dropdown location
     onLocationChange = (region) => {
         if (this.state.locationChange) {
-            this.setState({ region: region });
+            this.setState({ region: region, IsValidLocation: true });
         }
     }
     ChangeNameText(text) {
@@ -70,7 +71,6 @@ class MyMap extends Component {
     }
 
     onMapDoneClick() {
-        
         //Add map
         if (this.props.navigation.state.params.screenType === 'add') {
             const customerId = this.props.navigation.state.params.customerId;
@@ -82,65 +82,79 @@ class MyMap extends Component {
                 : this.state.formatted_address;
             const latitude = this.state.region.latitude;
             const longitude = this.state.region.longitude;
-            if(name){
-                if(buildingName){
-                    if(villaNo){
-                        this.setState({ IsSpinnerVisible: true });
-                        api.post('user-locations', {
-                            name: name,
-                            buildingName: buildingName,
-                            villa: villaNo,
-                            landmark: landmark,
-                            latitude: latitude,
-                            longitude: longitude,
-                            customerId: customerId
-                        }).then(res => {
-                            this.setState({ IsSpinnerVisible: false });
-                            const data = this.props.auth.data;
+            if (name) {
+                if (buildingName) {
+                    if (villaNo) {
+                        if (latitude && longitude) {
+                            if (this.state.IsValidLocation) {
+                                this.setState({ IsSpinnerVisible: true });
+                                api.post('user-locations', {
+                                    name: name,
+                                    buildingName: buildingName,
+                                    villa: villaNo,
+                                    landmark: landmark,
+                                    latitude: latitude,
+                                    longitude: longitude,
+                                    customerId: customerId
+                                }).then(res => {
+                                    this.setState({ IsSpinnerVisible: false });
+                                    const data = this.props.auth.data;
 
-                            AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
-                                if (fromConfirmation) {
-                                    this.props.navigation.dispatch( 
-                                        NavigationActions.reset({
-                                            index: 4,
-                                            actions: [
-                                              NavigationActions.navigate({ routeName: 'Menu' }),
-                                              NavigationActions.navigate({ routeName: 'Category' }),
-                                              NavigationActions.navigate({ routeName: 'ServiceDetails' }),
-                                              NavigationActions.navigate({ routeName: 'Confirmation' }),
-                                              NavigationActions.navigate({ routeName: 'LocationList' }),
-                                            ],
-                                        })
-                                    );
-                                }
-                                else {
-                                    this.props.navigation.dispatch(
-                                        NavigationActions.reset({
-                                            index: 1,
-                                            actions: [
-                                            NavigationActions.navigate({ routeName: 'Menu' }),
-                                            NavigationActions.navigate({ routeName: 'MyLocation' }),
-                                            ],
-                                        })
-                                    );
-                                }
-                            })
-                        }).catch((err) => {
+                                    AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
+                                        if (fromConfirmation) {
+                                            this.props.navigation.dispatch(
+                                                NavigationActions.reset({
+                                                    index: 4,
+                                                    actions: [
+                                                        NavigationActions.navigate({ routeName: 'Menu' }),
+                                                        NavigationActions.navigate({ routeName: 'Category' }),
+                                                        NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                                                        NavigationActions.navigate({ routeName: 'Confirmation' }),
+                                                        NavigationActions.navigate({ routeName: 'LocationList' }),
+                                                    ],
+                                                })
+                                            );
+                                        }
+                                        else {
+                                            this.props.navigation.dispatch(
+                                                NavigationActions.reset({
+                                                    index: 1,
+                                                    actions: [
+                                                        NavigationActions.navigate({ routeName: 'Menu' }),
+                                                        NavigationActions.navigate({ routeName: 'MyLocation' }),
+                                                    ],
+                                                })
+                                            );
+                                        }
+                                    })
+                                }).catch((err) => {
+                                    this.setState({ IsSpinnerVisible: false });
+                                    Alert.alert("Please try again later");
+                                });
+                            }
+                            else {
+                                this.setState({ IsSpinnerVisible: false });
+                                Alert.alert("Please give a valid location.");
+                            }
+
+                        }
+                        else {
                             this.setState({ IsSpinnerVisible: false });
-                            Alert.alert("Please try again later");
-                        });
-                    }else{
-                        
+                            Alert.alert("Please give a valid location.");
+                        }
+
+                    } else {
+
                     }
-                }else{
+                } else {
                     Alert.alert('Please add building name');
                 }
-               
-            }else{
+
+            } else {
                 Alert.alert('Please add name');
             }
-            
-           
+
+
         } else if (this.props.navigation.state.params.screenType === 'edit') {
             //Edit Map
             const customerId1 = this.props.navigation.state.params.customerId;
@@ -153,9 +167,9 @@ class MyMap extends Component {
             const latitude1 = this.state.region.latitude;
             const longitude1 = this.state.region.longitude;
             const locationEditUrl = `user-locations/${id1}`;
-            if(name1){
-                if(buildingName1){
-                    if(villaNo1){
+            if (name1) {
+                if (buildingName1) {
+                    if (villaNo1) {
                         this.setState({ IsSpinnerVisible: true });
                         api.put(locationEditUrl, {
                             name: name1,
@@ -170,15 +184,15 @@ class MyMap extends Component {
                             const data = this.props.auth.data;
                             AsyncStorage.getItem("fromConfirmation").then((fromConfirmation) => {
                                 if (fromConfirmation) {
-                                    this.props.navigation.dispatch( 
+                                    this.props.navigation.dispatch(
                                         NavigationActions.reset({
                                             index: 4,
                                             actions: [
-                                              NavigationActions.navigate({ routeName: 'Menu' }),
-                                              NavigationActions.navigate({ routeName: 'Category' }),
-                                              NavigationActions.navigate({ routeName: 'ServiceDetails' }),
-                                              NavigationActions.navigate({ routeName: 'Confirmation' }),
-                                              NavigationActions.navigate({ routeName: 'LocationList' }),
+                                                NavigationActions.navigate({ routeName: 'Menu' }),
+                                                NavigationActions.navigate({ routeName: 'Category' }),
+                                                NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                                                NavigationActions.navigate({ routeName: 'Confirmation' }),
+                                                NavigationActions.navigate({ routeName: 'LocationList' }),
                                             ],
                                         })
                                     );
@@ -188,8 +202,8 @@ class MyMap extends Component {
                                         NavigationActions.reset({
                                             index: 1,
                                             actions: [
-                                            NavigationActions.navigate({ routeName: 'Menu' }),
-                                            NavigationActions.navigate({ routeName: 'MyLocation' }),
+                                                NavigationActions.navigate({ routeName: 'Menu' }),
+                                                NavigationActions.navigate({ routeName: 'MyLocation' }),
                                             ],
                                         })
                                     );
@@ -201,13 +215,13 @@ class MyMap extends Component {
                             this.setState({ IsSpinnerVisible: false });
                             Alert.alert("Please try again later");
                         });
-                    }else{
+                    } else {
                         Alert.alert('Please add Villa No / Appartment No');
                     }
-                }else{
+                } else {
                     Alert.alert('Please add building name');
                 }
-            }else{
+            } else {
                 Alert.alert('Please add name');
             }
 

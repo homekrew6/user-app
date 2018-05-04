@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, AsyncStorage, TextInput, ScrollView, Text } from 'react-native';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Form, Item, Frame, Input, Label , CardItem, Right, Card, Left, Body, Title, ActionSheet } from 'native-base';
+
+import { connect } from 'react-redux';
+// import PropTypes from 'prop-types';
+import { Image, View, StatusBar,Alert, TouchableOpacity, AsyncStorage, TextInput, ScrollView,Text } from 'react-native';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Item, Right, Left, Body, Title, ActionSheet } from 'native-base';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -19,8 +21,6 @@ const firebaseConfig = {
     databaseURL: "https://krew-user-app.firebaseio.com",
     storageBucket: "krew-user-app.appspot.com"
 };
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 import { RNS3 } from 'react-native-aws3';
 var BUTTONS = [
     { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
@@ -57,7 +57,11 @@ class Chat extends Component {
                 this.setState({ typeMessage: '', chatList: chatList });
             }
             setTimeout(() => {
-                this.refs.ScrollViewStart.scrollToEnd(true);
+                if (this.refs && this.refs.ScrollViewStart)
+                {
+                    this.refs.ScrollViewStart.scrollToEnd(true);
+                }
+                
             }, 400);
 
         })
@@ -65,6 +69,7 @@ class Chat extends Component {
     componentDidMount() {
 
         setTimeout(() => {
+            if(this.refs && this.refs.ScrollViewStart)
             this.refs.ScrollViewStart.scrollToEnd();
         }, 50);
 
@@ -304,8 +309,8 @@ class Chat extends Component {
                                         <View style={{ flexDirection: 'row', marginBottom: 15 }} key={key}>
                                             <View style={{ marginRight: 15, justifyContent: 'flex-end' }}>
                                                 {
-                                                    this.props.auth.data.image ? (
-                                                        <Image source={{ uri: this.props.auth.data.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />
+                                                    this.props.navigation.state.params.workerDetails.image? (
+                                                        <Image source={{ uri: this.props.navigation.state.params.workerDetails.image }} style={{ height: 30, width: 30, borderRadius: 70 }} />
                                                     ) : (<Image source={require('../../../img/atul.png')} style={{ height: 30, width: 30, borderRadius: 70 }} />)
                                                 }
                                             </View>
@@ -355,9 +360,9 @@ class Chat extends Component {
 }
 
 
-Chat.propTypes = {
-    auth: PropTypes.object.isRequired,
-};
+// Chat.propTypes = {
+//     auth: PropTypes.object.isRequired,
+// };
 
 const mapStateToProps = (state) => {
     return {

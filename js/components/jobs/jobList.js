@@ -1,17 +1,15 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { Image, View, RefreshControl, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, ListView, Picker, Text } from "react-native";
-import { Container, Header, Button, Content, Form, Left, Right, Body, Title, Item, Icon, Frame, Input, Label, List, ListItem } from "native-base";
+import { Image, View, RefreshControl, StatusBar, Alert, TouchableOpacity, ListView,Text} from "react-native";
+import { Container, Header, Button, Content, Left, Right, Body, Title, Item, List, ListItem } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import api from '../../api';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
-const win = Dimensions.get('window').width;
 const imageIcon1 = require('../../../img/icon/home.png');
 import styles from "./styles";
 class JobList extends Component {
@@ -160,18 +158,17 @@ class JobList extends Component {
                                 </Button>
                             }
                         >
-                            <MenuItem onPress={() => this.jobType('ALL')}>ALL</MenuItem>
-                            <MenuItem onPress={() => this.jobType('ACCEPTED')}>JOB ACCEPTED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('STARTED')}>JOB POSTED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('ONMYWAY')}>KREW ON WAY</MenuItem>
-                            <MenuItem onPress={() => this.jobType('JOBSTARTED')}>JOB STARTED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('FOLLOWEDUP')}>FOLLOWED UP</MenuItem>
-                            <MenuItem onPress={() => this.jobType('CANCELLED')}>CANCELLED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('COMPLETED')}>JOB COMPLETED</MenuItem>
-                            <MenuItem onPress={() => this.jobType('PAYPENDING')}>PAYMENT PENDING</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ALL')}>{I18n.t('all_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ACCEPTED')}>{I18n.t('job_accepted_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('STARTED')}>{I18n.t('job_posted_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('ONMYWAY')}>{I18n.t('krew_on_way_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('JOBSTARTED')}>{I18n.t('job_started_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('FOLLOWEDUP')}>{I18n.t('followed_up_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('CANCELLED')}>{I18n.t('cancelled_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('COMPLETED')}>{I18n.t('job_completed_list')}</MenuItem>
+                            <MenuItem onPress={() => this.jobType('PAYPENDING')}>{I18n.t('payment_pending_list')}</MenuItem>
                         </Menu>
                     </View>
-
                 </Header>
                 <Content  
                     refreshControl={

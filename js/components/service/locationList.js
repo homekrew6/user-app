@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, AsyncStorage, Text } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
@@ -212,10 +212,10 @@ class LocationList extends Component {
 }
 
 // export default Expect;
-LocationList.propTypes = {
-    auth: PropTypes.object.isRequired,
-    service: PropTypes.object.isRequired
-};
+// LocationList.propTypes = {
+//     auth: PropTypes.object.isRequired,
+//     service: PropTypes.object.isRequired
+// };
 const mapStateToProps = state => ({
     auth: state.auth,
     service: state.service,

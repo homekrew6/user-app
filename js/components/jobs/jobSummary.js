@@ -1,24 +1,14 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler, Text } from "react-native";
-import Ico from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { Image, AsyncStorage, View, StatusBar, Alert,Text} from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import FSpinner from 'react-native-loading-spinner-overlay';
-import { NavigationActions } from 'react-navigation';
-import { Container, Header, Button, Content, Card, CardItem, Item, Frame, Input, Label, Body, Title, Footer, FooterTab } from "native-base";
+import { Container, Header, Button, Content, Item, Body, Title } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require("../../../img/logo2.png");
-const carve = require("../../../img/icon17.png"); 
 const totalImg = require("../../../img/icon/coins.png");
 const timer = require("../../../img/icon/timer.png");
 
@@ -33,16 +23,51 @@ class jobSummary extends Component {
             materialTotalPrice: 0,
             hoursPrice: '0.00',
             grndtotal: 0,
-            min_charge:''
+            min_charge:'',
+            currencyList:[]
         };
     }
     componentDidMount() {
-        AsyncStorage.getItem("currency").then((value) => {
-            if (value) {
-                const value1 = JSON.parse(value);
-                this.setState({ currency: value1.language })
-            }
-        });
+        api.get('Currencies').then((res)=>{
+            let finalList=[];
+            res.map((item)=>{
+                if (item.is_active)
+                {
+                    finalList.push(item);
+                }
+            });
+            this.setState({ currencyList:finalList});
+            AsyncStorage.getItem("currency").then((value) => {
+                if (value) {
+                    const value1 = JSON.parse(value);
+                    if (this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId)
+                    {
+                        this.state.currencyList.map((item)=>{
+                            if (item.id == this.props.navigation.state.params.jobDetails.currencyId)
+                            {
+                                this.setState({ currency:item.name})
+                            }
+                        })
+                    }
+                    //this.setState({ currency: value1.language })
+                }
+                else
+                {
+                    if (this.props.navigation.state.params.jobDetails && this.props.navigation.state.params.jobDetails.currencyId) {
+                        this.state.currencyList.map((item) => {
+                            if (item.id == this.props.navigation.state.params.jobDetails.currencyId) {
+                                this.setState({ currency: item.name })
+                            }
+                        })
+                    }
+                }
+            });
+           
+        }).catch((Err)=>{
+            console.log(Err);
+           
+        })
+       
 
         let jodId = this.props.navigation.state.params.jobDetails.id;
         api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": jodId }).then((resAns) => {

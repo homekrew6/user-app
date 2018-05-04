@@ -1,22 +1,18 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { setDateAndTime, setServiceDetails, checkIfThePostingDateIsValid } from './elements/serviceActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, ScrollView, AsyncStorage, Text } from "react-native";
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Body, Card, CardItem } from "native-base";
+import { Image, View, StatusBar, Alert, TouchableOpacity, FlatList, ScrollView, AsyncStorage,Text } from "react-native";
+import { Container, Header, Button, Content,Item, Body, Card, CardItem } from "native-base";
 import styles from './styles';
 import { Calendar } from 'react-native-calendars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
-import { navigateAndSaveCurrentScreen } from '../accounts/elements/authActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { NavigationActions } from "react-navigation";
 
-
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 const img1 = require('../../../img/splash-bg2.png');
 const launchscreenBg = require("../../../img/bg-login.png");
 
@@ -138,10 +134,10 @@ class DateAndTime extends Component {
         this.props.setServiceDetails(data);
     }
     navigate() {
-        const data = this.props.auth.data;
-        data.activeScreen = 'Confirmation';
-        data.previousScreen = "ServiceDetails";
-        this.props.navigateAndSaveCurrentScreen(data);
+        // const data = this.props.auth.data;
+        // data.activeScreen = 'Confirmation';
+        // data.previousScreen = "ServiceDetails";
+        // this.props.navigateAndSaveCurrentScreen(data);
         //this.props.navigation.navigate('Confirmation');
 
         this.props.navigation.dispatch(
@@ -320,10 +316,10 @@ class DateAndTime extends Component {
     }
 }
 
-DateAndTime.propTypes = {
-    service: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
-}
+// DateAndTime.propTypes = {
+//     service: PropTypes.object.isRequired,
+//     auth: PropTypes.object.isRequired
+// }
 
 const mapStateToProps = (state) => {
     return {
@@ -336,7 +332,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setDateAndTime: (data) => dispatch(setDateAndTime(data)),
         setServiceDetails: (data) => dispatch(setServiceDetails(data)),
-        navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data)),
         checkIfThePostingDateIsValid: (data) => dispatch(checkIfThePostingDateIsValid(data))
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, AsyncStorage, Alert } from "react-native";
-import { Container, Header, Content, Body, Title, Footer, FooterTab, Button } from "native-base";
+import { Image, View, StatusBar, TouchableOpacity, Text, AsyncStorage, Alert } from "react-native";
+import { Container, Header, Content, Body, Title, Button } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import I18n from '../../i18n/i18n';
@@ -93,9 +93,9 @@ class SupportLiveChatList extends Component {
                 />
 
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
-                    <Button transparent  style={styles.buttonIconWarp}>
+                    {/* <Button transparent  style={styles.buttonIconWarp}>
                         <FontAwesome style={[styles.headerIconClose, { fontSize: 18 }]} name='edit' />
-                    </Button>
+                    </Button> */}
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>{I18n.t('liveChat')}</Title>
                     </Body>

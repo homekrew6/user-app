@@ -1,16 +1,14 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Dimensions, Alert, TouchableOpacity, List, ListItem, BackHandler, WebView, Text } from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Alert, TouchableOpacity,Text } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { NavigationActions } from 'react-navigation';
-import { Container, Header, Button, Content, Form, Item, Frame, Input, Label, Body, Title, Footer, FooterTab } from "native-base";
+import { Container, Header, Button, Content, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import api from '../../api/index';
@@ -21,21 +19,11 @@ import { setServiceDetails } from './elements/serviceActions';
 //     index: 0,
 //     actions: [NavigationActions.navigate({ routeName: 'Menu' })],
 // });
-const reseteAction = NavigationActions.reset({
-    index: 0,
-    actions: [NavigationActions.navigate({ routeName: 'ThankYou' })],
-});
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-const logo_hdr = require("../../../img/logo2.png");
+// const reseteAction = NavigationActions.reset({
+//     index: 0,
+//     actions: [NavigationActions.navigate({ routeName: 'ThankYou' })],
+// });
 const carve = require("../../../img/icon17.png");
-const paymentUrl = 'https://secure.telr.com/gateway/mobile.xml';
-var parseString = require('react-native-xml2js').parseString;
-var xml2js = require('react-native-xml2js');
-let headers = {
-    'Accept': 'application/xml',
-    'Content-Type': 'application/xml',
-}
 class Confirmation extends Component {
 
     constructor(props) {
@@ -57,72 +45,72 @@ class Confirmation extends Component {
 
     }
 
-    
-
-     startPayment() {
-        this.setState({
-            loader: true
-        });
-        var obj = {
-            store: '20217', key: 'JtLPL^pgBVG@q7PZ', device: { type: 'Android', id: '36C0EC49-AA2F-47DC-A4D7-D9927A739F5F' },
-            app: { name: 'Pragati', version: '1.0.0', user: '7070', id: '55555' }, tran: {
-                test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description: 'Krew Test Job',
-                currency: 'AED', amount: this.props.service.data.price, language: 'en'
-            }, billing: {
-                name: { title: 'Miss', first: 'Pragati', last: 'Chatterjee' }, address: {
-                    line1: 'SIT TOWER', city: 'Dubai', region: 'Dubai', country: 'AE'
-                },
-                email: 'pragati@natitsolved.com'
-            }
-        };
-
-        var builder = new xml2js.Builder({ rootName: 'mobile' });
-        var xml = builder.buildObject(obj);
-
-        const selfComponent = this;
-        fetch(paymentUrl, {
-            method: 'POST',
-            headers: headers,
-            body: xml
-        }).then((res) => {
-
-            parseString(res._bodyInit, function (err, result) {
-                if (err) {
-                    this.setState({
-                        loader: false
-                    });
-                    Alert.alert('Please try again later.');
-                }
-                else {
-                    selfComponent.setState({
-                        loader: false
-                    });
-                    console.warn("pragati", result.mobile.webview[0].start[0]);
-                    selfComponent.props.navigation.navigate('Payment', 
-                    { 
-                        amount: selfComponent.props.service.data.price, 
-                        customerId: selfComponent.props.auth.data.id,
-                        url: result.mobile.webview[0].start[0], 
-                        close: result.mobile.webview[0].close[0], 
-                        abort: result.mobile.webview[0].abort[0], 
-                        code: result.mobile.webview[0].code[0] 
-                    });
-                }
 
 
-            });
-        }).catch((err) => {
-            this.setState({
-                loader: false
-            });
-            console.warn("error", err);
-            Alert.alert('Please try again later.');
-        })
+    // startPayment() {
+    //     this.setState({
+    //         loader: true
+    //     });
+    //     var obj = {
+    //         store: '20217', key: 'JtLPL^pgBVG@q7PZ', device: { type: 'Android', id: '36C0EC49-AA2F-47DC-A4D7-D9927A739F5F' },
+    //         app: { name: 'Pragati', version: '1.0.0', user: '7070', id: '55555' }, tran: {
+    //             test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description: 'Krew Test Job',
+    //             currency: 'AED', amount: this.props.service.data.price, language: 'en'
+    //         }, billing: {
+    //             name: { title: 'Miss', first: 'Pragati', last: 'Chatterjee' }, address: {
+    //                 line1: 'SIT TOWER', city: 'Dubai', region: 'Dubai', country: 'AE'
+    //             },
+    //             email: 'pragati@natitsolved.com'
+    //         }
+    //     };
 
-    }
+    //     var builder = new xml2js.Builder({ rootName: 'mobile' });
+    //     var xml = builder.buildObject(obj);
+
+    //     const selfComponent = this;
+    //     fetch(paymentUrl, {
+    //         method: 'POST',
+    //         headers: headers,
+    //         body: xml
+    //     }).then((res) => {
+
+    //         parseString(res._bodyInit, function (err, result) {
+    //             if (err) {
+    //                 this.setState({
+    //                     loader: false
+    //                 });
+    //                 Alert.alert('Please try again later.');
+    //             }
+    //             else {
+    //                 selfComponent.setState({
+    //                     loader: false
+    //                 });
+    //                 console.warn("pragati", result.mobile.webview[0].start[0]);
+    //                 selfComponent.props.navigation.navigate('Payment',
+    //                     {
+    //                         amount: selfComponent.props.service.data.price,
+    //                         customerId: selfComponent.props.auth.data.id,
+    //                         url: result.mobile.webview[0].start[0],
+    //                         close: result.mobile.webview[0].close[0],
+    //                         abort: result.mobile.webview[0].abort[0],
+    //                         code: result.mobile.webview[0].code[0]
+    //                     });
+    //             }
+
+
+    //         });
+    //     }).catch((err) => {
+    //         this.setState({
+    //             loader: false
+    //         });
+    //         console.warn("error", err);
+    //         Alert.alert('Please try again later.');
+    //     })
+
+    // }
 
     componentDidMount() {
-        
+
         // debugger;
         // var xml = "<?xml version='1.0' encoding='UTF - 8'?>< mobile ><webview><start>https://secure.telr.com/gateway/webview_start.html?code=e46f5da95ac55ad990c2aa6cc1f1</start><close>https://secure.telr.com/gateway/webview_close.html</close><abort>https://secure.telr.com/gateway/webview_abort.html</abort><code>e46f5da95ac55ad990c2aa6cc1f1</code></webview><trace>4000/27841/5ad990c2</trace></mobile >"
         // parseString(xml, function (err, result) {
@@ -185,7 +173,7 @@ class Confirmation extends Component {
                     // };
                     // console.log('resCons', resCons);
 
-                    
+
                     console.log(this.props.service.data.serviceLocationid);
                     if (this.props.service.data.serviceLocationid) {
                         if (this.props.service.data.saveDateDB) {
@@ -194,14 +182,12 @@ class Confirmation extends Component {
                                 AsyncStorage.getItem("keyQuestionList").then((value) => {
                                     if (value) {
                                         let price = Number(this.props.service.data.price);
-                                        let minPrice=Number(this.state.minPrice);
-                                        if(price>minPrice)
-                                        {
+                                        let minPrice = Number(this.state.minPrice);
+                                        if (price > minPrice) {
 
                                         }
-                                        else
-                                        {
-                                            price=minPrice;
+                                        else {
+                                            price = minPrice;
                                         }
                                         api.post('Jobs/insertNewJob', {
                                             "userLocationId": this.props.service.data.serviceLocationid,
@@ -220,7 +206,7 @@ class Confirmation extends Component {
                                             "saveDbDay": this.props.service.data.saveDbDay,
                                             "expectedTimeInterval": this.props.service.data.time_interval,
                                             "questionList": value,
-                                            "promoPrice": this.props.service.data.promoPrice ? this.props.service.data.promoPrice:''
+                                            "promoPrice": this.props.service.data.promoPrice ? this.props.service.data.promoPrice : ''
                                         }
                                         ).then(responseJson => {
                                             AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
@@ -232,6 +218,10 @@ class Confirmation extends Component {
                                             this.setState({
                                                 loader: false,
                                                 continueButtonDesable: true
+                                            });
+                                            const reseteAction = NavigationActions.reset({
+                                                index: 0,
+                                                actions: [NavigationActions.navigate({ routeName: 'ThankYou', params: { orderId: responseJson.response.message}})],
                                             });
                                             this.props.navigation.dispatch(reseteAction);
                                         }).catch(err => {
@@ -282,10 +272,10 @@ class Confirmation extends Component {
 
     }
     navigate(screen) {
-        const data = this.props.auth.data;
-        data.activeScreen = screen;
-        data.previousScreen = "Confirmation";
-        this.props.navigateAndSaveCurrentScreen(data);
+        // const data = this.props.auth.data;
+        // data.activeScreen = screen;
+        // data.previousScreen = "Confirmation";
+        // this.props.navigateAndSaveCurrentScreen(data);
         this.props.navigation.navigate(screen);
     }
 
@@ -313,9 +303,9 @@ class Confirmation extends Component {
                         <Ionicons name="ios-arrow-back-outline" style={styles.hd_lft_icon} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>Confirmation</Title>
+                        <Title style={styles.appHdr2Txt}>{I18n.t('confirmation')}</Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled/>
+                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled />
                 </Header>
 
                 <Content style={styles.bgWhite} >
@@ -389,24 +379,24 @@ class Confirmation extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate("MyPromoCode", { id: this.props.auth.data.id, price: this.props.service.data.price })} disabled={ this.props.service.data.promo? true:false }>
+                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.props.navigation.navigate("MyPromoCode", { id: this.props.auth.data.id, price: this.props.service.data.price })} disabled={this.props.service.data.promo ? true : false}>
                             <View style={styles.confirmationIconView}>
                                 <Entypo name='scissors' style={styles.confirmationViewIcon} />
                             </View>
                             <Text style={styles.confirmationMainTxt}>{I18n.t('promo_code')}</Text>
                             {
-                                this.props.service.data.promo ? <Text style={styles.confirmationDateTime}>{this.state.currency} {this.props.service.data.promo}</Text>: null
-                                
+                                this.props.service.data.promo ? <Text style={styles.confirmationDateTime}>{this.state.currency} {this.props.service.data.promo}</Text> : null
+
                             }
                             {
                                 this.props.service.data.promotionsId ? <TouchableOpacity style={styles.confirmationArwNxt}>
-                                    <Ico name="close" style={[styles.confirmationArwNxtIcn, { color: 'red' }]} onPress={() => this.cleanPromo()}/>
+                                    <Ico name="close" style={[styles.confirmationArwNxtIcn, { color: 'red' }]} onPress={() => this.cleanPromo()} />
                                 </TouchableOpacity> : <View style={styles.confirmationArwNxt}>
-                                    <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
-                                </View>
+                                        <Ico name="navigate-next" style={styles.confirmationArwNxtIcn} />
+                                    </View>
 
                             }
-                            
+
                         </TouchableOpacity>
 
                     </View>
@@ -449,10 +439,10 @@ class Confirmation extends Component {
     }
 }
 
-Confirmation.propTypes = {
-    auth: PropTypes.object.isRequired,
-    service: PropTypes.object.isRequired,
-};
+// Confirmation.propTypes = {
+//     auth: PropTypes.object.isRequired,
+//     service: PropTypes.object.isRequired,
+// };
 
 const mapStateToProps = (state) => {
     return {
@@ -462,8 +452,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    navigateAndSaveCurrentScreen: (data) => dispatch(navigateAndSaveCurrentScreen(data)),
     setServiceDetails: (data) => dispatch(setServiceDetails(data))
-    
+
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Confirmation);

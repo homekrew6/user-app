@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, Text } from "react-native";
 import { Container, Header, Button, Content, Form, Item, Input, Body, Title } from "native-base";
@@ -178,11 +178,13 @@ class MyPromoCode extends Component {
                 this.setState({ IsLoaderVisible: true });
                 const data = { promoCode: this.state.promoCode, customerId: this.props.navigation.state.params.id, addedDate:new Date() };
                 api.post('userPromoCodes/addUserPromo', data).then((res) => {
+                    debugger;
                     if (res.response.type == "Error") {
                         this.setState({ IsLoaderVisible: false, isModalVisible: false });
                         Alert.alert(res.response.message);
                     }
                     else {
+                        debugger;
                         this.setState({ IsLoaderVisible: false, isModalVisible: false });
                         this.GetPromoCodeList();
                     }
@@ -268,10 +270,10 @@ class MyPromoCode extends Component {
 }
 
 // export default Categories;
-MyPromoCode.propTypes = {
-    auth: PropTypes.object.isRequired,
-    service: PropTypes.object.isRequired,
-};
+// MyPromoCode.propTypes = {
+//     auth: PropTypes.object.isRequired,
+//     service: PropTypes.object.isRequired,
+// };
 const mapStateToProps = state => ({
     auth: state.auth,
     service: state.service

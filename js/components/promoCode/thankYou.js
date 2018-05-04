@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, FlatList, Text } from "react-native";
+// import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import { Image, View, StatusBar, Alert, TouchableOpacity, FlatList,Text } from "react-native";
 import { Container, Header, Button, Content, CardItem, Card, Body, Title } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Stars from 'react-native-stars-rating';
@@ -133,7 +133,7 @@ class ThankYou extends Component {
                                 <Text style={styles.thanksText1}>{I18n.t('you_are_all_set')}</Text>
                                 <Text style={styles.thanksText2}>{I18n.t('thanks_for_awesome')}</Text>
                                 <Text style={styles.thanksText2}>{I18n.t('see_on_next')}</Text>
-                                <View style={styles.thanksText3}><Text style={{ backgroundColor: '#81cdc7', borderRadius: 10, fontSize: 12, paddingLeft: 8, paddingRight: 8, paddingTop: 2, paddingBottom: 2 }}>ORDER #: 123456</Text></View>
+                                <View style={styles.thanksText3}><Text style={{ backgroundColor: '#81cdc7', borderRadius: 10, fontSize: 12, paddingLeft: 8, paddingRight: 8, paddingTop: 2, paddingBottom: 2 }}>ORDER #: {this.props.navigation.state.params.orderId?this.props.navigation.state.params.orderId:''}</Text></View>
                                 <Text style={[styles.thanksText2, {marginBottom: 15}]}>Cheack your mail for more details.</Text>
 
                                 <View style={styles.thanksBottomWarp}>
@@ -181,9 +181,9 @@ class ThankYou extends Component {
     }
 }
 
-ThankYou.propTypes = {
-    //auth: PropTypes.object.isRequired
-}
+// ThankYou.propTypes = {
+//     //auth: PropTypes.object.isRequired
+// }
 const mapStateToProps = (state) => {
     return {
         //auth: state.auth
