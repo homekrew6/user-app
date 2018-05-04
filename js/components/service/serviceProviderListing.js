@@ -9,7 +9,6 @@ import styles from './styles';
 import { setServiceDetails } from './elements/serviceActions';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api/index';
-const carve = require("../../../img/atul_bk.png");
 const img18 = require('../../../img/no-image-available.png');
 class ServiceProviderListing extends Component {
     constructor(props) {

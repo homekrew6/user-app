@@ -828,7 +828,7 @@ class JobDetails extends Component {
                                                 this.state.jobDetails.worker ? (
                                                     <Image source={{ uri: this.state.jobDetails.worker.image }} style={{ height: 50, width: 50, borderRadius: 45, }} />
                                                 ) : (
-                                                        <Image source={require('../../../img/atul_bk.png')} style={{ height: 50, width: 50, borderRadius: 45, }} />
+                                                        <Image source={require('../../../img/atul.png')} style={{ height: 50, width: 50, borderRadius: 45, }} />
                                                     )
                                             }
 

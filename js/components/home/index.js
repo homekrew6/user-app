@@ -12,7 +12,6 @@ import api from '../../api';
 //import GlobalFont from 'react-native-global-font';
 //const launchscreenBg = require("../../../img/launchscreen-bg.png");
 const launchscreenBg = require("../../../img/splash.png");
-const launchscreenLogo = require("../../../img/logo-kitchen-sink.png");
 const resetAction = NavigationActions.reset({
 	index: 0,
 	actions: [NavigationActions.navigate({ routeName: 'Menu' })],
