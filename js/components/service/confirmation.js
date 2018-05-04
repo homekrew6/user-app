@@ -248,7 +248,7 @@ class Confirmation extends Component {
                             this.setState({
                                 loader: false
                             });
-                            Alert.alert('Please add time.');
+                            Alert.alert(I18n.t("please_add_time"));
                         }
 
                     }
@@ -256,7 +256,7 @@ class Confirmation extends Component {
                         this.setState({
                             loader: false
                         });
-                        Alert.alert('Please add a location.');
+                        Alert.alert(I18n.t("please_add_location"));
                     }
 
                 }
@@ -267,7 +267,7 @@ class Confirmation extends Component {
             this.setState({
                 loader: false,
             })
-            Alert.alert("Please Enter a Date And Time")
+            Alert.alert(I18n.t("please_enter_date_and_time"))
         }
 
     }
@@ -286,7 +286,7 @@ class Confirmation extends Component {
             this.navigate('ServiceProviderListing');
         }
         else {
-            Alert.alert('Please select date and time to see the service providers available.');
+            Alert.alert(I18n.t("please_enter_date_for_sp"));
         }
     }
 

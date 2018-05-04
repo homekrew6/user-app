@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { NavigationActions } from "react-navigation";
 import moment from 'moment';
-import { Image, View, CheckBox, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput,Text } from "react-native";
+import { Image, View, CheckBox, StatusBar, Dimensions, Alert, TouchableOpacity, ImageBackground, AsyncStorage, TextInput, Text } from "react-native";
 import { Container, Header, Button, Content, Body, Title, Item } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -75,7 +75,7 @@ class JobDetails extends Component {
             materialTotalPrice: 0,
             hoursPrice: 0,
             spinner: false,
-            currencyList:[]
+            currencyList: []
         }
 
         this.state.trackingRef = firebaseApp.database().ref().child('tracking');
@@ -277,14 +277,13 @@ class JobDetails extends Component {
                         finalList.push(item);
                     }
                 });
-                this.setState({ currencyList:finalList});
+                this.setState({ currencyList: finalList });
                 AsyncStorage.getItem("currency").then((value) => {
                     // if (value) {
                     //     const value1 = JSON.parse(value);
                     //     this.setState({ currency: value1.language })
                     // }
-                    if(value)
-                    {
+                    if (value) {
                         if (this.state.jobDetails && this.state.jobDetails.currencyId) {
                             this.state.currencyList.map((item) => {
                                 if (item.id == this.state.jobDetails.currencyId) {
@@ -293,8 +292,7 @@ class JobDetails extends Component {
                             })
                         }
                     }
-                    else
-                    {
+                    else {
                         if (this.state.jobDetails && this.state.jobDetails.currencyId) {
                             this.state.currencyList.map((item) => {
                                 if (item.id == this.state.jobDetails.currencyId) {
@@ -303,7 +301,7 @@ class JobDetails extends Component {
                             })
                         }
                     }
-                   
+
                 });
             })
             if (this.props.navigation.state.params.IsPaymentDone != undefined && this.props.navigation.state.params.IsPaymentDone == true) {
@@ -655,9 +653,10 @@ class JobDetails extends Component {
         );
     }
     onClickMakeFav(value) {
-
+        debugger;
         let customerId = this.props.auth.data.id;
         let workerId = this.state.jobDetails.workerId;
+        let language = this.state.jobDetails.worker.language?this.state.jobDetails.worker.language:"en";
         if (this.state.favValue) {
             this.setState({ favValue: false });
             api.post('favoriteSps/removeSpAsFavourite', { workerId: workerId, customerId: customerId }).then((favRes) => {
@@ -667,10 +666,11 @@ class JobDetails extends Component {
             })
         } else {
             this.setState({ favValue: true });
-            api.post('favoriteSps/addSpAsFavourite', { workerId: workerId, customerId: customerId }).then((favRes) => {
-
+            api.post('favoriteSps/addSpAsFavourite', { workerId: workerId, customerId: customerId, language: language }).then((favRes) => {
+     
             }).catch((favErr) => {
-
+                console.log("Err", favErr);
+                debugger;
             })
         }
 

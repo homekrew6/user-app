@@ -152,12 +152,18 @@ export default {
   select_location_first: "يرجى تحديد الموقع أولاً.",
   select_date_and_time: "يرجى تحديد التاريخ والوقت",
   continue_with_the_payment: "يرجى متابعة الدفع لاستكمال المهمة",
-  give_valid_location: "S'il vous plaît donner un emplacement valide.",
+  give_valid_location: "يرجى إعطاء الموقع الصحيح",
   add_building_name: "الرجاء إضافة اسم المبنى",
   add_villa_name: "يرجى إضافة Villa No / Appartment No",
   payment_successfull: "دفع النجاح.",
   please_add_promo_code: "الرجاء إضافة الرمز الترويجي.",
   job_posted_successfully: "وظيفة نشرت بنجاح",
   please_give_proper_price: "يرجى إعطاء السعر المناسب لتقديم الوظيفة.",
-  please_add_time: "يرجى إضافة الوقت"
+  please_add_time: "يرجى إضافة الوقت",
+  please_add_location: "الرجاء إضافة موقع",
+  please_enter_date_and_time: "يرجى إدخال التاريخ والوقت",
+  please_enter_date_for_sp: "يرجى تحديد التاريخ والوقت لرؤية مزودي الخدمة المتاحين.",
+  you_cannot_set_back: "لا يمكنك تحديد الوقت مرة أخرى",
+  please_set_date: "يرجى ضبط التاريخ",
+  please_set_time: "يرجى ضبط الوقت"
 };

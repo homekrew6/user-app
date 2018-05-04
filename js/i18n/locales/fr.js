@@ -139,12 +139,18 @@ export default {
   select_location_first: "Veuillez d'abord sélectionner un lieu.",
   select_date_and_time: "S'il vous plaît, fixez une date et une heure",
   continue_with_the_payment: "S'il vous plaît continuer avec le paiement pour terminer le travail",
-  give_valid_location: "يرجى إعطاء الموقع الصحيح",
+  give_valid_location: "S'il vous plaît donner un emplacement valide.",
   add_building_name: "Veuillez ajouter le nom du bâtiment",
   add_villa_name: "S'il vous plaît ajouter Villa No / Appartment No",
   payment_successfull: "Paiement réussi.",
   please_add_promo_code: "S'il vous plaît ajouter le code promo.",
   job_posted_successfully: "Job Posté avec succès",
   please_give_proper_price: "S'il vous plaît donner le bon prix pour soumettre le travail.",
-  please_add_time: "S'il vous plaît ajouter du temps."
+  please_add_time: "S'il vous plaît ajouter du temps.",
+  please_add_location: "Veuillez ajouter un lieu",
+  please_enter_date_and_time: "Veuillez entrer une date et heure",
+  please_enter_date_for_sp: "Veuillez sélectionner la date et l'heure pour voir les fournisseurs de services disponibles.",
+  you_cannot_set_back: "Vous ne pouvez pas sélectionner l'heure du retour",
+  please_set_date: "Veuillez définir une date",
+  please_set_time: "Veuillez définir une heure"
 };

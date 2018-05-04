@@ -180,7 +180,7 @@ class DateAndTime extends Component {
         let durPosHour = Math.abs(duration);
 
         if(checkPosNeg === 1 || checkPosNeg === 0){
-            Alert.alert('You cannot select back time');
+            Alert.alert(I18n.t("you_cannot_set_back"));
         } else{
             if (durPosHour > this.state.settings) {
                 let zeroPos = saveDBTime.search("0");
@@ -197,9 +197,9 @@ class DateAndTime extends Component {
                 //const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00';
 
                 if (this.state.satDate == '') {
-                    Alert.alert('Please set a Date');
+                    Alert.alert(I18n.t("please_set_date"));
                 } else if (this.state.setTime == '') {
-                    Alert.alert('Please set a Time');
+                    Alert.alert(I18n.t("please_set_time"));
                 } else {
                     this.setState({ IsSpinnerVisible: true });
                     data = { serviceId: this.props.service.data.id, saveDbDay: saveDbDay, saveDBTime: saveDBTime }
