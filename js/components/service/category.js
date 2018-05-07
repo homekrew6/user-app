@@ -127,6 +127,16 @@ class Categories extends Component {
       console.log(this.state.locationArray);
     }
   }
+  componentDidMount() {
+    if(this.props.auth.loggedIn) {
+      api.post('Customers/checkIfPaymentPending', { id: this.props.auth.data.id }).then((resPay) => {
+        if(resPay.response.IsPayPending) {
+          Alert.alert(I18n.t('please_pay_pending_amount'));
+          this.props.navigation.goBack();
+        }  
+      });
+    }
+  }
   openModal(data) {
     console.log('data on open Modal', data);
     //Alert.alert('Click is working');

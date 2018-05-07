@@ -152,5 +152,6 @@ export default {
   please_enter_date_for_sp: "Veuillez sélectionner la date et l'heure pour voir les fournisseurs de services disponibles.",
   you_cannot_set_back: "Vous ne pouvez pas sélectionner l'heure du retour",
   please_set_date: "Veuillez définir une date",
-  please_set_time: "Veuillez définir une heure"
+  please_set_time: "Veuillez définir une heure",
+  please_pay_pending_amount: "S'il vous plaît payer le montant en attente pour procéder"
 };
