@@ -57,7 +57,8 @@ class Menu extends Component {
           AsyncStorage.clear();
           AsyncStorage.removeItem('userToken');
           AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
-              this.setState({ visible: false });
+              I18n.locale = "en";
+            this.setState({visible: false  });
               this.props.navigation.dispatch(resetAction);
           });
           // this.props.logout(res => {
