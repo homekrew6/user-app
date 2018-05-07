@@ -73,13 +73,13 @@ class Settings extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()} >
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }}>
                         <Ionicons name="ios-arrow-back" style={{ fontSize: 26, color: '#fff' }} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title>{I18n.t('settings')}</Title>
+                        <Title><Text>{I18n.t('settings')}</Text></Title>
                     </Body>
-                    <Button transparent />
+                    <Button transparent style={{ width: 40, backgroundColor: 'transparent' }} disabled/>
                 </Header>
 
                 <Content style={styles.bgWhite} >

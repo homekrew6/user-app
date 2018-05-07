@@ -312,9 +312,9 @@ class Menu extends Component {
 
               <View>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('EditProfile')}>
-                  <Text style={styles.pname}>{this.props.auth.data.name}</Text>
-                  <Text style={styles.pemail}>{this.props.auth.data.email}</Text>
-                  <Text style={styles.pphone}>{this.props.auth.data.phone}</Text>
+                  <Text style={[styles.pname, { lineHeight: 22 }]}>{this.props.auth.data.name}</Text>
+                    <Text style={[styles.pemail, { lineHeight: 22 }]}>{this.props.auth.data.email}</Text>
+                    <Text style={[styles.pphone, { lineHeight: 22 }]}>{this.props.auth.data.phone}</Text>
                 </TouchableOpacity>
               </View>
             </View>

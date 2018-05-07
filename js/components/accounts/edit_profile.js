@@ -191,13 +191,13 @@ class EditProfile extends Component {
         <Content>
           <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
           <Header style={styles.appHdr2} noShadow>
-            <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+            <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }}>
               <Icon name="chevron-left" style={{ fontSize: 18, color: '#71beb8' }} />
             </Button>
             <Body style={styles.appHdrtitleWarp}>
               <Text style={{ color: '#1e3768' }}>{I18n.t('edit_my_profile')}</Text>
             </Body>
-            <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled />
+            <Button transparent style={{ width: 40, backgroundColor: 'transparent' }} disabled />
           </Header>
 
           <View style={styles.editPflHdr}>

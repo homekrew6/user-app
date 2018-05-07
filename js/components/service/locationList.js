@@ -184,13 +184,13 @@ class LocationList extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.goToMyMap()} >
+                    <Button transparent onPress={() => this.goToMyMap()} style={{ width: 50 }}>
                         <Text>{I18n.t('add')}</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>{I18n.t('my_location')}</Title>
                     </Body>
-                    <Button transparent onPress={() => this.locationDone()}><Text>{I18n.t('done')}</Text></Button>
+                    <Button transparent onPress={() => this.locationDone()} state={{ width: 50 }}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >

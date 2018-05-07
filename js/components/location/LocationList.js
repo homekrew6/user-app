@@ -35,25 +35,21 @@ class LocationList extends Component {
   render() {
     return (
       <View style={{ paddingTop: 5  }}>
-        <View style={{ flexDirection: 'row', height: 50, justifyContent: 'center', backgroundColor: 'white',}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white',}}>
             
-            <View style={{ flex: 2, justifyContent: 'center' }}><Image source={icon3} style={styleSelf.menuCardIcon} /></View>
-            <View style={{ flex: 10, justifyContent: 'center' }}>
+          <View style={{ paddingLeft: 10, paddingRight: 10 }}><Image source={icon3} style={styleSelf.menuCardIcon} /></View>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
               <TouchableOpacity onLongPress={() => this._onLongPressButton()} >
                 <Text>{this.props.listName}</Text>
               </TouchableOpacity>
             </View>
-           
-            <View style={{ flex: 2, justifyContent: 'center' }}>
               {
                 this.state.deleteOption ?
-                  <TouchableOpacity onPress={() => this.confirmDelete()}>
-                  <Ico name="close" size={28} style={{color:'red'}}/>
+              <TouchableOpacity onPress={() => this.confirmDelete()} style={{ paddingTop: 15, paddingBottom: 15, paddingLeft: 8, paddingRight: 8 }}>
+                      <Ico name="close" size={28} style={{color:'red'}}/>
                   </TouchableOpacity>
                 : null
               }
-            </View>
-            <View style={{ flex: 3, justifyContent: 'center' }}>
               <TouchableOpacity onPress={() => this.props.Self.navigation.navigate('MyMap', {
                 screenType: 'edit',
                 customerId: this.props.customerId,
@@ -64,10 +60,9 @@ class LocationList extends Component {
                 buildingName: this.props.buildingName,
                 villaNo: this.props.villa,
                 landmark: this.props.landmark
-                })}>
-                <Text>{I18n.t('edit')}</Text>
+                })} style={{ paddingTop: 15, paddingBottom: 15, paddingLeft: 8, paddingRight: 8, marginRight: 10 }}>
+              <Ico name='edit' size={20} style={{ color: '#1e3768' }}/>
               </TouchableOpacity>
-            </View>
         </View>
       </View>
     );

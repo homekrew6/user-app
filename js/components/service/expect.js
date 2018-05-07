@@ -69,13 +69,13 @@ class Expect extends Component {
                 <Content style={styles.bgWhite} >
 
                     <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                        <Button transparent onPress={() => this.props.navigation.goBack()} >
+                        <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }}>
                             <Ionicons name="ios-arrow-back-outline" style={styles.hd_lft_icon} />
                         </Button>
                         <Body style={{ alignItems: 'center' }}>
-                            <Title style={styles.appHdr2Txt}>{I18n.t('what_to_expect')}</Title>
+                            <Title style={styles.appHdr2Txt}><Text>{I18n.t('what_to_expect')}</Text></Title>
                         </Body>
-                        <Button transparent />
+                        <Button transparent style={{ width: 40, backgroundColor: 'transparent',  }} disabled/>
                     </Header>
 
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#cbf0ed', paddingBottom: 30, paddingTop: 14 }}>
