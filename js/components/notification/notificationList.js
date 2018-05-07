@@ -151,9 +151,9 @@ class NotificationList extends Component {
         return (
             <Container >
 					<FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{color: '#FFF'}} />                
-                <StatusBar
-                    backgroundColor="#81cdc7"
-                />
+                    <StatusBar
+                        backgroundColor="#81cdc7"
+                    />
 
                 <Header style={[styles.headerMain, { alignItems: 'center' }]} androidStatusBarColor="#81cdc7" noShadow>
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 75, justifyContent: 'flex-start' }}>

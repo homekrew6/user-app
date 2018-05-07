@@ -43,8 +43,8 @@ export default {
     listWarpPriceDown: { fontSize: 12 },
 
     jobItemWarp: { backgroundColor: '#fff', paddingTop: 15, paddingLeft: 10, paddingRight: 10, paddingBottom: 15, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#ccc' },
-    jobItemIconIonicons: { color: '#81cdc7', fontSize: 30 },
-    jobItemIcon: { color: '#81cdc7', fontSize: 20 },
+    jobItemIconIonicons: { color: '#1e3768', fontSize: 30 },
+    jobItemIcon: { color: '#1e3768', fontSize: 20 },
     jobItemName: { flex: 1, fontSize: 14, paddingLeft: 10 },
     cancelName: { color: 'red', flex: 1, fontSize: 14, paddingLeft: 10, alignItems:'center'},
     jobItemValue: { fontSize: 14, color: '#ccc', paddingLeft: 10 },

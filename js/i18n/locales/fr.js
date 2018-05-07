@@ -153,5 +153,6 @@ export default {
   you_cannot_set_back: "Vous ne pouvez pas sélectionner l'heure du retour",
   please_set_date: "Veuillez définir une date",
   please_set_time: "Veuillez définir une heure",
-  my_Currency: 'Ma devise'
+  my_Currency: 'Ma devise',
+  add_Service: 'Ajouter un service',
 };

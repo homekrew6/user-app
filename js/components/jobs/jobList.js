@@ -185,7 +185,7 @@ class JobList extends Component {
                                     return (
                                         <View key={key}>
                                             <View style={styles.dayHeading}>
-                                                <Text>{dataQ.serviceName}</Text>
+                                                <Text style={{ fontWeight: 'bold' }}>{dataQ.serviceName}</Text>
                                             </View>
                                             <List
                                                 dataArray={dataQ.jobList}

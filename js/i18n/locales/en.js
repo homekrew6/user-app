@@ -168,5 +168,6 @@ export default {
   you_cannot_set_back:"You cannot select back time",
   please_set_date:"Please set a Date",
   please_set_time:"Please set a Time",
-  my_Currency: 'My Currency'
+  my_Currency: 'My Currency',
+  add_Service: 'Add Service',
 };
