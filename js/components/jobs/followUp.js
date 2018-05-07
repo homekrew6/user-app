@@ -195,13 +195,13 @@ class FollowUp extends Component {
                 />
                 <FSpinner visible={this.state.IsVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }}>
                         <EvilIcons name="close" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('followUp')}</Title>
+                        <Title><Text>{I18n.t('followUp')}</Text></Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
+                    <Button transparent style={{ width: 40, backgroundColor: 'transparent', }} disabled={true} />
                 </Header>
                 <Content>
                     <View style={styles.totalBillitem}>

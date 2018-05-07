@@ -153,5 +153,7 @@ export default {
   you_cannot_set_back: "Vous ne pouvez pas sélectionner l'heure du retour",
   please_set_date: "Veuillez définir une date",
   please_set_time: "Veuillez définir une heure",
-  please_pay_pending_amount: "S'il vous plaît payer le montant en attente pour procéder"
+  my_Currency: 'Ma devise',
+  add_Service: 'Ajouter un service',
+  please_pay_pending_amount: "S'il vous plaît payer le montant en attente pour procéder",
 };

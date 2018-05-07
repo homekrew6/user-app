@@ -168,5 +168,12 @@ export default {
   you_cannot_set_back: "You cannot select back time",
   please_set_date: "Please set a Date",
   please_set_time: "Please set a Time",
-  please_pay_pending_amount: 'Please pay the pending amount to proceed'
+  please_pay_pending_amount: 'Please pay the pending amount to proceed',
+  please_enter_date_and_time:"Please Enter a Date And Time",
+  please_enter_date_for_sp:"Please select date and time to see the service providers available.",
+  you_cannot_set_back:"You cannot select back time",
+  please_set_date:"Please set a Date",
+  please_set_time:"Please set a Time",
+  my_Currency: 'My Currency',
+  add_Service: 'Add Service',
 };

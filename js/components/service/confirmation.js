@@ -295,13 +295,13 @@ class Confirmation extends Component {
                     backgroundColor="#cbf0ed"
                 />
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }}>
                         <Ionicons name="ios-arrow-back-outline" style={styles.hd_lft_icon} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>{I18n.t('confirmation')}</Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled />
+                    <Button transparent style={{ width: 40, backgroundColor: 'transparent' }} disabled />
                 </Header>
 
                 <Content style={styles.bgWhite} >
@@ -397,7 +397,7 @@ class Confirmation extends Component {
 
                     </View>
                     <View style={styles.confirmationhd}>
-                        <Text style={styles.confirmationhdtxt}>Add Service</Text>
+                        <Text style={styles.confirmationhdtxt}>{I18n.t('add_Service')}</Text>
                     </View>
                     <View style={styles.confirmationServicewarp}>
                         <View style={styles.confirmationServiceItem}>

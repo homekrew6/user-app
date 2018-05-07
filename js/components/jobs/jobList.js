@@ -143,17 +143,17 @@ class JobList extends Component {
                 />
                 <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <Header style={[styles.headerWarp, { alignItems: 'center' }]} noShadow androidStatusBarColor="#81cdc7">
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }} >
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
                     <Body style={[styles.headBody]}>
-                        <Title>{I18n.t('jobList')}</Title>
+                        <Title><Text>{I18n.t('jobList')}</Text></Title>
                     </Body>
                     <View>
                         <Menu
                             ref={this.setMenuRef}
                             button={
-                                <Button transparent onPress={this.showMenu} style={{ width: 30 }} >
+                                <Button transparent onPress={this.showMenu} style={{ width: 40 }} >
                                     <SimpleLineIcons name="options" style={{ color: '#fff' }} />
                                 </Button>
                             }
@@ -185,7 +185,7 @@ class JobList extends Component {
                                     return (
                                         <View key={key}>
                                             <View style={styles.dayHeading}>
-                                                <Text>{dataQ.serviceName}</Text>
+                                                <Text style={{ fontWeight: 'bold' }}>{dataQ.serviceName}</Text>
                                             </View>
                                             <List
                                                 dataArray={dataQ.jobList}
@@ -203,10 +203,10 @@ class JobList extends Component {
                                                             </View>
                                                             <View style={styles.listWarpTextWarp}>
                                                                 <View style={styles.flexDirectionRow}>
-                                                                    <Text>{ item.service.name ? item.service.name : ''}</Text>
+                                                                    <Text style={[styles.fontWeight700, { fontSize: 14 }]}>{ item.service.name ? item.service.name : ''}</Text>
                                                                 </View>
                                                                 <View style={styles.flexDirectionRow}>
-                                                                    <Text style={[styles.fontWeight700, { fontSize: 14 }]}> {this.getLocalTimeFormat(item.postedDate)} </Text>
+                                                                    <Text> {this.getLocalTimeFormat(item.postedDate)} </Text>
                                                                     
                                                                 </View>
                                                                 <View style={styles.flexDirectionRow}>

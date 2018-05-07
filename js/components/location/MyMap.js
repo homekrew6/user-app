@@ -249,18 +249,20 @@ class MyMap extends Component {
                     backgroundColor="#cbf0ed"
                 />
                 <Header style={styleSelf.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.goBack()} >
+
+                    <Button transparent onPress={() => this.goBack()} style={{ width: 60 }}>
                         <Text style={styleSelf.backBt} >{I18n.t('cancel')}</Text>
                     </Button>
+
                     <Body style={styleSelf.tac}>
                         {
                             this.props.navigation.state.params.screenType === 'add' ?
-                                <Text style={styleSelf.hdClr}>{I18n.t('add_location')}</Text> :
-                                <Text style={styleSelf.hdClr}>{I18n.t('edit_location')}</Text>
+                                <Text style={[styleSelf.hdClr, { fontSize: 18 }]}>{I18n.t('add_location')}</Text> :
+                                <Text style={[styleSelf.hdClr, { fontSize: 18 }]}>{I18n.t('edit_location')}</Text>
                         }
                     </Body>
 
-                    <Button transparent onPress={() => this.onMapDoneClick()} >
+                    <Button transparent onPress={() => this.onMapDoneClick()} style={{ width: 60 }} >
                         <Text style={styleSelf.backBt} >{I18n.t('done')}</Text>
                     </Button>
 

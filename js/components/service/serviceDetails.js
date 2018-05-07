@@ -1126,23 +1126,23 @@ class serviceDetails extends Component {
         <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
           {
             this.props.auth.data.id ?
-              <Button transparent style={{ width: 30 }} onPress={() => this.props.navigation.navigate('Menu')}>
+              <Button transparent style={{ width: 40 }} onPress={() => this.props.navigation.navigate('Menu')}>
                 <SimpleLineIcons name="grid" style={[styles.hd_lft_icon, { fontSize: 14, color: '#fff' }]} />
               </Button> : null
           }
           {
-            this.props.service.data.features ? <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled /> : null
+            this.props.service.data.features ? <Button transparent style={{ width: 40, backgroundColor: 'transparent' }} disabled /> : null
           }
           <Body style={styles.appHdr2Bdy}>
             <Title style={styles.appHdr2Txt}>{I18n.t('serviceDetails')}</Title>
           </Body>
           
           {
-            this.props.auth.data.id ? <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled /> : null
+            this.props.auth.data.id ? <Button transparent style={{ width: 40, backgroundColor: 'transparent' }} disabled /> : null
           }
           {
             this.props.service.data.features ? (
-              <Button transparent onPress={() => this.props.navigation.navigate('Expect')} >
+              <Button transparent onPress={() => this.props.navigation.navigate('Expect')} style={{ width: 40 }} >
                 <Ionicons name="ios-information-circle" style={[styles.hd_rt_icon, { color: '#fff', fontSize: 22 }]} />
               </Button>
             ) : null

@@ -111,9 +111,9 @@ export default {
     textAlign: 'center',
   },
   confirmationIconView: {
-    borderRadius: 50,
+    borderRadius: 35,
     borderWidth: 1,
-    borderColor: '#81cdc7',
+    borderColor: '#1e3768',
     marginRight: 8,
     height: 35,
     width: 35,
@@ -122,7 +122,7 @@ export default {
   },
   confirmationViewIcon: {
     fontSize: 20,
-    color: '#81cdc7',
+    color: '#1e3768',
   },
   confirmationViewIcon2: {
     fontSize: 26,
@@ -197,14 +197,14 @@ export default {
   confirmationServicePlusWarp: {
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: '#1e3768',
     height: 25,
     width: 25,
     alignItems: 'center',
     justifyContent: 'center',
   },
   confirmationServicePlusIcon: {
-    color: '#81cdc7',
+    color: '#1e3768',
     fontSize: 18,
   },
   confirmationServiceDvdr: {

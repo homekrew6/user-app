@@ -37,13 +37,13 @@ class ServiceProviderDetails extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
-                    <Button transparent onPress={() => this.props.navigation.goBack()}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('serviceProvider')}</Title>
+                        <Title><Text>{I18n.t('serviceProvider')}</Text></Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
+                    <Button transparent style={{ width: 40, backgroundColor: 'transparent', }} disabled={true} />
                 </Header>
                 <Content>
                     <Modal isVisible={this.state.IsModalVisible}

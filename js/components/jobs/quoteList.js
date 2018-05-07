@@ -79,13 +79,13 @@ class QuoteList extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }} >
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('quote_follow_up')}</Title>
+                        <Title><Text>{I18n.t('quote_follow_up')}</Text></Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} />
+                    <Button transparent style={{ width: 40, backgroundColor: 'transparent' }} />
                 </Header>
                 <Content>
                     <FSpinner visible={this.state.loader} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />

@@ -93,9 +93,7 @@ class SupportLiveChatList extends Component {
                 />
 
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
-                    {/* <Button transparent  style={styles.buttonIconWarp}>
-                        <FontAwesome style={[styles.headerIconClose, { fontSize: 18 }]} name='edit' />
-                    </Button> */}
+                    <Button transparent  style={[styles.buttonIconWarp, { backgroundColor: 'transparent' }]} disabled />
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>{I18n.t('liveChat')}</Title>
                     </Body>
