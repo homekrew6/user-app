@@ -236,13 +236,13 @@ class DateAndTime extends Component {
                     backgroundColor="#81cdc7" />
                 <FSpinner visible={this.state.IsSpinnerVisible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed">
-                    <Button transparent onPress={() => this.props.navigation.navigate('Confirmation')}>
+                    <Button transparent onPress={() => this.props.navigation.navigate('Confirmation')} style={{width: 60}}>
                         <Text>{I18n.t('cancel')}</Text>
                     </Button>
                     <Body style={styles.tac}>
                         <Text style={styles.hdClr}>{I18n.t('my_timings')}</Text>
                     </Body>
-                    <Button transparent onPress={() => this.setDateAndTime()}>
+                    <Button transparent onPress={() => this.setDateAndTime()} style={{ width: 60}}>
                         <Text>{I18n.t('done')}</Text>
                     </Button>
                 </Header>

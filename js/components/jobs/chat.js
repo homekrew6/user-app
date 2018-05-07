@@ -241,13 +241,13 @@ class Chat extends Component {
                 />
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
 
-                    <Button transparent style={{ width: 30 }}>
+                    <Button transparent style={{ width: 40 }}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
                         <Title style={{ fontSize: 14 }}>{I18n.t('typicallyRepliesInAFewMinutes')}</Title>
                     </Body>
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }}>
                         <EvilIcons name="close" style={styles.headIcon} />
                     </Button>
 

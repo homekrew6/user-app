@@ -42,15 +42,13 @@ class MyLocation extends Component {
                 />
                 <Content>
                     <Header style={styleSelf.appHdr2} androidStatusBarColor="#cbf0ed">
-                        <Button transparent >
-                            <TouchableOpacity onPress={() => this.goToMyMap()}>
-                                <Text style={styleSelf.backBt} >{I18n.t('add')}</Text>
-                            </TouchableOpacity>
+                        <Button transparent onPress={() => this.goToMyMap()} style={{width: 60}}>
+                            <Text style={styleSelf.backBt} >{I18n.t('add')}</Text>
                         </Button>
                         <Body style={styleSelf.tac}>
-                            <Text style={styleSelf.hdClr}>{I18n.t('my_location')}</Text>
+                            <Text style={[styleSelf.hdClr, { fontSize: 18 }]}>{I18n.t('my_location')}</Text>
                         </Body>
-                        <Button transparent onPress={() => this.goBack()} >
+                        <Button transparent onPress={() => this.goBack()} style={{ width: 60 }}>
                             <Text style={styleSelf.backBt} >{I18n.t('done')}</Text>
                         </Button>
                     </Header>

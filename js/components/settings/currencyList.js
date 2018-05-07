@@ -160,7 +160,7 @@ class CurrencyList extends Component {
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
                     <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 80, backgroundColor: 'transparent' }}><Text>{I18n.t('cancel')}</Text></Button>                    
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>My Currency</Title>
+                        <Title style={styles.appHdr2Txt}><Text>{I18n.t('my_Currency')}</Text></Title>
                     </Body>
                     <Button transparent onPress={() => this.languageDone()} style={{width: 80}}><Text>{I18n.t('done')}</Text></Button>
                 </Header>

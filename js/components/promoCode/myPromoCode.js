@@ -221,13 +221,13 @@ class MyPromoCode extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" >
-                    <Button transparent onPress={() => this.props.navigation.goBack()}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 50 }}>
                         <Ionicons style={styles.headerIconBack} name='ios-arrow-back' />
                     </Button>
                     <Body style={styles.headerBody}>
-                        <Title style={styles.headerTitle}>{I18n.t('myPromoCode')}</Title>
+                        <Title style={styles.headerTitle}><Text>{I18n.t('myPromoCode')}</Text></Title>
                     </Body>
-                    <Button transparent onPress={() => this.addPromoCode()} >
+                    <Button transparent onPress={() => this.addPromoCode()} style={{ width: 50 }}>
                         <Text>{I18n.t('add')}</Text>
                     </Button>
                 </Header>

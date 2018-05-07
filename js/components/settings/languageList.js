@@ -24,6 +24,7 @@ class LanguageList extends Component {
     componentDidMount() {
         this.setState({ visible: true });
         this.props.getAllLanguagesList().then((res) => {
+            debugger;
             let newArray = [];
             res.map((item) => {
                 if (item.is_active) {
@@ -176,7 +177,7 @@ class LanguageList extends Component {
                         <Text>{I18n.t('cancel')}</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>{I18n.t('my_language')}</Title>
+                        <Title style={styles.appHdr2Txt}><Text>{I18n.t('my_language')}</Text></Title>
                     </Body>
                     <Button transparent onPress={() => this.languageDone()} style={{ width: 80 }}><Text>{I18n.t('done')}</Text></Button>
                 </Header>

@@ -167,5 +167,6 @@ export default {
   please_enter_date_for_sp:"Please select date and time to see the service providers available.",
   you_cannot_set_back:"You cannot select back time",
   please_set_date:"Please set a Date",
-  please_set_time:"Please set a Time"
+  please_set_time:"Please set a Time",
+  my_Currency: 'My Currency'
 };
