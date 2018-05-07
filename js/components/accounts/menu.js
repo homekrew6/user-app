@@ -3,6 +3,7 @@ import { NavigationActions } from "react-navigation";
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logout } from './elements/authActions'
+import FSpinner from 'react-native-loading-spinner-overlay';
 import { Image, View, StatusBar, Alert, TouchableOpacity, BackHandler, AsyncStorage,Text } from "react-native";
 
 import { Container, Header, Button, Content, Item, Icon, Input, Label, CardItem,  Card, Body} from "native-base";
@@ -28,42 +29,45 @@ const resetAction = NavigationActions.reset({
 });
 
 
-
-
-
 class Menu extends Component {
   constructor(props) {
     super(props);
     this.state={
-      visible:'',
+      visible: false,
       notificatonCount: 0,
+      reRender: ''
     }
     AsyncStorage.getItem("language").then((value)=>{
       if(value)
       {
         const value1=JSON.parse(value);
         I18n.locale = value1.Code;
-        this.setState({visible:'fhfh'});
+        this.setState({reRender:'fhfh'});
       }
     })
    // I18n.locale = 'ar';
   }
 
   logout() {
+    this.setState({ visible: true });
     AsyncStorage.getItem("userToken").then((userToken) => {
       if (userToken) {
         const userToken1 = JSON.parse(userToken);
         api.put(`Customers/editCustomer/${userToken1.userId}?access_token=${userToken1.id}`, { deviceToken: '' }).then((resEdit) => {
           AsyncStorage.clear();
-          AsyncStorage.setItem("IsSliderShown", "true").then((res) => {})
-          this.props.logout(res => {
-            if (res) {
-              //this.props.navigation.navigate("Login")
+          AsyncStorage.removeItem('userToken');
+          AsyncStorage.setItem("IsSliderShown", "true").then((res) => {
+              this.setState({ visible: false });
               this.props.navigation.dispatch(resetAction);
-            } else {
-              this.props.navigation.navigate("Menu");
-            }
-          })
+          });
+          // this.props.logout(res => {
+          //   if (res) {
+          //     //this.props.navigation.navigate("Login")
+          //     this.props.navigation.dispatch(resetAction);
+          //   } else {
+          //     this.props.navigation.navigate("Menu");
+          //   }
+          // })
         }).catch((err) => {
           console.log(err);
         });
@@ -282,6 +286,7 @@ class Menu extends Component {
     
     return (
       <Container >
+        <FSpinner visible={this.state.visible} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
         <StatusBar
           backgroundColor="#81cdc7"
         />
