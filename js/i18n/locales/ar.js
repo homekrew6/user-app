@@ -168,4 +168,5 @@ export default {
   please_set_time: "يرجى ضبط الوقت",
   my_Currency: 'عملتي',
   add_Service: 'أضف خدمة',
+  please_pay_pending_amount: 'يرجى دفع المبلغ المعلق للمضي قدما'
 };

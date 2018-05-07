@@ -155,4 +155,5 @@ export default {
   please_set_time: "Veuillez définir une heure",
   my_Currency: 'Ma devise',
   add_Service: 'Ajouter un service',
+  please_pay_pending_amount: "S'il vous plaît payer le montant en attente pour procéder",
 };

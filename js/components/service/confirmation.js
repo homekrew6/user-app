@@ -116,6 +116,23 @@ class Confirmation extends Component {
         // parseString(xml, function (err, result) {
         //     console.dir(result);
         // });
+
+        if(this.props.auth.loggedIn) {
+            api.post('Customers/checkIfPaymentPending', { id: this.props.auth.data.id }).then((resPay) => {
+              if(resPay.response.IsPayPending) {
+                Alert.alert(I18n.t('please_pay_pending_amount'));
+
+                this.props.navigation.dispatch(NavigationActions.reset({
+                    index: 1,
+                    actions: [NavigationActions.navigate({ routeName: 'Menu' }),
+                    NavigationActions.navigate({ routeName: 'Category' })
+                    ],
+                  }));
+                  return true;
+              }  
+            });
+        }
+
         if (this.props.service.data.min_charge) {
             this.setState({ minPrice: this.props.service.data.min_charge.toFixed(2) });
         }
@@ -153,27 +170,6 @@ class Confirmation extends Component {
         if (!(this.state.dateTime == undefined)) {
             AsyncStorage.getItem("zoneId").then((zoneValue) => {
                 if (zoneValue) {
-
-                    // console.log('confirmationContinue', this.props);
-                    // let resCons = {
-                    //     "userLocationId": this.props.service.data.serviceLocationid,
-                    //     "price": this.props.service.data.price,
-                    //     "postedDate": this.props.service.data.saveDateDB,
-                    //     "payment": "Credit Card",
-                    //     "faourite_sp": this.props.service.data.favouriteId,
-                    //     "promo_code": "AED 50 off",
-                    //     "status": "STARTED",
-                    //     "customerId": this.props.auth.data.id,
-                    //     "currencyId": 0,
-                    //     "workerId": 0,
-                    //     "zoneId": zoneValue,
-                    //     "serviceId": this.props.service.data.id,
-                    //     "saveDBTime": this.props.service.data.saveDBTime,
-                    //     "saveDbDay": this.props.service.data.saveDbDay
-                    // };
-                    // console.log('resCons', resCons);
-
-
                     console.log(this.props.service.data.serviceLocationid);
                     if (this.props.service.data.serviceLocationid) {
                         if (this.props.service.data.saveDateDB) {
