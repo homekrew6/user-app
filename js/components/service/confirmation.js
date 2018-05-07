@@ -397,7 +397,7 @@ class Confirmation extends Component {
 
                     </View>
                     <View style={styles.confirmationhd}>
-                        <Text style={styles.confirmationhdtxt}>Add Service</Text>
+                        <Text style={styles.confirmationhdtxt}>{I18n.t('add_Service')}</Text>
                     </View>
                     <View style={styles.confirmationServicewarp}>
                         <View style={styles.confirmationServiceItem}>

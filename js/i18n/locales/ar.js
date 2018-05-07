@@ -166,6 +166,7 @@ export default {
   you_cannot_set_back: "لا يمكنك تحديد الوقت مرة أخرى",
   please_set_date: "يرجى ضبط التاريخ",
   please_set_time: "يرجى ضبط الوقت",
-  please_pay_pending_amount: 'يرجى دفع المبلغ المعلق للمضي قدما',
-  my_Currency: 'عملتي'
+  my_Currency: 'عملتي',
+  add_Service: 'أضف خدمة',
+  please_pay_pending_amount: 'يرجى دفع المبلغ المعلق للمضي قدما'
 };

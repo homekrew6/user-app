@@ -113,7 +113,7 @@ export default {
     confirmationIconView: {
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: '#81cdc7',
+        borderColor: '#1e3768',
         marginRight: 8,
         height: 35,
         width: 35,
@@ -122,7 +122,7 @@ export default {
     },
     confirmationViewIcon: {
         fontSize: 20,
-        color: '#81cdc7',
+        color: '#1e3768',
     },
     confirmationViewIcon2: {
         fontSize: 26,
