@@ -187,7 +187,7 @@ class NotificationList extends Component {
                                 <ListItem style={styles.listWarp}>
                                     <TouchableOpacity style={styles.listWarpInner} onPress={()=> this.gotoDetails(data)}>
                                          <View style={styles.listImageWarp}>
-                                             <Image source={require('../../../img/icon/notificationIcon1.png')} style={styles.listImage} />
+                                                <Image source={require('../../../img/icon/notificationicon_01.png')} style={styles.listImage} />
                                          </View>
                                          <View style={styles.listTextWarp}>
                                              <Text>{data.title}</Text>
@@ -232,7 +232,7 @@ class NotificationList extends Component {
                             <ListItem style={styles.listWarp}>
                                 <TouchableOpacity style={styles.listWarpInner} onPress={()=> this.gotoDetails(data)} >
                                     <View style={styles.listImageWarp}>
-                                        <Image source={require('../../../img/icon/notificationIcon1.png')} style={styles.listImage} />
+                                            <Image source={require('../../../img/icon/notificationicon_01.png')} style={styles.listImage} />
                                     </View>
                                     <View style={styles.listTextWarp}>
                                         <Text>{data.title}</Text>

@@ -24,7 +24,6 @@ class LanguageList extends Component {
     componentDidMount() {
         this.setState({ visible: true });
         this.props.getAllLanguagesList().then((res) => {
-            debugger;
             let newArray = [];
             res.map((item) => {
                 if (item.is_active) {

@@ -546,7 +546,7 @@ class JobDetails extends Component {
                                             <Text style={{ fontSize: 12 }} >{this.state.trTime}</Text>
                                         </View>
                                         <View style={{ width: 100, alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', marginTop: -5 }}>
-                                            <Image source={require("../../../img/icon/arrowDown.png")} style={{ height: 20, width: 20 }} />
+                                            <Image source={require("../../../img/icon/arrow_down.png")} style={{ height: 20, width: 20 }} />
                                         </View>
                                     </View>
                                 </MapView.Marker>
@@ -653,7 +653,6 @@ class JobDetails extends Component {
         );
     }
     onClickMakeFav(value) {
-        debugger;
         let customerId = this.props.auth.data.id;
         let workerId = this.state.jobDetails.workerId;
         let language = this.state.jobDetails.worker.language?this.state.jobDetails.worker.language:"en";
@@ -670,7 +669,6 @@ class JobDetails extends Component {
      
             }).catch((favErr) => {
                 console.log("Err", favErr);
-                debugger;
             })
         }
 

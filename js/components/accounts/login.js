@@ -179,6 +179,32 @@ class Login extends Component {
                         })
                       })
                     }
+                    else
+                    {
+                      AsyncStorage.getItem('keyQuestionList').then((value) => {
+                        if (value) {
+                          AsyncStorage.setItem("fromLogin", "true").then((resT) => {
+                            const data = this.props.auth.data;
+                            //this.props.navigation.dispatch(resetAction1);
+                            this.props.navigation.dispatch(
+                              NavigationActions.reset({
+                                index: 3,
+                                actions: [
+                                  NavigationActions.navigate({ routeName: 'Menu' }),
+                                  NavigationActions.navigate({ routeName: 'Category' }),
+                                  NavigationActions.navigate({ routeName: 'ServiceDetails' }),
+                                  NavigationActions.navigate({ routeName: 'Confirmation' }),
+                                ],
+                              })
+                            );
+                            //this.props.navigation.navigate('Confirmation');
+                          })
+
+                        } else {
+                          this.props.navigation.dispatch(resetAction);
+                        }
+                      })
+                    }
 
                   }).catch((err) => {
                     Alert.alert('Login failed, please try again');
