@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {View, StatusBar, TouchableOpacity, Text, TextInput, Alert ,Dimensions } from "react-native";
+import { View, StatusBar, TouchableOpacity, Text, TextInput, Alert, Dimensions, AsyncStorage } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button  } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -21,7 +21,7 @@ class Support extends Component {
             findText: '',
             PhoneNumber: '',
             loader: false,
-            allSupportList:[]
+            allSupportList:[],
         }
     }
 
@@ -31,19 +31,57 @@ class Support extends Component {
         api.get('Faqs').then((res) => {
             let listResponce = res;
             // console.log(res);
-            listResponce.map((item)=>{
-                let i = item;
-                i.is_active_item = false;
-                if (item.is_active){
-                    newsupportList.push(i);
-                }
+            AsyncStorage.getItem("language").then((languageVal) => {
 
-            })
+            let answer = 'answer', question = 'question', title = 'title';
+            const languageValue = JSON.parse(languageVal);
+            const languageCode = languageValue.Code;
+            if (languageCode == 'fr') {
+                listResponce.map((item) => {
+                    let i = item;
+                    item.titleSelected = item.fr_title;
+                    item.answerSelected = item.fr_answer;
+                    item.questionselected = item.fr_question;
+                    i.is_active_item = false;
+                    if (item.is_active) {
+                        newsupportList.push(i);
+                    }
+
+                })
+            } else if (languageCode == 'ar'){
+                listResponce.map((item) => {
+                    let i = item;
+                    item.titleSelected = item.ar_title;
+                    item.answerSelected = item.ar_answer;
+                    item.questionselected = item.ar_question;
+                    i.is_active_item = false;
+                    if (item.is_active) {
+                        newsupportList.push(i);
+                    }
+
+                })
+            }
+            else{
+                listResponce.map((item) => {
+                    let i = item;
+                    item.titleSelected = item.title;
+                    item.answerSelected = item.answer;
+                    item.questionselected = item.question;
+                    i.is_active_item = false;
+                    if (item.is_active) {
+                        newsupportList.push(i);
+                    }
+
+                })
+            }
             this.setState({
                 supportList: newsupportList,
                 loader: false,
                 allSupportList:newsupportList
             });
+        }).catch((err) => {
+            console.log(err);
+        })
         }).catch((error) => {
             console.log(error);
             this.setState({ loader: false });
@@ -118,13 +156,13 @@ class Support extends Component {
                 <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />                
 
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={styles.buttonIconWarp}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={[styles.buttonIconWarp, { width: 40 }]}>
                         <Ionicons style={styles.headerIconClose} name='ios-arrow-back' />
                     </Button>
                     <Body style={styles.headerBody}>
-                        <Title style={styles.headerTitle}>{I18n.t('support')}</Title>
+                        <Title style={styles.headerTitle}><Text>{I18n.t('support')}</Text></Title>
                     </Body>
-                    <Button transparent style={styles.buttonIconWarp} disabled />
+                    <Button transparent style={[styles.buttonIconWarp, { width: 40 }]} disabled />
                 </Header>
 
                 <View style={styles.afterHeaderSearch}>
@@ -141,12 +179,13 @@ class Support extends Component {
                     <View style={[this.state.supportList.length ? styles.bgWhite: '',{ marginBottom: 20 }]}>
                     {
                              this.state.supportList.map((item, key)=>{
+                                        let ttl = this.state.title;
                                     return(
                                         <View style={styles.chatListWarp} key={key}>
                                             <TouchableOpacity style={styles.chatListTouchWarp} onPress={()=> this.faqFunction(key)}>
                                                 <View style={styles.chatListTextWarp}>
-                                                    <Text style={styles.chatListTextName}>{item.title}</Text>
-                                                    <Text style={styles.chatListTextQuestion}>{item.question}</Text>
+                                                    <Text style={styles.chatListTextName}>{item.titleSelected}</Text>
+                                                    <Text style={styles.chatListTextQuestion}>{item.questionselected}</Text>
                                                 </View>
                                                 <View>
                                                     {
@@ -158,7 +197,7 @@ class Support extends Component {
                                             {
                                                 item.is_active_item ? <View style={{ paddingBottom: 15 }}>
                                                     {/* <Text style={styles.chatListTime}>{item.answer}</Text> */}
-                                                    <HTML html={item.answer} style={styles.chatListTime} imagesMaxWidth={Dimensions.get('window').width} />
+                                                    <HTML html={item.answerSelected} style={styles.chatListTime} imagesMaxWidth={Dimensions.get('window').width} />
                                                 </View>: null
                                             }
                                         </View>

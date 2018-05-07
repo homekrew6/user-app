@@ -241,13 +241,13 @@ class jobSummary extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }} >
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }} >
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>{I18n.t('jobSummary')}</Title>
+                        <Title style={styles.appHdr2Txt}><Text>{I18n.t('jobSummary')}</Text></Title>
                     </Body>
-
+                    <Button transparent style={{ backgroundColor: 'transparent', width: 40 }} disabled />                    
                 </Header>
 
                 <Content style={styles.bgWhite} >

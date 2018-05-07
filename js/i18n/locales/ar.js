@@ -165,5 +165,6 @@ export default {
   please_enter_date_for_sp: "يرجى تحديد التاريخ والوقت لرؤية مزودي الخدمة المتاحين.",
   you_cannot_set_back: "لا يمكنك تحديد الوقت مرة أخرى",
   please_set_date: "يرجى ضبط التاريخ",
-  please_set_time: "يرجى ضبط الوقت"
+  please_set_time: "يرجى ضبط الوقت",
+  my_Currency: 'عملتي'
 };

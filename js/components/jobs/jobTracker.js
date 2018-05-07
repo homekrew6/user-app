@@ -104,13 +104,13 @@ class JobTracker extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
-                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 30 }}>
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }}>
                         <EvilIcons name="close" style={[styles.headIcon, { color: '#fff' }]} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('jobTracker')}</Title>
+                        <Title><Text>{I18n.t('jobTracker')}</Text></Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
+                    <Button transparent style={{ width: 40, backgroundColor: 'transparent', }} disabled={true} />
                 </Header>
                 <Content>
                     <FSpinner visible={this.state.loader} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />

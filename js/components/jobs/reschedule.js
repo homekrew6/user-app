@@ -194,9 +194,9 @@ class Reschedule extends Component {
                         <EvilIcons name="close" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
-                        <Title>{I18n.t('reschedule')}</Title>
+                        <Title><Text>{I18n.t('reschedule')}</Text></Title>
                     </Body>
-                    <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} />
+                    <Button transparent style={{ width: 50, backgroundColor: 'transparent' }} disabled/>
                 </Header>
                 <Content>
                     <View style={styles.dateWarp}>

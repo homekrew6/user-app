@@ -51,7 +51,7 @@ import NotificationList from './components/notification/notificationList';
 const customTextProps = {
     style: {
         color: '#1e3768',
-        fontFamily: 'Lato-Regular'
+        fontFamily: 'Lato-Regular',
     }
 }
 

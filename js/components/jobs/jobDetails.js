@@ -770,13 +770,13 @@ class JobDetails extends Component {
                     <FSpinner visible={this.state.spinner} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
 
                     <Header style={styles.headerWarp} noShadow androidStatusBarColor="#81cdc7">
-                        <Button transparent onPress={() => this.goBackJobDetails()} style={{ width: 30 }} >
+                        <Button transparent onPress={() => this.goBackJobDetails()} style={{ width: 40 }} >
                             <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                         </Button>
                         <Body style={styles.headBody}>
-                            <Title>{I18n.t('jobDetails')}</Title>
+                            <Title><Text>{I18n.t('jobDetails')}</Text></Title>
                         </Body>
-                        <Button transparent style={{ width: 30, backgroundColor: 'transparent', }} disabled={true} />
+                        <Button transparent style={{ width: 40, backgroundColor: 'transparent', }} disabled={true} />
                     </Header>
 
 

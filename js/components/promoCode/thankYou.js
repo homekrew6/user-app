@@ -118,13 +118,13 @@ class ThankYou extends Component {
                     backgroundColor="#81cdc7"
                 />
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" >
-                    <Button transparent onPress={() => this.goToMenu()}>
+                    <Button transparent onPress={() => this.goToMenu()} style={{ width: 40 }}>
                         <Ionicons style={styles.headerIconClose} name='ios-close' />
                     </Button>
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>{I18n.t('thank_you')}</Title>
                     </Body>
-                    <Button transparent />
+                    <Button transparent style={{ backgroundColor: 'transparent', width: 40 }} disabled/>
                 </Header>
                 <Content>
                     <Card style={styles.tCard}>

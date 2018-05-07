@@ -278,7 +278,7 @@ class Categories extends Component {
 
             {
               this.props.auth.data.id?
-              <Button transparent style={{ width: 30 }} onPress={()=> this.props.navigation.navigate('Menu')}>
+              <Button transparent style={{ width: 40 }} onPress={()=> this.props.navigation.navigate('Menu')}>
                 <SimpleLineIcons name="grid" style={[styles.hd_lft_icon, { fontSize: 14, color: '#fff' }]} />
               </Button>: null
             }
@@ -287,7 +287,7 @@ class Categories extends Component {
               <Image source={logo_hdr} style={styles.logo_hdr_img} />
             </Body>
             {
-              this.props.auth.data.id ? <Button transparent style={{ width: 30, backgroundColor: 'transparent' }} disabled />: null
+              this.props.auth.data.id ? <Button transparent style={{ width: 40, backgroundColor: 'transparent' }} disabled />: null
             }
             
             {/* <Button transparent >

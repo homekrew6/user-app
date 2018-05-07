@@ -218,13 +218,13 @@ class ServiceProviderListing extends Component {
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#81cdc7" noShadow>
-                    <Button transparent onPress={() => this.props.navigation.goBack()} >
+                    <Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 60 }}>
                         <Text>{I18n.t('cancel')}</Text>
                     </Button>
                     <Body style={{ alignItems: 'center' }}>
-                        <Title style={styles.appHdr2Txt}>{I18n.t('choose_from_favourite')}</Title>
+                        <Title style={styles.appHdr2Txt}><Text>{I18n.t('choose_from_favourite')}</Text></Title>
                     </Body>
-                    <Button transparent onPress={() => this.spDone()}><Text>{I18n.t('done')}</Text></Button>
+                    <Button transparent onPress={() => this.spDone()} style={{ width: 60 }}><Text>{I18n.t('done')}</Text></Button>
                 </Header>
 
                 <Content style={styles.bgWhite} >

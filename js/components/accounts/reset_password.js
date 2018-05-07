@@ -15,11 +15,11 @@ const buttonImage = require("../../../img/bg-button.png");
 class ResetPassword extends Component {
 	constructor(props) {
         super(props);
-				this.state = {
-					otp:'',
-	       			password: '',
-					visible: false
-	      }
+			this.state = {
+				otp:'',
+				password: '',
+				visible: false
+	    }
     }
 
 		pressSend(){
@@ -67,14 +67,13 @@ class ResetPassword extends Component {
 				<Content>
 					<FSpinner visible={this.state.visible} textContent={"Loading..."} textStyle={{ color: '#FFF' }} androidStatusBarColor="#81cdc7" />
 					<Header style={{backgroundColor:'#fff'}}>
-						<Left style={{marginRight:-15}}>
-							<Button transparent onPress={() => this.props.navigation.goBack()}>
-								<Icon style={{color:'#81cdc7'}} name='arrow-back' />
-							</Button>
-						</Left>
-						<Body>
-							<Title style={{color:'#1e3768'}}>{I18n.t('reset_password')}</Title>
+						<Button transparent onPress={() => this.props.navigation.goBack()} style={{ width: 40 }}>
+							<Icon style={{color:'#81cdc7'}} name='arrow-back' />
+						</Button>
+						<Body style={{ alignItems: 'center' }}>
+							<Title style={{ color: '#1e3768' }}><Text>{I18n.t('reset_password')}</Text></Title>
 						</Body>
+						<Button transparent style={{ backgroundColor: 'transparent', width: 40 }} disabled />						
 					</Header>
 
 					<View style={{padding:20}}>
