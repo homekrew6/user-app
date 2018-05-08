@@ -236,9 +236,11 @@ class JobDetails extends Component {
                 let price = this.props.navigation.state.params.jobDetails.price;
                 const jobId = this.props.navigation.state.params.jobDetails.id;
                 const customerId = this.props.navigation.state.params.jobDetails.customerId;
+                const languageName = this.props.navigation.state.params.jobDetails.customer.languageName ? this.props.navigation.state.params.jobDetails.customer.languageName:'en';
                 api.post('Jobs/completeJob', {
                     "id": jobId, "status": "COMPLETED", "customerId": customerId, "workerId": this.state.jobDetails.workerId,
-                    price: price
+                    "price": price,
+                    "languageName": languageName
                 }).then(responseJson => {
                     api.post('Jobs/getJobDetailsById', {
                         "id": this.props.navigation.state.params.jobDetails.id,
