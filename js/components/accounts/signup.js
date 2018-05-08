@@ -64,8 +64,7 @@ class Signup extends Component {
     if (!regEmail.test(this.state.email)) {
       Alert.alert('Please enter a valid email');
       return false;
-      Alert.alert('Please enter a valid email');
-      return false;
+     
     }
     if (!this.state.password) {
       Alert.alert('Please enter password');
