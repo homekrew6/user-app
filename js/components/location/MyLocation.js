@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StatusBar, TouchableOpacity, Image, ScrollView, AsyncStorage } from 'react-native';
+import { View, Text, StatusBar, Image, ScrollView, AsyncStorage, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Button, Content, Body, Item, Frame, Input, Label } from 'native-base';
 import LocationList from './LocationList';
@@ -10,27 +10,37 @@ import I18n from '../../i18n/i18n';
 // const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } } };
 
 class MyLocation extends Component {
-    state = { locationData: '' };
+    state = { locationData: '', IsAddDisabled: false, IsDoneDisabled:false};
     componentDidMount() {
         const customerId = this.props.auth.data.id;
         const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`
         api.get(getLocationUrl).then(res => {
             this.setState({ locationData: res });
         }).catch((err) => {
-            console.log(err);
+           
         });
         AsyncStorage.removeItem('fromConfirmation', (err) => console.log('finished', err));
     }
     goToMyMap() {
-        const data = this.props.auth.data;
-        data.activeScreen = "MyMap";
-        data.previousScreen = "MyLocation";
+        // const data = this.props.auth.data;
+        // data.activeScreen = "MyMap";
+        // data.previousScreen = "MyLocation";
+        this.setState({ IsAddDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsAddDisabled: false });
+        }, 3000);
         this.props.navigation.navigate('MyMap', { screenType: 'add', customerId: this.props.auth.data.id });
     }
     goBack() {
-        const data = this.props.auth.data;
-        data.activeScreen = "Menu";
-        data.previousScreen = "";
+        // const data = this.props.auth.data;
+        // data.activeScreen = "Menu";
+        // data.previousScreen = "";
+        this.setState({ IsDoneDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsDoneDisabled: false });
+        }, 3000);
         this.props.navigation.navigate('Menu');
     }
 
@@ -42,15 +52,15 @@ class MyLocation extends Component {
                 />
                 <Content>
                     <Header style={styleSelf.appHdr2} androidStatusBarColor="#cbf0ed">
-                        <Button transparent onPress={() => this.goToMyMap()} style={{width: 60}}>
+                        <Button transparent disabled={this.state.IsAddDisabled} onPress={() => this.goToMyMap()} style={{width: 60}}>
                             <Text style={styleSelf.backBt} >{I18n.t('add')}</Text>
                         </Button>
                         <Body style={styleSelf.tac}>
                             <Text style={[styleSelf.hdClr, { fontSize: 18 }]}>{I18n.t('my_location')}</Text>
                         </Body>
-                        <Button transparent onPress={() => this.goBack()} style={{ width: 60 }}>
+                        <TouchableOpacity disabled={this.state.IsDoneDisabled}  onPress={() => this.goBack()} style={{ width: 60 }}>
                             <Text style={styleSelf.backBt} >{I18n.t('done')}</Text>
-                        </Button>
+                        </TouchableOpacity>
                     </Header>
                     <ScrollView>
                         <View>

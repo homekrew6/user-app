@@ -299,7 +299,7 @@ class MyMap extends Component {
                                 }}
                                 getDefaultValue={() => ''}
                                 query={{
-                                    key: 'AIzaSyCya136InrAdTM3EkhM9hryzbCcfTUu7UU',
+                                    key: 'AIzaSyCgqyi_a10dEfgxoQtHxiJTFg9gCwG1YJI',
                                     language: 'en', // language of the results
                                     //types: '(cities)' // default: 'geocode'
                                 }}

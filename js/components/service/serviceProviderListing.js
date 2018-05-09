@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Image, View, StatusBar, Alert, TouchableOpacity, List,Text} from "react-native";
 import { NavigationActions } from "react-navigation";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Container, Header, Button, Content, Body, Title } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';

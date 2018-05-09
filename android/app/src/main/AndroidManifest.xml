@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.KrewUserApp"
+    package="com.HomeKrew.User"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -23,6 +23,7 @@
     <application
       android:name=".MainApplication"
       android:allowBackup="false"
+      android:supportsRtl="true"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:theme="@style/AppTheme">

@@ -161,6 +161,7 @@ class FollowUp extends Component {
             api.post('jobFollowUps/declineFollowUp', toSendData).then((res) => {
                 Alert.alert(res.response.message);
                 this.setState({ IsVisible: false });
+                Alert.alert(I18n.t("continue_with_the_payment"));
                 this.props.navigation.navigate('JobList');
             }).catch((Err) => {
                 this.setState({})

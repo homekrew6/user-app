@@ -22,6 +22,7 @@ class JobList extends Component {
             customerId: this.props.auth.data.id ? this.props.auth.data.id : '',
             jobList: [],
             refreshing: false,
+            IsDisabled:false
 
         }
     }
@@ -108,6 +109,11 @@ class JobList extends Component {
     }
 
     goToDetails(data) {
+        this.setState({ IsDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsDisabled: false });
+        }, 3000);
         this.props.navigation.navigate('JobDetails', { jobDetails: data });
     }
 
@@ -191,7 +197,7 @@ class JobList extends Component {
                                                 dataArray={dataQ.jobList}
                                                 renderRow={(item) =>
                                                     <ListItem style={{ marginLeft: 0 }}>
-                                                        <TouchableOpacity style={styles.listWarp} onPress={() => this.goToDetails(item)}>
+                                                        <TouchableOpacity style={styles.listWarp} disabled={this.state.IsDisabled} onPress={() => this.goToDetails(item)}>
                                                             <View style={styles.listWarpImageWarp}>
                                                                 {
                                                                     item.service.banner_image ? (

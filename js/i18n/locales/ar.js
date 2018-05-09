@@ -168,5 +168,15 @@ export default {
   please_set_time: "يرجى ضبط الوقت",
   my_Currency: 'عملتي',
   add_Service: 'أضف خدمة',
-  please_pay_pending_amount: 'يرجى دفع المبلغ المعلق للمضي قدما'
+  please_pay_pending_amount: 'يرجى دفع المبلغ المعلق للمضي قدما',
+  close: "قريب",
+  reload_app:"يرجى إعادة تحميل التطبيق للاطلاع على التغييرات",
+  save:'حفظ',
+  camera: 'الة تصوير',
+  file: "ملف",
+  please_rate_krew: "يرجى تقييم KREW الخاص بك وعلى كل خبرتك معنا",
+  Confirm: 'تؤكد',
+  are_you_sure: "هل أنت متأكد من الخروج من التطبيق?",
+  are_you_sure_to_cancel: "هل أنت متأكد من إلغاء هذه الوظيفة؟",
+  sure_to_delete_loc: "هل أنت متأكد من حذف الموقع؟?"
 };

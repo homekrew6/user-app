@@ -11,8 +11,10 @@ import styles from './styles';
 import api from '../../api';
 import { NavigationActions } from "react-navigation";
 import { setServiceDetails } from './elements/serviceActions';
+import FSpinner from 'react-native-loading-spinner-overlay';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
+
 
 class LocationList extends Component {
     constructor(props) {
@@ -23,7 +25,10 @@ class LocationList extends Component {
             ],
             homeValue: 'Home',
             serviceDetails: this.props.service.data,
-            serviceLocationid: ''
+            serviceLocationid: '',
+            IsMapDisabled:false,
+            IsEditDisabled:false,
+            loader:false
         }
     }
 
@@ -107,7 +112,7 @@ class LocationList extends Component {
     }
 
     navigate() {
-        const data = this.props.auth.data;
+        this.setState({ loader: false });
         this.props.navigation.dispatch( 
             NavigationActions.reset({
                 index: 3,
@@ -127,6 +132,7 @@ class LocationList extends Component {
                 loc = loc1.text;
             }
         })
+        this.setState({loader:true});
         if (loc) {
             let data = this.state.serviceDetails;
             let serviceLocationid = this.state.serviceLocationid;
@@ -137,16 +143,41 @@ class LocationList extends Component {
             this.navigate();
         }
         else {
+            this.setState({ loader: false });
             Alert.alert(I18n.t('select_location_first'));
         }
 
     }
     goToMyMap() {
+        this.setState({ IsMapDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsMapDisabled: false });
+        }, 3000);
         const data = this.props.auth.data;
         AsyncStorage.setItem("fromConfirmation", "true").then((res) => {
             this.props.navigation.navigate('MyMap', { screenType: 'add', customerId: this.props.auth.data.id });
         })
 
+    }
+    GotToEdit(data)
+    {
+          this.setState({ IsEditDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsEditDisabled: false });
+        }, 3000);
+        this.props.navigation.navigate('MyMap', {
+                        screenType: 'edit',
+                        id: data.id,
+                        customerId: this.props.auth.data.id,
+                        latitude: data.latitude,
+                        longitude: data.longitude,
+                        name: data.text,
+                        buildingName: data.buildingName,
+                        villaNo: data.villa,
+                        landmark: data.landmark
+                    })
     }
     render() {
 
@@ -160,17 +191,7 @@ class LocationList extends Component {
                     <View style={{ flex: 1 }}>
                         <Text>{data.text}</Text>
                     </View>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('MyMap', {
-                        screenType: 'edit',
-                        id: data.id,
-                        customerId: this.props.auth.data.id,
-                        latitude: data.latitude,
-                        longitude: data.longitude,
-                        name: data.text,
-                        buildingName: data.buildingName,
-                        villaNo: data.villa,
-                        landmark: data.landmark
-                    })} >
+                    <TouchableOpacity disabled={this.state.IsEditDisabled} onPress={() =>this.GotToEdit(data) } >
                         <Text>{I18n.t('edit')}</Text>
                     </TouchableOpacity>
                 </TouchableOpacity>
@@ -178,15 +199,15 @@ class LocationList extends Component {
         )
         return (
             <Container >
-
+                <FSpinner visible={this.state.loader} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
                 <StatusBar
                     backgroundColor="#cbf0ed"
                 />
 
                 <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow>
-                    <Button transparent onPress={() => this.goToMyMap()} style={{ width: 50 }}>
+                    <TouchableOpacity style={{ alignItems:'center', justifyContent:'center', width: 50 }} disabled={this.state.IsMapDisabled}  onPress={() => this.goToMyMap()}>
                         <Text>{I18n.t('add')}</Text>
-                    </Button>
+                    </TouchableOpacity>
                     <Body style={{ alignItems: 'center' }}>
                         <Title style={styles.appHdr2Txt}>{I18n.t('my_location')}</Title>
                     </Body>

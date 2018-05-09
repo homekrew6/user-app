@@ -27,11 +27,17 @@ const win = Dimensions.get('window').width;
 const { width } = Dimensions.get('window');
 const height = parseInt(Dimensions.get('window').height / 20);
 const paused = require("../../../img/paused.png");
+// const firebaseConfig = {
+//     apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
+//     authDomain: "krew-user-app.firebaseapp.com",
+//     databaseURL: "https://krew-user-app.firebaseio.com",
+//     storageBucket: "krew-user-app.appspot.com"
+// };
 const firebaseConfig = {
-    apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
-    authDomain: "krew-user-app.firebaseapp.com",
-    databaseURL: "https://krew-user-app.firebaseio.com",
-    storageBucket: "krew-user-app.appspot.com"
+    apiKey: "AIzaSyCRclijPdb65nW25fvZozVv0LekbC0GHRM",
+    authDomain: "homekrew-91b4e.firebaseapp.com",
+    databaseURL: "https://homekrew-91b4e.firebaseio.com",
+    storageBucket: "homekrew-91b4e.appspot.com"
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const paymentUrl = 'https://secure.telr.com/gateway/mobile.xml';
@@ -75,7 +81,12 @@ class JobDetails extends Component {
             materialTotalPrice: 0,
             hoursPrice: 0,
             spinner: false,
-            currencyList: []
+            currencyList: [],
+            IsSpDisabled: false,
+            IsFollowDisabled: false,
+            IsTrackerDisabled:false,
+            IsSummaryDisabled:false,
+            IsResDisabled:false
         }
 
         this.state.trackingRef = firebaseApp.database().ref().child('tracking');
@@ -170,27 +181,28 @@ class JobDetails extends Component {
 
     showConfirmDialog(reason) {
         Alert.alert(
-            'Confirm',
-            'Are you sure to cancel this job?',
+            I18n.t('Confirm'),
+            I18n.t('are_you_sure_to_cancel'),
             [
-                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                { text: 'OK', onPress: () => this.cancelJob(reason) },
+                { text: I18n.t('cancel'), onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: I18n.t('ok'), onPress: () => this.cancelJob(reason) },
             ],
             { cancelable: false }
         )
     }
     showConfirm() {
         Alert.alert(
-            'Confirm',
-            'Are you sure to cancel this job?',
+            I18n.t('Confirm'),
+            I18n.t('are_you_sure_to_cancel'),
             [
-                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                { text: 'OK', onPress: () => this.cancelJob(this.state.reason, true) },
+                { text: I18n.t('cancel'), onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: I18n.t('ok'), onPress: () => this.cancelJob(this.state.reason, true) },
             ],
             { cancelable: false }
         )
     }
     cancelJob(reason, IsOther) {
+
 
         if (IsOther != undefined && IsOther == true) {
             this.setState({ jobCancelModal: false });
@@ -236,7 +248,7 @@ class JobDetails extends Component {
                 let price = this.props.navigation.state.params.jobDetails.price;
                 const jobId = this.props.navigation.state.params.jobDetails.id;
                 const customerId = this.props.navigation.state.params.jobDetails.customerId;
-                const languageName = this.props.navigation.state.params.jobDetails.customer.languageName ? this.props.navigation.state.params.jobDetails.customer.languageName:'en';
+                const languageName = this.props.navigation.state.params.jobDetails.customer.languageName ? this.props.navigation.state.params.jobDetails.customer.languageName : 'en';
                 api.post('Jobs/completeJob', {
                     "id": jobId, "status": "COMPLETED", "customerId": customerId, "workerId": this.state.jobDetails.workerId,
                     "price": price,
@@ -327,7 +339,6 @@ class JobDetails extends Component {
                 })
             }
             else {
-                console.log('jobDetails', this.state.jobDetails);
 
                 if (this.state.jobDetails.status == 'STARTED') {
                     this.setState({ jobTrackingStatus: 'Job Requested' });
@@ -363,9 +374,9 @@ class JobDetails extends Component {
                         // this.setState({
                         //     grndtotal: grndtotal,
                         // })
-                        console.log(materialList);
+
                     }).catch((err) => {
-                        console.log(err);
+
                     })
                 }
                 else if (this.state.jobDetails.status == 'JOBSTARTED') {
@@ -391,7 +402,7 @@ class JobDetails extends Component {
             }
 
         }).catch(err => {
-            console.log(err);
+
             //reject(err)
             this.setState({
                 loader: false,
@@ -399,9 +410,9 @@ class JobDetails extends Component {
         })
 
 
-        console.log('componentDidMount', this.props);
+
         navigator.geolocation.getCurrentPosition((position) => {
-            console.log('position', position);
+
             this.setState({
                 latitudeUser: position.coords.latitude,
                 longitudeUser: position.coords.longitude,
@@ -423,9 +434,9 @@ class JobDetails extends Component {
                 }
             })
             this.setState({ reasonList: reasonsList });
-            console.log('reasonsList', reasonsList);
+
         }).catch((errReason) => {
-            console.log(errReason);
+
         })
 
 
@@ -558,7 +569,14 @@ class JobDetails extends Component {
             </View>
         );
     }
+    goToFollow() {
+        this.setState({ IsFollowDisabled: true });
 
+        setTimeout(() => {
+            this.setState({ IsFollowDisabled: false });
+        }, 3000);
+        this.props.navigation.navigate('FollowUp', { jobDetails: this.state.jobDetails })
+    }
     workerRateing(rating) {
         this.setState({
             loader: true,
@@ -602,7 +620,7 @@ class JobDetails extends Component {
                 <View style={{ paddingBottom: 20, paddingLeft: 15, paddingRight: 15 }}>
                     <View>
                         <Text style={{ textAlign: 'center', width: '100%', fontSize: 14 }}>
-                            Please rate our KREW and your over all experience with us
+                            {I18n.t('please_rate_krew')}
                         </Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -619,7 +637,7 @@ class JobDetails extends Component {
     renderFollowUp() {
         return (
             <View style={{ flex: 1, flexDirection: 'row', padding: 30, alignItems: 'center' }}>
-                <TouchableOpacity style={{ flex: 1 }} onPress={() => this.props.navigation.navigate('FollowUp', { jobDetails: this.state.jobDetails })}>
+                <TouchableOpacity style={{ flex: 1 }} disabled={this.state.IsFollowDisabled} onPress={() => this.goToFollow()}>
                     <Text style={{ textAlign: 'center' }}>{I18n.t('click_to_see_follow_up')}</Text>
                 </TouchableOpacity>
                 <View>
@@ -657,7 +675,7 @@ class JobDetails extends Component {
     onClickMakeFav(value) {
         let customerId = this.props.auth.data.id;
         let workerId = this.state.jobDetails.workerId;
-        let language = this.state.jobDetails.worker.language?this.state.jobDetails.worker.language:"en";
+        let language = this.state.jobDetails.worker.language ? this.state.jobDetails.worker.language : "en";
         if (this.state.favValue) {
             this.setState({ favValue: false });
             api.post('favoriteSps/removeSpAsFavourite', { workerId: workerId, customerId: customerId }).then((favRes) => {
@@ -668,7 +686,7 @@ class JobDetails extends Component {
         } else {
             this.setState({ favValue: true });
             api.post('favoriteSps/addSpAsFavourite', { workerId: workerId, customerId: customerId, language: language }).then((favRes) => {
-     
+
             }).catch((favErr) => {
                 console.log("Err", favErr);
             })
@@ -757,6 +775,41 @@ class JobDetails extends Component {
             })
         );
     }
+    GoToReschedule()
+    {
+        this.setState({ IsResDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsResDisabled: false });
+        }, 3000);
+        this.props.navigation.navigate('Reschedule', { jobDetails: this.state.jobDetails })
+    }
+    goToSp() {
+        this.setState({ IsSpDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsSpDisabled: false });
+        }, 3000);
+        this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })
+    }
+    goToTracker()
+    {
+        this.setState({ IsTrackerDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsTrackerDisabled: false });
+        }, 3000);
+        this.props.navigation.navigate('JobTracker', { jobDetails: this.state.jobDetails })
+    }
+    goToSummary()
+    {
+        this.setState({ IsSummaryDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsSummaryDisabled: false });
+        }, 3000);
+        this.props.navigation.navigate('jobSummary', { jobDetails: this.state.jobDetails })
+    }
 
     render() {
         if (this.state.jobDetails) {
@@ -812,7 +865,7 @@ class JobDetails extends Component {
                         }
 
 
-                        <TouchableOpacity style={styles.jobItemWarp} onPress={() => this.props.navigation.navigate('JobTracker', { jobDetails: this.state.jobDetails })}>
+                        <TouchableOpacity disabled={this.state.IsTrackerDisabled} style={styles.jobItemWarp} onPress={() => this.goToTracker()}>
                             <View style={{ width: 20 }}>
                                 <Ionicons name="ios-man-outline" style={styles.jobItemIconIonicons} />
                             </View>
@@ -847,7 +900,7 @@ class JobDetails extends Component {
                                         </View>
                                         {
                                             !(this.state.jobDetails.status === 'STARTED') ?
-                                                <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })} >
+                                                <TouchableOpacity disabled={this.state.IsSpDisabled} style={{ alignItems: 'center' }} onPress={() => this.goToSp()} >
                                                     <Image source={require('../../../img/icon/chat-support.png')} style={{ height: 25, width: 25 }} />
                                                     <Text style={{ fontSize: 12 }}>{I18n.t('chat')}/{I18n.t('call')}</Text>
                                                 </TouchableOpacity> : null
@@ -875,7 +928,7 @@ class JobDetails extends Component {
                             <Text style={styles.jobItemName}>{I18n.t('location')}</Text>
                             <Text style={styles.jobItemValue}>{this.state.jobDetails.userLocation ? this.state.jobDetails.userLocation.name : ''}</Text>
                         </View>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('jobSummary', { jobDetails: this.state.jobDetails })}>
+                        <TouchableOpacity disabled={this.state.IsSummaryDisabled} onPress={() => this.goToSummary()}>
                             <View style={styles.jobItemWarp}>
                                 <View style={{ width: 20 }}>
                                     <SimpleLineIcons name="docs" style={styles.jobItemIcon} />
@@ -903,13 +956,13 @@ class JobDetails extends Component {
                                 </View>
                                 : console.log()
                         }
-                        <View style={styles.jobItemWarp}>
+                        {/* <View style={styles.jobItemWarp}>
                             <View style={{ width: 20 }}>
                                 <Ionicons name="ios-flag-outline" style={styles.jobItemIconIonicons} />
                             </View>
                             <Text style={styles.jobItemName}>{I18n.t('quoteOrFollow')}</Text>
                             <Text style={styles.jobItemValue}>Yes</Text>
-                        </View>
+                        </View> */}
 
                         {
                             this.state.topScreenStatus == 'PAYPENDING' ? (
@@ -1006,7 +1059,7 @@ class JobDetails extends Component {
                                         (this.state.otherReason == 0 || this.state.otherReason == 1) ? (
                                             <View style={{ width: '100%', flexDirection: 'row', padding: 15 }}>
                                                 <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: false, otherReason: 0 })}>
-                                                    <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('cancel')}</Text>
+                                                    <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('close')}</Text>
                                                 </TouchableOpacity>
                                             </View>
                                         ) : (console.log())
@@ -1023,7 +1076,7 @@ class JobDetails extends Component {
                                     <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: true })}>
                                         <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('cancel_job')} </Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#1e3768', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.props.navigation.navigate('Reschedule', { jobDetails: this.state.jobDetails })}>
+                                    <TouchableOpacity disabled={this.state.IsResDisabled} style={{ flex: 1, backgroundColor: '#1e3768', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.GoToReschedule()}>
                                         <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('reschedule')}</Text>
                                     </TouchableOpacity>
                                 </View>

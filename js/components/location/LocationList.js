@@ -5,8 +5,9 @@ import I18n from '../../i18n/i18n';
 import api from '../../api';
 const icon3 = require("../../../img/icon3.png");
 class LocationList extends Component {
-  state = { deleteOption: false };
+  state = { deleteOption: false , IsAddDisabled:false};
   componentDidMount(){
+   
 
   }
   _onLongPressButton(){
@@ -15,11 +16,11 @@ class LocationList extends Component {
 
   confirmDelete(){
     Alert.alert(
-        'Confirm',
-        'Are you sure want to delete location?',
+      I18n.t('Confirm'),
+        I18n.t('sure_to_delete_loc'),
         [
-            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-            { text: 'Yes', onPress: () => this.finalDelete() },
+          { text: I18n.t('cancel'), onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+          { text: I18n.t('yes'), onPress: () => this.finalDelete() },
         ],
         { cancelable: true }
     );
@@ -31,7 +32,26 @@ class LocationList extends Component {
       this.props.Self.navigation.navigate('MyLocation');
     })
   }
-  
+  goToMap()
+  {
+
+    this.setState({ IsAddDisabled: true });
+
+    setTimeout(() => {
+      this.setState({ IsAddDisabled: false });
+    }, 3000);
+    this.props.Self.navigation.navigate('MyMap', {
+      screenType: 'edit',
+      customerId: this.props.customerId,
+      id: this.props.uid,
+      latitude: this.props.latitude,
+      longitude: this.props.longitude,
+      name: this.props.listName,
+      buildingName: this.props.buildingName,
+      villaNo: this.props.villa,
+      landmark: this.props.landmark
+    })
+  }
   render() {
     return (
       <View style={{ paddingTop: 5  }}>
@@ -50,17 +70,7 @@ class LocationList extends Component {
                   </TouchableOpacity>
                 : null
               }
-              <TouchableOpacity onPress={() => this.props.Self.navigation.navigate('MyMap', {
-                screenType: 'edit',
-                customerId: this.props.customerId,
-                id: this.props.uid,
-                latitude: this.props.latitude,
-                longitude: this.props.longitude,
-                name: this.props.listName,
-                buildingName: this.props.buildingName,
-                villaNo: this.props.villa,
-                landmark: this.props.landmark
-                })} style={{ paddingTop: 15, paddingBottom: 15, paddingLeft: 8, paddingRight: 8, marginRight: 10 }}>
+          <TouchableOpacity disabled={this.state.IsAddDisabled} onPress={() => this.goToMap()} style={{ paddingTop: 15, paddingBottom: 15, paddingLeft: 8, paddingRight: 8, marginRight: 10 }}>
               <Ico name='edit' size={20} style={{ color: '#1e3768' }}/>
               </TouchableOpacity>
         </View>

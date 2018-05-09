@@ -156,4 +156,15 @@ export default {
   my_Currency: 'Ma devise',
   add_Service: 'Ajouter un service',
   please_pay_pending_amount: "S'il vous plaît payer le montant en attente pour procéder",
+  close:"Fermer",
+  reload_app: "Veuillez recharger l'application pour voir les modifications.",
+  camera: 'Caméra',
+  file: "Fichier",
+  please_rate_krew: "S'il vous plaît noter notre KREW et votre sur toute expérience avec nous",
+  Confirm: 'Confirmer',
+  are_you_sure: "Êtes-vous sûr de quitter l'application?",
+  ok: "D'accord",
+  are_you_sure_to_cancel: "Êtes-vous sûr d'annuler ce travail?",
+  yes:'Oui',
+  sure_to_delete_loc: "Voulez-vous vraiment supprimer l'emplacement?"
 };

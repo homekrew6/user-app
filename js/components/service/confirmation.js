@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, AsyncStorage, View, StatusBar, Alert, TouchableOpacity,Text } from "react-native";
+import { Image, AsyncStorage, View, StatusBar, Alert, TouchableOpacity, Text } from "react-native";
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -38,7 +38,8 @@ class Confirmation extends Component {
             continueButtonDesable: false,
             currencyId: 3,
             minPrice: '0.0',
-            url: 'https://secure.telr.com/gateway/webview_start.html?code=8f6f5da95a445ad995ba561231db'
+            url: 'https://secure.telr.com/gateway/webview_start.html?code=8f6f5da95a445ad995ba561231db',
+            IsDateDisabled: false
             //homeValuearray: props.service.data.homeArray,
             // homeValue: 'Home'
         }
@@ -117,19 +118,19 @@ class Confirmation extends Component {
         //     console.dir(result);
         // });
 
-        if(this.props.auth.loggedIn) {
+        if (this.props.auth.loggedIn) {
             api.post('Customers/checkIfPaymentPending', { id: this.props.auth.data.id }).then((resPay) => {
-              if(resPay.response.IsPayPending) {
-                Alert.alert(I18n.t('please_pay_pending_amount'));
+                if (resPay.response.IsPayPending) {
+                    Alert.alert(I18n.t('please_pay_pending_amount'));
 
-                this.props.navigation.dispatch(NavigationActions.reset({
-                    index: 1,
-                    actions: [NavigationActions.navigate({ routeName: 'Menu' }),
-                    NavigationActions.navigate({ routeName: 'Category' })
-                    ],
-                  }));
-                  return true;
-              }  
+                    this.props.navigation.dispatch(NavigationActions.reset({
+                        index: 1,
+                        actions: [NavigationActions.navigate({ routeName: 'Menu' }),
+                        NavigationActions.navigate({ routeName: 'Category' })
+                        ],
+                    }));
+                    return true;
+                }
             });
         }
 
@@ -170,7 +171,7 @@ class Confirmation extends Component {
         if (!(this.state.dateTime == undefined)) {
             AsyncStorage.getItem("zoneId").then((zoneValue) => {
                 if (zoneValue) {
-                    console.log(this.props.service.data.serviceLocationid);
+
                     if (this.props.service.data.serviceLocationid) {
                         if (this.props.service.data.saveDateDB) {
                             const jobPrice = Number(this.props.service.data.price);
@@ -217,11 +218,11 @@ class Confirmation extends Component {
                                             });
                                             const reseteAction = NavigationActions.reset({
                                                 index: 0,
-                                                actions: [NavigationActions.navigate({ routeName: 'ThankYou', params: { orderId: responseJson.response.message}})],
+                                                actions: [NavigationActions.navigate({ routeName: 'ThankYou', params: { orderId: responseJson.response.message } })],
                                             });
                                             this.props.navigation.dispatch(reseteAction);
                                         }).catch(err => {
-                                            console.log(err);
+
                                             Alert.alert(I18n.t("please_try_again_later"));
                                             this.setState({
                                                 loader: false,
@@ -235,7 +236,7 @@ class Confirmation extends Component {
                                 this.setState({
                                     loader: false
                                 });
-                                Alert.alert(I18n.t("please_give_proper_price"));
+                                Alert.alert("", I18n.t("please_give_proper_price"));
                             }
 
 
@@ -244,7 +245,7 @@ class Confirmation extends Component {
                             this.setState({
                                 loader: false
                             });
-                            Alert.alert(I18n.t("please_add_time"));
+                            Alert.alert("", I18n.t("please_add_time"));
                         }
 
                     }
@@ -252,7 +253,7 @@ class Confirmation extends Component {
                         this.setState({
                             loader: false
                         });
-                        Alert.alert(I18n.t("please_add_location"));
+                        Alert.alert("", I18n.t("please_add_location"));
                     }
 
                 }
@@ -263,7 +264,7 @@ class Confirmation extends Component {
             this.setState({
                 loader: false,
             })
-            Alert.alert(I18n.t("please_enter_date_and_time"))
+            Alert.alert("", I18n.t("please_enter_date_and_time"))
         }
 
     }
@@ -282,10 +283,26 @@ class Confirmation extends Component {
             this.navigate('ServiceProviderListing');
         }
         else {
-            Alert.alert(I18n.t("please_enter_date_for_sp"));
+            Alert.alert("", I18n.t("please_enter_date_for_sp"));
         }
     }
 
+    goToDate() {
+        this.setState({ IsDateDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsDateDisabled: false });
+        }, 3000);
+        this.props.navigation.navigate('DateAndTime');
+    }
+    goToLoc() {
+        this.setState({ IsLocDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsLocDisabled: false });
+        }, 3000);
+        this.props.navigation.navigate('LocationList');
+    }
 
     render() {
         return (
@@ -331,7 +348,7 @@ class Confirmation extends Component {
                     </View>
                     <View>
 
-                        <TouchableOpacity style={[styles.confirmationItem]} onPress={() => this.navigate('DateAndTime')}>
+                        <TouchableOpacity style={[styles.confirmationItem]} disabled={this.state.IsDateDisabled} onPress={() => this.goToDate()}>
                             <View style={styles.confirmationIconView}>
                                 <Ico name='alarm' style={styles.confirmationViewIcon}></Ico>
                             </View>
@@ -342,7 +359,7 @@ class Confirmation extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.confirmationItem} onPress={() => this.navigate('LocationList')}>
+                        <TouchableOpacity style={styles.confirmationItem} disabled={this.state.IsLocDisabled} onPress={() => this.goToLoc()}>
                             <View style={styles.confirmationIconView}>
                                 <EvilIcons name='location' style={styles.confirmationViewIcon} />
                             </View>

@@ -6,7 +6,7 @@ import { signup, login, getUserDetail, checkAuth } from './elements/authActions'
 import { Image, View, ScrollView, StatusBar, Alert, TouchableOpacity, ImageBackground, AsyncStorage,Text } from 'react-native';
 import FCM, { FCMEvent, NotificationType } from "react-native-fcm";
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
-
+import FSpinner from 'react-native-loading-spinner-overlay';
 import { Container, Header, Button, Content, Item, Input, Label, CheckBox } from 'native-base';
 import styles from './styles';
 import I18n from '../../i18n/i18n';
@@ -41,9 +41,19 @@ class Signup extends Component {
       phone: '',
       chkbox_chk: false,
       deviceToken: '',
+      IsSignUpDisabled:false
     };
   }
 
+  goToLogin()
+  {
+    this.setState({ IsSignUpDisabled: true });
+
+    setTimeout(() => {
+      this.setState({ IsSignUpDisabled: false });
+    }, 3000);
+    this.props.navigation.navigate('Login');
+  }
   componentDidMount() {
     FCM.getFCMToken().then(token => {
       this.setState({ deviceToken: token });
@@ -338,6 +348,7 @@ class Signup extends Component {
         />
         <ImageBackground source={launchscreenBg} style={styles.imageContainer}>
           <Content>
+            <FSpinner visible={this.props.auth.busy} textContent={"Loading..."} textStyle={{ color: '#FFF' }} />
             <View style={styles.logoContainer}>
               <Image source={launchscreenLogo} style={styles.logo} />
             </View>
@@ -417,7 +428,7 @@ class Signup extends Component {
 
               <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                 <Text style={{ color: '#252525' }} >{I18n.t('already_registered')} </Text>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+                <TouchableOpacity disabled={this.state.IsSignUpDisabled} onPress={() => this.goToLogin()}>
                   <Text style={{ color: '#29416f' }}>{I18n.t('login')}</Text>
                 </TouchableOpacity>
               </View>

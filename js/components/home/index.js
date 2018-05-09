@@ -41,7 +41,6 @@ class Home extends Component {
 	componentWillMount() {
 		FCM.requestPermissions();
 		FCM.getFCMToken().then(token => {
-			console.log('token  ', token);
 			AsyncStorage.getItem("userToken").then((userToken) => {
 				if (userToken) {
 					const userToken1 = JSON.parse(userToken);
@@ -113,7 +112,6 @@ class Home extends Component {
 
 		// This method give received notifications to mobile to display.
 		this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
-			console.log("a", notif);
 			if (notif && notif.local_notification) {
 				if(notif.screenType){
 					if(notif.screenType == 'JobDetails'){
@@ -151,9 +149,7 @@ class Home extends Component {
 
 		// this method call when FCM token is update(FCM token update any time so will get updated token from this method)
 		this.refreshUnsubscribe = FCM.on(FCMEvent.Notification, token => {
-			console.log("TOKEN (refreshUnsubscribe)", token);
 			FCM.getFCMToken().then(token => {
-				console.log("TOKEN (getFCMToken)", token);
 				AsyncStorage.getItem("userToken").then((userToken) => {
 					if (userToken) {
 						const userToken1 = JSON.parse(userToken);
@@ -170,7 +166,6 @@ class Home extends Component {
 	}
 
 	sendRemote(notif) {
-		console.log('notify sent', notif);
 		FCM.presentLocalNotification({
 			id: new Date().valueOf().toString(),
 			title: notif.fcm.body,

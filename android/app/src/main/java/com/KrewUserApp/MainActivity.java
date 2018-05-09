@@ -1,4 +1,4 @@
-package com.KrewUserApp;
+package com.HomeKrew.User;
 
 import com.facebook.react.ReactActivity;
 import android.content.Intent;

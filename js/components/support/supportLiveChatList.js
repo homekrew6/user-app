@@ -17,7 +17,8 @@ class SupportLiveChatList extends Component {
         super(props);
         this.state = {
             supportAgents: [],
-            IsVisible: false
+            IsVisible: false,
+            IsChatDisabled: false
         }
     }
 
@@ -29,7 +30,7 @@ class SupportLiveChatList extends Component {
             if (token) {
                 api.get('roleTypes?access_token=' + JSON.parse(token).id).then((roles) => {
                     api.get('Admins/getAllAgents?access_token=' + JSON.parse(token).id).then((agents) => {
-                        console.log(roles);
+
                         let supportId;
                         roles.map((item) => {
                             if (item.name.includes('Support')) {
@@ -65,10 +66,18 @@ class SupportLiveChatList extends Component {
             Alert.alert(I18n.t('please_login'));
         });
     }
+    goToChat(item) {
+        this.setState({ IsChatDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsChatDisabled: false });
+        }, 3000);
+        this.props.navigation.navigate('SupportLiveChat', { agent: item });
+    }
     render() {
         let agentsList = this.state.supportAgents.map((item, key) => {
             return (
-                <TouchableOpacity key={key} style={styles.liveChatWarp} onPress={() => this.props.navigation.navigate('SupportLiveChat', {agent:item})}>
+                <TouchableOpacity key={key} style={styles.liveChatWarp} disabled={this.state.IsChatDisabled} onPress={() => this.goToChat(item)}>
                     <View style={styles.grayCointenner}>
                         <View style={styles.ImageContnr}></View>
                         <View style={styles.textWarp}>
@@ -93,7 +102,7 @@ class SupportLiveChatList extends Component {
                 />
 
                 <Header style={styles.headerMain} androidStatusBarColor="#81cdc7" noShadow >
-                    <Button transparent  style={[styles.buttonIconWarp, { backgroundColor: 'transparent' }]} disabled />
+                    <Button transparent style={[styles.buttonIconWarp, { backgroundColor: 'transparent' }]} disabled />
                     <Body style={styles.headerBody}>
                         <Title style={styles.headerTitle}>{I18n.t('liveChat')}</Title>
                     </Body>

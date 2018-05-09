@@ -145,7 +145,7 @@ class MyPromoCode extends Component {
         api.post('Jobs/calculatePromoPrice', calculatePromoPriceOpject ).then((res) => {
             // debugger;
             let response = res.response;  
-            console.log(response);
+          
             if (response.message){
                 Alert.alert(response.message);                
             }else{
@@ -165,7 +165,7 @@ class MyPromoCode extends Component {
             }
             this.setState({ IsLoaderVisible: false });            
         }).catch((err) => {
-            console.log(err);
+           
             this.setState({ IsLoaderVisible: false });            
         });
 

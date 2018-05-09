@@ -27,7 +27,6 @@ class authApi {
 			api.get('Customers/'+id+'?access_token='+auth).then(responseJson=>{
 				resolve(responseJson)
 			}).catch(err=>{
-					console.log(err);
 					reject(err)
 			})
 		})

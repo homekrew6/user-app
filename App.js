@@ -8,7 +8,6 @@ import api from './js/api/';
 export class App1 extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
 
   }
 state = { isReady: false};

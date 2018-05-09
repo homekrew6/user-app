@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, StatusBar, Alert, TouchableOpacity, AsyncStorage, Text } from "react-native";
+import { View, StatusBar, Alert, TouchableOpacity, AsyncStorage, Text, I18nManager } from "react-native";
 import { Container, Header, Button, Content, Item, Body, Title } from "native-base";
 import I18n from '../../i18n/i18n';
 import styles from './styles';
@@ -96,6 +96,18 @@ class LanguageList extends Component {
         })
         if (loc) {
             const data = { langId: loc.id, language: loc.name, Code: loc.Code };
+            if(data.Code == 'ar') {
+                I18nManager.allowRTL(true);
+                Alert.alert(I18n.t('reload_app'));
+            }else {
+                if (data.Code == 'en') {
+                    Alert.alert(I18n.t('reload_app'));
+                }
+                else if (data.Code == "fr") {
+                    Alert.alert(I18n.t('reload_app'));
+                }
+                I18nManager.allowRTL(false);
+            }
             AsyncStorage.getItem("userToken").then((userToken) => {
                 if (userToken) {
                     const response = JSON.parse(userToken);

@@ -6,12 +6,10 @@ class serviceApi {
 			// let questionService = '{"include":["service","questions","answers"]}';
 			// const url = "Questions/"+id+"?filter="+questionService;
 			let questionService = '{"include": [{"relation": "answers"}],"where": { 		"serviceId": ' + id + '	} }';
-			console.log(questionService);
 			const url = "Questions?filter=" + questionService;
 			api.get(url).then(responseJson => {
 				resolve(responseJson)
 			}).catch(err => {
-				console.log(err);
 				reject(err)
 			})
 		})
@@ -22,7 +20,6 @@ class serviceApi {
 			api.post('Jobs/checkIfThePostingDateIsValid',data).then(responseJson => {
 				resolve(responseJson)
 			}).catch(err => {
-				console.log(err);
 				reject(err)
 			})
 		})

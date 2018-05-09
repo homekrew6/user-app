@@ -37,6 +37,8 @@ class Login extends Component {
       email: '',
       password: '',
       deviceToken: '',
+      IsSignupDisabled:false,
+      IsForgotDisabled:false
     };
   }
   componentDidMount() {
@@ -44,7 +46,7 @@ class Login extends Component {
       this.setState({ deviceToken: token });
     });
     GoogleSignin.configure({
-      webClientId: '16831185707-hpfq3aigemrct3qnfogjf19t864fr0kp.apps.googleusercontent.com',
+      webClientId: '834042316676-150u3l1ql1vgh7fi482b58mt08dbpvc9.apps.googleusercontent.com',
       offlineAccess: true
     }).then(() => {
       // you can now call currentUserAsync()
@@ -52,8 +54,11 @@ class Login extends Component {
   }
 
   clickGmail() {
+    debugger;
     GoogleSignin.signIn().then((user) => {
+      debugger;
       if (user.email) {
+        debugger;
         api.post('Customers/socialLoginEmailCheck', { email: user.email }).then((res) => {
           if (res.response.exist == 1) {
             Alert.alert('Email already exist');
@@ -121,7 +126,21 @@ class Login extends Component {
   }
 
   pressForgotPassword() {
+    this.setState({ IsForgotDisabled: true });
+
+    setTimeout(() => {
+      this.setState({ IsForgotDisabled: false });
+    }, 3000);
     this.props.navigation.navigate('ForgotPassword');
+  }
+
+  pressSignup() {
+    this.setState({ IsSignupDisabled: true });
+
+    setTimeout(() => {
+      this.setState({ IsSignupDisabled: false });
+    }, 3000);
+    this.props.navigation.navigate('Signup');
   }
 
   pressLogin() {
@@ -339,7 +358,7 @@ class Login extends Component {
               </ImageBackground>
             </TouchableOpacity>
             <View>
-              <TouchableOpacity onPress={() => this.pressForgotPassword()} style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 15 }}>
+              <TouchableOpacity onPress={() => this.pressForgotPassword()} disabled={this.state.IsForgotDisabled} style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 15 }}>
                 <Text style={{ textAlign: 'right', color: '#29416f', fontSize: 12, paddingBottom: 20, }}>
                   {I18n.t('forgot_password')}
                 </Text>
@@ -363,7 +382,7 @@ class Login extends Component {
 
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
               <Text style={{ color: '#252525' }}>{I18n.t('not_a_register_member')} </Text>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Signup')}>
+              <TouchableOpacity disabled={this.state.IsSignupDisabled} onPress={() => this.pressSignup()}>
                 <Text style={{ color: '#29416f' }}>{I18n.t('signup')}</Text>
               </TouchableOpacity>
             </View>

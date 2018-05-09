@@ -14,7 +14,8 @@ class ServiceProviderDetails extends Component {
         super(props);
         this.state = {
             jobDetails: '',
-            IsModalVisible: false
+            IsModalVisible: false,
+            IsDisabled:false
         }
 
     }
@@ -28,6 +29,11 @@ class ServiceProviderDetails extends Component {
         this.setState({ IsModalVisible: true });
     }
     pressChat(){
+        this.setState({ IsDisabled: true });
+
+        setTimeout(() => {
+            this.setState({ IsDisabled: false });
+        }, 3000);
         this.props.navigation.navigate('Chat', { workerDetails: this.state.jobDetails.worker });
     }
     render() {
@@ -120,7 +126,7 @@ class ServiceProviderDetails extends Component {
                 </Content>
                 <Footer>
                     <FooterTab>
-                        <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.pressChat()}>
+                        <TouchableOpacity style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#81cdc7' }} disabled={this.state.IsDisabled}  onPress={() => this.pressChat()}>
                             <Text style={{ color: '#fff', fontSize: 14 }}>{I18n.t('liveChat')}</Text>
                         </TouchableOpacity>
 

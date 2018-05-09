@@ -15,17 +15,39 @@ import styles from './styles';
 import I18n from '../../i18n/i18n';
 import config from '../../config';
 import * as firebase from 'firebase';
+// const firebaseConfig = {
+//     apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
+//     authDomain: "krew-user-app.firebaseapp.com",
+//     databaseURL: "https://krew-user-app.firebaseio.com",
+//     storageBucket: "krew-user-app.appspot.com"
+// };
+
 const firebaseConfig = {
-    apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
-    authDomain: "krew-user-app.firebaseapp.com",
-    databaseURL: "https://krew-user-app.firebaseio.com",
-    storageBucket: "krew-user-app.appspot.com"
+    apiKey: "AIzaSyCRclijPdb65nW25fvZozVv0LekbC0GHRM",
+    authDomain: "homekrew-91b4e.firebaseapp.com",
+    databaseURL: "https://homekrew-91b4e.firebaseio.com",
+    storageBucket: "homekrew-91b4e.appspot.com"
 };
 import { RNS3 } from 'react-native-aws3';
+
+// var BUTTONS = [
+//     { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
+//     { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+// ];
+
 var BUTTONS = [
-    { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
-    { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+
 ];
+AsyncStorage.getItem("language").then((value) => {
+    if (value) {
+        const value1 = JSON.parse(value);
+        I18n.locale = value1.Code;
+        BUTTONS = [
+            { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+            { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
+        ]
+    }
+});
 
 
 class Chat extends Component {
@@ -73,7 +95,6 @@ class Chat extends Component {
             this.refs.ScrollViewStart.scrollToEnd();
         }, 50);
 
-        console.log(this.props.auth.data)
         if (this.state.customerId && this.state.workerId) {
             const chatRoomId = this.state.customerId + "_" + this.state.workerId;
             this.setState({ chatRoomId: chatRoomId });
@@ -81,17 +102,14 @@ class Chat extends Component {
         }
         let chatRoomId = this.state.customerId + '_' + this.state.workerId;
         this.state.chatRef.orderByChild('chatRoomId').equalTo(chatRoomId).once('value').then((snapshot) => {
-            console.log(snapshot);
             if (snapshot.val()) {
                 var listMesage = [];
                 for (let key in snapshot.val()) {
                     listMesage.push(snapshot.val()[key]);
                 }
                 this.setState({ chatList: listMesage });
-                console.log(this.state.chatList);
             }
         }).catch((Err) => {
-            console.log(Err);
         })
     }
     sendMessage() {
@@ -148,7 +166,6 @@ class Chat extends Component {
                 name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
                 type: response.mime || 'image/png',
             };
-            console.log(file);
 
             const options = config.s3;
             RNS3.put(file, config.s3).then((response) => {
@@ -168,11 +185,9 @@ class Chat extends Component {
                 }
             }).catch((err) => {
                 this.setState({ visible: false });
-                console.log(err);
             });
         }).catch((err) => {
             this.setState({ visible: false });
-            console.log(err);
         });
     }
 
@@ -199,8 +214,6 @@ class Chat extends Component {
             const options = config.s3;
 
             RNS3.put(file, config.s3).then((response) => {
-                console.log("myImageCapture");
-                console.log(response);
                 if (response.status !== 201) {
                     this.setState({ visible: false });
                     throw new Error('Failed to upload image to S3');
@@ -218,7 +231,6 @@ class Chat extends Component {
 
                 }
             }).catch((err) => {
-                console.log(err);
                 this.setState({ visible: false });
             });
 
@@ -241,7 +253,7 @@ class Chat extends Component {
                 />
                 <Header style={styles.appHdr2} noShadow androidStatusBarColor="#81cdc7">
 
-                    <Button transparent style={{ width: 40 }}>
+                    <Button transparent style={{ width: 40 }} onPress={() => this.props.navigation.goBack()}>
                         <Ionicons name="ios-arrow-back" style={styles.headIcon} />
                     </Button>
                     <Body style={styles.headBody}>
@@ -314,8 +326,8 @@ class Chat extends Component {
                                                     ) : (<Image source={require('../../../img/atul.png')} style={{ height: 30, width: 30, borderRadius: 70 }} />)
                                                 }
                                             </View>
-                                            <View style={{ flex: 1, marginBottom: 15, overflow: 'visible', position: 'relative' }}>
-                                                <View style={{ width: '100%', maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#fff', position: 'relative', overflow: 'visible' }}>
+                                            <View style={{ flex: 1, marginBottom: 15, overflow: 'visible', position: 'relative', flexDirection: 'row' }}>
+                                                <View style={{ maxWidth: '80%', padding: 8, borderRadius: 5, backgroundColor: '#fff', position: 'relative', overflow: 'visible' }}>
                                                     {
                                                         data.Message ? (
                                                             <Text style={{ fontSize: 14 }}> {data.Message} </Text>

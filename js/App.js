@@ -52,6 +52,7 @@ const customTextProps = {
     style: {
         color: '#1e3768',
         fontFamily: 'Lato-Regular',
+        textAlign: 'left'
     }
 }
 
@@ -183,7 +184,6 @@ class App extends Component{
   }
   
   function mapStateToProps(state) {
-    console.log('mapStateToProps App', state);
     return {
         currentRoute: state.newState,
         prevRoute: state.prevRoute

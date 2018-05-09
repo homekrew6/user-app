@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, ScrollView, Alert, Keyboard } from "react-native";
+import { Image, View, StatusBar, TouchableOpacity, Text, TextInput, ScrollView, Alert, Keyboard, AsyncStorage } from "react-native";
 import { Container, Header, Content, Body, Title, Footer, FooterTab, Button, ActionSheet } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -11,17 +11,36 @@ import * as firebase from 'firebase';
 import config from '../../config';
 import ImagePicker from 'react-native-image-crop-picker';
 import FSpinner from 'react-native-loading-spinner-overlay';
+// const firebaseConfig = {
+//     apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
+//     authDomain: "krew-user-app.firebaseapp.com",
+//     databaseURL: "https://krew-user-app.firebaseio.com",
+//     storageBucket: "krew-user-app.appspot.com"
+// };
 const firebaseConfig = {
-    apiKey: "AIzaSyCnS3M8ZZBYRH4QubDH3OJPKSgk-03Nm9w",
-    authDomain: "krew-user-app.firebaseapp.com",
-    databaseURL: "https://krew-user-app.firebaseio.com",
-    storageBucket: "krew-user-app.appspot.com"
+    apiKey: "AIzaSyCRclijPdb65nW25fvZozVv0LekbC0GHRM",
+    authDomain: "homekrew-91b4e.firebaseapp.com",
+    databaseURL: "https://homekrew-91b4e.firebaseio.com",
+    storageBucket: "homekrew-91b4e.appspot.com"
 };
 import { RNS3 } from 'react-native-aws3';
+// var BUTTONS = [
+//     { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
+//     { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+// ];
 var BUTTONS = [
-    { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
-    { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+
 ];
+AsyncStorage.getItem("language").then((value) => {
+    if (value) {
+        const value1 = JSON.parse(value);
+        I18n.locale = value1.Code;
+        BUTTONS = [
+            { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+            { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
+        ]
+    }
+});
 class SupportLiveChat extends Component {
     constructor(props) {
         super(props);
@@ -132,8 +151,7 @@ class SupportLiveChat extends Component {
                 name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
                 type: response.mime || 'image/png',
             };
-            console.log(file);
-
+           
             const options = config.s3;
             RNS3.put(file, config.s3).then((response) => {
                 if (response.status !== 201) {
@@ -160,11 +178,11 @@ class SupportLiveChat extends Component {
                 }
             }).catch((err) => {
                 this.setState({ visible: false });
-                console.log(err);
+           
             });
         }).catch((err) => {
             this.setState({ visible: false });
-            console.log(err);
+         
         });
     }
 
@@ -191,8 +209,8 @@ class SupportLiveChat extends Component {
             const options = config.s3;
 
             RNS3.put(file, config.s3).then((response) => {
-                console.log("myImageCapture");
-                console.log(response);
+             
+   
                 if (response.status !== 201) {
                     this.setState({ visible: false });
                     throw new Error('Failed to upload image to S3');
@@ -216,7 +234,7 @@ class SupportLiveChat extends Component {
 
                 }
             }).catch((err) => {
-                console.log(err);
+             
                 this.setState({ visible: false });
             });
 

@@ -22,6 +22,7 @@ class Support extends Component {
             PhoneNumber: '',
             loader: false,
             allSupportList:[],
+            IsListDisabled:false
         }
     }
 
@@ -80,10 +81,8 @@ class Support extends Component {
                 allSupportList:newsupportList
             });
         }).catch((err) => {
-            console.log(err);
         })
         }).catch((error) => {
-            console.log(error);
             this.setState({ loader: false });
         })
 
@@ -92,13 +91,11 @@ class Support extends Component {
         api.get('Settings').then((res) => {
             let PhoneNumber;
             PhoneNumber = res[0].phone;
-            console.log(res);
             this.setState({
                 PhoneNumber: PhoneNumber,
                 loader: false,
             });
         }).catch((error) => {
-            console.log(error);
             this.setState({ loader: false });
         })
     }
@@ -144,7 +141,15 @@ class Support extends Component {
         }
         
     }
+GoToList()
+{
+    this.setState({ IsListDisabled: true });
 
+    setTimeout(() => {
+        this.setState({ IsListDisabled: false });
+    }, 3000);
+    this.props.navigation.navigate('SupportLiveChatList');
+}
     render() {
         return (
             <Container >
@@ -210,7 +215,7 @@ class Support extends Component {
                 }
                 <Footer style={styles.footerWarp}>
                     <FooterTab>
-                        <TouchableOpacity style={[styles.footerTabStyle, { backgroundColor: '#81cdc7' }]} onPress={() => this.props.navigation.navigate('SupportLiveChatList')}>
+                        <TouchableOpacity style={[styles.footerTabStyle, { backgroundColor: '#81cdc7' }]} disabled={this.state.IsListDisabled} onPress={() => this.GoToList()}>
                             <MaterialIcons name='chat-bubble-outline' style={styles.footerTabIcon} />
                             <Text style={styles.footerTabText}>{I18n.t('liveChat').toUpperCase()}</Text>
                         </TouchableOpacity>

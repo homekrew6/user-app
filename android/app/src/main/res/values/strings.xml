@@ -1,5 +1,5 @@
 <resources>
     <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey"></string>
     <string name="app_name">KrewUserApp</string>
-    <string name="facebook_app_id">172684336789498</string>
+    <string name="facebook_app_id">575957172775349</string>
 </resources>

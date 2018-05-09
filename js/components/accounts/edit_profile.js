@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { checkAuth, getUserDetail } from './elements/authActions';
-import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, Text } from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, TouchableOpacity, Text, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -18,9 +18,19 @@ const deviceWidth = Dimensions.get('window').width;
 const profileImage = require('../../../img/atul.png');
 const carveImage = require('../../../img/bg-1.png');
 var BUTTONS = [
-  { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
-  { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+ 
 ];
+AsyncStorage.getItem("language").then((value) => {
+  if (value) {
+    const value1 = JSON.parse(value);
+    I18n.locale = value1.Code;
+    BUTTONS=[
+      { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+      { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
+    ]
+  }
+})
+
 class EditProfile extends Component {
   constructor(props) {
     super(props);

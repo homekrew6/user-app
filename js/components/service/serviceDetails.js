@@ -32,10 +32,23 @@ const resetAction = NavigationActions.reset({
   actions: [NavigationActions.navigate({ routeName: 'Login' })],
 });
 
+// var BUTTONS = [
+//   { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
+//   { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+// ];
 var BUTTONS = [
-  { text: "Camera", icon: "ios-camera", iconColor: "#2c8ef4" },
-  { text: "File", icon: "ios-images", iconColor: "#f42ced" }
+
 ];
+AsyncStorage.getItem("language").then((value) => {
+  if (value) {
+    const value1 = JSON.parse(value);
+    I18n.locale = value1.Code;
+    BUTTONS = [
+      { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+      { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
+    ]
+  }
+});
 class serviceDetails extends Component {
   constructor(props) {
     super(props);
@@ -54,7 +67,9 @@ class serviceDetails extends Component {
       isSlided: false,
       sliderData: [
 
-      ]
+      ],
+      IsConfirmDisabled:false,
+      IsExpectDisabled:false
     };
     super(props);
   }
@@ -908,6 +923,11 @@ class serviceDetails extends Component {
 
 
   goToConfirmation() {
+    this.setState({ IsConfirmDisabled: true });
+
+    setTimeout(() => {
+      this.setState({ IsConfirmDisabled: false });
+    }, 3000);
     if (this.props.auth.data) {
       this.setState({ IsSpinnerVisible: true });
       // const data = this.props.auth.data;
@@ -970,6 +990,18 @@ class serviceDetails extends Component {
       { cancelable: false }
     )
   }
+
+  goToExpect()
+  {
+    this.setState({ IsExpectDisabled: true });
+
+    setTimeout(() => {
+      this.setState({ IsExpectDisabled: false });
+    }, 3000);
+    this.props.navigation.navigate('Expect')
+  }
+
+  
 
   render() {
 
@@ -1142,9 +1174,9 @@ class serviceDetails extends Component {
           }
           {
             this.props.service.data.features ? (
-              <Button transparent onPress={() => this.props.navigation.navigate('Expect')} style={{ width: 40 }} >
+              <TouchableOpacity disabled={this.state.IsExpectDisabled}  onPress={() => this.goToExpect()} style={{ width: 40 }} >
                 <Ionicons name="ios-information-circle" style={[styles.hd_rt_icon, { color: '#fff', fontSize: 22 }]} />
-              </Button>
+              </TouchableOpacity>
             ) : null
           }
         </Header>
@@ -1194,7 +1226,7 @@ class serviceDetails extends Component {
           this.state.questionList.length > 0 ? (
             <Footer>
               <FooterTab>
-                <TouchableOpacity onPress={this.goToConfirmation.bind(this)} style={styles.confirmationServicefooterItem}>
+                <TouchableOpacity disabled={this.state.IsConfirmDisabled} onPress={this.goToConfirmation.bind(this)} style={styles.confirmationServicefooterItem}>
                   <Text style={styles.confirmationServicefooterItmTxt} >CONTINUE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.confirmationServicefooterItem2}>

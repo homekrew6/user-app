@@ -38,17 +38,17 @@ class Categories extends Component {
     if(this.props.currentRoute === 'Category' ){
       if(this.props.prevRoute === '' ){
         BackHandler.addEventListener('hardwareBackPress', function () {
-          console.log('hardwareBackPress', this.props);
+        
           if(this.props.currentRoute === 'Category' || this.props.currentRoute === 'Login'){
-              Alert.alert(
-                  'Confirm',
-                  'Are you sure to exit the app?',
-                  [
-                      { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                      { text: 'OK', onPress: () => BackHandler.exitApp() },
-                  ],
-                  { cancelable: false }
-              );
+            Alert.alert(
+              I18n.t('Confirm'),
+              I18n.t('are_you_sure'),
+              [
+                { text: I18n.t('cancel'), onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: I18n.t('ok'), onPress: () => BackHandler.exitApp() },
+              ],
+              { cancelable: false }
+            );
               return true;
           }else{
               this.props.navigation.goBack(null);
@@ -70,7 +70,7 @@ class Categories extends Component {
 
         });
         api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
-          console.log('khalid', resService);
+      
           if (resService.response.length > 0) {
             api.get('WorkerSkills').then((workerSkillsList) => {
               let checkServiceIdsList=[];
@@ -116,15 +116,14 @@ class Categories extends Component {
       const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`;
       api.get(getLocationUrl).then(res => {
         //let newArray = res;
-        console.log('this is test');
+      
         this.setState({ locationArray: res });
-        console.log(this.state.locationArray);
+      
 
       }).catch((err) => {
-        console.log("this is an error");
-        console.log(err);
+      
       });
-      console.log(this.state.locationArray);
+   
     }
   }
   componentDidMount() {
@@ -138,7 +137,7 @@ class Categories extends Component {
     }
   }
   openModal(data) {
-    console.log('data on open Modal', data);
+
     //Alert.alert('Click is working');
     this.props.setServiceDetails(data);
     this.setState({
@@ -181,7 +180,7 @@ class Categories extends Component {
     });
     this.setState({ visible: true })
     api.post('serviceZones/getZoneRelatedService', { zone: value }).then((res) => {
-      console.log(res.response);
+    
       if (res.response.length > 0) {
         this.setState({ selectedZoneDetails: res.response[0].zone, serviceList: res.response });
         api.get('WorkerSkills').then((workerSkillsList) => {
@@ -382,7 +381,7 @@ class Categories extends Component {
 }; */}
 
 const mapStateToProps = (state) => {
-  console.log('mapStateToProps cate', state);
+ 
   return {
     auth: state.auth,
     service: state.service,
