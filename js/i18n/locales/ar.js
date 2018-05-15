@@ -178,5 +178,6 @@ export default {
   Confirm: 'تؤكد',
   are_you_sure: "هل أنت متأكد من الخروج من التطبيق?",
   are_you_sure_to_cancel: "هل أنت متأكد من إلغاء هذه الوظيفة؟",
-  sure_to_delete_loc: "هل أنت متأكد من حذف الموقع؟?"
+  sure_to_delete_loc: "هل أنت متأكد من حذف الموقع؟?",
+  payment_cancelled: 'لقد رفضت الدفع.'
 };

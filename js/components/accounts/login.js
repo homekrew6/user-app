@@ -54,16 +54,19 @@ class Login extends Component {
   }
 
   clickGmail() {
-    debugger;
+   // debugger;
     GoogleSignin.signIn().then((user) => {
-      debugger;
+     // debugger;
       if (user.email) {
-        debugger;
+        //debugger;
         api.post('Customers/socialLoginEmailCheck', { email: user.email }).then((res) => {
           if (res.response.exist == 1) {
+            //debugger
             Alert.alert('Email already exist');
           } else if (res.response.exist == 2) {
+            //debugger
             this.props.login(user.email, user.id).then((resLogin) => {
+             // debugger
               if (resLogin.type == 'success') {
                 //updating Device token for push notification
                 this.props.checkAuth((res) => {
@@ -81,34 +84,45 @@ class Login extends Component {
                     });
                   }
                 }, (err) => {
+                  //debugger
+                  console.log(err);
                 });
                 //update device token for push notification end
 
               } else {
+                //debugger
                 Alert.alert('Login failed, please try again');
               }
             }).catch((err) => {
+             // debugger
               Alert.alert('Login fail,please try again');
               // return err
             });
           } else {
+           // debugger
             api.post('Customers/signup', { name: user.name, email: user.email, password: user.id, social_type: 'google', social_id: user.id, is_active: 1, "deviceToken": this.state.deviceToken }).then((responseJson) => {
               this.props.login(user.email, user.id).then((resLogin) => {
+               // debugger
                 if (resLogin.type == 'success') {
                   this.props.getUserDetail(resLogin.userId, resLogin.id).then((userRes) => {
                     // this.props.navigation.navigate("Menu");
                     this.props.navigation.dispatch(resetAction);
                   }).catch((err) => {
+                   // debugger
                     Alert.alert('Login failed, please try again');
                   });
                 } else {
+                 // debugger
                   Alert.alert('Login failed, please try again');
                 }
               }).catch((err) => {
+               // debugger
                 Alert.alert('Login fail,please try again');
                 // return err
               });
             }).catch((err) => {
+              //debugger
+              console.log(err);
             });
           }
         }).catch((err) => {
@@ -122,7 +136,7 @@ class Login extends Component {
       .catch((err) => {
         Alert.alert('Login failed, please try again');
       })
-      .done();
+      
   }
 
   pressForgotPassword() {

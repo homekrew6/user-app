@@ -15,6 +15,50 @@
       },
       "oauth_client": [
         {
+          "client_id": "834042316676-m9h6dr3so3p6r36fvljsip6kdi7tq0s2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.HomeKrew.User",
+            "certificate_hash": "6020d189fa45f377fad2aa68e88c7cf68dbec2cd"
+          }
+        },
+        {
+          "client_id": "834042316676-150u3l1ql1vgh7fi482b58mt08dbpvc9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo5nbyiJd-Hez6cdZkzxZmBIJ8dcxji34"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "834042316676-150u3l1ql1vgh7fi482b58mt08dbpvc9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:834042316676:android:0b9234f29dae4ed4",
+        "android_client_info": {
+          "package_name": "com.HomeKrew.Worker"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "834042316676-150u3l1ql1vgh7fi482b58mt08dbpvc9.apps.googleusercontent.com",
           "client_type": 3
         }

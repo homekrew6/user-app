@@ -234,7 +234,6 @@ class JobDetails extends Component {
         if (snapshot && snapshot.val()) {
             const key = Object.keys(snapshot.val())[0];
             const ref = firebase.database().ref().child('tracking').child(key);
-            console.warn(key);
             const data = {
                 "jobId": `${this.props.navigation.state.params.jobDetails.id}`,
                 "customerId": `${this.props.auth.data.id}`,
@@ -715,16 +714,17 @@ class JobDetails extends Component {
         });
         var obj = {
             store: '20217', key: 'JtLPL^pgBVG@q7PZ', device: { type: 'Android', id: '36C0EC49-AA2F-47DC-A4D7-D9927A739F5F' },
-            app: { name: 'Pragati', version: '1.0.0', user: '7070', id: '55555' }, tran: {
-                test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description: 'Krew Test Job',
+            app: { name: this.state.jobDetails.customer ? this.state.jobDetails.customer.name : 'Test', version: '1.0.0', user: '7070', id: this.state.jobDetails.customer ? this.state.jobDetails.customer.id.toString() : '55555' }, tran: {
+                test: '1', type: 'paypage', class: 'ecom', cartid: Math.floor(100000 + Math.random() * 900000), description: this.state.jobDetails.service ? this.state.jobDetails.service.name : 'Test Job',
                 currency: 'AED', amount: this.state.jobDetails.price, language: 'en'
             }, billing: {
-                name: { title: 'Miss', first: 'Pragati', last: 'Chatterjee' }, address: {
+                name: { title: 'Miss', first: this.state.jobDetails.customer ? this.state.jobDetails.customer.name : 'Test', last: 'Chatterjee' }, address: {
                     line1: 'SIT TOWER', city: 'Dubai', region: 'Dubai', country: 'AE'
                 },
-                email: 'pragati@natitsolved.com'
+                email: this.state.jobDetails.customer ? this.state.jobDetails.customer.email : 'pragati@natitsolved.com'
             }
         };
+        
 
         var builder = new xml2js.Builder({ rootName: 'mobile' });
         var xml = builder.buildObject(obj);
@@ -748,8 +748,6 @@ class JobDetails extends Component {
                     selfComponent.setState({
                         spinner: false
                     });
-
-                    console.warn("pragati", result.mobile.webview[0].start[0]);
                     selfComponent.props.navigation.navigate('Payment', { jobDetails: selfComponent.state.jobDetails, amount: selfComponent.state.jobDetails.price, customerId: selfComponent.props.auth.data.id, url: result.mobile.webview[0].start[0], close: result.mobile.webview[0].close[0], abort: result.mobile.webview[0].abort[0], code: result.mobile.webview[0].code[0] });
                 }
 

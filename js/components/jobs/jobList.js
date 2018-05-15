@@ -200,7 +200,7 @@ class JobList extends Component {
                                                         <TouchableOpacity style={styles.listWarp} disabled={this.state.IsDisabled} onPress={() => this.goToDetails(item)}>
                                                             <View style={styles.listWarpImageWarp}>
                                                                 {
-                                                                    item.service.banner_image ? (
+                                                                    item.service && item.service.banner_image ? (
                                                                         <Image source={{ uri: item.service.banner_image }} style={styles.listWarpImage} />
                                                                     ) : (
                                                                             <Image source={imageIcon1} style={styles.listWarpImage} />

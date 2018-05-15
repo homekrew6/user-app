@@ -108,21 +108,21 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
-        debug {
-            if (project.hasProperty('MYAPP_DEBUG_STORE_FILE')) {
-                storeFile file(MYAPP_DEBUG_STORE_FILE)
-                storePassword MYAPP_DEBUG_STORE_PASSWORD
-                keyAlias MYAPP_DEBUG_KEY_ALIAS
-                keyPassword MYAPP_DEBUG_KEY_PASSWORD
-            }
-        }
+        // debug {
+        //     if (project.hasProperty('MYAPP_DEBUG_STORE_FILE')) {
+        //         storeFile file(MYAPP_DEBUG_STORE_FILE)
+        //         storePassword MYAPP_DEBUG_STORE_PASSWORD
+        //         keyAlias MYAPP_DEBUG_KEY_ALIAS
+        //         keyPassword MYAPP_DEBUG_KEY_PASSWORD
+        //     }
+        // }
         release {
-            // if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-            //     storeFile file(MYAPP_RELEASE_STORE_FILE)
-            //     storePassword MYAPP_RELEASE_STORE_PASSWORD
-            //     keyAlias MYAPP_RELEASE_KEY_ALIAS
-            //     keyPassword MYAPP_RELEASE_KEY_PASSWORD
-            // }
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
         }
     }
     splits {

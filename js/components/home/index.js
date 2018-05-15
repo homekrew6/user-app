@@ -102,7 +102,7 @@ class Home extends Component {
 					}
 				})
 			}, 4000);
-			if (notif.screenType && notif.screenType == 'JobDetails') {
+			if (notif && notif.screenType && notif.screenType == 'JobDetails') {
 				// this.props.navigation.navigate('JobDetails', { jobDetails: notif.jobId });
 				this.setState({ isPush: true, jobId: notif.jobId });
 			}

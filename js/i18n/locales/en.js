@@ -179,5 +179,6 @@ export default {
   Confirm:'Confirm',
   are_you_sure:'Are you sure to exit the app?',
   are_you_sure_to_cancel:'Are you sure to cancel this job?',
-  sure_to_delete_loc:'Are you sure want to delete location?'
+  sure_to_delete_loc:'Are you sure want to delete location?',
+  payment_cancelled:'You declined the payment.'
 };

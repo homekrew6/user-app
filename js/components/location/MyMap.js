@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StatusBar, TouchableOpacity, Dimensions, TextInput, Alert, AsyncStorage } from 'react-native';
-import { Container, Header, Button, Content, Body, Item,Input, Label, Form } from 'native-base';
+import { Container, Header, Button, Content, Body, Item, Input, Label, Form } from 'native-base';
 import MapView, { Marker } from 'react-native-maps';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -49,7 +49,7 @@ class MyMap extends Component {
     }
     //called user move maps
     onRegionChange = (region) => {
-        this.setState({ region: region});
+        this.setState({ region: region });
     }
     //called when user select dropdown location
     onLocationChange = (region) => {
@@ -144,7 +144,7 @@ class MyMap extends Component {
                         }
 
                     } else {
-
+                        Alert.alert(I18n.t("add_villa_name"));
                     }
                 } else {
                     Alert.alert(I18n.t("add_building_name"));
@@ -241,6 +241,18 @@ class MyMap extends Component {
         })
     }
 
+
+    cancelText() {
+        this.GooglePlacesRef.setAddressText("")
+        this.setState({
+            buildingName: '',
+            name: '',
+            villaNo: '',
+            landmark: '',
+            formatted_address: ''
+        })
+    }
+
     render() {
         const { width, height } = Dimensions.get('screen');
         return (
@@ -281,6 +293,7 @@ class MyMap extends Component {
                                 returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
                                 listViewDisplayed='auto'    // true/false/undefined
                                 fetchDetails={true}
+                                ref={(instance) => { this.GooglePlacesRef = instance }}
                                 renderDescription={row => row.description} // custom description render
                                 onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
                                     this.setState({
@@ -330,13 +343,7 @@ class MyMap extends Component {
                                 debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
                                 renderRightButton={() =>
                                     <TouchableOpacity onPress={() =>
-                                        this.setState({
-                                            buildingName: '',
-                                            name: '',
-                                            villaNo: '',
-                                            landmark: '',
-                                            formatted_address: ''
-                                        })
+                                        this.cancelText()
 
                                     }
                                         style={{ alignItems: 'center', justifyContent: 'center' }}

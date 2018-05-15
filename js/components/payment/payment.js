@@ -10,7 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FSpinner from 'react-native-loading-spinner-overlay';
-import { Container, Header, Button, Content, Card, CardItem, Item, Frame, Input, Label,  Body, Title, Footer, FooterTab } from "native-base";
+import { Container, Header, Button, Content, Card, CardItem, Item, Frame, Input, Label, Body, Title, Footer, FooterTab } from "native-base";
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 const paymentUrl = 'https://secure.innovatepayments.com/gateway/mobile_complete.xml';
@@ -36,23 +36,27 @@ class Payment extends Component {
             amount: '',
             customerId: '',
             IsData: false,
-            jobDetails:''
+            jobDetails: '',
+            abort: ''
         };
     }
     componentDidMount() {
-      
+
         if (this.props.navigation.state.params.url && this.props.navigation.state.params.close) {
             this.setState({
                 url: this.props.navigation.state.params.url, close: this.props.navigation.state.params.close, transCode: this.props.navigation.state.params.code,
                 customerId: this.props.navigation.state.params.customerId, amount: this.props.navigation.state.params.amount,
-                jobDetails: this.props.navigation.state.params.jobDetails
+                jobDetails: this.props.navigation.state.params.jobDetails,
+                abort: this.props.navigation.state.params.abort
             });
         }
 
 
     }
     _onNavigationStateChange(webViewState) {
+        const selfComponent = this;
         if (webViewState.url == this.state.close) {
+            console.log("accepted");
             if (this.state.IsData == false) {
                 this.setState({ IsData: true });
                 // Alert.alert('Payment Successfull');
@@ -63,7 +67,6 @@ class Payment extends Component {
 
                 var builder = new xml2js.Builder({ rootName: 'mobile' });
                 var xml = builder.buildObject(obj);
-                const selfComponent = this;
                 var IsData = false;
                 fetch(paymentUrl, {
                     method: 'POST',
@@ -71,60 +74,77 @@ class Payment extends Component {
                     body: xml
                 }).then((res) => {
                     //console.log(res)
-                    console.warn("responseFromComplete", res);
                     parseString(res._bodyInit, function (err, result) {
                         if (err) {
                             Alert.alert(I18n.t('please_try_again_later'));
                         }
                         else {
+                            if (result.mobile.auth[0].message[0] == "3DSecure authentication rejected") {
+                                Alert.alert(I18n.t("payment_cancelled"));
+                                selfComponent.props.navigation.dispatch(
+                                    NavigationActions.reset({
+                                        index: 2,
+                                        actions: [
+                                            NavigationActions.navigate({ routeName: 'Menu' }),
+                                            NavigationActions.navigate({ routeName: 'JobList' }),
+                                            NavigationActions.navigate({
+                                                routeName: 'JobDetails',
+                                                params: { jobDetails: selfComponent.state.jobDetails, IsPaymentDone: false }
+                                            }),
+                                        ],
+                                    })
+                                );
+                            }
+                            else {
+                                const toInsertData = {
+                                    "paymentDate": new Date(), "status": result.mobile.auth[0].status[0],
+                                    "message": result.mobile.auth[0].message[0],
+                                    "amount": selfComponent.state.amount,
+                                    "customerId": selfComponent.state.customerId,
+                                    "jobId": 0,
+                                    "transactionCode": result.mobile.auth[0].code[0]
+                                };
+                                api.post('payments', toInsertData).then((successfull) => {
+                                    Alert.alert(I18n.t("payment_successfull"));
+                                    selfComponent.props.navigation.dispatch(
+                                        NavigationActions.reset({
+                                            index: 2,
+                                            actions: [
+                                                NavigationActions.navigate({ routeName: 'Menu' }),
+                                                NavigationActions.navigate({ routeName: 'JobList' }),
+                                                NavigationActions.navigate({
+                                                    routeName: 'JobDetails',
+                                                    params: { jobDetails: selfComponent.state.jobDetails, IsPaymentDone: true }
+                                                }),
+                                            ],
+                                        })
+                                    );
+                                    // selfComponent.props.navigation.navigate('JobDetails', 
+                                    // );
+                                }).catch((paymentError) => {
+                                    Alert.alert(I18n.t('please_try_again_later'));
+                                    selfComponent.props.navigation.dispatch(
+                                        NavigationActions.reset({
+                                            index: 2,
+                                            actions: [
+                                                NavigationActions.navigate({ routeName: 'Menu' }),
+                                                NavigationActions.navigate({ routeName: 'JobList' }),
+                                                NavigationActions.navigate({
+                                                    routeName: 'JobDetails',
+                                                    params: { jobDetails: selfComponent.state.jobDetails, IsPaymentDone: false }
+                                                }),
+                                            ],
+                                        })
+                                    );
 
-                            const toInsertData = {
-                                "paymentDate": new Date(), "status": result.mobile.auth[0].status[0],
-                                "message": result.mobile.auth[0].message[0],
-                                "amount": selfComponent.state.amount,
-                                "customerId": selfComponent.state.customerId,
-                                "jobId": 0,
-                                "transactionCode": result.mobile.auth[0].code[0]
-                            };
-                            api.post('payments', toInsertData).then((successfull) => {
-                                Alert.alert(I18n.t("payment_successfull"));
-                                selfComponent.props.navigation.dispatch( 
-                                    NavigationActions.reset({
-                                        index: 2,
-                                        actions: [
-                                          NavigationActions.navigate({ routeName: 'Menu' }),
-                                          NavigationActions.navigate({ routeName: 'JobList' }),
-                                          NavigationActions.navigate({ routeName: 'JobDetails', 
-                                            params:  {jobDetails:selfComponent.state.jobDetails, IsPaymentDone:true} 
-                                            }),
-                                        ],
-                                    })
-                                  );
-                                // selfComponent.props.navigation.navigate('JobDetails', 
-                                // );
-                            }).catch((paymentError) => {
-                                Alert.alert(I18n.t('please_try_again_later'));
-                                selfComponent.props.navigation.dispatch( 
-                                    NavigationActions.reset({
-                                        index: 2,
-                                        actions: [
-                                          NavigationActions.navigate({ routeName: 'Menu' }),
-                                          NavigationActions.navigate({ routeName: 'JobList' }),
-                                          NavigationActions.navigate({ routeName: 'JobDetails', 
-                                            params:  {jobDetails:selfComponent.state.jobDetails, IsPaymentDone:false} 
-                                            }),
-                                        ],
-                                    })
-                                  );
-                                
-                            });
+                                });
+                            }
+                            
                         }
                     });
 
 
                 }).catch((err) => {
-                    console.log(err);
-                    console.warn("error in completing Payment", err);
                     Alert.alert(I18n.t('please_try_again_later'));
                 });
             }

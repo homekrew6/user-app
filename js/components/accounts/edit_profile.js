@@ -9,7 +9,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import config from '../../config';
 import { RNS3 } from 'react-native-aws3';
 import api from '../../api';
-import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content,  Input,  Body,  ActionSheet } from 'native-base';
+import { Footer, FooterTab, Thumbnail, Container, Header, Button, Content, Input, Body, ActionSheet } from 'native-base';
 
 
 import I18n from '../../i18n/i18n';
@@ -18,25 +18,26 @@ const deviceWidth = Dimensions.get('window').width;
 const profileImage = require('../../../img/atul.png');
 const carveImage = require('../../../img/bg-1.png');
 var BUTTONS = [
- 
+  { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+  { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
 ];
-AsyncStorage.getItem("language").then((value) => {
-  if (value) {
-    const value1 = JSON.parse(value);
-    I18n.locale = value1.Code;
-    BUTTONS=[
-      { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
-      { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
-    ]
-  }
-})
+// AsyncStorage.getItem("language").then((value) => {
+//   if (value) {
+//     const value1 = JSON.parse(value);
+//     I18n.locale = value1.Code;
+//     BUTTONS=[
+//       { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+//       { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
+//     ]
+//   }
+// })
 
 class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-	    email: props.auth.data.email,
-	    name: props.auth.data.name,
+      email: props.auth.data.email,
+      name: props.auth.data.name,
       phone: props.auth.data.phone,
       image: props.auth.data.image,
       id: props.auth.data.id,
@@ -45,7 +46,10 @@ class EditProfile extends Component {
       uploaded: false,
       cameraButton: true,
       cameraUploaded: false,
-	  };
+    };
+
+
+    console.log(this.props.auth.data);
   }
 
 
@@ -101,86 +105,86 @@ class EditProfile extends Component {
   }
 
   captureFile() {
-      this.setState({ cameraButton: false });
+    this.setState({ cameraButton: false });
 
-      ImagePicker.openCamera({
-          width: 400,
-          height: 300,
-          cropping: true
-      }).then((response) => {
-          this.setState({ visible: true });
-          let uri;
+    ImagePicker.openCamera({
+      width: 400,
+      height: 300,
+      cropping: true
+    }).then((response) => {
+      this.setState({ visible: true });
+      let uri;
 
-          if (!response.path) {
-              uri = response.uri;
-          } else {
-              uri = response.path;
-          }
-          const file = {
-              uri,
-              name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
-              type: response.mime || 'image/png',
-          };
+      if (!response.path) {
+        uri = response.uri;
+      } else {
+        uri = response.path;
+      }
+      const file = {
+        uri,
+        name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
+        type: response.mime || 'image/png',
+      };
 
-          const options = config.s3;
-          RNS3.put(file, config.s3).then((response) => {
-              if (response.status !== 201) {
-                  this.setState({ cameraButton: true });
-                  this.setState({ visible: true });
-                  throw new Error('Failed to upload image to S3');
-              }
-
-
-              if (response.status == 201) {
-                  this.setState({ cameraButton: true });
-                  this.setState({ cameraUploaded: true });
-                  this.setState({ image: response.body.postResponse.location })
-                  this.setState({ visible: false });
-                Alert.alert('', I18n.t('press_save_to_image'));
-              }
-          }).catch((err) => {
-              this.setState({ visible: false });
-          });
-      }).catch((err) => {
-          this.setState({ visible: false });
+      const options = config.s3;
+      RNS3.put(file, config.s3).then((response) => {
+        if (response.status !== 201) {
           this.setState({ cameraButton: true });
+          this.setState({ visible: true });
+          throw new Error('Failed to upload image to S3');
+        }
+
+
+        if (response.status == 201) {
+          this.setState({ cameraButton: true });
+          this.setState({ cameraUploaded: true });
+          this.setState({ image: response.body.postResponse.location })
+          this.setState({ visible: false });
+          Alert.alert('', I18n.t('press_save_to_image'));
+        }
+      }).catch((err) => {
+        this.setState({ visible: false });
       });
+    }).catch((err) => {
+      this.setState({ visible: false });
+      this.setState({ cameraButton: true });
+    });
   }
 
   pressSave() {
     if (!this.state.email) {
       Alert.alert(I18n.t('enter_email'));
-	      return false;
-	    }
+      return false;
+    }
     if (!this.state.name) {
       Alert.alert(I18n.t('enter_name'));
-	      return false;
-	    }
+      return false;
+    }
     if (!this.state.phone) {
       Alert.alert(I18n.t('enter_phone'));
-	      return false;
-	    }
+      return false;
+    }
     this.setState({ visible: true });
     this.props.checkAuth((res) => {
-  			if (res) {
+      if (res) {
         api.put(`Customers/editCustomer/${res.userId}?access_token=${res.id}`, { name: this.state.name, phone: this.state.phone, image: this.state.image }).then((resEdit) => {
           this.props.getUserDetail(res.userId, res.id).then((userRes) => {
-  						// this.props.navigation.navigate("Menu");
+            // this.props.navigation.navigate("Menu");
             this.setState({ visible: false });
             Alert.alert(I18n.t('successfully_saved'));
-  					}).catch((err) => {
+          }).catch((err) => {
             this.setState({ visible: false });
-              Alert.alert('', I18n.t('please_try_again_later'));
-  			    });
+            Alert.alert('', I18n.t('please_try_again_later'));
+          });
         }).catch((err) => {
           this.setState({ visible: false });
           Alert.alert('', I18n.t('please_try_again_later'));
-    			});
-  			} else {
+        });
+      } else {
         this.setState({ visible: false });
-  				this.props.navigation.navigate('Login');
-  			}
-  		});
+        this.props.navigation.navigate('Login');
+      }
+    });
   }
 
   fileUploadType(buttonIndex) {
@@ -216,8 +220,8 @@ class EditProfile extends Component {
                 this.props.auth.data.image ? (
                   <Thumbnail source={{ uri: this.state.image }} style={styles.editPflHdrThumbnail} />
                 ) : (
-                  <Thumbnail source={profileImage} style={styles.editPflHdrThumbnail} />
-                )
+                    <Thumbnail source={profileImage} style={styles.editPflHdrThumbnail} />
+                  )
               }
 
               <Button

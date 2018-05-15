@@ -52,9 +52,9 @@ class MyLocation extends Component {
                 />
                 <Content>
                     <Header style={styleSelf.appHdr2} androidStatusBarColor="#cbf0ed">
-                        <Button transparent disabled={this.state.IsAddDisabled} onPress={() => this.goToMyMap()} style={{width: 60}}>
+                        <TouchableOpacity transparent disabled={this.state.IsAddDisabled} onPress={() => this.goToMyMap()} style={{width: 60}}>
                             <Text style={styleSelf.backBt} >{I18n.t('add')}</Text>
-                        </Button>
+                        </TouchableOpacity>
                         <Body style={styleSelf.tac}>
                             <Text style={[styleSelf.hdClr, { fontSize: 18 }]}>{I18n.t('my_location')}</Text>
                         </Body>
@@ -114,13 +114,16 @@ styleSelf = {
     },
     appHdr2: {
         backgroundColor: '#cbf0ed',
+        alignItems: 'center'
+        
     },
     backBt: {
         fontSize: 16,
-        color: "#71beb8"
+        color: "#000"
     },
     tac: {
-        alignItems: 'center'
+        alignItems: 'center',
+        flex: 1
     },
     menuCardIcon: {
         height: 30,

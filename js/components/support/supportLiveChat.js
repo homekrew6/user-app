@@ -29,18 +29,19 @@ import { RNS3 } from 'react-native-aws3';
 //     { text: "File", icon: "ios-images", iconColor: "#f42ced" }
 // ];
 var BUTTONS = [
-
+    { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+    { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
 ];
-AsyncStorage.getItem("language").then((value) => {
-    if (value) {
-        const value1 = JSON.parse(value);
-        I18n.locale = value1.Code;
-        BUTTONS = [
-            { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
-            { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
-        ]
-    }
-});
+// AsyncStorage.getItem("language").then((value) => {
+//     if (value) {
+//         const value1 = JSON.parse(value);
+//         I18n.locale = value1.Code;
+//         BUTTONS = [
+//             { text: I18n.t('camera'), icon: "ios-camera", iconColor: "#2c8ef4" },
+//             { text: I18n.t('file'), icon: "ios-images", iconColor: "#f42ced" }
+//         ]
+//     }
+// });
 class SupportLiveChat extends Component {
     constructor(props) {
         super(props);

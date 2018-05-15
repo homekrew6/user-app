@@ -166,5 +166,6 @@ export default {
   ok: "D'accord",
   are_you_sure_to_cancel: "Êtes-vous sûr d'annuler ce travail?",
   yes:'Oui',
-  sure_to_delete_loc: "Voulez-vous vraiment supprimer l'emplacement?"
+  sure_to_delete_loc: "Voulez-vous vraiment supprimer l'emplacement?",
+  payment_cancelled: "Vous avez refusé le paiement."
 };
