@@ -7,7 +7,7 @@ export default {
   my_location: 'Ma position',
   add_location: 'Ajouter un emplacement',
   edit_location: "Modifier l'emplacement",
-  additional_information: 'Information additionnelle',
+  additional_information: 'Informations obligatoires*',
   enter_building_name: 'Entrez le nom du bâtiment',
   appartment_no: 'Appartment No/ Vill No',
   address: 'Adresse',
@@ -128,7 +128,7 @@ export default {
   serviceDetails:"Détails du service",
   my_language: "Ma langue",
   please_try_again_later: 'Veuillez réessayer plus tard.',
-  press_save_to_image: "Appuyez sur le bouton Enregistrer pour enregistrer l'image.",
+  press_save_to_image: "Appuyez sur Enregistrer.",
   enter_email: "S'il vous plaît entrer email",
   enter_name: "S'il vous plaît entrer le nom",
   enter_phone: "S'il vous plaît entrer le téléphone",
@@ -167,5 +167,7 @@ export default {
   are_you_sure_to_cancel: "Êtes-vous sûr d'annuler ce travail?",
   yes:'Oui',
   sure_to_delete_loc: "Voulez-vous vraiment supprimer l'emplacement?",
-  payment_cancelled: "Vous avez refusé le paiement."
+  payment_cancelled: "Vous avez refusé le paiement.",
+  smallName: 'prénom',
+  smaillEmail: 'Identifiant Email'
 };

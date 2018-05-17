@@ -62,7 +62,7 @@ class SupportLiveChat extends Component {
     }
 
     sendMessage() {
-        if (this.state.typeMessage) {
+        if (this.state.typeMessage && this.state.typeMessage.trim()) {
             const data = {
                 Message: this.state.typeMessage, IsAdminSender: false, chatRoomId:
                     this.state.chatRoomId, customerName: this.props.auth.data.name, customerId: this.props.auth.data.id, date: new Date().toUTCString(), adminId: this.props.navigation.state.params.agent.id

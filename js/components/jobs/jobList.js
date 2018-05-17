@@ -31,7 +31,6 @@ class JobList extends Component {
         //const gmtToDeiveTimeObj = moment.tz(gmtTime, "Europe/London"); 
         //const timezoneDevice = DeviceInfo.getTimezone(); 
         //const gmtToDeiveTime = gmtToDeiveTimeObj.clone().tz('Asia/Kolkata').format('ddd DD-MMM-YYYY hh:mm A'); 
-
         let dateNow = new Date();
         var nUTC_diff = dateNow.getTimezoneOffset();
         let slicedDate = gmtTime.slice(0, -4);
@@ -98,7 +97,7 @@ class JobList extends Component {
                     finalServiceList.push(data);
                 }
             }
-            console.log('final lsit', finalServiceList);
+           
             this.setState({ jobList: finalServiceList });
             this.setState({ visible: false });
 
@@ -212,7 +211,7 @@ class JobList extends Component {
                                                                     <Text style={[styles.fontWeight700, { fontSize: 14 }]}>{ item.service.name ? item.service.name : ''}</Text>
                                                                 </View>
                                                                 <View style={styles.flexDirectionRow}>
-                                                                    <Text> {this.getLocalTimeFormat(item.postedDate)} </Text>
+                                                                    <Text> {item.postedDate?this.getLocalTimeFormat(item.postedDate):''} </Text>
                                                                     
                                                                 </View>
                                                                 <View style={styles.flexDirectionRow}>

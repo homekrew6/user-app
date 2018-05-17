@@ -177,7 +177,7 @@ class MyPromoCode extends Component {
             if (this.state.promoCode) {
                 this.setState({ IsLoaderVisible: true });
                 const data = { promoCode: this.state.promoCode, customerId: this.props.navigation.state.params.id, addedDate:new Date() };
-                console.log(data);
+             
                 api.post('userPromoCodes/addUserPromo', data).then((res) => {
                     if (res.response.type == "Error") {
                         this.setState({ IsLoaderVisible: false, isModalVisible: false });

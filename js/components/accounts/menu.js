@@ -58,9 +58,25 @@ class Menu extends Component {
         }
       }
     })
+    
    // I18n.locale = 'ar';
   }
 
+
+
+
+  
+
+  componentWillReceiveProps()
+  {
+    api.post('Notifications/getUnreadCustomerNot', { "customerId": this.props.auth.data.id }).then((res) => {
+      this.setState({
+        notificatonCount: res.response.message,
+      })
+    }).catch((err) => {
+    });
+  }
+ 
   logout() {
     this.setState({ visible: true });
     AsyncStorage.getItem("userToken").then((userToken) => {
@@ -106,6 +122,7 @@ class Menu extends Component {
   // }
 
   componentDidMount() {
+   
      BackHandler.addEventListener('hardwareBackPress', function () {
         if(this.props.currentRoute === 'Menu'){
             Alert.alert(
@@ -127,6 +144,7 @@ class Menu extends Component {
 }
 
   componentWillMount() {
+ 
     const data = this.props.auth.data;
     // data.activeScreen = "Menu";
     // this.props.navigateAndSaveCurrentScreen(data);

@@ -56,7 +56,7 @@ class Payment extends Component {
     _onNavigationStateChange(webViewState) {
         const selfComponent = this;
         if (webViewState.url == this.state.close) {
-            console.log("accepted");
+         
             if (this.state.IsData == false) {
                 this.setState({ IsData: true });
                 // Alert.alert('Payment Successfull');

@@ -29,6 +29,12 @@ class NotificationList extends Component {
 
     }
 
+
+    componentWillReceiveProps()
+    {
+        this.notificationListData();
+    }
+
     getLocalTimeFormat(gmtTime) {
         if (gmtTime) {
             let dateNow = new Date();

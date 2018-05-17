@@ -861,7 +861,14 @@ class JobDetails extends Component {
                                             this.renderFollowUp()
                                             : console.log()
                         }
-
+                        <View style={{ backgroundColor: 'orange', padding: 10, flexDirection: 'row', alignItems: 'center' }}>
+                            {
+                                this.state.jobDetails.service && this.state.jobDetails.service.banner_image ?
+                                    <Image source={{ uri: this.state.jobDetails.service.banner_image }} style={{ height: 30, width: 30 }} /> :
+                                    <Image source={require('../../../img/bg-6.png')} style={{ height: 30, width: 30 }} />
+                            }
+                            <Text style={{ color: '#fff', paddingLeft: 8 }}>{this.state.jobDetails.service ? this.state.jobDetails.service.name : ''}</Text>
+                        </View>
 
                         <TouchableOpacity disabled={this.state.IsTrackerDisabled} style={styles.jobItemWarp} onPress={() => this.goToTracker()}>
                             <View style={{ width: 20 }}>
@@ -969,7 +976,8 @@ class JobDetails extends Component {
                                         <MaterialIcons name="payment" style={styles.jobItemIcon} />
                                     </View>
                                     <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
-                                    <Text style={styles.jobItemValue}>123456</Text>
+                                    <Text style={styles.jobItemValue}>{this.state.currency} 
+                                        {this.state.jobDetails.price}</Text>
                                 </TouchableOpacity>
                             ) : null
                         }

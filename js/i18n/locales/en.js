@@ -14,7 +14,7 @@ export default {
   already_registered: 'Already registered ?',
   name: 'NAME',
   email: 'EMAIL',
-  phone_number: 'PHONE NUMBER',
+  phone_number: 'Phone Number',
   email_address: 'EMAIL ADDRESS',
   send_otp: 'SEND OTP',
   reset_password: 'Reset Password',
@@ -55,7 +55,7 @@ export default {
   my_location: 'My Location',
   add_location:'Add Location',
   edit_location: "Edit Location",
-  additional_information:'Additional Information',
+  additional_information:'Mandatory Information*',
   enter_building_name: 'Enter Building Name',
   appartment_no:'Appartment No/ Vill No',
   address: 'Address (Nearest Landmark)',
@@ -143,7 +143,7 @@ export default {
   what_to_expect:"What To Expect",
   my_language:"My Language",
   please_try_again_later:'Please try again later.',
-  press_save_to_image:'Press save button to save the image.',
+  press_save_to_image:"Press Save.",
   enter_email:"Please enter email",
   enter_name:"Please enter name",
   enter_phone:"Please enter phone",
@@ -180,5 +180,7 @@ export default {
   are_you_sure:'Are you sure to exit the app?',
   are_you_sure_to_cancel:'Are you sure to cancel this job?',
   sure_to_delete_loc:'Are you sure want to delete location?',
-  payment_cancelled:'You declined the payment.'
+  payment_cancelled:'You declined the payment.',
+  smallName: 'Name',
+  smaillEmail: 'Email Id'
 };

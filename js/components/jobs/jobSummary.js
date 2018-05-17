@@ -64,7 +64,7 @@ class jobSummary extends Component {
             });
            
         }).catch((Err)=>{
-            console.log(Err);
+           
            
         })
        
@@ -167,7 +167,7 @@ class jobSummary extends Component {
                     hoursPrice:hoursPrice
                 })
             }).catch(err => {
-                console.log('err', err);
+             
             });
 
         })

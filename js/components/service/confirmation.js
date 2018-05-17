@@ -186,10 +186,11 @@ class Confirmation extends Component {
                                         else {
                                             price = minPrice;
                                         }
+                                        const postDb = new Date(this.props.service.data.saveDateDB).toUTCString();
                                         api.post('Jobs/insertNewJob', {
                                             "userLocationId": this.props.service.data.serviceLocationid,
                                             "price": price,
-                                            "postedDate": this.props.service.data.saveDateDB,
+                                            "postedDate": postDb,
                                             "payment": "Credit Card",
                                             "faourite_sp": this.props.service.data.favouriteId,
                                             "promo_code": "AED 50 off",

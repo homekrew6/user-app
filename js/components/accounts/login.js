@@ -85,7 +85,6 @@ class Login extends Component {
                   }
                 }, (err) => {
                   //debugger
-                  console.log(err);
                 });
                 //update device token for push notification end
 
@@ -121,8 +120,6 @@ class Login extends Component {
                 // return err
               });
             }).catch((err) => {
-              //debugger
-              console.log(err);
             });
           }
         }).catch((err) => {

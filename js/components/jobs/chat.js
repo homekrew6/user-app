@@ -114,7 +114,7 @@ class Chat extends Component {
         })
     }
     sendMessage() {
-        if (this.state.typeMessage) {
+        if (this.state.typeMessage && this.state.typeMessage.trim()) {
             this.state.chatRef.push({ "customerId": this.state.customerId, "workerId": this.state.workerId, "chatRoomId": this.state.chatRoomId, "IsCustomerSender": true, "Message": this.state.typeMessage });
         }
         else {

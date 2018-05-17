@@ -54,7 +54,7 @@ export default {
   my_location:'موقعي',
   add_location: 'أضف الموقع',
   edit_location: "تحديد الوجهة",
-  additional_information:'معلومة اضافية',
+  additional_information:'معلومات إلزامية*',
   enter_building_name: 'أدخل اسم المبنى',
   appartment_no: 'شقة رقم/ فيلا رقم',
   address:'عنوان',
@@ -141,7 +141,7 @@ export default {
   what_to_expect: "ماذا تتوقع",
   my_language: "لغتي",
   please_try_again_later: 'الرجاء معاودة المحاولة في وقت لاحق.',
-  press_save_to_image: 'اضغط على زر الحفظ لحفظ الصورة.',
+  press_save_to_image: 'اضغط على حفظ.',
   enter_email: "يرجى إدخال البريد الإلكتروني",
   enter_name: "يرجى إدخال الاسم",
   enter_phone: "يرجى إدخال الهاتف",
@@ -179,5 +179,7 @@ export default {
   are_you_sure: "هل أنت متأكد من الخروج من التطبيق?",
   are_you_sure_to_cancel: "هل أنت متأكد من إلغاء هذه الوظيفة؟",
   sure_to_delete_loc: "هل أنت متأكد من حذف الموقع؟?",
-  payment_cancelled: 'لقد رفضت الدفع.'
+  payment_cancelled: 'لقد رفضت الدفع.',
+  smallName: 'اسم',
+  smaillEmail: 'عنوان الايميل'
 };

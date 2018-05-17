@@ -47,9 +47,6 @@ class EditProfile extends Component {
       cameraButton: true,
       cameraUploaded: false,
     };
-
-
-    console.log(this.props.auth.data);
   }
 
 

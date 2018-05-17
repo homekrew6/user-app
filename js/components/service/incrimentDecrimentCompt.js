@@ -19,7 +19,7 @@ class incrimentDecriment extends Component {
     }
 
     increment() {
-        console.log("from child")
+      
         this.props.onIncrement(this.props.massage);
     }
     decrement() {
@@ -41,15 +41,15 @@ class incrimentDecriment extends Component {
             });
             const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
             AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-            console.log('====FirstPage====handleIncrement==='+res)
+          
             });
         }
         }).catch(res => {
-            //AsyncStorage.setItem('StoreData', dataRemoteString);
-            console.log('switchChange err', res);
+          
         });
 
         var price = this.props.service.data.price;
+        debugger;
         price=Number(price);
         var timeInterval = this.props.service.data.time_interval;
         if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
@@ -101,7 +101,7 @@ class incrimentDecriment extends Component {
                 });
                 const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
                 AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-                    console.log('====FirstPage====handleDecrement==='+res)
+                   
                 });
             }
             }).catch(res => {
@@ -109,10 +109,10 @@ class incrimentDecriment extends Component {
             
             if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
                 if (this.state.totalData.answers[0].option_time_impact == "Addition") {
-                    timeInterval = timeInterval + (Number(massage) + Number(this.state.totalData.answers[0].time_impact));
+                    timeInterval = timeInterval - (Number(this.state.massage) + Number(this.state.totalData.answers[0].time_impact));
                 }
                 else {
-                    timeInterval = timeInterval + (Number(massage) * Number(this.state.totalData.answers[0].time_impact));
+                    timeInterval = timeInterval - (Number(this.state.massage) * Number(this.state.totalData.answers[0].time_impact));
                 }
                 if (this.state.totalData.answers[0].option_price_impact == "Addition") {
                     price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));

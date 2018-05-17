@@ -93,7 +93,7 @@ class serviceDetails extends Component {
         name: `${Math.floor((Math.random() * 100000000) + 1)}_.png`,
         type: response.mime || 'image/png',
       };
-      console.log(file);
+    
 
       const options = config.s3;
       RNS3.put(file, config.s3).then((response) => {
@@ -144,30 +144,30 @@ class serviceDetails extends Component {
               const jsonKeyQuestion = JSON.parse(value);
               jsonKeyQuestion.map((dataQ, key) => {
                 if (dataQ.id === questionId) {
-                  console.log('sliderDump', sliderDump);
+                
                   jsonKeyQuestion[key].sliderValues = sliderDump;
                 }
               });
-              console.log('jsonKeyQuestion cature photo', jsonKeyQuestion);
+           
               this.setState({ questionList: jsonKeyQuestion });
               const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
               AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-                console.log('====FirstPage====captureFile===' + res);
+               
               });
             }
           }).catch(res => {
             //AsyncStorage.setItem('StoreData', dataRemoteString);
-            console.log('switchChange err', res);
+           
           });
 
         }
       }).catch((err) => {
         this.setState({ IsSpinnerVisible: false });
-        console.log(err);
+        
       });
     }).catch((err) => {
       this.setState({ IsSpinnerVisible: false });
-      console.log(err);
+     
     });
   }
 
@@ -195,7 +195,7 @@ class serviceDetails extends Component {
       const options = config.s3;
 
       RNS3.put(file, config.s3).then((response) => {
-        console.log(response);
+       
         if (response.status !== 201) {
           this.setState({ IsSpinnerVisible: false });
           throw new Error('Failed to upload image to S3');
@@ -257,25 +257,25 @@ class serviceDetails extends Component {
               const jsonKeyQuestion = JSON.parse(value);
               jsonKeyQuestion.map((dataQ, key) => {
                 if (dataQ.id === questionId) {
-                  console.log('sliderDump', sliderDump);
+                 
                   jsonKeyQuestion[key].sliderValues = sliderDump;
                 }
               });
-              console.log('jsonKeyQuestion cature photo', jsonKeyQuestion);
+             
               this.setState({ questionList: jsonKeyQuestion });
               const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
               AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-                console.log('====FirstPage====captureFile===' + res);
+               
               });
             }
           }).catch(res => {
             //AsyncStorage.setItem('StoreData', dataRemoteString);
-            console.log('switchChange err', res);
+            
           });
 
         }
       }).catch((err) => {
-        console.log(err);
+       
         this.setState({ IsSpinnerVisible: false });
       });
     }).catch((err) => {
@@ -285,7 +285,7 @@ class serviceDetails extends Component {
     });
   }
   fileUploadType(buttonIndex, data) {
-    console.log('fileUploadType func', data);
+   
     if (buttonIndex == 0) {
       this.captureFile(data);
     }
@@ -309,7 +309,7 @@ class serviceDetails extends Component {
 
   }
   changeActiveRadio(data) {
-    console.log('data changeActiveRadio', data);
+   
     const answersId = data.id;
     const questionId = data.questionId;
     AsyncStorage.getItem("keyQuestionList").then((value) => {
@@ -329,12 +329,12 @@ class serviceDetails extends Component {
         });
         const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
         AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-          console.log('====FirstPage====changeActiveRadio===' + res)
+         
         });
       }
     }).catch(res => {
       //AsyncStorage.setItem('StoreData', dataRemoteString);
-      console.log('switchChange err', res);
+      
     });
 
 
@@ -436,12 +436,12 @@ class serviceDetails extends Component {
         });
         const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
         AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-          console.log('====FirstPage====switch change===' + res)
+        
         });
       }
     }).catch(res => {
       //AsyncStorage.setItem('StoreData', dataRemoteString);
-      console.log('switchChange err', res);
+     
     });
 
     var price = this.props.service.data.price;
@@ -514,7 +514,7 @@ class serviceDetails extends Component {
   calculatePriceOnStart() {
     this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
       if (res.type == "success") {
-        console.log("success componentWillMount", res);
+      
         //this.setState({ questionList: res });
         var price = 0.0;
         AsyncStorage.getItem("servicePrice").then((priceValue) => {
@@ -607,7 +607,7 @@ class serviceDetails extends Component {
     // AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
 
     AsyncStorage.getItem('serviceId').then((serviceValue) => {
-      console.log('AsyncStorage serviceId', serviceValue);
+     
       if (serviceValue && serviceValue === serviceId.toString()) {
         AsyncStorage.getItem("keyQuestionList").then((value) => {
           if (value) {
@@ -623,12 +623,12 @@ class serviceDetails extends Component {
               }
             })
             this.calculatePriceOnStart();
-            console.log('jsonDump DidMount', jsonDump);
+          
           } else {
             let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
           
             api.get(questionServiceUrl).then(responseJson => {
-              console.log('questionServiceUrl', responseJson);
+             
               responseJson.map((item)=>{
                 if(item.type==4)
                 {
@@ -642,25 +642,25 @@ class serviceDetails extends Component {
               const dataStringQuestion = JSON.stringify(responseJson);
               AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
                 this.calculatePriceOnStart();
-                console.log('====FirstPage====keyQuestionList===' + res)
+               
               });
             }).catch(err => {
-              console.log(err);
+             
               reject(err)
             })
           }
         }).catch(res => {
           //AsyncStorage.setItem('StoreData', dataRemoteString);
-          console.log('switchChange err', res);
+         
         });
       } else {
-        console.log('AsyncStorage inside else');
+       
         AsyncStorage.setItem('serviceId', serviceId.toString(), (res) => {
           if (serviceValue) {
             let questionServiceUrl = 'Questions?filter={"include": [{"relation": "answers"}],"where": {"serviceId": ' + serviceId + '} }';
             api.get(questionServiceUrl).then(responseJson => {
               AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
-              console.log('questionServiceUrl', responseJson);
+             
               responseJson.map((item)=>{
                 if(item.type==4){
                   if(!item.rangeValue)
@@ -673,7 +673,7 @@ class serviceDetails extends Component {
               const dataStringQuestion = JSON.stringify(responseJson);
               AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
                 this.calculatePriceOnStart();
-                console.log('====FirstPage====keyQuestionList===' + res)
+               
               });
             }).catch(err => {
               console.log(err);
@@ -698,21 +698,21 @@ class serviceDetails extends Component {
                 const dataStringQuestion = JSON.stringify(responseJson);
                 AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
                   this.calculatePriceOnStart();
-                  console.log('====FirstPage====keyQuestionList===' + res)
+                
                 });
               }).catch(err => {
                 console.log(err);
                 reject(err)
               })
             }).catch(res => {
-              console.log('switchChange err', res);
+              
             });
           }
         });
       }
     }).catch(err => {
       AsyncStorage.setItem('serviceId', toString(serviceId), (res) => {
-        console.log('serviceId set in catch');
+        
       });
     })
     //AsyncStorage.removeItem('keyQuestionList', (err) => console.log('finished', err));
@@ -796,7 +796,7 @@ class serviceDetails extends Component {
   }
 
   sliderChanged(value, data) {
-    console.log('sliderChanged', value, data);
+    
     if (value != 0) {
       value = parseFloat(Math.round(value * 100) / 100).toFixed(2);
       value = Number(value);
@@ -812,15 +812,15 @@ class serviceDetails extends Component {
               jsonKeyQuestion[key].start_range = setRangeValue;
             }
           });
-          console.log('jsonKeyQuestion', jsonKeyQuestion);
+         
           const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
           AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-            console.log('====FirstPage====sliderChanged===' + res)
+           
           });
         }
       }).catch(res => {
         //AsyncStorage.setItem('StoreData', dataRemoteString);
-        console.log('switchChange err', res);
+        
       });
 
       var price = this.props.service.data.price;
