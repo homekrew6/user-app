@@ -163,6 +163,7 @@ class DateAndTime extends Component {
         })
     }
     setDateAndTime() {
+        
         let saveDBTime = this.state.setTime.slice(0, -5) + " " + this.state.setTime.slice(5).toLowerCase();
         const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00' + " " + this.state.setTime.slice(5).toLowerCase();
         
@@ -210,10 +211,23 @@ class DateAndTime extends Component {
                         }
                         else {
                             let data = this.state.serviceDetails;
+                            const postedDateForServer = new Date(this.state.daYSelected);
+                            let fullHours;
+                           let fullHours1= this.state.setTime.split(":")[0].replace("0", "");
+                            if (this.state.setTime.includes("AM"))
+                            {
+                                fullHours=Number(fullHours1);
+                            }
+                            else
+                            {
+                                fullHours=Number(fullHours1)+12;
+                            }
+                            const newPostedServerDate = new Date(postedDateForServer.getFullYear(), postedDateForServer.getMonth() + 1, postedDateForServer.getDate(), fullHours ).toUTCString();
                             data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
                             data.saveDateDB = saveDateDB;
                             data.saveDBTime = saveDBTime;
                             data.saveDbDay = saveDbDay;
+                            data.newPostedServerDate = newPostedServerDate;
                             this.props.setDateAndTime(data);
                             this.navigate();
                         }

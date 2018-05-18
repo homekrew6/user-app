@@ -173,7 +173,7 @@ class Confirmation extends Component {
                 if (zoneValue) {
 
                     if (this.props.service.data.serviceLocationid) {
-                        if (this.props.service.data.saveDateDB) {
+                        if (this.props.service.data.saveDateDB && this.props.service.data.newPostedServerDate) {
                             const jobPrice = Number(this.props.service.data.price);
                             if (jobPrice) {
                                 AsyncStorage.getItem("keyQuestionList").then((value) => {
@@ -186,11 +186,10 @@ class Confirmation extends Component {
                                         else {
                                             price = minPrice;
                                         }
-                                        const postDb = new Date(this.props.service.data.saveDateDB).toUTCString();
                                         api.post('Jobs/insertNewJob', {
                                             "userLocationId": this.props.service.data.serviceLocationid,
                                             "price": price,
-                                            "postedDate": postDb,
+                                            "postedDate": this.props.service.data.newPostedServerDate,
                                             "payment": "Credit Card",
                                             "faourite_sp": this.props.service.data.favouriteId,
                                             "promo_code": "AED 50 off",

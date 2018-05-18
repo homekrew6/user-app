@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import { Image, View, StatusBar, ImageBackground, Alert, AsyncStorage } from "react-native";
+import { Image, View, StatusBar, ImageBackground, Alert, AsyncStorage, NetInfo, BackHandler } from "react-native";
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { checkAuth, getUserDetail } from '../accounts/elements/authActions'
@@ -39,6 +39,34 @@ class Home extends Component {
 	// 	GlobalFont.applyGlobal(fontName);
 	// }
 	componentWillMount() {
+		NetInfo.getConnectionInfo().then((connectionInfo) => {
+			if (connectionInfo.type == "none") {
+				Alert.alert(
+					'Info',
+					'There is no Internet Connection',
+					[
+						{ text: 'OK', onPress: () => BackHandler.exitApp() },
+					],
+				);
+				return true;
+			}
+		});
+		function handleFirstConnectivityChange(connectionInfo) {
+			if (connectionInfo.type == "none") {
+				Alert.alert(
+					'Info',
+					'There is no Internet Connection',
+					[
+						{ text: 'OK', onPress: () => BackHandler.exitApp() },
+					],
+				);
+				return true;
+			}
+		}
+		NetInfo.addEventListener(
+			'connectionChange',
+			handleFirstConnectivityChange
+		);
 		FCM.requestPermissions();
 		FCM.getFCMToken().then(token => {
 			AsyncStorage.getItem("userToken").then((userToken) => {
