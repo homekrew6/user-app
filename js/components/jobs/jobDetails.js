@@ -84,9 +84,13 @@ class JobDetails extends Component {
             currencyList: [],
             IsSpDisabled: false,
             IsFollowDisabled: false,
-            IsTrackerDisabled:false,
-            IsSummaryDisabled:false,
-            IsResDisabled:false
+            IsTrackerDisabled: false,
+            IsSummaryDisabled: false,
+            IsResDisabled: false,
+            cancellationPrice: '',
+            badRatingModal: false,
+            showOthers: false,
+            addedRating:''
         }
 
         this.state.trackingRef = firebaseApp.database().ref().child('tracking');
@@ -229,6 +233,48 @@ class JobDetails extends Component {
             })
         }
 
+    }
+
+    cancelJobByUser() {
+        this.setState({ spinner: true });
+        let price;
+        if (Number(this.state.cancellationPrice)) {
+            price = Number(this.state.jobDetails.price) + Number(this.state.cancellationPrice);
+        }
+        else {
+            price = this.state.jobDetails.price;
+
+        }
+        const data = { id: this.state.jobDetails.id, price: price };
+        api.post('Jobs/cancelJobByUser', data).then((res) => {
+            this.setState({ spinner: false, jobCancelModal: false });
+            if (res["response"]["type"] == "Error") {
+                Alert.alert(res["response"]["message"]);
+            }
+            else {
+                this.props.navigation.navigate('JobList');
+            }
+        }).catch((err) => {
+            this.setState({ spinner: false, jobCancelModal: false });
+            Alert.alert(I18n.t('please_try_again_later'));
+        })
+    }
+
+    cancellationCalculatePrice() {
+        this.setState({ spinner: true });
+        const data = { postingTime: this.state.jobDetails.postingTime, id: this.state.jobDetails.id, price: this.state.jobDetails.price };
+        api.post('Jobs/cancelllationPriceCalculate', data).then((res) => {
+            this.setState({ spinner: false });
+            if (res["response"]["type"] == "Error") {
+                Alert.alert(res["response"]["message"]);
+            }
+            else {
+                this.setState({ jobCancelModal: true, cancellationPrice: res["response"]["price"] });
+            }
+        }).catch((err) => {
+            this.setState({ spinner: false });
+            Alert.alert(I18n.t('please_try_again_later'))
+        })
     }
     onCompleteFirebaseCall(snapshot) {
         if (snapshot && snapshot.val()) {
@@ -577,17 +623,47 @@ class JobDetails extends Component {
         this.props.navigation.navigate('FollowUp', { jobDetails: this.state.jobDetails })
     }
     workerRateing(rating) {
+
+        if (rating < 3) {
+            this.setState({ badRatingModal: true , addedRating:rating});
+        }
+        else {
+            this.setState({
+                loader: true,
+                workerRate: rating
+            })
+            console.log(rating);
+
+            let d = new Date();
+            api.post('ratings', {
+                "IsWorkerSender": false,
+                "ratingDate": d,
+                "rating": rating,
+                "customerId": this.props.auth.data.id,
+                "workerId": this.state.jobDetails.workerId,
+            }).then((res) => {
+                this.props.navigation.navigate('Menu');
+                this.setState({
+                    loader: false,
+                })
+            }).catch(err => {
+                console.log(err);
+            })
+        }
+       
+    }
+    addWorkerRating()
+    {
         this.setState({
             loader: true,
-            workerRate: rating
+            badRatingModal:false
         })
-        console.log(rating);
 
         let d = new Date();
         api.post('ratings', {
             "IsWorkerSender": false,
             "ratingDate": d,
-            "rating": rating,
+            "rating": this.state.addedRating,
             "customerId": this.props.auth.data.id,
             "workerId": this.state.jobDetails.workerId,
         }).then((res) => {
@@ -599,6 +675,7 @@ class JobDetails extends Component {
             console.log(err);
         })
     }
+    
 
     renderWorkerRating() {
         return (
@@ -724,7 +801,7 @@ class JobDetails extends Component {
                 email: this.state.jobDetails.customer ? this.state.jobDetails.customer.email : 'pragati@natitsolved.com'
             }
         };
-        
+
 
         var builder = new xml2js.Builder({ rootName: 'mobile' });
         var xml = builder.buildObject(obj);
@@ -773,8 +850,7 @@ class JobDetails extends Component {
             })
         );
     }
-    GoToReschedule()
-    {
+    GoToReschedule() {
         this.setState({ IsResDisabled: true });
 
         setTimeout(() => {
@@ -790,8 +866,7 @@ class JobDetails extends Component {
         }, 3000);
         this.props.navigation.navigate('ServiceProviderDetails', { jobDetails: this.state.jobDetails })
     }
-    goToTracker()
-    {
+    goToTracker() {
         this.setState({ IsTrackerDisabled: true });
 
         setTimeout(() => {
@@ -799,8 +874,7 @@ class JobDetails extends Component {
         }, 3000);
         this.props.navigation.navigate('JobTracker', { jobDetails: this.state.jobDetails })
     }
-    goToSummary()
-    {
+    goToSummary() {
         this.setState({ IsSummaryDisabled: true });
 
         setTimeout(() => {
@@ -976,7 +1050,7 @@ class JobDetails extends Component {
                                         <MaterialIcons name="payment" style={styles.jobItemIcon} />
                                     </View>
                                     <Text style={styles.jobItemName}>{I18n.t('payment')}</Text>
-                                    <Text style={styles.jobItemValue}>{this.state.currency} 
+                                    <Text style={styles.jobItemValue}>{this.state.currency}
                                         {this.state.jobDetails.price}</Text>
                                 </TouchableOpacity>
                             ) : null
@@ -990,7 +1064,7 @@ class JobDetails extends Component {
                         ) : (
                                 <View></View>
                             )}
-                        <Modal isVisible={this.state.jobCancelModal}>
+                        {/* <Modal isVisible={this.state.jobCancelModal}>
                             <TouchableOpacity
                                 transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }}
                                 onPress={() => this.setState({ jobCancelModal: false })}
@@ -1074,12 +1148,102 @@ class JobDetails extends Component {
                                 </View>
 
                             </TouchableOpacity>
+                        </Modal> */}
+
+
+                        <Modal isVisible={this.state.badRatingModal}>
+                            <TouchableOpacity
+                                transparent style={{ flex: 1, justifyContent: 'center', display: 'flex', width: '100%' }}
+                                onPress={() => this.setState({ badRatingModal: false })}
+                                activeOpacity={1}
+                            >
+                                <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0, zIndex: 99999, }} onPress={() => this.setState({ badRatingModal: false })}>
+                                    <Ionicons style={{ color: 'rgba(255,255,255,0.5)', fontSize: 36 }} name='md-close-circle' />
+                                </TouchableOpacity>
+
+                                <View style={{ padding: 15, borderRadius: 10, alignItems: 'center', justifyContent: 'center', width: '100%' }} >
+                                    {
+                                        this.state.showOthers == false ? (
+                                            <View style={{ width: '100%', backgroundColor: '#fff', borderRadius: 10 }}>
+                                                {
+                                                    this.state.reasonList.length > 0 ?
+                                                        this.state.reasonList.map((reasonData, key) => {
+                                                            return (
+                                                                <View key={key}>
+                                                                    <TouchableOpacity key={key} style={{ backgroundColor: '#fff', flexDirection: 'row', borderRadius: 10, paddingTop: 10, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}
+                                                                        onPress={() => reasonData.name.includes('Other') ? this.setState({ showOthers: true }) : this.addWorkerRating()}
+                                                                    >
+                                                                        <Text style={{ color: '#000' }}>{reasonData.name}</Text>
+                                                                    </TouchableOpacity>
+                                                                </View>
+                                                            )
+
+
+                                                        }) : (
+                                                            console.log(null)
+                                                        )
+
+                                                }
+                                            </View>
+                                        ) : (<View style={{ width: '100%', backgroundColor: '#fff', borderRadius: 10, overflow: 'hidden' }}>
+                                            <View style={{ backgroundColor: '#81cdc7', alignItems: 'center', paddingTop: 10, paddingBottom: 10 }}>
+                                                <Text style={{ color: '#fff' }}>
+                                                    Others Reason
+                                                </Text>
+                                            </View>
+                                            <View style={{ backgroundColor: '#ccc', flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center' }}>
+                                                <TextInput placeholder="Tell us here what went wrong?" style={{ width: '100%', backgroundColor: '#fff', borderWidth: 0, borderRadius: 10, paddingLeft: 10, paddingRight: 10, height: 200, textAlign: 'center', textAlignVertical: 'top' }} multiline={true} underlineColorAndroid='transparent' onChangeText={text => this.setState({ reason: text })} value={this.state.reason} >
+
+                                                </TextInput>
+                                            </View>
+                                            <View style={{ backgroundColor: '#fff', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#ccc', justifyContent: 'center', marginBottom: -1 }}>
+                                                <TouchableOpacity style={{ flex: 1, backgroundColor: 'red', alignItems: 'center', height: 45, justifyContent: 'center' }} onPress={() => this.setState({ showOthers: false })}><Text style={{ color: '#fff' }} >{I18n.t('back')}</Text></TouchableOpacity>
+                                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 45, justifyContent: 'center', alignItems: 'center' }} onPress={() => this.addWorkerRating()}><Text style={{ color: '#fff' }}>{I18n.t('ok')}</Text></TouchableOpacity>
+                                            </View>
+                                        </View>)
+                                    }
+
+
+                                </View>
+
+                            </TouchableOpacity>
+                        </Modal>
+                        <Modal isVisible={this.state.jobCancelModal}>
+                            <TouchableOpacity activeOpacity={1} style={{ alignItems: 'center', justifyContent: 'center', flex: 1, padding: 10, flexDirection: 'row' }} onPress={() => this.setState({ rescheduleModal: false })}>
+                                <View style={{ backgroundColor: '#fff', flex: 1, borderRadius: 10, overflow: 'hidden' }}>
+                                    <View style={{ padding: 15 }}>
+                                        <Text style={{ width: '100%', textAlign: 'center' }}>Are you sure </Text>
+                                        <Text style={{ width: '100%', textAlign: 'center', marginBottom: 20 }}>{I18n.t('are_you_sure_to_cancel')}</Text>
+                                        <View style={{ width: '100%', borderWidth: 1, borderColor: '#ccc', flexDirection: 'row', padding: 10 }} >
+                                            <View style={{ flex: 1 }}>
+                                                <Text style={{ fontSize: 14 }}>{this.state.jobDetails.service ? this.state.jobDetails.service.name : ''}</Text>
+                                                <Text style={{ fontSize: 12 }}>{this.getLocalTimeFormat(this.state.jobDetails.postedDate)}</Text>
+                                            </View>
+                                            <View>
+                                                <Image source={require('../../../img/atul.png')} style={{ height: 40, width: 40 }} />
+                                            </View>
+                                        </View>
+                                        <View style={{ width: '100%' }}>
+                                            <Text style={{ width: '100%', textAlign: 'center', fontSize: 18, marginTop: 20 }}>{I18n.t('cancellation_charge')}:</Text>
+                                            <Text style={{ fontSize: 12, width: '100%', textAlign: 'center' }}>{this.state.currency} {this.state.cancellationPrice}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ width: '100%', flexDirection: 'row' }}>
+                                        <TouchableOpacity style={{ flex: 1, height: 40, alignItems: 'center', justifyContent: 'center', backgroundColor: 'red' }} onPress={() => this.setState({ jobCancelModal: false })}>
+                                            <Text style={{ color: '#fff', fontSize: 14 }}>{I18n.t('no')}</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={{ flex: 1, height: 40, alignItems: 'center', justifyContent: 'center', backgroundColor: '#81cdc7' }} onPress={() => this.cancelJobByUser()}>
+                                            <Text style={{ color: '#fff', fontSize: 14 }}>{I18n.t('yes_cancel')}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                         </Modal>
 
                         {
                             (this.state.jobDetails.status == "STARTED" || this.state.jobDetails.status == "ACCEPTED") ?
                                 <View style={styles.jobItemWarp}>
-                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.setState({ jobCancelModal: true })}>
+                                    <TouchableOpacity style={{ flex: 1, backgroundColor: '#81cdc7', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.cancellationCalculatePrice()}>
                                         <Text style={{ fontSize: 14, color: '#fff' }}>{I18n.t('cancel_job')} </Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity disabled={this.state.IsResDisabled} style={{ flex: 1, backgroundColor: '#1e3768', height: 40, alignItems: 'center', justifyContent: 'center' }} onPress={() => this.GoToReschedule()}>

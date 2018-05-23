@@ -181,5 +181,8 @@ export default {
   sure_to_delete_loc: "هل أنت متأكد من حذف الموقع؟?",
   payment_cancelled: 'لقد رفضت الدفع.',
   smallName: 'اسم',
-  smaillEmail: 'عنوان الايميل'
+  smaillEmail: 'عنوان الايميل',
+  are_you_sure_to_reschedule: "هل أنت متأكد من إعادة جدولة هذه المهمة",
+  cancellation_charge: 'تهمة إلغاء',
+  yes_cancel: "نعم ,الغاء"
 };

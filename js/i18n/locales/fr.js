@@ -169,5 +169,8 @@ export default {
   sure_to_delete_loc: "Voulez-vous vraiment supprimer l'emplacement?",
   payment_cancelled: "Vous avez refusé le paiement.",
   smallName: 'prénom',
-  smaillEmail: 'Identifiant Email'
+  smaillEmail: 'Identifiant Email',
+  are_you_sure_to_reschedule: "Êtes-vous sûr de reporter ce travail?",
+  cancellation_charge: "Frais d'annulation",
+  yes_cancel: "Oui, Annuler"
 };

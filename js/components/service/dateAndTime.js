@@ -163,7 +163,7 @@ class DateAndTime extends Component {
         })
     }
     setDateAndTime() {
-        
+        debugger;
         let saveDBTime = this.state.setTime.slice(0, -5) + " " + this.state.setTime.slice(5).toLowerCase();
         const saveDateDB = this.state.daYSelected + " " + this.state.setTime.slice(0, -2) + ':00' + " " + this.state.setTime.slice(5).toLowerCase();
         
@@ -183,7 +183,9 @@ class DateAndTime extends Component {
         if(checkPosNeg === 1 || checkPosNeg === 0){
             Alert.alert(I18n.t("you_cannot_set_back"));
         } else{
-            if (durPosHour > this.state.settings) {
+           let postingDiff=durPosHour.toFixed(2);
+            let postingDiff1 = Number(postingDiff) + 0.166667;
+            if (postingDiff1 > this.state.settings) {
                 let zeroPos = saveDBTime.search("0");
                 if (zeroPos >= 0) {
                     if (this.state.setTime === "10:00AM" || this.state.setTime === "10:00PM") {
@@ -222,7 +224,7 @@ class DateAndTime extends Component {
                             {
                                 fullHours=Number(fullHours1)+12;
                             }
-                            const newPostedServerDate = new Date(postedDateForServer.getFullYear(), postedDateForServer.getMonth() + 1, postedDateForServer.getDate(), fullHours ).toUTCString();
+                            const newPostedServerDate = new Date(postedDateForServer.getFullYear(), postedDateForServer.getMonth(), postedDateForServer.getDate(), fullHours ).toUTCString();
                             data.serviceTime = this.state.setWeek + ' ' + this.state.satDate + ' ' + this.state.setTime;
                             data.saveDateDB = saveDateDB;
                             data.saveDBTime = saveDBTime;

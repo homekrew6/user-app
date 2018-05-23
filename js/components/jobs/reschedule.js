@@ -293,7 +293,7 @@ class Reschedule extends Component {
                         <View style={{ backgroundColor: '#fff', flex: 1, borderRadius: 10, overflow: 'hidden' }}>
                             <View style={{ padding: 15}}>
                                     <Text style={{ width: '100%', textAlign: 'center' }}>Are you sure </Text>
-                                    <Text style={{ width: '100%', textAlign: 'center', marginBottom: 20 }}>you want to Reschedule?</Text>
+                                    <Text style={{ width: '100%', textAlign: 'center', marginBottom: 20 }}>{I18n.t('are_you_sure_to_reschedule')}</Text>
                                 <View style={{ width: '100%', borderWidth: 1, borderColor: '#ccc', flexDirection: 'row', padding: 10 }} >
                                         <View style={{ flex: 1 }}>
                                             <Text style={{ fontSize: 14 }}>{this.state.jobDetails.service.name}</Text>

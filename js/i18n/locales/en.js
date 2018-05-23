@@ -182,5 +182,8 @@ export default {
   sure_to_delete_loc:'Are you sure want to delete location?',
   payment_cancelled:'You declined the payment.',
   smallName: 'Name',
-  smaillEmail: 'Email Id'
+  smaillEmail: 'Email Id',
+  are_you_sure_to_reschedule:'Are you sure to reschedule this job?',
+  cancellation_charge:'Cancellation Charge',
+  yes_cancel:"Yes, Cancel"
 };
