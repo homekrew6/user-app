@@ -36,7 +36,7 @@ class Confirmation extends Component {
             // homeValuearray: props.service.data.serviceLocation,            
             loader: false,
             continueButtonDesable: false,
-            currencyId: 3,
+            currencyId: 4,
             minPrice: '0.0',
             url: 'https://secure.telr.com/gateway/webview_start.html?code=8f6f5da95a445ad995ba561231db',
             IsDateDisabled: false
@@ -178,6 +178,7 @@ class Confirmation extends Component {
                             if (jobPrice) {
                                 AsyncStorage.getItem("keyQuestionList").then((value) => {
                                     if (value) {
+                                        debugger;
                                         let price = Number(this.props.service.data.price);
                                         let minPrice = Number(this.state.minPrice);
                                         if (price > minPrice) {

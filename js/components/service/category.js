@@ -70,7 +70,6 @@ class Categories extends Component {
 
         });
         api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
-      
           if (resService.response.length > 0) {
             api.get('WorkerSkills').then((workerSkillsList) => {
               let checkServiceIdsList=[];
