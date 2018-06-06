@@ -184,5 +184,7 @@ export default {
   smaillEmail: 'عنوان الايميل',
   are_you_sure_to_reschedule: "هل أنت متأكد من إعادة جدولة هذه المهمة",
   cancellation_charge: 'تهمة إلغاء',
-  yes_cancel: "نعم ,الغاء"
+  yes_cancel: "نعم ,الغاء",
+  turn_your_location: "يرجى تحويل موقعك حتى نتمكن من خدمتك بشكل أفضل.",
+  no_zones: "لم يتم العثور على مناطق بالقرب من موقعك"
 };

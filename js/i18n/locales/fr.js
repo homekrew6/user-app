@@ -172,5 +172,7 @@ export default {
   smaillEmail: 'Identifiant Email',
   are_you_sure_to_reschedule: "Êtes-vous sûr de reporter ce travail?",
   cancellation_charge: "Frais d'annulation",
-  yes_cancel: "Oui, Annuler"
+  yes_cancel: "Oui, Annuler",
+  turn_your_location: "Veuillez tourner votre emplacement afin que nous puissions mieux vous servir.",
+  no_zones: "Aucune zone trouvée près de votre position"
 };

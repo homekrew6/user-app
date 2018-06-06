@@ -23,20 +23,14 @@ class ResetPassword extends Component {
     }
 
 		pressSend(){
-	    if(!this.state.otp.trem){
+	    if(!this.state.otp.trim()){
 	      Alert.alert('Please enter otp');
 	      return false;
 		}
 		
-		if(!this.state.password){
+		if(!this.state.password.trim()){
 	      Alert.alert('Please enter password');
 	      return false;
-		}
-
-		let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-		if (!regEmail.test(this.state.email)) {
-			Alert.alert('Please enter a valid email');
-			return false;
 		}
 			this.setState({visible:true});
 			api.post('Customers/otpChecking',{otp:this.state.otp}).then(res=>{

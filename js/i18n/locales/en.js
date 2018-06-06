@@ -185,5 +185,7 @@ export default {
   smaillEmail: 'Email Id',
   are_you_sure_to_reschedule:'Are you sure to reschedule this job?',
   cancellation_charge:'Cancellation Charge',
-  yes_cancel:"Yes, Cancel"
+  yes_cancel:"Yes, Cancel",
+  turn_your_location:"Please turn your location so that we can serve you better.",
+  no_zones:"No zones found near your location"
 };

@@ -212,11 +212,11 @@ class JobDetails extends Component {
             this.setState({ jobCancelModal: false });
             let cancelJobData = { postingTime: this.state.jobDetails.postingTime, id: this.state.jobDetails.id, status: "CANCELLED", reason: reason.name };
             api.post('Jobs/cancelJobByUser', cancelJobData).then((res) => {
-                if (res.response.type == "SUCCESS") {
+                if (res.response.type == "Success") {
                     this.props.navigation.navigate('JobList');
                 }
                 else {
-                    Alert.alert(I18n.t('please_try_again_later'));
+                    Alert.alert(res.response.message);
                 }
             })
         }

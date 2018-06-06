@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, View, StatusBar, Dimensions, Alert, BackHandler, TouchableOpacity, ImageBackground, AsyncStorage ,Text} from 'react-native';
+import { Image, View, StatusBar, Dimensions, Alert, BackHandler, TouchableOpacity, ImageBackground, AsyncStorage, Text } from 'react-native';
 import Ico from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import FSpinner from 'react-native-loading-spinner-overlay';
 import api from '../../api';
 import { setServiceDetails } from './elements/serviceActions';
-import { Container, Header, Button, Content,Item, Label, Body, Picker } from 'native-base';
+import { Container, Header, Button, Content, Item, Label, Body, Picker } from 'native-base';
 import I18n from '../../i18n/i18n';
 import styles from './styles';
 import Modal from "react-native-modal";
+import GeoFencing from 'react-native-geo-fencing';
 const deviceWidth = Dimensions.get('window').width;
 const logo_hdr = require('../../../img/logo2.png');
 const carveImage = require('../../../img/bg-5.png');
@@ -33,13 +34,13 @@ class Categories extends Component {
     };
   }
 
-  activateBackAlert(){
-  
-    if(this.props.currentRoute === 'Category' ){
-      if(this.props.prevRoute === '' ){
+  activateBackAlert() {
+
+    if (this.props.currentRoute === 'Category') {
+      if (this.props.prevRoute === '') {
         BackHandler.addEventListener('hardwareBackPress', function () {
-        
-          if(this.props.currentRoute === 'Category' || this.props.currentRoute === 'Login'){
+
+          if (this.props.currentRoute === 'Category' || this.props.currentRoute === 'Login') {
             Alert.alert(
               I18n.t('Confirm'),
               I18n.t('are_you_sure'),
@@ -49,89 +50,185 @@ class Categories extends Component {
               ],
               { cancelable: false }
             );
-              return true;
-          }else{
-              this.props.navigation.goBack(null);
-              return true;
+            return true;
+          } else {
+            this.props.navigation.goBack(null);
+            return true;
           }
         }.bind(this));
       }
     }
   }
 
-
   componentWillMount() {
-
-    api.get('Zones/getParentZone').then((res) => {
-      //console.log(res);
-      if (res.zone.length > 0) {
-        this.setState({ zoneList: res.zone, selectedZoneDetails: res.zone[0], selected1: res.zone[0].id })
-        AsyncStorage.setItem("zoneId", res.zone[0].id.toString()).then((res) => {
-
-        });
-        api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
-          if (resService.response.length > 0) {
-            api.get('WorkerSkills').then((workerSkillsList) => {
-              let checkServiceIdsList=[];
-              workerSkillsList.map((item)=>{
-                checkServiceIdsList.push(item.serviceId);
-              });
-               let zoneServiceIdCheck = [];
-            resService.response.map((data, key)=>{
-              if(data.service && (data.service.is_active === true || data.service.is_active === null)){
-                if(checkServiceIdsList.includes(data.service.id))
-                {
-                  zoneServiceIdCheck.push(data)
-                }
-               
-              }
-            })
-            this.setState({ serviceList: zoneServiceIdCheck });
-            this.setState({ visible: false });
-            }).catch((err1) => {
-              let zoneServiceIdCheck = [];
-              resService.response.map((data, key) => {
-                if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
-                  zoneServiceIdCheck.push(data)
-                }
-              })
-              this.setState({ serviceList: zoneServiceIdCheck });
-              this.setState({ visible: false });
-              this.setState({ visible: false });
-            })
+    navigator.geolocation.getCurrentPosition((position) => {
+      const point = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      api.get('Zones').then((zoneList) => {
+        let zoneListWithPolygon = [];
+        for (let i = 0; i < zoneList.length; i++) {
+          const data = { zone: zoneList[i], id: zoneList[i].id, polygon: [] };
+          for (let j = 0; j < zoneList[i].fencing.length; j++) {
+            data.polygon.push({ lat: Number(zoneList[i].fencing[j].lat), lng: Number(zoneList[i].fencing[j].lng) });
           }
-        }).catch((err) => {
-          //console.log(err);
-          this.setState({ visible: false });
+          zoneListWithPolygon.push(data);
+        }
+        let myZoneList = [];
+        zoneListWithPolygon.map((item) => {
+          GeoFencing.containsLocation(point, item.polygon).then(() => {
+            myZoneList.push(item);
+          }).catch((err) => {
+          })
         });
+        setTimeout(() => {
 
+          if (myZoneList.length > 0) {
+            let finalZoneList = [];
+            myZoneList.map((item) => {
+              finalZoneList.push(item.zone);
+            })
+            this.setState({ zoneList: finalZoneList, selectedZoneDetails: myZoneList[0].zone, selected1: myZoneList[0].zone.id });
+            AsyncStorage.setItem("zoneId", myZoneList[0].zone.id.toString()).then((res) => {
+
+            });
+            api.post('serviceZones/getZoneRelatedService', { zone: myZoneList[0].zone.id }).then((resService) => {
+              if (resService.response.length > 0) {
+                api.get('WorkerSkills').then((workerSkillsList) => {
+                  let checkServiceIdsList = [];
+                  workerSkillsList.map((item) => {
+                    checkServiceIdsList.push(item.serviceId);
+                  });
+                  let zoneServiceIdCheck = [];
+                  resService.response.map((data, key) => {
+                    if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
+
+                      if (checkServiceIdsList.includes(data.service.id)) {
+                        if (data.service.verticalId == 1) {
+                          zoneServiceIdCheck.push(data)
+                        }
+
+                      }
+
+                    }
+                  })
+                  this.setState({ serviceList: zoneServiceIdCheck });
+                  this.setState({ visible: false });
+                }).catch((err1) => {
+                  let zoneServiceIdCheck = [];
+                  resService.response.map((data, key) => {
+                    if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
+                      zoneServiceIdCheck.push(data)
+                    }
+                  })
+                  this.setState({ serviceList: zoneServiceIdCheck });
+                  this.setState({ visible: false });
+                  this.setState({ visible: false });
+                })
+              }
+              else {
+                this.setState({ visible: false });
+              }
+            }).catch((err) => {
+              //console.log(err);
+              this.setState({ visible: false });
+            });
+          }
+          else {
+            Alert.alert("", I18n.t("no_zones"));
+          }
+        }, 1000)
+
+      })
+    }, (error) => {
+      if (error.code && error.code == 2) {
+        this.setState({ visible: false });
+        Alert.alert("", I18n.t('turn_your_location'));
       }
-    }).catch((err) => {
-      this.setState({ visible: false });
-    });
+      else
+      {
+        this.setState({ visible: false });
+        Alert.alert("", I18n.t('turn_your_location'));
+      }
+    })
+
+    // api.get('Zones/getParentZone').then((res) => {
+    //   //console.log(res);
+    //   if (res.zone.length > 0) {
+    //     debugger;
+    //     this.setState({ zoneList: res.zone, selectedZoneDetails: res.zone[0], selected1: res.zone[0].id })
+    //     AsyncStorage.setItem("zoneId", res.zone[0].id.toString()).then((res) => {
+
+    //     });
+    //     debugger;
+    //     api.post('serviceZones/getZoneRelatedService', { zone: res.zone[0].id }).then((resService) => {
+    //       debugger;
+    //       if (resService.response.length > 0) {
+    //         api.get('WorkerSkills').then((workerSkillsList) => {
+    //           let checkServiceIdsList = [];
+    //           workerSkillsList.map((item) => {
+    //             checkServiceIdsList.push(item.serviceId);
+    //           });
+    //           let zoneServiceIdCheck = [];
+    //           resService.response.map((data, key) => {
+    //             if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
+
+    //               if (checkServiceIdsList.includes(data.service.id)) {
+    //                 if (data.service.verticalId == 1) {
+    //                   zoneServiceIdCheck.push(data)
+    //                 }
+
+    //               }
+
+    //             }
+    //           })
+    //           this.setState({ serviceList: zoneServiceIdCheck });
+    //           this.setState({ visible: false });
+    //         }).catch((err1) => {
+    //           let zoneServiceIdCheck = [];
+    //           resService.response.map((data, key) => {
+    //             if (data.service && (data.service.is_active === true || data.service.is_active === null)) {
+    //               zoneServiceIdCheck.push(data)
+    //             }
+    //           })
+    //           this.setState({ serviceList: zoneServiceIdCheck });
+    //           this.setState({ visible: false });
+    //           this.setState({ visible: false });
+    //         })
+    //       }
+    //     }).catch((err) => {
+    //       //console.log(err);
+    //       this.setState({ visible: false });
+    //     });
+
+    //   }
+    // }).catch((err) => {
+    //   this.setState({ visible: false });
+    // });
     if (this.props.auth.data) {
 
       let customerId = this.props.auth.data.id;
       const getLocationUrl = `user-locations?filter={"where":{"customerId":${customerId}}}`;
       api.get(getLocationUrl).then(res => {
         //let newArray = res;
-      
+
         this.setState({ locationArray: res });
-      
+
 
       }).catch((err) => {
-      
+
       });
-   
+
     }
   }
   componentDidMount() {
-    if(this.props.auth.loggedIn) {
+    if (this.props.auth.loggedIn) {
       api.post('Customers/checkIfPaymentPending', { id: this.props.auth.data.id }).then((resPay) => {
-        if(resPay.response.IsPayPending) {
+        if (resPay.response.IsPayPending) {
           Alert.alert(I18n.t('please_pay_pending_amount'));
           this.props.navigation.goBack();
-        }  
+        }
       });
     }
   }
@@ -171,7 +268,7 @@ class Categories extends Component {
   }
   onValueChange(value) {
     AsyncStorage.setItem("zoneId", value.toString()).then((res) => {
-        
+
     });
     //console.log(value);
     this.setState({
@@ -179,7 +276,7 @@ class Categories extends Component {
     });
     this.setState({ visible: true })
     api.post('serviceZones/getZoneRelatedService', { zone: value }).then((res) => {
-    
+
       if (res.response.length > 0) {
         this.setState({ selectedZoneDetails: res.response[0].zone, serviceList: res.response });
         api.get('WorkerSkills').then((workerSkillsList) => {
@@ -285,19 +382,19 @@ class Categories extends Component {
           <Header style={styles.appHdr2} androidStatusBarColor="#cbf0ed" noShadow >
 
             {
-              this.props.auth.data.id?
-              <Button transparent style={{ width: 40 }} onPress={()=> this.props.navigation.navigate('Menu')}>
-                <SimpleLineIcons name="grid" style={[styles.hd_lft_icon, { fontSize: 14, color: '#fff' }]} />
-              </Button>: null
+              this.props.auth.data.id ?
+                <Button transparent style={{ width: 40 }} onPress={() => this.props.navigation.navigate('Menu')}>
+                  <SimpleLineIcons name="grid" style={[styles.hd_lft_icon, { fontSize: 14, color: '#fff' }]} />
+                </Button> : null
             }
 
             <Body style={{ alignItems: 'center' }}>
               <Image source={logo_hdr} style={styles.logo_hdr_img} />
             </Body>
             {
-              this.props.auth.data.id ? <Button transparent style={{ width: 40, backgroundColor: 'transparent' }} disabled />: null
+              this.props.auth.data.id ? <Button transparent style={{ width: 40, backgroundColor: 'transparent' }} disabled /> : null
             }
-            
+
             {/* <Button transparent >
               <Ionicons name="ios-notifications-outline" style={styles.hd_rt_icon} />
             </Button>
@@ -380,7 +477,7 @@ class Categories extends Component {
 }; */}
 
 const mapStateToProps = (state) => {
- 
+
   return {
     auth: state.auth,
     service: state.service,

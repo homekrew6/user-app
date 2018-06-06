@@ -178,7 +178,6 @@ class Confirmation extends Component {
                             if (jobPrice) {
                                 AsyncStorage.getItem("keyQuestionList").then((value) => {
                                     if (value) {
-                                        debugger;
                                         let price = Number(this.props.service.data.price);
                                         let minPrice = Number(this.state.minPrice);
                                         if (price > minPrice) {
