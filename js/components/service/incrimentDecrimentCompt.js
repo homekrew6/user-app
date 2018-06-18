@@ -32,55 +32,62 @@ class incrimentDecriment extends Component {
         this.setState({ massage: massage });
         const incrementStatus = data;
         AsyncStorage.getItem("keyQuestionList").then((value) => {
-        if(value !== ''){
-            const jsonKeyQuestion = JSON.parse(value);
-            jsonKeyQuestion.map((dataQ, key) => {
-            if(dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId){
-                jsonKeyQuestion[key].IncrementId = massage;
+            if (value !== '') {
+                const jsonKeyQuestion = JSON.parse(value);
+                jsonKeyQuestion.map((dataQ, key) => {
+                    if (dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId) {
+                        jsonKeyQuestion[key].IncrementId = massage;
+                    }
+                });
+                const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+                AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+
+                });
             }
-            });
-            const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
-            AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-          
-            });
-        }
         }).catch(res => {
-          
+
         });
 
         var price = this.props.service.data.price;
-        debugger;
-        price=Number(price);
+        price = Number(price);
         var timeInterval = this.props.service.data.time_interval;
         if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
-            if (this.state.totalData.answers[0].option_time_impact == "Addition")
-            {
-                timeInterval = timeInterval + (Number(massage) + Number(this.state.totalData.answers[0].time_impact));
+            if (this.state.totalData.answers[0].option_time_impact == "Addition") {
+                const priceWithoutThis = timeInterval - (Number(this.state.massage) * (Number(this.state.totalData.answers[0].time_impact)));
+                timeInterval = priceWithoutThis + (Number(massage) * Number(this.state.totalData.answers[0].time_impact));
+                // timeInterval = timeInterval + (Number(massage) + Number(this.state.totalData.answers[0].time_impact));
             }
-            else
-            {
-                timeInterval = timeInterval + (Number(massage) * Number(this.state.totalData.answers[0].time_impact));
+            else {
+                const priceWithoutThis = timeInterval - (Number(this.state.massage) * (Number(this.state.totalData.answers[0].time_impact)));
+                timeInterval = priceWithoutThis + (Number(massage) * Number(this.state.totalData.answers[0].time_impact));
+                //timeInterval = timeInterval + (Number(massage) * Number(this.state.totalData.answers[0].time_impact));
             }
             if (this.state.totalData.answers[0].option_price_impact == "Addition") {
                 // price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));
-                price = price + (Number(massage) + Number(this.state.totalData.answers[0].price_impact));
+                const toSubtractPrice = (Number(this.state.massage) * (Number(this.state.totalData.answers[0].price_impact)));
+                const priceWithoutThis = price - toSubtractPrice;
+                price = priceWithoutThis + (Number(massage) * Number(this.state.totalData.answers[0].price_impact));
+                //price = price + (Number(massage) + Number(this.state.totalData.answers[0].price_impact));
             }
             else {
-                price = price + (Number(massage) * Number(this.state.totalData.answers[0].price_impact));
+                const toSubtractPrice = (Number(this.state.massage) * (Number(this.state.totalData.answers[0].price_impact)));
+                const priceWithoutThis = price - toSubtractPrice;
+                price = priceWithoutThis + (Number(massage) * Number(this.state.totalData.answers[0].price_impact));
+                //price = price + (Number(massage) * Number(this.state.totalData.answers[0].price_impact));
             }
             var data = this.props.service.data;
             price = this.addZeroes(price);
             data.price = price;
-            data.time_interval=timeInterval;
-            AsyncStorage.setItem("servicePrice", price).then((success)=>{
-            
+            data.time_interval = timeInterval;
+            AsyncStorage.setItem("servicePrice", price).then((success) => {
+
             })
             this.props.setServiceDetails(data);
         }
 
     }
     handleDecrement = () => {
-        price=Number(price);
+        price = Number(price);
         var price = this.props.service.data.price;
         var timeInterval = this.props.service.data.time_interval;
         if ((Number(this.state.massage) == 0) || (Number(this.state.massage) == 1)) {
@@ -92,42 +99,52 @@ class incrimentDecriment extends Component {
             this.setState({ massage: massage });
             const incrementStatus = data;
             AsyncStorage.getItem("keyQuestionList").then((value) => {
-            if(value !== ''){
-                const jsonKeyQuestion = JSON.parse(value);
-                jsonKeyQuestion.map((dataQ, key) => {
-                if(dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId){
-                    jsonKeyQuestion[key].IncrementId = massage;
+                if (value !== '') {
+                    const jsonKeyQuestion = JSON.parse(value);
+                    jsonKeyQuestion.map((dataQ, key) => {
+                        if (dataQ.answers && dataQ.answers.length && dataQ.answers[0].questionId === questionId) {
+                            jsonKeyQuestion[key].IncrementId = massage;
+                        }
+                    });
+                    const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
+                    AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
+
+                    });
                 }
-                });
-                const dataStringQuestion = JSON.stringify(jsonKeyQuestion);
-                AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
-                   
-                });
-            }
             }).catch(res => {
             });
-            
+
+
             if (this.state.totalData.answers && this.state.totalData.answers.length > 0) {
                 if (this.state.totalData.answers[0].option_time_impact == "Addition") {
-                    timeInterval = timeInterval - (Number(this.state.massage) + Number(this.state.totalData.answers[0].time_impact));
+                    const priceWithoutThis = timeInterval - (Number(this.state.massage) * (Number(this.state.totalData.answers[0].time_impact)));
+                    timeInterval = priceWithoutThis + (Number(massage) * Number(this.state.totalData.answers[0].time_impact));
+                    //timeInterval = timeInterval - (Number(this.state.massage) + Number(this.state.totalData.answers[0].time_impact));
                 }
                 else {
-                    timeInterval = timeInterval - (Number(this.state.massage) * Number(this.state.totalData.answers[0].time_impact));
+                    const priceWithoutThis = timeInterval - (Number(this.state.massage) * (Number(this.state.totalData.answers[0].time_impact)));
+                    timeInterval = priceWithoutThis + (Number(massage) * Number(this.state.totalData.answers[0].time_impact));
+                    //timeInterval = timeInterval - (Number(this.state.massage) * Number(this.state.totalData.answers[0].time_impact));
+
                 }
                 if (this.state.totalData.answers[0].option_price_impact == "Addition") {
-                    price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));
+                    const priceWithoutThis = price - (Number(this.state.massage) * (Number(this.state.totalData.answers[0].price_impact)));
+                    price = priceWithoutThis + (Number(massage) * Number(this.state.totalData.answers[0].price_impact))
+                    //price = price - (this.state.massage + Number(this.state.totalData.answers[0].price_impact));
                     // price = price + (Number(massage) + Number(this.state.totalData.answers[0].price_impact));
                 }
                 else {
-                    price = price - (Number(this.state.massage) * Number(this.state.totalData.answers[0].price_impact));
+                    const priceWithoutThis = price - (Number(this.state.massage) * (Number(this.state.totalData.answers[0].price_impact)));
+                    price = priceWithoutThis + (Number(massage) * Number(this.state.totalData.answers[0].price_impact))
+                    //price = price - (Number(this.state.massage) * Number(this.state.totalData.answers[0].price_impact));
                 }
                 this.setState({ massage: massage });
                 var data = this.props.service.data;
                 price = this.addZeroes(price);
                 data.price = price;
-                data.time_interval=timeInterval;
-                AsyncStorage.setItem("servicePrice", price).then((success)=>{
-            
+                data.time_interval = timeInterval;
+                AsyncStorage.setItem("servicePrice", price).then((success) => {
+
                 })
                 this.props.setServiceDetails(data);
             }

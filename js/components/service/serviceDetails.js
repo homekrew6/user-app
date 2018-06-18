@@ -309,9 +309,9 @@ class serviceDetails extends Component {
 
   }
   changeActiveRadio(data) {
-   
     const answersId = data.id;
     const questionId = data.questionId;
+    let dataselectedStatus = data.selected;
     AsyncStorage.getItem("keyQuestionList").then((value) => {
       if (value !== '') {
         const jsonKeyQuestion = JSON.parse(value);
@@ -336,11 +336,10 @@ class serviceDetails extends Component {
       //AsyncStorage.setItem('StoreData', dataRemoteString);
       
     });
-
-
-    data.selected = !data.selected;
+    dataselectedStatus = !dataselectedStatus;
     let dataselected = data;
     let item;
+    
     this.state.questionList.map((ques) => {
       if (ques.id == data.questionId) {
         item = ques;
@@ -354,7 +353,7 @@ class serviceDetails extends Component {
             noofselected++;
           }
         });
-        if (noofselected > 1) {
+        if (noofselected > 0) {
           item.answers.map((item1) => {
             if (item1.id == dataselected.id) {
 
@@ -364,11 +363,12 @@ class serviceDetails extends Component {
                 item1.selected = false;
                 var price = this.props.service.data.price;
                 price = Number(price);
-                if (dataselected.option_price_impact == "Addition") {
-                  price = price - Number(dataselected.price_impact);
+                if (item1.option_price_impact == "Addition") {
+                  price = price - Number(item1.price_impact);
                 }
                 else {
-                  price = price / Number(dataselected.price_impact);
+                  price = price - Number(item1.price_impact);
+                  //price = price / Number(dataselected.price_impact);
                 }
                 var data = this.props.service.data;
                 price = this.addZeroes(price);
@@ -386,12 +386,13 @@ class serviceDetails extends Component {
     }
     var price = this.props.service.data.price;
     price = Number(price);
-    if (data.selected == false) {
+    if (dataselectedStatus == false) {
       if (data.option_price_impact == "Addition") {
         price = price - Number(data.price_impact);
       }
       else {
-        price = price / Number(data.price_impact);
+        price = price - Number(data.price_impact);
+       // price = price / Number(data.price_impact);
       }
     }
     else {
@@ -399,13 +400,29 @@ class serviceDetails extends Component {
         price = price + Number(data.price_impact);
       }
       else {
-        price = price * Number(data.price_impact);
+        //price = price * Number(data.price_impact);
+        price = price + Number(data.price_impact);
       }
     }
 
     var data = this.props.service.data;
     price = this.addZeroes(price);
     data.price = price;
+    data.selected=!data.selected;
+    let stateQuestionList=this.state.questionList;
+    stateQuestionList.map((item)=>{
+      if (item.id == questionId)
+      {
+        item.answers.map((item1)=>{
+          if(item1.id==answersId)
+          {
+            // item1.selected=true;
+            item1.selected = !item1.selected;
+          }
+        })
+      }
+    });
+    this.setState({ questionList: stateQuestionList});
     AsyncStorage.setItem("servicePrice", price).then((success) => {
 
     })
@@ -443,7 +460,6 @@ class serviceDetails extends Component {
       //AsyncStorage.setItem('StoreData', dataRemoteString);
      
     });
-
     var price = this.props.service.data.price;
     price = Number(price);
     var timeInterval=this.props.service.data.time_interval;
@@ -463,13 +479,15 @@ class serviceDetails extends Component {
             timeInterval = timeInterval - Number(data1.answers[0].time_impact);
           }
           else {
-            timeInterval = timeInterval / Number(data1.answers[0].time_impact);
+            timeInterval = timeInterval - Number(data1.answers[0].time_impact);
+            //timeInterval = timeInterval / Number(data1.answers[0].time_impact);
           }
           if (data1.answers[0].option_price_impact == "Addition") {
             price = price - Number(data1.answers[0].price_impact);
           }
           else {
-            price = price / Number(data1.answers[0].price_impact);
+            //price = price / Number(data1.answers[0].price_impact);
+            price = price - Number(data1.answers[0].price_impact);
           }
 
           var data = this.props.service.data;
@@ -489,13 +507,15 @@ class serviceDetails extends Component {
             timeInterval = timeInterval - Number(data1.answers[0].time_impact);
           }
           else {
-            timeInterval = timeInterval / Number(data1.answers[0].time_impact);
+            //timeInterval = timeInterval / Number(data1.answers[0].time_impact);
+            timeInterval = timeInterval - Number(data1.answers[0].time_impact);
           }
           if (data1.answers[0].option_price_impact == "Addition") {
             price = price + Number(data1.answers[0].price_impact);
           }
           else {
-            price = price * Number(data1.answers[0].price_impact);
+            // price = price * Number(data1.answers[0].price_impact);
+            price = price +  Number(data1.answers[0].price_impact);
           }
           var data = this.props.service.data;
           price = this.addZeroes(price);
@@ -531,10 +551,12 @@ class serviceDetails extends Component {
                 if (this.state.questionList[i].answers && this.state.questionList[i].answers.length > 0) {
                   if (this.state.questionList[i].type == 1) {
                     if (this.state.questionList[i].answers[0].option_price_impact == "Addition") {
-                      price = price + (this.state.questionList[i].IncrementId + Number(this.state.questionList[i].answers[0].price_impact));
+                      //price = price + (this.state.questionList[i].IncrementId + Number(this.state.questionList[i].answers[0].price_impact));
+                      price = price + (this.state.questionList[i].IncrementId * Number(this.state.questionList[i].answers[0].price_impact));
                     }
                     else {
                       price = price + (this.state.questionList[i].IncrementId * Number(this.state.questionList[i].answers[0].price_impact));
+                      //price = price + (this.state.questionList[i].IncrementId * Number(this.state.questionList[i].answers[0].price_impact));
                     }
                   }
                   else if (this.state.questionList[i].type == 2) {
@@ -542,7 +564,8 @@ class serviceDetails extends Component {
                       price = price + Number(this.state.questionList[i].answers[0].price_impact);
                     }
                     else {
-                      price = price * Number(this.state.questionList[i].answers[0].price_impact);
+                      price = price + Number(this.state.questionList[i].answers[0].price_impact);
+                     // price = price * Number(this.state.questionList[i].answers[0].price_impact);
                     }
                   }
                 }
@@ -604,7 +627,7 @@ class serviceDetails extends Component {
       banner_image: this.props.service.data.banner_image
     })
     
-    // AsyncStorage.removeItem('serviceId', (err) => console.log('finished', err));
+    AsyncStorage.removeItem('servicePrice', (err) => console.log('finished', err));
 
     AsyncStorage.getItem('serviceId').then((serviceValue) => {
      
@@ -638,6 +661,7 @@ class serviceDetails extends Component {
                   }
                 }
               })
+            
               this.setState({ questionList: responseJson });
               const dataStringQuestion = JSON.stringify(responseJson);
               AsyncStorage.setItem('keyQuestionList', dataStringQuestion, (res) => {
@@ -835,7 +859,8 @@ class serviceDetails extends Component {
               timeInterval = timeInterval - Number(data.answers[0].time_impact);
             }
             else {
-              timeInterval = timeInterval / Number(data.answers[0].time_impact);
+              //timeInterval = timeInterval / Number(data.answers[0].time_impact);
+              timeInterval = timeInterval - Number(data.answers[0].time_impact);
             }
 
             let redux_value = Number(data.rangeValue);
@@ -863,7 +888,8 @@ class serviceDetails extends Component {
               timeInterval = timeInterval - Number(data.answers[0].time_impact);
             }
             else {
-              timeInterval = timeInterval / Number(data.answers[0].time_impact);
+              //timeInterval = timeInterval / Number(data.answers[0].time_impact);
+              timeInterval = timeInterval - Number(data.answers[0].time_impact);
             }
             // if (value < this.props.service.data.value) {
             //   price = price + (value + Number(data.answers[0].price_impact));
