@@ -27,6 +27,7 @@ class incrimentDecriment extends Component {
     }
 
     handleIncrement = () => {
+        debugger;
         const questionId = this.state.questionId;
         const massage = Number(this.state.massage) + 1;
         this.setState({ massage: massage });

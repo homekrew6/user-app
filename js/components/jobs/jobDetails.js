@@ -104,6 +104,7 @@ class JobDetails extends Component {
                         this.setState({ jobDetails: jobDetails, topScreenStatus: 'ONMYWAY', latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
                     }
                     else if (snapShotVal.status == 'JOBSTARTED') {
+                        debugger;
                         const jobDetails = this.state.jobDetails;
                         let job_start_time = snapShotVal.startTime ? moment(snapShotVal.startTime).format('LT') : '';
                         let job_end_time = snapShotVal.endTime ? moment(snapShotVal.endTime).format('LT') : '';
@@ -134,10 +135,18 @@ class JobDetails extends Component {
                         this.setState({ topScreenStatus: 'ONMYWAY', jobDetails: jobDetails, latitudeUser: snapShotVal.lat, longitudeUser: snapShotVal.lng, jobTrackingStatus: 'Krew On The Way' });
                     }
                     else if (snapShotVal.status == 'JOBSTARTED') {
+                        debugger;
                         let job_start_time = moment(snapShotVal.startTime).format('LT');
                         let job_end_time = moment(snapShotVal.endTime).format('LT');
                         let jobDetails = this.state.jobDetails;
                         jobDetails.status = snapShotVal.status;
+                             const time_interval = this.state.jobDetails.service.time_interval;
+                             const progressSpeed = (time_interval / 100) * 60000;
+                             console.warn("progressSpeed", progressSpeed)
+                             this.setState({ workProgressTime: 0.2 });
+                             const progressInterval = setInterval(() => {
+                                 this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                             }, progressSpeed);
                         this.setState({ topScreenStatus: 'JOBSTARTED', jobDetails: jobDetails, job_start_time: job_start_time, job_end_time: job_end_time, jobTrackingStatus: 'Job Started' });
                     }
                     else if (snapShotVal.status == 'COMPLETED') {
@@ -394,6 +403,7 @@ class JobDetails extends Component {
                         })
                     }
                     else if (this.state.jobDetails.status == 'JOBSTARTED') {
+                        debugger;
                         const jobDetails = this.state.jobDetails;
                         let job_start_time = moment(jobDetails.jobStartTime).format('LT');
                         let job_end_time = moment(jobDetails.jobEndTime).format('LT');
@@ -403,12 +413,35 @@ class JobDetails extends Component {
                         this.setState({ jobTrackingStatus: 'Job Completed' });
                     }
                     if (this.state.jobDetails.service) {
-                        const time_interval = this.state.jobDetails.service.time_interval;
-                        const progressSpeed = (time_interval / 100) * 60000;
-                        this.setState({ workProgressTime: 0.2 });
-                        const progressInterval = setInterval(() => {
-                            this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-                        }, progressSpeed);
+                        // debugger;
+                        // const time_interval = this.state.jobDetails.service.time_interval;
+                        // const progressSpeed = (time_interval / 100) * 60000;
+                        // console.warn("progressSpeed", progressSpeed)
+                        // this.setState({ workProgressTime: 0.2 });
+                        // const progressInterval = setInterval(() => {
+                        //     this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                        // }, progressSpeed);
+                        // console.warn("progressInterval", progressInterval)
+                           let start_time1 = moment(this.state.jobDetails.jobStartTime);
+                           let start_time_full1 = moment(this.state.jobDetails.jobEndTime).format('LT');
+                           let job_start_time1 = moment(this.state.jobDetails.jobStartTime).format('LT');
+                           let end_time1 = moment(new Date());
+                           let minuteDiff = end_time1.diff(start_time1, 'millisecond');
+
+                           const progressSpeed = (this.state.jobDetails.service.time_interval / 100) * 60000;
+                           let earlierPercent = Number(minuteDiff / progressSpeed) - 1;
+                           this.setState({
+                               workProgressTime: earlierPercent,
+                              
+                           });
+                           const progressInterval = setInterval(() => {
+                               this.setState({
+                                   workProgressTime: this.state.workProgressTime + 1
+                               });
+                           }, progressSpeed);
+                           this.setState({
+                               progressInterval: progressInterval
+                           });
                     }
 
                     if (this.state.jobDetails.status == "STARTED" || this.state.jobDetails.status == "ACCEPTED") {

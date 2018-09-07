@@ -71,6 +71,7 @@ class jobSummary extends Component {
 
         let jodId = this.props.navigation.state.params.jobDetails.id;
         api.post('jobSelectedQuestions/getJobSelectedAnswerList', { "id": jodId }).then((resAns) => {
+            
            
             if (resAns.response.message.length && resAns.response.message.length > 0 && resAns.response.message[0].questionList) {
                 let jsonAnswer = JSON.parse(resAns.response.message[0].questionList);
@@ -114,7 +115,7 @@ class jobSummary extends Component {
                     }
 
                 }
-                
+               
                 if(this.props.navigation.state.params.jobDetails.promoPrice)
                 {
                     totalPrice = totalPrice - Number(this.props.navigation.state.params.jobDetails.promoPrice);
@@ -132,6 +133,7 @@ class jobSummary extends Component {
             }
                
             api.post('jobMaterials/getJobMaterialByJobId', { "jobId": jodId }).then((materialAns) => {
+                debugger;
                 let materialList = materialAns.response.message;
                 materialTotalPrice = 0;
                 materialList.map((materialItem) => {
@@ -177,6 +179,7 @@ class jobSummary extends Component {
     CalculatePrice(type, impact_type, price_impact, time_impact, impact_no, BoolStatus, AnsArray,start_range, rangeValue, isSlided) {
         let retPrice;
         let totalPrice = 0;
+        debugger;
         switch (type) {
             case 1:
             
@@ -188,9 +191,11 @@ class jobSummary extends Component {
                     }
                 } else {
                     impact_no = Number(impact_no);
-                    for (let i = 1; i <= impact_no; i++) {
-                        totalPrice = totalPrice + (i * Number(price_impact));
-                    }
+                    // for (let i = 1; i <= impact_no; i++) {
+                    //     totalPrice = totalPrice + (i * Number(price_impact));
+                    // }
+                    // totalPrice = totalPrice + (i * Number(price_impact));
+                     totalPrice = totalPrice + (impact_no * Number(price_impact));
                     //retPrice = Number(price_impact) * Number(impact_no);
                 }
 
@@ -206,7 +211,7 @@ class jobSummary extends Component {
                         totalPrice = totalPrice + start_range + Number(price_impact);
                     } else {
                         impact_no = Number(impact_no);
-                        totalPrice = totalPrice + (start_range * Number(price_impact));
+                        totalPrice = totalPrice + (start_range + Number(price_impact));
                     }
                     return totalPrice;
                 }

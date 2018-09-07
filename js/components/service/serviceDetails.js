@@ -313,6 +313,7 @@ class serviceDetails extends Component {
     const questionId = data.questionId;
     let dataselectedStatus = data.selected;
     AsyncStorage.getItem("keyQuestionList").then((value) => {
+      debugger;
       if (value !== '') {
         const jsonKeyQuestion = JSON.parse(value);
         jsonKeyQuestion.map((dataQ, key) => {
@@ -443,6 +444,7 @@ class serviceDetails extends Component {
     const questionId = data.answers[0].questionId;
     const switchStatus = data;
     AsyncStorage.getItem("keyQuestionList").then((value) => {
+      debugger;
       if (value !== '') {
 
         const jsonKeyQuestion = JSON.parse(value);
@@ -533,11 +535,13 @@ class serviceDetails extends Component {
 
   calculatePriceOnStart() {
     this.props.getQuestionListByServiceId(this.props.service.data).then((res) => {
+      debugger;
       if (res.type == "success") {
       
         //this.setState({ questionList: res });
         var price = 0.0;
         AsyncStorage.getItem("servicePrice").then((priceValue) => {
+          debugger;
           if (priceValue) {
             var data = this.props.service.data;
             data.questionList = this.state.questionList;
