@@ -19,7 +19,7 @@ import FSpinner from 'react-native-loading-spinner-overlay';
 import I18n from '../../i18n/i18n';
 import api from '../../api/index';
 import Modal from "react-native-modal";
-
+import { Stopwatch, Timer } from 'react-native-stopwatch-timer'
 
 //import firebaseApp from '../../../App';
 import * as firebase from 'firebase';
@@ -90,7 +90,10 @@ class JobDetails extends Component {
             cancellationPrice: '',
             badRatingModal: false,
             showOthers: false,
-            addedRating:''
+            addedRating:'',
+            timerDuration: 0,
+            IsTimerStart: false,
+            IsShowTimer: false
         }
 
         this.state.trackingRef = firebaseApp.database().ref().child('tracking');
@@ -112,7 +115,7 @@ class JobDetails extends Component {
                     }
                     else if (snapShotVal.status == 'FOLLOWEDUP') {
                         const jobDetails = this.state.jobDetails;
-                        this.setState({ topScreenStatus: 'FOLLOWEDUP', job_start_time: '', job_end_time: '', jobTrackingStatus: 'Job Completed' });
+                        this.setState({ topScreenStatus: 'FOLLOWEDUP', job_start_time: '', job_end_time: '', jobTrackingStatus: 'Job Completed', IsTimerStart:false });
                     }
                     else if (snapShotVal.status == 'PAYPENDING') {
                         const jobDetails = this.state.jobDetails;
@@ -144,25 +147,36 @@ class JobDetails extends Component {
                              const progressSpeed = (time_interval / 100) * 60000;
                              console.warn("progressSpeed", progressSpeed)
                              this.setState({ workProgressTime: 0.2 });
-                             const progressInterval = setInterval(() => {
-                                 this.setState({ workProgressTime: this.state.workProgressTime + 1 });
-                             }, progressSpeed);
+                              const totalDuration = Number(this.state.jobDetails.service.time_interval) * 60000;
+                              this.setState({
+                                  timerDuration: totalDuration,
+                                  IsTimerStart: true
+                              });
+                              setTimeout(() => {
+
+                                  this.setState({
+                                      IsShowTimer: true
+                                  })
+                              }, 3000)
+                            //  const progressInterval = setInterval(() => {
+                            //      this.setState({ workProgressTime: this.state.workProgressTime + 1 });
+                            //  }, progressSpeed);
                         this.setState({ topScreenStatus: 'JOBSTARTED', jobDetails: jobDetails, job_start_time: job_start_time, job_end_time: job_end_time, jobTrackingStatus: 'Job Started' });
                     }
                     else if (snapShotVal.status == 'COMPLETED') {
                         let jobDetails = this.state.jobDetails;
                         jobDetails.status = snapShotVal.status;
-                        this.setState({ topScreenStatus: 'COMPLETED', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Job Completed' });
+                        this.setState({ topScreenStatus: 'COMPLETED', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Job Completed', IsTimerStart:false });
                     }
                     else if (snapShotVal.status == 'FOLLOWEDUP') {
                         let jobDetails = this.state.jobDetails;
                         jobDetails.status = snapShotVal.status;
-                        this.setState({ topScreenStatus: 'FOLLOWEDUP', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Job Completed' });
+                        this.setState({ topScreenStatus: 'FOLLOWEDUP', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Job Completed', IsTimerStart:false });
                     }
                     else if (snapShotVal.status == 'PAYPENDING') {
                         let jobDetails = this.state.jobDetails;
                         jobDetails.status = snapShotVal.status;
-                        this.setState({ topScreenStatus: 'PAYPENDING', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Payment Pending' });
+                        this.setState({ topScreenStatus: 'PAYPENDING', job_start_time: '', jobDetails: jobDetails, job_end_time: '', jobTrackingStatus: 'Payment Pending', IsTimerStart:false });
                         Alert.alert(I18n.t("continue_with_the_payment"));
                     }
                 }
@@ -191,6 +205,12 @@ class JobDetails extends Component {
         }
         return localTime;
     }
+
+     handleTimerFinish() {
+         this.setState({
+             IsTimerStart: false
+         })
+     }
 
     showConfirmDialog(reason) {
         Alert.alert(
@@ -407,7 +427,22 @@ class JobDetails extends Component {
                         const jobDetails = this.state.jobDetails;
                         let job_start_time = moment(jobDetails.jobStartTime).format('LT');
                         let job_end_time = moment(jobDetails.jobEndTime).format('LT');
-                        this.setState({ jobTrackingStatus: 'Job Started', job_start_time: job_start_time, job_end_time: job_end_time });
+                         const endTimeOfJobs = new Date(this.state.jobDetails.jobEndTime).getMinutes();
+                         const nowTime = new Date().getMinutes();
+
+                         let totalDuration = endTimeOfJobs - nowTime;
+                         if (totalDuration > 0) {
+                             totalDuration = totalDuration * 60000;
+                         }
+                        this.setState({ jobTrackingStatus: 'Job Started', job_start_time: job_start_time, job_end_time: job_end_time,
+                     timerDuration: totalDuration,
+                         IsTimerStart: true
+                     });
+                      setTimeout(() => {
+                          this.setState({
+                              IsShowTimer: true
+                          })
+                      }, 3000)
                     }
                     else if (this.state.jobDetails.status == 'COMPLETED') {
                         this.setState({ jobTrackingStatus: 'Job Completed' });
@@ -770,6 +805,19 @@ class JobDetails extends Component {
         );
     }
     renderTimingTracking() {
+        const options = {
+            container: {
+                backgroundColor: '#3d5875',
+                padding: 5,
+                borderRadius: 5,
+                width: 220,
+            },
+            text: {
+                fontSize: 30,
+                color: '#FFF',
+                marginLeft: 7,
+            }
+        };
         return (
             <View style={{ flex: 1, flexDirection: 'row', padding: 30 }}>
                 <View style={{ flex: 2, flexDirection: 'column' }}>
@@ -783,14 +831,23 @@ class JobDetails extends Component {
                     </View>
                 </View>
                 <View style={{ flex: 4 }}>
-                    <AnimatedCircularProgress
+                    {/* <AnimatedCircularProgress
                         size={120}
                         width={15}
                         fill={this.state.workProgressTime}
                         tintColor="#00e0ff"
                         onAnimationComplete={() => console.log('none')}
                         backgroundColor="#3d5875"
-                    />
+                    /> */}
+                     {
+                                            this.state.IsShowTimer ? (
+                                                <Timer totalDuration={this.state.timerDuration} start={this.state.IsTimerStart}
+
+                                                    options={options}
+
+                                                />
+                                            ) : null
+                                        }
                 </View>
             </View>
         );
